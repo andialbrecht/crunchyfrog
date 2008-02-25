@@ -96,6 +96,13 @@ class Function(Node):
     icon = "stock_macro-check-brackets"
     has_children = False
     
+class PackageCollection(Collection):
+    name = _(u"Packages")
+    
+class Package(Node):
+    name = _(u"Package")
+    icon = "gnome-mime-application-x-archive"
+        
 class ConstraintCollection(Collection):
     name = _(u"Constraints")
     

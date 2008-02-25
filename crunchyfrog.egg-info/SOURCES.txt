@@ -1,6 +1,5 @@
 AUTHORS
 COPYING
-ChangeLog
 INSTALL
 Makefile
 README
@@ -15,6 +14,7 @@ cf/userdb.py
 cf/backends/__init__.py
 cf/backends/dbapi2helper.py
 cf/backends/mysql.py
+cf/backends/oracle.py
 cf/backends/postgres.py
 cf/backends/sqlite.py
 cf/backends/schema/__init__.py

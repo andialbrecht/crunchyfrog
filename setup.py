@@ -54,5 +54,6 @@ setup(
     postgres = cf.backends.postgres:PostgresBackend
     sqlite = cf.backends.sqlite:SQLiteBackend
     mysql = cf.backends.mysql:MySQLBackend
+    oracle = cf.backends.oracle:OracleBackend
     """
 )

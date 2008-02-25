@@ -101,6 +101,6 @@ class Query(gobject.GObject):
         if not self.failed:
             self.description = self.cursor.description
             self.rowcount = self.cursor.rowcount
-            if self.description and self.rowcount:
+            if self.description:
                 self.rows = self.cursor.fetchall()
         self.emit("finished")

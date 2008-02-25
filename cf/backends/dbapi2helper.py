@@ -20,19 +20,6 @@
 
 from cf.backends import DBConnection, DBCursor
 
-class DbAPI2Connection(DBConnection):
-    
-    def __init__(self, app, real_conn):
-        DBConnection.__init__(self, app)
-        self._conn = real_conn
-        
-    def close(self):
-        self._conn.close()
-        DBConnection.close(self)
-        
-    def cursor(self):
-        return DbAPI2Cursor(self)
-    
 class DbAPI2Cursor(DBCursor):
     
     def __init__(self, connection):
@@ -52,3 +39,18 @@ class DbAPI2Cursor(DBCursor):
         
     def fetchall(self):
         return self._cur.fetchall()
+
+class DbAPI2Connection(DBConnection):
+    
+    cursor_class = DbAPI2Cursor
+    
+    def __init__(self, app, real_conn):
+        DBConnection.__init__(self, app)
+        self._conn = real_conn
+        
+    def close(self):
+        self._conn.close()
+        DBConnection.close(self)
+        
+    def cursor(self):
+        return self.cursor_class(self)
