@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=0.2
+Name=CrunchyFrog
+Comment=Database schema browser and query tool
+Exec=crunchyfrog %U
+StartupNotify=true
+StartupWMClass=crunchyfrog
+Icon=crunchyfrog
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Development;Databases;

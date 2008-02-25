@@ -1,0 +1,7 @@
+?package(crunchyfrog): \
+    needs="X11" \
+    section="Apps/Development" \
+    title="CrunchyFrog" \
+    hints="Database" \
+    icon="/usr/share/pixmaps/crunchyfrog.xpm" \
+    command="/usr/bin/crunchyfrog"

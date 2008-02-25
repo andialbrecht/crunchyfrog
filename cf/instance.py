@@ -1,0 +1,157 @@
+# -*- coding: utf-8 -*-
+
+# crunchyfrog - a database schema browser and query tool
+# Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# $Id: instance.py 123 2008-02-25 08:48:36Z freshi $
+
+import gtk
+import gtk.glade
+import gnome
+import gdl
+import gobject
+
+from gettext import gettext as _
+
+from cf import release
+from cf.ui import GladeWidget
+from cf.ui import pdock
+from cf.ui.browser import Browser
+from cf.ui.datasources import DatasourceManager
+from cf.ui.editor import Editor, EditorWindow
+from cf.ui.queries import QueriesNotebook
+from cf.ui.toolbar import CFToolbar
+from cf.ui.widgets import ConnectionButton
+
+class CFInstance(GladeWidget):
+    
+    def __init__(self, app):
+        GladeWidget.__init__(self, app, "crunchyfrog", "mainwindow")
+        self._editor = None
+        
+    def _setup_widget(self):
+        # Window state
+        if self.app.config.get("gui.width", -1) != -1:
+            self.widget.resize(self.app.config.get("gui.width"),
+                               self.app.config.get("gui.height"))
+        if self.app.config.get("gui.maximized", False):
+            self.widget.maximize()
+        # Tooltips
+        self.tt = gtk.Tooltips()
+        # Toolbar
+        self.toolbar = CFToolbar(self.app, self.xml)
+        # Dock
+        self.dock = pdock.Dock()
+        box = self.xml.get_widget("box_main")
+        box.pack_start(self.dock, True, True)
+        box.reorder_child(self.dock, 2)
+        # Queries
+        self.queries = QueriesNotebook(self.app, self)
+        item = pdock.DockItem(self.dock, "queries", self.queries, _(u"Queries"),
+                              "gtk-edit", None, pdock.DOCK_ITEM_BEH_LOCKED)
+        self.dock.add_item(item)
+        # Browser
+        self.browser = Browser(self.app)
+        item = pdock.DockItem(self.dock, "browser", self.browser, _(u"Browser"), 
+                              "gtk-find", gtk.POS_LEFT)
+        self.dock.add_item(item)
+    
+    def _init_ui(self, argv):
+        pass
+    
+    def on_about(self, *args):
+        def open_url(dialog, url):
+            gnome.url_show(url)
+        gtk.about_dialog_set_url_hook(open_url)
+        dlg = gtk.AboutDialog()
+        dlg.set_name(release.name)
+        dlg.set_version(release.version)
+        dlg.set_copyright(release.copyright)
+        dlg.set_license(release.license)
+        dlg.set_website(release.url)
+        dlg.set_website_label(release.url)
+        dlg.set_logo_icon_name(release.appname)
+        dlg.set_program_name(release.appname)
+        dlg.run()
+        dlg.destroy()
+        
+    def on_configure_event(self, win, event):
+        config = self.app.config
+        if not config.get("gui.maximized"):
+            config.set("gui.width", event.width)
+            config.set("gui.height", event.height)
+            
+    def on_copy(self, *args):
+        if not self._editor:
+            return
+        self._editor.textview.get_buffer().copy_clipboard(gtk.clipboard_get())
+        
+    def on_paste(self, *args):
+        if not self._editor:
+            return 
+        self._editor.textview.get_buffer().paste_clipboard(gtk.clipboard_get(), None, True)
+        
+    def on_cut(self, *args):
+        if not self._editor:
+            return
+        self._editor.textview.get_buffer().cut_clipboard(gtk.clipboard_get(), True)
+        
+    def on_delete(self, *args):
+        if not self._editor:
+            return
+        self._editor.textview.get_buffer().delete_selection(True, True)
+            
+    def on_datasource_manager(self, *args):
+        dlg = DatasourceManager(self.app)
+        dlg.run()
+        dlg.destroy()
+        
+    def on_execute_query(self, *args):
+        gobject.idle_add(self._editor.execute_query)
+        
+    def on_help(self, *args):
+        self.show_help()
+    
+    def on_new_instance(self, *args):
+        self.app.new_instance(tuple())
+        
+    def on_preferences(self, *args):
+        self.app.preferences_show()
+        
+    def on_query_new(self, *args):
+        editor = Editor(self.app, self)
+        if self.app.config.get("editor.open_in_window"):
+            editor.show_in_separate_window()
+        else:
+            self.queries.attach(editor)
+        editor.show_all()
+        
+    def on_quit(self, *args):
+        self.widget.destroy()
+        
+    def on_window_state_event(self, win, event):
+        config = self.app.config
+        bit = gtk.gdk.WINDOW_STATE_MAXIMIZED.value_names[0] in event.new_window_state.value_names
+        config.set("gui.maximized", bit)
+        
+    def set_editor_active(self, editor, active):
+        if not active:
+            editor = None
+        self._editor = editor
+        self.toolbar.set_editor(editor)
+        
+    def show_help(self, topic=None):
+        gnome.help_display(release.appname, topic)

@@ -1,0 +1,9 @@
+
+    [gui_scripts]
+    crunchyfrog = cf:main
+    
+    [crunchyfrog.backend]
+    postgres = cf.backends.postgres:PostgresBackend
+    sqlite = cf.backends.sqlite:SQLiteBackend
+    mysql = cf.backends.mysql:MySQLBackend
+    

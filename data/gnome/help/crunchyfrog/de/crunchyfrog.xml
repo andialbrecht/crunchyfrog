@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<book id="index" label="" lang="de" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <title>CrunchyFrog Handbuch</title>
+
+  <bookinfo>
+    <title>CrunchyFrog Handbuch</title>
+
+    <authorgroup>
+      <author>
+        <firstname>Andi</firstname>
+
+        <surname>Albrecht</surname>
+
+        <email>albrecht.andi@gmail.com</email>
+      </author>
+    </authorgroup>
+
+    <copyright>
+      <year>2008</year>
+
+      <holder>Andi Albrecht</holder>
+    </copyright>
+
+    <releaseinfo>This is version 0.1 of the CrunchyFrog manual, describing CrunchyFrog 0.2</releaseinfo>
+    
+    <revhistory>
+      <revision>
+        <revnumber>0.2</revnumber>
+        <date>December 13, 2007</date>
+        <authorinitials>aalbrecht</authorinitials>
+        <revdescription><remark>First release for CrunchyFrog 0.2.0</remark></revdescription>
+      </revision>
+   </revhistory>
+  </bookinfo>
+
+  <chapter id="introduction">
+    <title>Introduction</title>
+    <section id="intro_getting_started">
+    	<title>Getting started</title>
+    	<para>TODO</para>
+    </section>
+  </chapter>
+</book>

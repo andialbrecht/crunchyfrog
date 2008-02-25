@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export PYTHONPATH=`pwd`
+python cf/__init__.py $*
+

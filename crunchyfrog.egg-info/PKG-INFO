@@ -1,0 +1,20 @@
+Metadata-Version: 1.0
+Name: crunchyfrog
+Version: 0.2
+Summary: Simple GNOME database tool
+Home-page: http://cf.andialbrecht.de
+Author: Andi Albrecht
+Author-email: albrecht.andi@gmail.com
+License: UNKNOWN
+Description: CrunchyFrog is a database tool
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: X11 Applications :: Gnome
+Classifier: Environment :: X11 Applications :: GTK
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Topic :: Database :: Front-Ends
+Classifier: Topic :: Desktop Environment :: Gnome
