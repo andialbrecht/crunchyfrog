@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# $Id: postgres.py 128 2008-02-25 12:29:06Z freshi $
+# $Id$
 
 """PostgreSQL backend"""
 

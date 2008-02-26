@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# $Id: datasources.py 106 2008-02-20 14:52:36Z freshi $
+# $Id$
 
 """Datasources"""
 

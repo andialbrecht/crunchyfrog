@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# $Id: __init__.py 127 2008-02-25 10:50:10Z freshi $
+# $Id$
 
 import bonobo
 import gnome

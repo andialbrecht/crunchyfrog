@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# $Id: core.py 121 2008-02-25 06:20:28Z freshi $
+# $Id$
 
 """Core objects"""
 

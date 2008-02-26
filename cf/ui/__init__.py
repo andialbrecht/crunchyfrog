@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# $Id: __init__.py 116 2008-02-23 08:58:14Z freshi $
+# $Id$
 
 import gobject
 import gtk
