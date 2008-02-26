@@ -24,6 +24,7 @@ import gobject
 import gtk
 
 import sys
+import time
 
 from cf.utils import Emit
 
@@ -137,6 +138,7 @@ class Query(gobject.GObject):
         self.errors = list()
         
     def execute(self, threaded=False):
+        start = time.time()
         if threaded:
             Emit(self, "started")
         else:
@@ -147,6 +149,7 @@ class Query(gobject.GObject):
             self.failed = True
             self.errors.append(str(sys.exc_info()[1]))
         self.executed = True
+        self.execution_time = time.time() - start
         self.messages = self.cursor.get_messages()
         if not self.failed:
             self.description = self.cursor.description

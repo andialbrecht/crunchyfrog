@@ -25,6 +25,7 @@ import pango
 
 import re
 import thread
+import time
 
 from gettext import gettext as _
 
@@ -51,6 +52,7 @@ class Editor(GladeWidget):
         self.app = app
         self.instance = instance
         self.connection = None
+        self._query_timer = None
         GladeWidget.__init__(self, app, "crunchyfrog", "box_editor")
         self.set_data("win", None)
         self.show_all()
@@ -58,6 +60,7 @@ class Editor(GladeWidget):
     def _setup_widget(self):
         self._setup_textview()
         self._setup_resultsgrid()
+        self.lbl_status = self.xml.get_widget("editor_label_status")
         
     def _setup_textview(self):
         if USE_GTKSOURCEVIEW2:
@@ -116,6 +119,10 @@ class Editor(GladeWidget):
         item.connect("activate", self.on_close)
         popup.append(item)
         
+    def on_query_started(self, query):
+        start = time.time()
+        self._query_timer = gobject.timeout_add(10, self.update_exectime, start, query)
+        
     def on_query_finished(self, query, tag_notice):
         self.results.set_query(query)
         self.connection.disconnect(tag_notice)
@@ -145,10 +152,12 @@ class Editor(GladeWidget):
         cur.close()
         
     def execute_query(self):
+        self.lbl_status.set_text(_(u"Executing query..."))
         def exec_threaded(statement):
             cur = self.connection.cursor() 
             query = Query(statement, cur)
             gtk.gdk.threads_enter()
+            query.connect("started", self.on_query_started)
             query.connect("finished", self.on_query_finished, tag_notice)
             gtk.gdk.threads_leave()
             query.execute(True)
@@ -185,6 +194,19 @@ class Editor(GladeWidget):
         if win:
             win.destroy()
         self.set_data("win", None)
+        
+    def update_exectime(self, start, query):
+        gobject.idle_add(self.lbl_status.set_text, "Query running... (%.3f seconds)" % (time.time()-start))
+        if not query.executed:
+            gobject.timeout_add(233, self.update_exectime, start, query)
+        else:
+            if query.failed:
+                self.lbl_status.set_text(_(u"Query failed (%.3f seconds)") % query.execution_time)
+            elif query.description:
+                self.lbl_status.set_text(_(u"Query finished (%.3f seconds, %s rows)") % (query.execution_time, query.rowcount))
+            else:
+                self.lbl_status.set_text(_(u"Query finished (%.3f seconds, %s affected rows)") % (query.execution_time, query.rowcount))
+            
         
     def update_textview_options(self):
         conf = self.app.config
@@ -436,7 +458,6 @@ class ResultsGrid(GladeWidget):
                         value = gobject.markup_escape_text(str(value))
                     row.append(value)
                 row.append(i+1)
-                # FIXME: Get background color from style
                 row.append(style.dark[gtk.STATE_ACTIVE].to_string())
                 model.append(row)
             except IndexError:
