@@ -21,6 +21,12 @@ deb: dist-prepare
 	cp /tmp/crunchyfrog-build/*.deb dist/
 	rm -rf /tmp/crunchyfrog-build
 	
+snapshot: dist-prepare
+	python setup.py egg_info -rbdev bdist_egg rotate -m.egg -k3
+	
+source-release: dist-prepare
+	python setup.py egg_info -rbdev sdist upload
+	
 sdist: dist-prepare
 	python setup.py sdist
 	
