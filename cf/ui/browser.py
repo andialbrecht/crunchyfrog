@@ -32,8 +32,9 @@ class DummyNode(object):
 
 class Browser(gtk.ScrolledWindow):
     
-    def __init__(self, app):
+    def __init__(self, app, instance):
         self.app = app
+        self.instance = instance
         self._setup_widget()
         self._setup_connections()
         self.reset_tree()
@@ -71,10 +72,13 @@ class Browser(gtk.ScrolledWindow):
         self.app.datasources.connect("datasource-modified", self.on_datasource_modified)
         self.object_tree.connect("button-press-event", self.on_button_press_event)
         self.object_tree.connect("row-expanded", self.on_row_expanded)
+        sel = self.object_tree.get_selection()
+        sel.connect("changed", self.on_object_tree_selection_changed)
         
     def _create_dsinfo_menu(self, model, iter, popup):
         def connect(item, datasource_info):
             datasource_info.dbconnect()
+            self.on_object_tree_selection_changed(self.object_tree.get_selection())
         def disconnect(item, datasource_info):
             datasource_info.dbdisconnect()
         datasource_info = model.get_value(iter, 0)
@@ -130,6 +134,24 @@ class Browser(gtk.ScrolledWindow):
         if not iter:
             return
         self.set_datasource_info(iter, datasource_info)
+        
+    def on_object_tree_selection_changed(self, selection):
+        model, iter = selection.get_selected()
+        if not iter: return
+        obj = model.get_value(iter, 0)
+        if isinstance(obj, DatasourceInfo):
+            if obj.internal_connection:
+                server_info = obj.internal_connection.get_server_info()
+                if server_info:
+                    self.instance.statusbar.set_message(server_info)
+                else:
+                    self.instance.statusbar.set_message("")
+            else:
+                self.instance.statusbar.set_message("")
+        else:
+            comm = model.get_value(iter, 5) or ""
+            self.instance.statusbar.set_message(comm)
+            
         
     def on_row_expanded(self, treeview, iter, path):
         model = treeview.get_model()
@@ -190,7 +212,8 @@ class Browser(gtk.ScrolledWindow):
                   1, datasource_info.get_label(),
                   2, ico,
                   3, None,
-                  4, self._create_dsinfo_menu)
+                  4, self._create_dsinfo_menu,
+                  5, datasource_info.description)
         citer = self.model.iter_children(iter)
         if datasource_info.get_connections() \
         and not citer:

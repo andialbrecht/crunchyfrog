@@ -116,8 +116,9 @@ class Editor(GladeWidget):
         item.connect("activate", self.on_close)
         popup.append(item)
         
-    def on_query_finished(self, query):
+    def on_query_finished(self, query, tag_notice):
         self.results.set_query(query)
+        self.connection.disconnect(tag_notice)
         
     def on_show_in_main_window(self, *args):
         gobject.idle_add(self.show_in_main_window)
@@ -125,22 +126,47 @@ class Editor(GladeWidget):
     def on_show_in_separate_window(self, *args):
         gobject.idle_add(self.show_in_separate_window)
         
+    def commit(self):
+        if not self.connection: return
+        cur = self.connection.cursor()
+        cur.execute("commit")
+        cur.close()
+        
+    def rollback(self):
+        if not self.connection: return
+        cur = self.connection.cursor()
+        cur.execute("rollback")
+        cur.close()
+        
+    def begin_transaction(self):
+        if not self.connection: return
+        cur = self.connection.cursor()
+        cur.execute("begin")
+        cur.close()
+        
     def execute_query(self):
-        def exec_threaded():
-            cur = self.connection.cursor()
-            query = Query(buffer.get_text(*bounds), cur)
-            query.connect("finished", self.on_query_finished)
-            query.execute()
+        def exec_threaded(statement):
+            cur = self.connection.cursor() 
+            query = Query(statement, cur)
+            gtk.gdk.threads_enter()
+            query.connect("finished", self.on_query_finished, tag_notice)
+            gtk.gdk.threads_leave()
+            query.execute(True)
         buffer = self.textview.get_buffer()
         bounds = buffer.get_selection_bounds()
+        self.results.reset()
+        def foo(connection, msg):
+            self.results.add_message(msg)
+        tag_notice = self.connection.connect("notice", foo)
         if not bounds:
             bounds = buffer.get_bounds()
         if self.connection.threadsafety >= 2:
-            thread.start_new_thread(exec_threaded, tuple())
+            statement = buffer.get_text(*bounds)
+            thread.start_new_thread(exec_threaded, (statement,))
         else:
             cur = self.connection.cursor()
             query = Query(buffer.get_text(*bounds), cur)
-            query.connect("finished", self.on_query_finished)
+            query.connect("finished", self.on_query_finished, tag_notice)
             query.execute()
         
     def set_connection(self, conn):
@@ -306,11 +332,15 @@ class ResultsView(GladeWidget):
         self.messages = self.xml.get_widget("editor_results_messages")
         buffer = self.messages.get_buffer()
         buffer.create_tag("error", foreground="#a40000", weight=pango.WEIGHT_BOLD)
+        
+    def reset(self):
+        buffer = self.messages.get_buffer()
+        buffer.set_text("")
+        self.set_current_page(2)
     
     def set_query(self, query):
         self.grid.set_query(query)
         buffer = self.messages.get_buffer()
-        buffer.set_text("")
         for err in query.errors:
             iter = buffer.get_end_iter()
             buffer.insert_with_tags_by_name(iter, err.strip()+"\n", "error")
@@ -322,15 +352,28 @@ class ResultsView(GladeWidget):
             curr_page = 2
         gobject.idle_add(self.set_current_page, curr_page)
         
+    def add_message(self, msg):
+        buffer = self.messages.get_buffer()
+        buffer.insert_at_cursor(msg.strip()+"\n")
+        
         
 class ResultsGrid(GladeWidget):
     
     def __init__(self, app, instance, xml):
         GladeWidget.__init__(self, app, xml, "editor_results_data")
         self.instance = instance
-        self.grid = self.xml.get_widget("editor_resultsgrid")
         self._idx = 0
         self._query = None
+        
+    def _setup_widget(self):
+        self.grid = self.xml.get_widget("editor_resultsgrid")
+        sel = self.grid.get_selection()
+        sel.set_mode(gtk.SELECTION_MULTIPLE)
+        self.grid.set_rubber_banding(True)
+        
+    def on_select_all_rows(self, *args):
+        sel = self.grid.get_selection()
+        sel.select_all()
         
     def on_show_more(self, *args):
         gobject.idle_add(self.fetch_next)
@@ -340,6 +383,7 @@ class ResultsGrid(GladeWidget):
         
     def set_query(self, query):
         self._query = query
+        self._idx = 0
         while self.grid.get_columns():
             col = self.grid.get_column(0)
             self.grid.remove_column(col)
@@ -353,11 +397,21 @@ class ResultsGrid(GladeWidget):
         model_args = list()
         for name, type_code, display_size, internal_size, precision, scale, null_ok in query.description:
             model_args.append(str)
-            col = gtk.TreeViewColumn(name.replace("_", "__"), gtk.CellRendererText(), markup=len(model_args)-1)
+            renderer = gtk.CellRendererText()
+            renderer.set_property("ellipsize", pango.ELLIPSIZE_END)
+            renderer.set_property("wrap-width", 75)
+            renderer.set_property("wrap-mode", gtk.WRAP_CHAR)
+            renderer.set_property("single-paragraph-mode", True)
+            renderer.set_property("width-chars", 10)
+            col = gtk.TreeViewColumn(name.replace("_", "__"), renderer, markup=len(model_args)-1)
+            col.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
+            col.set_resizable(True)
             self.grid.append_column(col)
         model_args.append(int)
         model_args.append(str)
         col = gtk.TreeViewColumn("#", gtk.CellRendererText(), text=len(model_args)-2, cell_background=len(model_args)-1)
+        col.set_clickable(True)
+        col.connect("clicked", self.on_select_all_rows)
         self.grid.insert_column(col, 0)
         model = gtk.ListStore(*model_args)
         self.grid.set_model(model)
@@ -370,12 +424,20 @@ class ResultsGrid(GladeWidget):
     def fetch_next(self, fetch_all=False):
         model = self.grid.get_model()
         offset = self.app.config.get("editor.results.offset")
+        style = self.grid.get_style()
         for i in range(self._idx, self._idx+offset):
             try:
-                row = [gobject.markup_escape_text(str(x)) for x in self._query.rows[i]]
+                row = []
+                for j in range(len(self._query.rows[i])):
+                    value = self._query.rows[i][j]
+                    if value == None: 
+                        value = '<span foreground="%s">&lt;NULL&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
+                    else:
+                        value = gobject.markup_escape_text(str(value))
+                    row.append(value)
                 row.append(i+1)
                 # FIXME: Get background color from style
-                row.append("#cccccc")
+                row.append(style.dark[gtk.STATE_ACTIVE].to_string())
                 model.append(row)
             except IndexError:
                 pass

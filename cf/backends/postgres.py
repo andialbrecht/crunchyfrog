@@ -20,13 +20,20 @@
 
 """PostgreSQL backend"""
 
-from cf.backends import DBConnectError
-from cf.backends.dbapi2helper import DbAPI2Connection
+import gtk
+import gobject
+
+from cf.backends import DBConnectError, TRANSACTION_IDLE, TRANSACTION_COMMIT_ENABLED, TRANSACTION_ROLLBACK_ENABLED
+from cf.backends.dbapi2helper import DbAPI2Connection, DbAPI2Cursor
 from cf.backends.schema import *
 from cf.datasources import DatasourceInfo
 from cf.plugins.core import DBBackendPlugin
+from cf.utils import Emit
 
 import time
+
+import psycopg2
+import psycopg2.extensions
 
 from gettext import gettext as _
 
@@ -77,9 +84,10 @@ class PostgresBackend(DBBackendPlugin):
             raise DBConnectError(_(u"Python module psycopg2 is not installed."))
         try:
             real_conn = psycopg2.connect(**opts)
+            real_conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         except psycopg2.OperationalError, err:
             raise DBConnectError(err.message)
-        conn = DbAPI2Connection(self.app, real_conn)
+        conn = PgConnection(self.app, real_conn)
         conn.threadsafety = psycopg2.threadsafety
         return conn
     
@@ -90,6 +98,50 @@ class PostgresBackend(DBBackendPlugin):
         except DBConnectError, err:
             return err.message
         return None
+    
+class PgCursor(DbAPI2Cursor):
+    
+    def __init__(self, *args, **kw):
+        DbAPI2Cursor.__init__(self, *args, **kw)
+        self._notice_tag = None
+        
+    def _check_notices(self):
+        while self.connection._conn.notices:
+            Emit(self.connection, "notice", self.connection._conn.notices.pop())
+    
+    def execute(self, *args, **kw):
+        gtk.gdk.threads_enter()
+        self._notice_tag = gobject.timeout_add(10, self._check_notices)
+        gtk.gdk.threads_leave()
+        DbAPI2Cursor.execute(self, *args, **kw)
+        gtk.gdk.threads_enter()
+        gobject.source_remove(self._notice_tag)
+        gtk.gdk.threads_leave()
+        self._check_notices()
+    
+class PgConnection(DbAPI2Connection):
+    cursor_class = PgCursor
+    
+    def update_transaction_status(self):
+        stat = self._conn.get_transaction_status()
+        if stat == psycopg2.extensions.TRANSACTION_STATUS_INERROR:
+            flag = TRANSACTION_ROLLBACK_ENABLED
+        elif stat == psycopg2.extensions.TRANSACTION_STATUS_ACTIVE:
+            flag = TRANSACTION_IDLE
+        elif stat == psycopg2.extensions.TRANSACTION_STATUS_IDLE:
+            flag = TRANSACTION_IDLE
+        elif stat == psycopg2.extensions.TRANSACTION_STATUS_INTRANS:
+            flag = TRANSACTION_COMMIT_ENABLED|TRANSACTION_ROLLBACK_ENABLED
+        else:
+            flag = TRANSACTION_IDLE
+        self.props.transaction_state = flag
+        
+    def get_server_info(self):
+        cur = self._conn.cursor()
+        cur.execute("select version()")
+        ret = cur.fetchone()
+        cur.close()
+        return ret[0]
     
 class PgSchema(SchemaProvider):
     

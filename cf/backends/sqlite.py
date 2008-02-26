@@ -59,7 +59,7 @@ class SQLiteBackend(DBBackendPlugin):
     
     @classmethod
     def get_label(cls, datasource_info):
-        return "sqlite://%s" % datasource_info.options.get("filename")
+        return "%s (sqlite://%s)" % (datasource_info.name, datasource_info.options.get("filename"))
     
     def dbconnect(self, data):
         try:
@@ -70,7 +70,7 @@ class SQLiteBackend(DBBackendPlugin):
             real_conn = sqlite3.connect(data["filename"])
         except sqlite3.OperationalError, err:
             raise DBConnectError(err.message)
-        return DbAPI2Connection(self.app, real_conn)
+        return SQLite3Connection(self.app, real_conn)
     
     def test_connection(self, data):
         try:
@@ -79,6 +79,15 @@ class SQLiteBackend(DBBackendPlugin):
         except DBConnectError, err:
             return err.message
         return None
+    
+class SQLite3Connection(DbAPI2Connection):
+    
+    def get_server_info(self):
+        cur = self._conn.cursor()
+        cur.execute("select sqlite_version()")
+        ret = cur.fetchone()[0]
+        cur.close()
+        return "SQLite %s" % ret
     
 class SQLiteSchema(SchemaProvider):
     

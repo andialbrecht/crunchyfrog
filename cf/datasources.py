@@ -118,9 +118,9 @@ class DatasourceInfo(gobject.GObject):
         conn.datasource_info = self
         conn.conn_number = self.__conncount
         self.__conncount += 1
-        self.add_connection(conn)
         if not self.internal_connection:
             self.internal_connection = conn
+        self.add_connection(conn)
         return conn
     
     def dbdisconnect(self):

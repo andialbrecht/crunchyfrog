@@ -18,6 +18,8 @@
 
 # $Id$
 
+import sys
+
 from cf.backends import DBConnection, DBCursor
 
 class DbAPI2Cursor(DBCursor):
@@ -35,10 +37,20 @@ class DbAPI2Cursor(DBCursor):
     rowcount = property(fget=_get_rowcount)
         
     def execute(self, statement):
-        self._cur.execute(statement)
+        try:
+            self._cur.execute(statement)
+            exc = None
+        except:
+            exc = sys.exc_info()
+        self.connection.update_transaction_status()
+        if exc:
+            raise exc[1]
         
     def fetchall(self):
         return self._cur.fetchall()
+    
+    def close(self):
+        self._cur.close()
 
 class DbAPI2Connection(DBConnection):
     
@@ -54,3 +66,11 @@ class DbAPI2Connection(DBConnection):
         
     def cursor(self):
         return self.cursor_class(self)
+    
+    def commit(self):
+        self._conn.commit()
+        self.update_transaction_status()
+        
+    def rollback(self):
+        self._conn.rollback()
+        self.update_transaction_status()

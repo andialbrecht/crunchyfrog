@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Mon Feb 25 14:09:51 2008 -->
+<!--Generated with glade3 3.4.0 on Tue Feb 26 15:33:27 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="mainwindow">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -68,7 +68,7 @@
                       <widget class="GtkMenuItem" id="menuitem8">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label" translatable="yes">_Datasource manager</property>
+                        <property name="label" translatable="yes">_Datasource Manager</property>
                         <property name="use_underline">True</property>
                         <signal name="activate" handler="on_datasource_manager"/>
                       </widget>
@@ -188,6 +188,47 @@
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="on_help"/>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="menuitem15">
+                        <property name="visible">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="label" translatable="yes">_Online Resources</property>
+                        <property name="use_underline">True</property>
+                        <child>
+                          <widget class="GtkMenu" id="menu8">
+                            <property name="visible">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <child>
+                              <widget class="GtkMenuItem" id="menuitem17">
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="label" translatable="yes">Developer _Pages</property>
+                                <property name="use_underline">True</property>
+                                <signal name="activate" handler="on_open_devpages"/>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkMenuItem" id="menuitem16">
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="label" translatable="yes">_Report a Problem</property>
+                                <property name="use_underline">True</property>
+                                <signal name="activate" handler="on_report_problem"/>
+                              </widget>
+                            </child>
+                            <child>
+                              <widget class="GtkMenuItem" id="menuitem18">
+                                <property name="visible">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="label" translatable="yes">_Translate CrunchyFrog</property>
+                                <property name="use_underline">True</property>
+                                <signal name="activate" handler="on_open_helptranslate"/>
+                              </widget>
+                            </child>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>
@@ -379,36 +420,42 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkToolButton" id="toolbutton8">
+              <widget class="GtkToolButton" id="tb_begin">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip" translatable="yes">Begin transaction</property>
                 <property name="label" translatable="yes">Begin transaction</property>
                 <property name="stock_id">gtk-indent</property>
+                <signal name="clicked" handler="on_begin_transaction"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkToolButton" id="toolbutton9">
+              <widget class="GtkToolButton" id="tb_commit">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip" translatable="yes">Commit</property>
                 <property name="label" translatable="yes">Commit</property>
                 <property name="stock_id">gtk-apply</property>
+                <signal name="clicked" handler="on_commit"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkToolButton" id="toolbutton10">
+              <widget class="GtkToolButton" id="tb_rollback">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip" translatable="yes">Rollback</property>
                 <property name="label" translatable="yes">Rollback</property>
                 <property name="stock_id">gtk-revert-to-saved</property>
+                <signal name="clicked" handler="on_rollback"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -480,7 +527,7 @@
           <placeholder/>
         </child>
         <child>
-          <widget class="GtkStatusbar" id="statusbar1">
+          <widget class="GtkStatusbar" id="statusbar">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="spacing">2</property>

@@ -79,7 +79,7 @@ class MySQLBackend(DBBackendPlugin):
             real_conn = MySQLdb.connect(**opts)
         except MySQLdb.OperationalError, err:
             raise DBConnectError(err.message)
-        conn = DbAPI2Connection(self.app, real_conn)
+        conn = MySQLConnection(self.app, real_conn)
         conn.threadsafety = MySQLdb.threadsafety
         return conn
     
@@ -90,6 +90,11 @@ class MySQLBackend(DBBackendPlugin):
         except DBConnectError, err:
             return err.message
         return None
+    
+class MySQLConnection(DbAPI2Connection):
+    
+    def get_server_info(self):
+        return "MySQL %s" % self._conn.get_server_info()
     
 class MySQLSchema(SchemaProvider):
     

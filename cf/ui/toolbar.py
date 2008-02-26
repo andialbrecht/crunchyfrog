@@ -23,6 +23,7 @@ import gobject
 
 from gettext import gettext as _
 
+from cf.backends import TRANSACTION_IDLE, TRANSACTION_COMMIT_ENABLED, TRANSACTION_ROLLBACK_ENABLED
 from cf.ui import GladeWidget
 from cf.ui.widgets import ConnectionButton
 
@@ -34,11 +35,31 @@ class CFToolbar(GladeWidget):
         self.tb_connection = ConnectionButton(self.app)
         item.add(self.tb_connection)
         self.__editor_signals = list()
+        self.__conn_signals = list()
         self.set_editor(None)
+        
+    def on_connection_notify(self, connection, property):
+        if property.name == "transaction-state":
+            value = connection.get_property(property.name)
+            gobject.idle_add(self.set_transaction_state, value)
         
     def on_editor_connection_changed(self, editor, conn):
         if editor != self._editor: return
         self.xml.get_widget("tb_execute").set_sensitive(bool(conn))
+        if conn:
+            self.set_transaction_state(conn.get_property("transaction-state"))
+            self.__conn_signals.append(conn.connect("notify", self.on_connection_notify))
+        else:
+            self.set_transaction_state(None)
+            
+    def set_transaction_state(self, value):
+        if value == None: 
+            for item in ("tb_commit", "tb_rollback", "tb_begin"):
+                self.xml.get_widget(item).set_sensitive(False)
+                return
+        self.xml.get_widget("tb_commit").set_sensitive((value & TRANSACTION_COMMIT_ENABLED) != 0)
+        self.xml.get_widget("tb_rollback").set_sensitive((value & TRANSACTION_ROLLBACK_ENABLED) != 0)
+        self.xml.get_widget("tb_begin").set_sensitive((value & TRANSACTION_IDLE) != 0)
         
     def set_editor(self, editor):
         while self.__editor_signals:
@@ -49,3 +70,4 @@ class CFToolbar(GladeWidget):
             self.xml.get_widget(item).set_sensitive(bool(editor))
         if self._editor:
             self.__editor_signals.append(self._editor.connect("connection-changed", self.on_editor_connection_changed))
+            self.on_editor_connection_changed(self._editor, self._editor.connection)

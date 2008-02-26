@@ -33,6 +33,7 @@ from cf.ui.browser import Browser
 from cf.ui.datasources import DatasourceManager
 from cf.ui.editor import Editor, EditorWindow
 from cf.ui.queries import QueriesNotebook
+from cf.ui.statusbar import CFStatusbar
 from cf.ui.toolbar import CFToolbar
 from cf.ui.widgets import ConnectionButton
 
@@ -53,6 +54,8 @@ class CFInstance(GladeWidget):
         self.tt = gtk.Tooltips()
         # Toolbar
         self.toolbar = CFToolbar(self.app, self.xml)
+        # Statusbar
+        self.statusbar = CFStatusbar(self.app, self.xml)
         # Dock
         self.dock = pdock.Dock()
         box = self.xml.get_widget("box_main")
@@ -64,7 +67,7 @@ class CFInstance(GladeWidget):
                               "gtk-edit", None, pdock.DOCK_ITEM_BEH_LOCKED)
         self.dock.add_item(item)
         # Browser
-        self.browser = Browser(self.app)
+        self.browser = Browser(self.app, self)
         item = pdock.DockItem(self.dock, "browser", self.browser, _(u"Browser"), 
                               "gtk-find", gtk.POS_LEFT)
         self.dock.add_item(item)
@@ -87,6 +90,21 @@ class CFInstance(GladeWidget):
         dlg.set_program_name(release.appname)
         dlg.run()
         dlg.destroy()
+        
+    def on_commit(self, *args):
+        if not self._editor:
+            return 
+        gobject.idle_add(self._editor.commit)
+        
+    def on_rollback(self, *args):
+        if not self._editor:
+            return
+        gobject.idle_add(self._editor.rollback)
+        
+    def on_begin_transaction(self, *args):
+        if not self._editor:
+            return
+        gobject.idle_add(self._editor.begin_transaction)
         
     def on_configure_event(self, win, event):
         config = self.app.config
@@ -128,6 +146,15 @@ class CFInstance(GladeWidget):
     def on_new_instance(self, *args):
         self.app.new_instance(tuple())
         
+    def on_report_problem(self, *args):
+        gobject.idle_add(self.open_website, "http://code.google.com/p/crunchyfrog/issues/list")
+        
+    def on_open_devpages(self, *args):
+        gobject.idle_add(self.open_website, "http://crunchyfrog.googlecode.com")
+        
+    def on_open_helptranslate(self, *args):
+        gobject.idle_add(self.open_website, "https://translations.launchpad.net/crunchyfrog/trunk/")
+        
     def on_preferences(self, *args):
         self.app.preferences_show()
         
@@ -146,6 +173,9 @@ class CFInstance(GladeWidget):
         config = self.app.config
         bit = gtk.gdk.WINDOW_STATE_MAXIMIZED.value_names[0] in event.new_window_state.value_names
         config.set("gui.maximized", bit)
+        
+    def open_website(self, url):
+        gnome.url_show(url)
         
     def set_editor_active(self, editor, active):
         if not active:

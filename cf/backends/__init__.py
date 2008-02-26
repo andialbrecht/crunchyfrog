@@ -25,6 +25,12 @@ import gtk
 
 import sys
 
+from cf.utils import Emit
+
+TRANSACTION_IDLE = 1 << 1
+TRANSACTION_COMMIT_ENABLED = 1 << 2
+TRANSACTION_ROLLBACK_ENABLED = 1 << 3
+
 
 class DBError(StandardError):
     """Base class for database errors"""
@@ -38,6 +44,15 @@ class DBConnection(gobject.GObject):
         "closed" : (gobject.SIGNAL_RUN_LAST,
                     gobject.TYPE_NONE,
                     tuple()),
+        "notice" : (gobject.SIGNAL_RUN_LAST,
+                    gobject.TYPE_NONE,
+                    (str,)),
+    }
+    
+    __gproperties__ = {
+        "transaction-state" : (gobject.TYPE_PYOBJECT,
+                            "Transaction flag", "Transaction flag",
+                            gobject.PARAM_READWRITE),
     }
     
     def __init__(self, app):
@@ -45,7 +60,20 @@ class DBConnection(gobject.GObject):
         self.datasource_info = None
         self.conn_number = None
         self.threadsafety = 0
+        self._transaction_state = TRANSACTION_IDLE
         self.__gobject_init__()
+        
+    def do_set_property(self, property, value):
+        if property.name == "transaction-state":
+            self._transaction_state = value
+        else:
+            raise AttributeError, "unknown property %r" % property.name
+        
+    def do_get_property(self, property):
+        if property.name == "transaction-state":
+            return self._transaction_state
+        else:
+            raise AttributeError, "unknown property %r" % property.name
         
     def get_label(self):
         return self.datasource_info.get_label() + " #%s" % self.conn_number
@@ -56,6 +84,18 @@ class DBConnection(gobject.GObject):
     def cursor(self):
         raise NotImplementedError
     
+    def update_transaction_status(self):
+        pass
+    
+    def get_server_info(self):
+        return None
+    
+    def commit(self):
+        raise NotImplementedError
+    
+    def rollback(self):
+        raise NotImplementedError
+    
 class DBCursor(gobject.GObject):
     
     def __init__(self, connection):
@@ -63,6 +103,12 @@ class DBCursor(gobject.GObject):
         self.__gobject_init__()
         
     def execute(self, query):
+        raise NotImplementedError
+    
+    def get_messages(self):
+        return []
+    
+    def close(self):
         raise NotImplementedError
     
     
@@ -91,16 +137,23 @@ class Query(gobject.GObject):
         self.errors = list()
         
     def execute(self, threaded=False):
-        self.emit("started")
+        if threaded:
+            Emit(self, "started")
+        else:
+            self.emit("started")
         try:
             self.cursor.execute(self.statement)
         except:
             self.failed = True
             self.errors.append(str(sys.exc_info()[1]))
         self.executed = True
+        self.messages = self.cursor.get_messages()
         if not self.failed:
             self.description = self.cursor.description
             self.rowcount = self.cursor.rowcount
             if self.description:
                 self.rows = self.cursor.fetchall()
-        self.emit("finished")
+        if threaded:
+            Emit(self, "finished")
+        else:
+            self.emit("finished")

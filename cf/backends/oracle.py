@@ -115,6 +115,9 @@ class OracleCursor(DbAPI2Cursor):
 class OracleConnection(DbAPI2Connection):
     cursor_class = OracleCursor
     
+    def get_server_info(self):
+        return "Oracle %s" % self._conn.version
+    
     
 class OracleSchema(SchemaProvider):
     
