@@ -21,6 +21,7 @@
 """Application object"""
 
 import bonobo
+import gobject
 
 import sys
 
@@ -47,11 +48,18 @@ class CFApplication(bonobo.Application):
     
     def __init__(self):
         bonobo.Application.__init__(self, release.name)
+        self.cb = CFAppCallbacks()
         self.__shutdown_tasks = []
         self.config = Config(self)
         self.userdb = UserDB(self)
         self.plugins = PluginManager(self)
         self.datasources = DatasourceManager(self)
+        
+    def get_instances(self):
+        ret = self.get_data("instances")
+        if not ret:
+            ret = []
+        return ret
         
     def preferences_show(self):
         """Displays the preferences dialog"""
@@ -78,3 +86,10 @@ class CFApplication(bonobo.Application):
             except:
                 log.error("Task failed: %s" % str(sys.exc_info()[1])) 
         
+class CFAppCallbacks(gobject.GObject):
+    
+    __gsignals__ = {
+        "instance-created" : (gobject.SIGNAL_RUN_LAST,
+                              gobject.TYPE_NONE,
+                              (gobject.TYPE_PYOBJECT,)),
+    }

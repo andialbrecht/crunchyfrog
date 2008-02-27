@@ -111,7 +111,12 @@ class PluginManager(gobject.GObject):
         self.__active_plugins = dict()
         gnomevfs.monitor_add(USER_PLUGIN_DIR, gnomevfs.MONITOR_DIRECTORY, self.on_plugin_folder_changed)
         gnomevfs.monitor_add(PLUGIN_DIR, gnomevfs.MONITOR_DIRECTORY, self.on_plugin_folder_changed)
+        self.app.register_shutdown_task(self.on_app_shutdown, _(u"Closing plugins"))
         self.refresh()
+        
+    def on_app_shutdown(self):
+        for plugin in self.__active_plugins.values():
+            plugin.shutdown()
         
     def on_plugin_folder_changed(self, folder, path, change):
         if change in [gnomevfs.MONITOR_EVENT_DELETED, gnomevfs.MONITOR_EVENT_CREATED]:

@@ -76,6 +76,7 @@ def new_instance_cb(xapp, argc, argv):
     xapp.set_data("instances", l)
     app.widget.show_all()
     app.widget.connect("destroy", ui_destroy_cb, app, xapp)
+    xapp.cb.emit("instance-created", app)
     return argc
 
 def ui_destroy_cb(widget, app, xapp):

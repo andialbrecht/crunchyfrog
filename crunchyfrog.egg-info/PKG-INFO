@@ -1,12 +1,12 @@
 Metadata-Version: 1.0
 Name: crunchyfrog
-Version: 0.2.dev-r20
+Version: 0.2
 Summary: Simple GNOME database tool
 Home-page: http://crunchyfrog.googlecode.com
 Author: Andi Albrecht
 Author-email: albrecht.andi@gmail.com
 License: UNKNOWN
-Description: "CrunchyFrog is a SQL editor and database schema browser for the GNOME desktop.
+Description: CrunchyFrog is a SQL editor and database schema browser for the GNOME desktop.
         
         Supported databases
         ===================

@@ -32,6 +32,13 @@ class DummyNode(object):
 
 class Browser(gtk.ScrolledWindow):
     
+    __gsignals__ = {
+        "object-menu-popup" : (gobject.SIGNAL_RUN_LAST,
+                               gobject.TYPE_NONE,
+                               (gobject.TYPE_PYOBJECT,
+                                gobject.TYPE_PYOBJECT)),
+    }
+    
     def __init__(self, app, instance):
         self.app = app
         self.instance = instance
@@ -65,6 +72,15 @@ class Browser(gtk.ScrolledWindow):
         col.add_attribute(renderer, 'text', 1)
         self.object_tree.append_column(col)
         self.object_tree.set_headers_visible(False)
+        self.object_tree.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, (("text/plain", gtk.TARGET_SAME_APP, 80),), gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_COPY)
+        def drag_data_get(treeview, context, selection, info, timestamp):
+            treeselection = treeview.get_selection()
+            model, iter = treeselection.get_selected()
+            text = id(model.get_value(iter, 0))
+            selection.set('text/plain', 8, str(text))
+            return
+        self.object_tree.connect("drag_data_get", drag_data_get)
+        self.set_shadow_type(gtk.SHADOW_ETCHED_IN)
         
     def _setup_connections(self):
         self.app.datasources.connect("datasource-added", self.on_datasource_added)
@@ -107,13 +123,12 @@ class Browser(gtk.ScrolledWindow):
                 model = treeview.get_model()
                 iter = model.get_iter(path)
                 cb = model.get_value(iter, 4)
-                if not cb:
-                    return 1
-                try:
-                    popup = cb(model, iter, popup)
-                except:
-                    import traceback; traceback.print_exc()
-                    return 1
+                if cb:
+                    try:
+                        popup = cb(model, iter, popup)
+                    except:
+                        import traceback; traceback.print_exc()
+                self.emit("object-menu-popup", popup, model.get_value(iter, 0))
                 if popup.get_children():
                     popup.show_all()
                     popup.popup( None, None, None, event.button, time)
@@ -195,6 +210,22 @@ class Browser(gtk.ScrolledWindow):
                 return iter
             iter = self.model.iter_next(iter)
         return None
+    
+    def get_object_by_id(self, id_, iter=None, model=None):
+        if not iter:
+            model = self.object_tree.get_model()
+            iter = model.get_iter_first()
+        while iter:
+            value = model.get_value(iter, 0)
+            if id(value) == id_:
+                return value
+            citer = model.iter_children(iter)
+            while citer:
+                ret = self.get_object_by_id(id_, citer, model)
+                if ret:
+                    return ret
+                citer = model.iter_next(citer)
+            iter = model.iter_next(iter)
     
     def reset_tree(self):
         self.model.clear()

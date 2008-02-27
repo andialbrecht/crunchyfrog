@@ -15,6 +15,7 @@ cf/userdb.py
 cf/utils.py
 cf/backends/__init__.py
 cf/backends/dbapi2helper.py
+cf/backends/ldapbe.py
 cf/backends/mysql.py
 cf/backends/oracle.py
 cf/backends/postgres.py
@@ -24,6 +25,8 @@ cf/config/__init__.py
 cf/config/default.cfg
 cf/plugins/__init__.py
 cf/plugins/core.py
+cf/shell/__init__.py
+cf/shell/ipython_view.py
 cf/ui/__init__.py
 cf/ui/browser.py
 cf/ui/datasources.py
