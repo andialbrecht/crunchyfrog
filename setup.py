@@ -59,5 +59,6 @@ setup(
     
     [crunchyfrog.plugin]
     cfshell = cf.shell:CFShell
+    refbrowser = cf.ui.refviewer:ReferenceViewer
     """
 )

@@ -33,6 +33,7 @@ cf/ui/datasources.py
 cf/ui/editor.py
 cf/ui/prefs.py
 cf/ui/queries.py
+cf/ui/refviewer.py
 cf/ui/statusbar.py
 cf/ui/toolbar.py
 cf/ui/pdock/__init__.py
