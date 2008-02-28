@@ -78,7 +78,7 @@ class CFShell(GenericPlugin):
         
     def init_instance(self, instance):
         mn_view = instance.xml.get_widget("mn_view")
-        item = gtk.CheckMenuItem("Shell")
+        item = gtk.CheckMenuItem(_(u"Shell"))
         item.connect("activate", self.on_toggle_shell, instance)
         item.show()
         if self.app.config.get("cfshell.visible"):
