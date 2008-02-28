@@ -70,7 +70,7 @@ class SQLiteBackend(DBBackendPlugin):
             real_conn = sqlite3.connect(data["filename"])
         except sqlite3.OperationalError, err:
             raise DBConnectError(err.message)
-        return SQLite3Connection(self.app, real_conn)
+        return SQLite3Connection(self, self.app, real_conn)
     
     def test_connection(self, data):
         try:

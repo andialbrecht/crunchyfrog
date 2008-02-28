@@ -79,7 +79,7 @@ class MySQLBackend(DBBackendPlugin):
             real_conn = MySQLdb.connect(**opts)
         except MySQLdb.OperationalError, err:
             raise DBConnectError(err.message)
-        conn = MySQLConnection(self.app, real_conn)
+        conn = MySQLConnection(self, self.app, real_conn)
         conn.threadsafety = MySQLdb.threadsafety
         return conn
     

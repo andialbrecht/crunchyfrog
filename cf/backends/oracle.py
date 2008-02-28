@@ -79,7 +79,7 @@ class OracleBackend(DBBackendPlugin):
             real_conn = cx_Oracle.connect(**opts)
         except cx_Oracle.OperationalError, err:
             raise DBConnectError(err.message)
-        conn = OracleConnection(self.app, real_conn)
+        conn = OracleConnection(self, self.app, real_conn)
         conn.threadsafety = cx_Oracle.threadsafety
         return conn
     

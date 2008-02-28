@@ -56,8 +56,8 @@ class DbAPI2Connection(DBConnection):
     
     cursor_class = DbAPI2Cursor
     
-    def __init__(self, app, real_conn):
-        DBConnection.__init__(self, app)
+    def __init__(self, provider, app, real_conn):
+        DBConnection.__init__(self, provider, app)
         self._conn = real_conn
         
     def close(self):

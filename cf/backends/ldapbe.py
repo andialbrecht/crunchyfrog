@@ -107,7 +107,7 @@ class LDAPBackend(DBBackendPlugin):
                 real_conn.bind_s(data.get("user"), data.get("password"))
             except:
                 raise DBConnectError(str(sys.exc_info()[1]))
-        return LDAPConnection(self.app, real_conn, data)
+        return LDAPConnection(self, self.app, real_conn, data)
     
     def test_connection(self, data):
         try:
@@ -119,8 +119,8 @@ class LDAPBackend(DBBackendPlugin):
     
 class LDAPConnection(DBConnection):
     
-    def __init__(self, app, conn, opts):
-        DBConnection.__init__(self, app)
+    def __init__(self, provider, app, conn, opts):
+        DBConnection.__init__(self, provider, app)
         self.conn = conn
         self.opts = opts
         

@@ -56,8 +56,9 @@ class DBConnection(gobject.GObject):
                             gobject.PARAM_READWRITE),
     }
     
-    def __init__(self, app):
+    def __init__(self, provider, app):
         self.app = app
+        self.provider = provider
         self.datasource_info = None
         self.conn_number = None
         self.threadsafety = 0

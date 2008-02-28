@@ -54,6 +54,7 @@ class GenericPlugin(gobject.GObject):
         
 class DBBackendPlugin(GenericPlugin):
     icon = "stock_database"
+    context_help_pattern = None
     
     def __init__(self, app):
         GenericPlugin.__init__(self, app)

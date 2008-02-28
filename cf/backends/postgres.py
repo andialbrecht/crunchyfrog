@@ -43,6 +43,7 @@ log = logging.getLogger("PG")
 class PostgresBackend(DBBackendPlugin):
     name = _(u"PostgreSQL Plugin")
     description = _(u"Provides access to PostgreSQL databases")
+    context_help_pattern = "http://www.postgresql.org/docs/8.2/interactive/sql-%(term)s.html"
     
     def __init__(self, app):
         DBBackendPlugin.__init__(self, app)
@@ -87,7 +88,7 @@ class PostgresBackend(DBBackendPlugin):
             real_conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         except psycopg2.OperationalError, err:
             raise DBConnectError(err.message)
-        conn = PgConnection(self.app, real_conn)
+        conn = PgConnection(self, self.app, real_conn)
         conn.threadsafety = psycopg2.threadsafety
         return conn
     
