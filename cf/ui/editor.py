@@ -22,10 +22,13 @@ import gtk
 import gobject
 import gconf
 import pango
+import gnome
+import gnomevfs
 
 import re
 import thread
 import time
+import os
 
 from gettext import gettext as _
 
@@ -104,6 +107,19 @@ class Editor(GladeWidget):
         sep = gtk.SeparatorMenuItem()
         sep.show()
         popup.append(sep)
+        if self.connection and self.connection.provider.reference:
+            refviewer = self.instance.get_data("refviewer")
+            buffer = self.textview.get_buffer()
+            bounds = buffer.get_selection_bounds()
+            if bounds:
+                url = self.connection.provider.reference.get_context_help_url(buffer.get_text(*bounds))
+            else:
+                url = None
+            if url and refviewer:
+                item = gtk.ImageMenuItem("gtk-help")
+                item.connect("activate", self.on_show_context_help, refviewer, url)
+                item.show()
+                popup.append(item)
         if self.get_data("win"):
             lbl = _(u"Show in main window")
             cb = self.on_show_in_main_window
@@ -126,6 +142,9 @@ class Editor(GladeWidget):
     def on_query_finished(self, query, tag_notice):
         self.results.set_query(query)
         self.connection.disconnect(tag_notice)
+        
+    def on_show_context_help(self, menuitem, refviewer, url):
+        refviewer.load_url(url)
         
     def on_show_in_main_window(self, *args):
         gobject.idle_add(self.show_in_main_window)
@@ -201,11 +220,11 @@ class Editor(GladeWidget):
             gobject.timeout_add(233, self.update_exectime, start, query)
         else:
             if query.failed:
-                self.lbl_status.set_text(_(u"Query failed (%.3f seconds)") % query.execution_time)
+                gobject.idle_add(self.lbl_status.set_text, _(u"Query failed (%.3f seconds)") % query.execution_time)
             elif query.description:
-                self.lbl_status.set_text(_(u"Query finished (%.3f seconds, %s rows)") % (query.execution_time, query.rowcount))
+                gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s rows)") % (query.execution_time, query.rowcount))
             else:
-                self.lbl_status.set_text(_(u"Query finished (%.3f seconds, %s affected rows)") % (query.execution_time, query.rowcount))
+                gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s affected rows)") % (query.execution_time, query.rowcount))
             
         
     def update_textview_options(self):
@@ -355,6 +374,18 @@ class ResultsView(GladeWidget):
         buffer = self.messages.get_buffer()
         buffer.create_tag("error", foreground="#a40000", weight=pango.WEIGHT_BOLD)
         
+    def on_export_data(self, *args):
+        gobject.idle_add(self.export_data)
+        
+    def export_data(self):
+        gtk.gdk.threads_enter()
+        dlg = DataExportDialog(self.app, self.instance.widget, self.grid)
+        if dlg.run() == gtk.RESPONSE_OK:
+            dlg.hide()
+            dlg.export_data()
+        dlg.destroy()
+        gtk.gdk.threads_leave()
+        
     def reset(self):
         buffer = self.messages.get_buffer()
         buffer.set_text("")
@@ -366,12 +397,15 @@ class ResultsView(GladeWidget):
         for err in query.errors:
             iter = buffer.get_end_iter()
             buffer.insert_with_tags_by_name(iter, err.strip()+"\n", "error")
+        for msg in query.messages:
+            buffer.insert_at_cursor(msg.strip()+"\n")
         if query.errors:
             curr_page = 2
         elif query.description:
             curr_page = 0
         else:
             curr_page = 2
+        self.xml.get_widget("editor_export_data").set_sensitive(bool(query.rows))
         gobject.idle_add(self.set_current_page, curr_page)
         
     def add_message(self, msg):
@@ -474,3 +508,89 @@ class ResultsGrid(GladeWidget):
         else: 
             return (self._idx < len(self._query.rows)-1)
             
+
+class DataExportDialog(gtk.FileChooserDialog):
+    
+    def __init__(self, app, parent, grid):
+        gtk.FileChooserDialog.__init__(self, _(u"Export data"),
+                                       parent,
+                                       gtk.FILE_CHOOSER_ACTION_SAVE,
+                                       (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                        gtk.STOCK_SAVE, gtk.RESPONSE_OK))
+        self.grid = grid
+        self.app = app
+        self._setup_widget()
+        self._setup_connections()
+        
+    def _setup_widget(self):
+        vbox = gtk.VBox()
+        vbox.set_spacing(5)
+        self.set_extra_widget(vbox)
+        self.edit_export_options = gtk.CheckButton(_(u"_Edit export options"))
+        vbox.pack_start(self.edit_export_options, False, False)
+        self.export_selection = gtk.CheckButton(_(u"_Only export selected rows"))
+        sel = self.grid.grid.get_selection()
+        model, rows = sel.get_selected_rows()
+        self.export_selection.set_sensitive(bool(rows))
+        vbox.pack_start(self.export_selection, False, False)
+        self.open_file = gtk.CheckButton(_(u"_Open file when finished"))
+        vbox.pack_start(self.open_file, False, False)
+        vbox.show_all()
+        if self.app.config.get("editor.export.recent_folder"):
+            self.set_current_folder(self.app.config.get("editor.export.recent_folder"))
+        self._setup_filter()
+    
+    def _setup_filter(self):
+        recent_filter = None
+        for plugin in self.app.plugins.get_plugins("crunchyfrog.export", True):
+            filter = gtk.FileFilter()
+            filter.set_name(plugin.file_filter_name)
+            for pattern in plugin.file_filter_pattern:
+                filter.add_pattern(pattern)
+            for mime in plugin.file_filter_mime:
+                filter.add_mime_type(mime)
+            self.add_filter(filter)
+            filter.set_data("plugin", plugin)
+            if self.app.config.get("editor.export.recent_filter", None) == plugin.id:
+                recent_filter = filter
+        if recent_filter:
+            self.filter_changed(recent_filter)
+        else:
+            self.filter_changed(self.get_filter())
+    
+    def _setup_connections(self):
+        self.connect("notify::filter", self.on_filter_changed)
+        
+    def on_filter_changed(self, dialog, param):
+        gobject.idle_add(self.filter_changed, self.get_filter())
+        
+    def filter_changed(self, filter):
+        plugin = filter.get_data("plugin")
+        self.edit_export_options.set_sensitive(plugin.has_options)
+        
+    def export_data(self):
+        self.app.config.set("editor.export.recent_folder", self.get_current_folder())
+        plugin = self.get_filter().get_data("plugin")
+        self.app.config.set("editor.export.recent_filter", plugin.id)
+        description = self.grid._query.description
+        if self.export_selection.get_property("sensitive") \
+        and self.export_selection.get_active():
+            rows = []
+            sel = self.grid.grid.get_selection()
+            model, srows = sel.get_selected_rows()
+            for path in srows:
+                i = path[0]
+                rows.append(self.grid._query.rows[i])
+        else:
+            rows = self.grid._query.rows
+        opts = {"filename" : self.get_filename(),
+                "uri" : self.get_uri()}
+        if self.edit_export_options.get_property("sensitive") \
+        and self.edit_export_options.get_active():
+            opts.update(plugin.show_options(description, rows))
+        plugin.export(description, rows, opts)
+        if self.open_file.get_active():
+            mime = gnomevfs.get_mime_type(opts["uri"])
+            app_desc = gnomevfs.mime_get_default_application(mime)
+            cmd = app_desc[2].split(" ")
+            os.spawnvp(os.P_NOWAIT, cmd[0], cmd+[opts["uri"]])

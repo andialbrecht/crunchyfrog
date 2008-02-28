@@ -22,6 +22,7 @@
 
 import gtk
 import gobject
+import pango
 
 import sys
 
@@ -29,6 +30,7 @@ from cf.backends import DBConnection, DBConnectError
 from cf.backends.schema import SchemaProvider, Node
 from cf.plugins.core import DBBackendPlugin
 from cf.datasources import DatasourceInfo
+from cf.ui import GladeWidget
 from cf.ui.pdock import DockItem
 
 from gettext import gettext as _
@@ -53,12 +55,28 @@ class LDAPBackend(DBBackendPlugin):
     def on_instance_created(self, app, instance):
         self.init_instance(instance)
         
+    def on_search_dn(self, menuitem, object, instance):
+        search = LDAPSearch(self.app, instance, object.get_data("connection"))
+        search.set_search_dn(object.get_data("dn"))
+        item = DockItem(instance.dock, "search_%s" % object.get_data("dn"),
+                        search.widget, 
+                        _(u"Search: %(dn)s") % {"dn" : object.get_data("dn")}, 
+                       "gtk-find", None)
+        instance.dock.add_item(item)
+        
     def init_instance(self, instance):
         instance.browser.connect("object-menu-popup", self.on_object_menu_popup, instance)
         
     def on_object_menu_popup(self, browser, popup, object, instance):
         if isinstance(object, LDAPNode):
-            item = gtk.MenuItem(_(u"Details"))
+            item = gtk.ImageMenuItem("gtk-find")
+            item.show()
+            item.connect("activate", self.on_search_dn, object, instance)
+            popup.append(item)
+            sep = gtk.SeparatorMenuItem()
+            sep.show()
+            popup.append(sep)
+            item = gtk.MenuItem(_(u"_Details"))
             item.show()
             item.connect("activate", self.on_object_details, object, instance)
             popup.append(item)
@@ -124,6 +142,99 @@ class LDAPConnection(DBConnection):
         self.conn = conn
         self.opts = opts
         
+    def _reconnect(self):
+        data = self.opts
+        conn_args = [data.get("host") or "localhost"]
+        conn_args.append(data.get("port") or 389)
+        real_conn = ldap.open(*conn_args)
+        if data.get("user"):
+            try:
+                real_conn.bind_s(data.get("user"), data.get("password"))
+            except:
+                raise DBConnectError(str(sys.exc_info()[1]))
+        self.conn = real_conn
+        
+    def search_s(self, *args, **kw):
+        try:
+            r = self.conn.search_s(*args, **kw)
+        except ldap.SERVER_DOWN:
+            self._reconnect()
+            r = self.conn.search_s(*args, **kw)
+        return r
+            
+        
+class LDAPSearch(GladeWidget):
+    
+    def __init__(self, app, instance, connection):
+        GladeWidget.__init__(self, app, "crunchyfrog", "ldap_search")
+        self.connection = connection
+        self.instance = instance
+        
+    def on_do_search(self, *args):
+        self.search()
+        
+    def on_row_activated(self, treeview, path, column):
+        model = treeview.get_model()
+        iter = model.get_iter(path)
+        dn = model.get_value(iter, 0)
+        res = self.connection.conn.search_s(dn, ldap.SCOPE_BASE)
+        view = LDAPView(res[0][1])
+        item = DockItem(self.instance.dock, dn, view, dn, 
+                       "gtk-edit", None)
+        self.instance.dock.add_item(item)
+        
+    def search(self):
+        search_dn = self.xml.get_widget("ldap_search_dn").get_text()
+        if self.xml.get_widget("ldap_search_scope_onelevel").get_active():
+            scope = ldap.SCOPE_ONELEVEL
+        else:
+            scope = ldap.SCOPE_SUBTREE
+        filterstr = self.xml.get_widget("ldap_search_filter").get_text()
+        attrlist = self.xml.get_widget("ldap_search_attributes").get_text().split(",") 
+        r = self.connection.search_s(search_dn, scope, filterstr, attrlist)
+        treeview = self.xml.get_widget("ldap_search_results")
+        while treeview.get_columns():
+            treeview.remove_column(treeview.get_column(0))
+        model_args = [str]
+        renderer = gtk.CellRendererText()
+        renderer.set_property("ellipsize", pango.ELLIPSIZE_END)
+        col = gtk.TreeViewColumn("dn", renderer, text=0)
+        col.set_sort_column_id(0)
+        col.set_resizable(True)
+        col.set_min_width(100)
+        col.set_reorderable(True)
+        treeview.append_column(col)
+        for i in range(len(attrlist)):
+            attr = attrlist[i]
+            model_args.append(str)
+            renderer = gtk.CellRendererText()
+            renderer.set_property("ellipsize", pango.ELLIPSIZE_END)
+            col = gtk.TreeViewColumn(attr, renderer, text=i+1)
+            col.set_sort_column_id(i+1)
+            col.set_resizable(True)
+            col.set_reorderable(True)
+            col.set_min_width(50)
+            treeview.append_column(col)
+        model = gtk.ListStore(*model_args)
+        treeview.set_model(model)
+        for item in r:
+            row = [item[0]]
+            attrs = item[1]
+            for i in range(len(attrlist)):
+                att = attrlist[i].lower()
+                att_set = False
+                for key, value in attrs.items():
+                    if key.lower() == att and not att_set:
+                        row.append(value[0])
+                        att_set = True
+                if not att_set:
+                    row.append("N/A") 
+            model.append(row)
+        
+        
+    def set_search_dn(self, dn):
+        self.xml.get_widget("ldap_search_dn").set_text(dn)
+        
 class LDAPView(gtk.ScrolledWindow):
     
     def __init__(self, data):
@@ -156,7 +267,11 @@ class LDAPSchema(SchemaProvider):
         else:
             dn = parent.get_data("dn")
         ret = []
-        for item in  [x[0] for x in connection.conn.search_st(dn, ldap.SCOPE_ONELEVEL, attrsonly=1)]:
-            ret.append(LDAPNode(item.split(",", 1)[0], dn=item, connection=connection))
+        for item in  [x[0] for x in connection.search_s(dn, ldap.SCOPE_ONELEVEL, attrsonly=1)]:
+            node = LDAPNode(item.split(",", 1)[0], dn=item, connection=connection)
+            if len(connection.search_s(item, ldap.SCOPE_ONELEVEL, attrsonly=1)) == 0:
+                node.has_children = False
+                node.icon = "gtk-justify-fill"
+            ret.append(node)
         return ret
         

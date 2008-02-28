@@ -23,6 +23,7 @@ import gtk
 from cf.backends import DBConnectError
 from cf.backends.dbapi2helper import DbAPI2Connection, DbAPI2Cursor
 from cf.backends.schema import *
+from cf.backends import ReferenceProvider
 from cf.plugins.core import DBBackendPlugin
 from cf.datasources import DatasourceInfo
 
@@ -39,6 +40,7 @@ class SQLiteBackend(DBBackendPlugin):
         DBBackendPlugin.__init__(self, app)
         log.info("Activating SQLite3 backend")
         self.schema = SQLiteSchema()
+        self.reference = SQLiteReferenceProvider()
 
     @classmethod
     def _get_filename(cls, chooser):
@@ -113,3 +115,11 @@ class SQLiteSchema(SchemaProvider):
             for item in self.q(connection, sql):
                 ret.append(View(item[0]))
             return ret
+        
+class SQLiteReferenceProvider(ReferenceProvider):
+    name = _(u"SQLite Reference")
+    base_url = "http://sqlite.org/docs.html"
+    
+    def get_context_help_url(self, term):
+        return "http://sqlite.org/lang.html"
+    

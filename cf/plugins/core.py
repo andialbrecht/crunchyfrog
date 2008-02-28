@@ -51,6 +51,22 @@ class GenericPlugin(gobject.GObject):
         
     def shutdown(self):
         pass
+    
+class ExportPlugin(GenericPlugin):
+    icon = "gtk-save-as"
+    file_filter_name = None
+    file_filter_mime = []
+    file_filter_pattern = []
+    has_options = False
+    
+    def __init__(self, app):
+        GenericPlugin.__init__(self, app)
+        
+    def export(self, description, rows, options=dict()):
+        raise NotImplementedError
+    
+    def show_options(self, description, rows):
+        return dict()
         
 class DBBackendPlugin(GenericPlugin):
     icon = "stock_database"
@@ -59,6 +75,7 @@ class DBBackendPlugin(GenericPlugin):
     def __init__(self, app):
         GenericPlugin.__init__(self, app)
         self.schema = None
+        self.reference = None
     
     @classmethod
     def get_datasource_options_widgets(cls, data_widgets, initial_data=None):
@@ -86,6 +103,7 @@ class DBBackendPlugin(GenericPlugin):
 ENTRY_POINTS = {
     "crunchyfrog.plugin" : (_(u"Miscellaneous"), GenericPlugin),
     "crunchyfrog.backend" : (_(u"Database backends"), DBBackendPlugin),
+    "crunchyfrog.export": (_(u"Export filter"), ExportPlugin),
 } 
 
 class PluginManager(gobject.GObject):

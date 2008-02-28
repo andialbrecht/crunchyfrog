@@ -60,5 +60,9 @@ setup(
     [crunchyfrog.plugin]
     cfshell = cf.shell:CFShell
     refbrowser = cf.ui.refviewer:ReferenceViewer
+    
+    [crunchyfrog.export]
+    csv = cf.filter.exportfilter:CSVExportFilter
+    xml = cf.filter.exportfilter:XMLExportFilter
     """
 )

@@ -23,6 +23,8 @@ cf/backends/sqlite.py
 cf/backends/schema/__init__.py
 cf/config/__init__.py
 cf/config/default.cfg
+cf/filter/__init__.py
+cf/filter/exportfilter.py
 cf/plugins/__init__.py
 cf/plugins/core.py
 cf/shell/__init__.py

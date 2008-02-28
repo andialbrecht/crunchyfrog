@@ -26,11 +26,13 @@ import gobject
 from cf.backends import DBConnectError, TRANSACTION_IDLE, TRANSACTION_COMMIT_ENABLED, TRANSACTION_ROLLBACK_ENABLED
 from cf.backends.dbapi2helper import DbAPI2Connection, DbAPI2Cursor
 from cf.backends.schema import *
+from cf.backends import ReferenceProvider
 from cf.datasources import DatasourceInfo
 from cf.plugins.core import DBBackendPlugin
 from cf.utils import Emit
 
 import time
+from urllib import quote_plus
 
 import psycopg2
 import psycopg2.extensions
@@ -39,16 +41,25 @@ from gettext import gettext as _
 
 import logging
 log = logging.getLogger("PG")
+        
+class PgReferenceProvider(ReferenceProvider):
+    name = _(u"PostgreSQL Reference")
+    base_url = "http://www.postgresql.org/docs/current"
+    
+    def get_context_help_url(self, term):
+        url = "http://search.postgresql.org/search?u=%2Fdocs%2F8.3%2Finteractive%2F&q="
+        url += quote_plus(term.strip())
+        return url
 
 class PostgresBackend(DBBackendPlugin):
     name = _(u"PostgreSQL Plugin")
     description = _(u"Provides access to PostgreSQL databases")
-    context_help_pattern = "http://www.postgresql.org/docs/8.2/interactive/sql-%(term)s.html"
     
     def __init__(self, app):
         DBBackendPlugin.__init__(self, app)
         log.info("Activating PostgreSQL backend")
         self.schema = PgSchema()
+        self.reference = PgReferenceProvider()
         
     def _get_conn_opts_from_opts(self, opts):
         conn_opts = dict()
@@ -119,6 +130,12 @@ class PgCursor(DbAPI2Cursor):
         gobject.source_remove(self._notice_tag)
         gtk.gdk.threads_leave()
         self._check_notices()
+        
+    def get_messages(self):
+        if self._cur.statusmessage:
+            return [self._cur.statusmessage]
+        else:
+            return []
     
 class PgConnection(DbAPI2Connection):
     cursor_class = PgCursor
