@@ -32,7 +32,7 @@ class CSVExportFilter(ExportPlugin):
     version = "0.1"
     has_options = False
     
-    file_filter_name = _(u"CSV file")
+    file_filter_name = _(u"Text CSV (.csv)")
     file_filter_pattern = ["*.csv"]
     
     def __init__(self, app):
@@ -45,16 +45,46 @@ class CSVExportFilter(ExportPlugin):
         w.writerows(rows)
         fp.close()
         
-class XMLExportFilter(ExportPlugin):
-    name = _(u"XML Export")
-    description = _(u"Export query results as XML files")
+class OOCalcExportFilter(ExportPlugin):
+    name = _(u"OpenDocument Export")
+    description = _(u"Export query results as OpenDocument Spreadsheets")
     author = "Andi Albrecht"
     license = "GPL"
     homepage = "http://crunchyfrog.googlecode.com"
     version = "0.1"
     
-    file_filter_name = _(u"XML file")
-    file_filter_pattern = ["*.xml"]
+    file_filter_name = _(u"OpenDocument Spreadsheet (.ods)")
+    file_filter_pattern = ["*.ods"]
     
     def __init__(self, app):
         ExportPlugin.__init__(self, app)
+        
+    def export(self, description, rows, options):
+        from cf.thirdparty import ooolib
+        import pwd
+        import os
+        import types
+        doc = ooolib.Calc()
+        doc.set_meta('title', _(u"CrunchyFrog Data Export"))
+        doc.set_meta('description', options.get("query", ""))
+        doc.set_meta('creator', pwd.getpwuid(os.getuid())[4].split(",", 1)[0])
+        doc.set_cell_property('bold', True)
+        for i in range(len(description)):
+            doc.set_cell_value(i+1, 1, "string", description[i][0])
+        doc.set_cell_property('bold', False)
+        for i in range(len(rows)):
+            for j in range(len(rows[i])):
+                value = rows[i][j]
+                if value == None:
+                    continue
+                if type(value) == types.FloatType:
+                    otype = "float" 
+                elif type(value) == types.IntType:
+                    otype = "int"
+                elif type(value) == types.BooleanType:
+                    otype = "boolean"
+                else:
+                    otype = "string"
+                doc.set_cell_value(j+1, i+2, otype, value)
+        doc.save(options["filename"])
+            

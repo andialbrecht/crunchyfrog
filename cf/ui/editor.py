@@ -584,7 +584,8 @@ class DataExportDialog(gtk.FileChooserDialog):
         else:
             rows = self.grid._query.rows
         opts = {"filename" : self.get_filename(),
-                "uri" : self.get_uri()}
+                "uri" : self.get_uri(),
+                "query" : self.grid._query.statement}
         if self.edit_export_options.get_property("sensitive") \
         and self.edit_export_options.get_active():
             opts.update(plugin.show_options(description, rows))

@@ -63,6 +63,6 @@ setup(
     
     [crunchyfrog.export]
     csv = cf.filter.exportfilter:CSVExportFilter
-    xml = cf.filter.exportfilter:XMLExportFilter
+    odc = cf.filter.exportfilter:OOCalcExportFilter
     """
 )
