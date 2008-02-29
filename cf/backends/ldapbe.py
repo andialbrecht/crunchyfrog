@@ -32,6 +32,7 @@ from cf.plugins.core import DBBackendPlugin
 from cf.datasources import DatasourceInfo
 from cf.ui import GladeWidget
 from cf.ui.pdock import DockItem
+from cf.ui.widgets import DataExportDialog
 
 from gettext import gettext as _
 
@@ -170,8 +171,35 @@ class LDAPSearch(GladeWidget):
         self.connection = connection
         self.instance = instance
         
+    def _setup_connections(self):
+        self.xml.get_widget("ldap_search_results").connect("button-press-event", self.on_button_press_event)
+        
+    def on_button_press_event(self, treeview, event):
+        if event.button == 3:
+            x = int(event.x)
+            y = int(event.y)
+            time = event.time
+            pthinfo = treeview.get_path_at_pos(x, y)
+            if pthinfo is not None:
+                path, col, cellx, celly = pthinfo
+                treeview.grab_focus()
+                treeview.set_cursor( path, col, 0)
+                popup = gtk.Menu()
+                model = treeview.get_model()
+                iter = model.get_iter(path)
+                item = gtk.MenuItem(_(u"Export"))
+                item.connect("activate", self.on_export)
+                item.show()
+                popup.append(item)
+                popup.show_all()
+                popup.popup( None, None, None, event.button, time)
+            return 1
+        
     def on_do_search(self, *args):
         self.search()
+        
+    def on_export(self, *args):
+        gobject.idle_add(self.export_data)
         
     def on_row_activated(self, treeview, path, column):
         model = treeview.get_model()
@@ -182,6 +210,35 @@ class LDAPSearch(GladeWidget):
         item = DockItem(self.instance.dock, dn, view, dn, 
                        "gtk-edit", None)
         self.instance.dock.add_item(item)
+        
+    def export_data(self):
+        data = []
+        treeview = self.xml.get_widget("ldap_search_results")
+        model = treeview.get_model()
+        iter = model.get_iter_first()
+        description = []
+        first_row = True
+        while iter:
+            row = []
+            for i in range(len(treeview.get_columns())):
+                row.append(model.get_value(iter, i))
+                if first_row:
+                    col = treeview.get_column(i)
+                    description.append((col.get_title(), str, None, None, None, None, None))
+            data.append(row)
+            first_row = False
+            iter = model.iter_next(iter)
+        selected = None
+        statement = ""
+        gtk.gdk.threads_enter()
+        dlg = DataExportDialog(self.app, self.instance.widget,
+                               data, selected, statement,
+                               description)
+        if dlg.run() == gtk.RESPONSE_OK:
+            dlg.hide()
+            dlg.export_data()
+        dlg.destroy()
+        gtk.gdk.threads_leave()
         
     def search(self):
         search_dn = self.xml.get_widget("ldap_search_dn").get_text()
