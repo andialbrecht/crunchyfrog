@@ -240,20 +240,21 @@ class LDAPView(gtk.ScrolledWindow):
     def __init__(self, data):
         gtk.ScrolledWindow.__init__(self)
         self.set_shadow_type(gtk.SHADOW_ETCHED_IN)
-        self.model = gtk.ListStore(str, str)
+        self.model = gtk.ListStore(str, str, str)
         self.list = gtk.TreeView(self.model)
-        col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=0)
+        col = gtk.TreeViewColumn(_(u"Attribute"), gtk.CellRendererText(), text=0)
+        col.set_sort_column_id(2)
         self.list.append_column(col)
-        col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=1)
+        col = gtk.TreeViewColumn(_(u"Value"), gtk.CellRendererText(), text=1)
+        col.set_sort_column_id(1)
         self.list.append_column(col)
         for key, value in data.items():
             for i in range(len(value)):
                 if i == 0:
-                    self.model.append([key, value[i]])
+                    self.model.append([key, value[i], key])
                 else:
-                    self.model.append(["", value[i]])
+                    self.model.append(["", value[i], key])
         self.add(self.list)
-        self.list.set_headers_visible(False)
         self.list.set_rules_hint(True)
         
 class LDAPNode(Node):
