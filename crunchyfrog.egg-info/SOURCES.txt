@@ -29,6 +29,8 @@ cf/plugins/__init__.py
 cf/plugins/core.py
 cf/shell/__init__.py
 cf/shell/ipython_view.py
+cf/thirdparty/__init__.py
+cf/thirdparty/ooolib.py
 cf/ui/__init__.py
 cf/ui/browser.py
 cf/ui/datasources.py
