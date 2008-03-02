@@ -27,6 +27,9 @@ from configobj import ConfigObj
 
 from gettext import gettext as _
 
+import logging
+log = logging.getLogger("CONFIG")
+
 from cf import USER_CONF
 
 class Config(gobject.GObject):
@@ -38,10 +41,11 @@ class Config(gobject.GObject):
                      (str, gobject.TYPE_PYOBJECT)),
     }
     
-    def __init__(self, app):
+    def __init__(self, app, config_file):
         self.app = app
         self.__gobject_init__() # IGNORE:E1101
         self.__conf = None
+        self.__config_file = config_file
         self.__init_conf()
         self.app.register_shutdown_task(self.on_app_shutdown, 
                                         _(u"Writing configuration"))
@@ -54,7 +58,8 @@ class Config(gobject.GObject):
         """Intialize the configuration system"""
         self.__conf = ConfigObj(abspath(join(dirname(__file__), "default.cfg")),
                                 unrepr=True)
-        self.__conf.update(ConfigObj(USER_CONF, unrepr=True))
+        log.info("Loading configuration file %r" % self.__config_file)
+        self.__conf.update(ConfigObj(self.__config_file, unrepr=True))
         
     def init(self):
         """Loads configuration"""
@@ -72,7 +77,7 @@ class Config(gobject.GObject):
     def write(self, fname=None):
         """Writes configuration file"""
         if not fname:
-            fname = USER_CONF
-        fp = open(USER_CONF, "w")
+            fname = self.__config_file
+        fp = open(fname, "w")
         self.__conf.write(fp)
         fp.close()

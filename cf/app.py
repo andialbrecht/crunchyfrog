@@ -46,11 +46,12 @@ class CFApplication(bonobo.Application):
     
     """
     
-    def __init__(self):
+    def __init__(self, options):
         bonobo.Application.__init__(self, release.name)
+        self.options = options
         self.cb = CFAppCallbacks()
         self.__shutdown_tasks = []
-        self.config = Config(self)
+        self.config = Config(self, options.config)
         self.userdb = UserDB(self)
         self.plugins = PluginManager(self)
         self.datasources = DatasourceManager(self)

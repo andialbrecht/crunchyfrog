@@ -101,6 +101,9 @@ def _parse_commandline():
                       action="store_true", dest="show_version",
                       default=False,
                       help="show program's version number and exit")
+    parser.add_option("-c", "--config",
+                      dest="config", default=USER_CONF,
+                      help="configuration file")
     options, args = parser.parse_args()
     if options.show_version:
         print "%s - %s" % (release.name, release.description)
@@ -118,7 +121,7 @@ def main():
     logging.basicConfig(format=LOG_FORMAT_APP,
                         level=log_level)
     bonobo.activate()
-    app = CFApplication()
+    app = CFApplication(options)
     client = app.register_unique(app.create_serverinfo(("LANG",)))
     if not client:
         if isfile(abspath(join(dirname(__file__), "../setup.py"))):
