@@ -83,6 +83,7 @@ class UserDB(gobject.GObject):
         """
         self.app = app
         self.conn = None
+        self._user_db = self.app.config.get("userdb.file", USER_DB)
         self.__gobject_init__()
         self.__init_userdb()
         
@@ -92,8 +93,8 @@ class UserDB(gobject.GObject):
         This method creates the database if necessary.
         """
         log.debug("Initializing user database")
-        create = not os.path.isfile(USER_DB)
-        self.conn = sqlite.connect(USER_DB)
+        create = not os.path.isfile(self._user_db)
+        self.conn = sqlite.connect(self._user_db)
         self.cursor = self.conn.cursor()
         if create:
             self.__create_userdb()
