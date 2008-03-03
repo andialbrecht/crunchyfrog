@@ -11,6 +11,7 @@
  * python-configobj >= 4.4.0
  * python-lxml >= 0.9
  * python-kiwi
+ * gnome-extra-icons
  * psycopg2 (optional, required to connect to PostgreSQL databases)
  * MySQLdb (optional, required to connect to MySQL databases)
  * sqlite3 bindings (optional, required to connect to SQLite3 databases)

@@ -24,6 +24,7 @@ Depends: ${misc:Depends},
          python-configobj (>= 4.4.0),
          python-lxml (>= 0.9),
          python-kiwi,
+         gnome-extra-icons,
 Recommends: python-psycopg2
 XB-Python-Version: ${python:Versions}
 Description: database schema browser and query tool
