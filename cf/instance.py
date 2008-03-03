@@ -21,7 +21,6 @@
 import gtk
 import gtk.glade
 import gnome
-import gdl
 import gobject
 
 from gettext import gettext as _

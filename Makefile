@@ -1,4 +1,5 @@
 PO=de
+RELEASENAME=snapshot
 
 clean: po-clean
 	find . -name "*.pyc" -delete
@@ -23,6 +24,17 @@ deb: dist-prepare
 	
 snapshot: dist-prepare
 	python setup.py egg_info -rbdev bdist_egg rotate -m.egg -k3
+
+dist-release: dist-prepare sdist-release bdist-release
+
+sdist-release:
+	python setup.py egg_info -b-$(RELEASENAME) sdist
+
+sdist-upload:
+	python setup.py egg_info -b-$(RELEASENAME) sdist upload
+
+bdist-release:
+	python setup.py egg_info -b-$(RELEASENAME) bdist_egg
 	
 source-release: dist-prepare
 	python setup.py egg_info -rbdev sdist upload
