@@ -18,7 +18,7 @@
 
 # $Id$
 
-"""LDAP Backend (experimental)"""
+"""LDAP backend"""
 
 import gtk
 import gobject

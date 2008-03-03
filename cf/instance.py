@@ -18,10 +18,15 @@
 
 # $Id$
 
+"""Instance class"""
+
 import gtk
 import gtk.glade
 import gnome
+import gnomevfs
 import gobject
+
+import os
 
 from gettext import gettext as _
 
@@ -145,6 +150,37 @@ class CFInstance(GladeWidget):
     def on_new_instance(self, *args):
         self.app.new_instance(tuple())
         
+    def on_open_file(self, *args):
+        dlg = gtk.FileChooserDialog(_(u"Select file"),
+                            self.widget,
+                            gtk.FILE_CHOOSER_ACTION_OPEN,
+                            (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                             gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+        dlg.set_current_folder(self.app.config.get("editor.recent_folder", ""))
+        filter = gtk.FileFilter()
+        filter.set_name(_(u"All files (*)"))
+        filter.add_pattern("*")
+        dlg.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_(u"SQL files (*.sql)"))
+        filter.add_pattern("*.sql")
+        dlg.add_filter(filter)
+        dlg.set_filter(filter)
+        if dlg.run() == gtk.RESPONSE_OK:
+            gobject.idle_add(self.new_editor, dlg.get_filename())
+            self.app.config.set("editor.recent_folder", dlg.get_current_folder())
+        dlg.destroy()
+        
+    def on_save_file(self, *args):
+        if not self._editor:
+            return 
+        self._editor.save_file()
+        
+    def on_save_file_as(self, *args):
+        if not self._editor:
+            return
+        self._editor.save_file_as()
+        
     def on_report_problem(self, *args):
         gobject.idle_add(self.open_website, "http://code.google.com/p/crunchyfrog/issues/list")
         
@@ -158,12 +194,7 @@ class CFInstance(GladeWidget):
         self.app.preferences_show()
         
     def on_query_new(self, *args):
-        editor = Editor(self.app, self)
-        if self.app.config.get("editor.open_in_window"):
-            editor.show_in_separate_window()
-        else:
-            self.queries.attach(editor)
-        editor.show_all()
+        self.new_editor()
         
     def on_quit(self, *args):
         self.widget.destroy()
@@ -172,6 +203,18 @@ class CFInstance(GladeWidget):
         config = self.app.config
         bit = gtk.gdk.WINDOW_STATE_MAXIMIZED.value_names[0] in event.new_window_state.value_names
         config.set("gui.maximized", bit)
+        
+    def new_editor(self, fname=None):
+        editor = Editor(self.app, self)
+        if fname:
+            if fname.startswith("file://"):
+                fname = gnomevfs.get_local_path_from_uri(fname)
+            editor.set_filename(fname)
+        if self.app.config.get("editor.open_in_window"):
+            editor.show_in_separate_window()
+        else:
+            self.queries.attach(editor)
+        editor.show_all()
         
     def open_website(self, url):
         gnome.url_show(url)

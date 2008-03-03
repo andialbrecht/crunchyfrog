@@ -18,7 +18,9 @@
 
 # $Id$
 
-"""Application object"""
+"""Application object
+
+"""
 
 import bonobo
 import gobject
@@ -37,13 +39,16 @@ log = logging.getLogger("APP")
 
 class CFApplication(bonobo.Application):
     """Main application object
-    
-    :Attributes:
-        config: preferences
-        userdb: uer database
-        plugins: pugin manager
-        datasources: datasource manager
-    
+        
+    :IVariables:
+        config : `Config`
+            preferences
+        userdb : `UserDB`
+            user database
+        plugins : `PluginManager`
+            pugin manager
+        datasources : `DatasourceManager`
+            datasource manager
     """
     
     def __init__(self, options):
@@ -57,6 +62,10 @@ class CFApplication(bonobo.Application):
         self.datasources = DatasourceManager(self)
         
     def get_instances(self):
+        """Returns a list of active instances
+        
+        See `CFInstance` for details.
+        """
         ret = self.get_data("instances")
         if not ret:
             ret = []
@@ -88,6 +97,16 @@ class CFApplication(bonobo.Application):
                 log.error("Task failed: %s" % str(sys.exc_info()[1])) 
         
 class CFAppCallbacks(gobject.GObject):
+    """Container for application specific signals.
+    
+    Signals
+    =======
+    
+        instance-created
+            ``def callback(application, instance, user_data1, ...)``
+            
+            Called when a new instance was created
+    """
     
     __gsignals__ = {
         "instance-created" : (gobject.SIGNAL_RUN_LAST,

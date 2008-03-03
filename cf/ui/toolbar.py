@@ -18,6 +18,8 @@
 
 # $Id$
 
+"""Custom toolbar"""
+
 import gtk
 import gobject
 
@@ -34,9 +36,22 @@ class CFToolbar(GladeWidget):
         item = self.xml.get_widget("tb_connection")
         self.tb_connection = ConnectionButton(self.app)
         item.add(self.tb_connection)
+        self._editor = None
         self.__editor_signals = list()
+        self.__buffer_signals = list()
         self.__conn_signals = list()
         self.set_editor(None)
+        
+    def on_buffer_changed(self, buffer, editor):
+        btn_save = self.xml.get_widget("tb_save")
+        btn_saveas = self.xml.get_widget("tb_saveas")
+        if not editor or not editor.get_filename():
+            btn_save.set_sensitive(False)
+            btn_saveas.set_sensitive(bool(editor))
+            return
+        btn_save.set_sensitive(editor.file_contents_changed())
+        btn_saveas.set_sensitive(True)
+        
         
     def on_connection_notify(self, connection, property):
         if property.name == "transaction-state":
@@ -51,6 +66,7 @@ class CFToolbar(GladeWidget):
             self.__conn_signals.append(conn.connect("notify", self.on_connection_notify))
         else:
             self.set_transaction_state(None)
+        self.tb_connection.set_editor(editor)
             
     def set_transaction_state(self, value):
         if value == None: 
@@ -64,6 +80,10 @@ class CFToolbar(GladeWidget):
     def set_editor(self, editor):
         while self.__editor_signals:
             self._editor.disconnect(self.__editor_signals.pop())
+        if self._editor:
+            buffer = self._editor.get_buffer()
+            while self.__buffer_signals:
+                buffer.disconnect(self.__buffer_signals.pop())
         self._editor = editor
         self.tb_connection.set_editor(editor)
         for item in ["tb_cut", "tb_copy", "tb_paste"]:
@@ -71,3 +91,5 @@ class CFToolbar(GladeWidget):
         if self._editor:
             self.__editor_signals.append(self._editor.connect("connection-changed", self.on_editor_connection_changed))
             self.on_editor_connection_changed(self._editor, self._editor.connection)
+            buffer = self._editor.get_buffer()
+            self.__buffer_signals.append(buffer.connect("changed", self.on_buffer_changed, editor))

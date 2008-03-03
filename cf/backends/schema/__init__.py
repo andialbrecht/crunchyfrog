@@ -18,6 +18,8 @@
 
 # $Id$
 
+"""Schema browsing base classes"""
+
 import gobject
 
 from gettext import gettext as _

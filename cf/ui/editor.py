@@ -18,6 +18,8 @@
 
 # $Id$
 
+"""SQL editor and results view"""
+
 import gtk
 import gobject
 import gconf
@@ -56,7 +58,10 @@ class Editor(GladeWidget):
         self.app = app
         self.instance = instance
         self.connection = None
+        self.__conn_close_tag = None
         self._query_timer = None
+        self._filename = None
+        self._filecontent_read = ""
         GladeWidget.__init__(self, app, "crunchyfrog", "box_editor")
         self.set_data("win", None)
         self.show_all()
@@ -95,14 +100,15 @@ class Editor(GladeWidget):
         self.app.config.connect("changed", self.on_config_changed)
         
     def on_close(self, *args):
-        if self.get_data("win"):
-            self.get_data("win").close()
-        else:
-            self.destroy()
+        self.close()
             
     def on_config_changed(self, config, option, value):
         if option.startswith("editor."):
             gobject.idle_add(self.update_textview_options)
+            
+    def on_connection_closed(self, connection):
+        connection.disconnect(self.__conn_close_tag)
+        self.set_connection(None)
         
     def on_populate_popup(self, textview, popup):
         sep = gtk.SeparatorMenuItem()
@@ -153,6 +159,12 @@ class Editor(GladeWidget):
     def on_show_in_separate_window(self, *args):
         gobject.idle_add(self.show_in_separate_window)
         
+    def close(self):
+        if self.get_data("win"):
+            self.get_data("win").close()
+        else:
+            self.destroy()
+        
     def commit(self):
         if not self.connection: return
         cur = self.connection.cursor()
@@ -200,7 +212,65 @@ class Editor(GladeWidget):
         
     def set_connection(self, conn):
         self.connection = conn
+        if conn:
+            self.__conn_close_tag = self.connection.connect("closed", self.on_connection_closed)
         self.emit("connection-changed", conn)
+        
+    def set_filename(self, filename):
+        self._filename = filename
+        if filename:
+            f = open(self._filename)
+            a = f.read()
+            f.close()
+        else:
+            a = ""
+        self._filecontent_read = a
+        self.textview.get_buffer().set_text(a)
+        
+    def get_filename(self):
+        return self._filename
+    
+    def file_contents_changed(self):
+        if self._filename:
+            buffer = self.textview.get_buffer()
+            return buffer.get_text(*buffer.get_bounds()) != self._filecontent_read
+        return False
+    
+    def save_file(self):
+        if not self._filename:
+            return self.save_file_as()
+        buffer = self.get_buffer()
+        a = buffer.get_text(*buffer.get_bounds())
+        f = open(self._filename, "w")
+        f.write(a)
+        f.close()
+        self._filecontent_read = a
+        gobject.idle_add(buffer.emit, "changed")
+        
+    def save_file_as(self):
+        dlg = gtk.FileChooserDialog(_(u"Save file"),
+                            self.instance.widget,
+                            gtk.FILE_CHOOSER_ACTION_SAVE,
+                            (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                             gtk.STOCK_SAVE, gtk.RESPONSE_OK))
+        dlg.set_current_folder(self.app.config.get("editor.recent_folder", ""))
+        filter = gtk.FileFilter()
+        filter.set_name(_(u"All files (*)"))
+        filter.add_pattern("*")
+        dlg.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_(u"SQL files (*.sql)"))
+        filter.add_pattern("*.sql")
+        dlg.add_filter(filter)
+        dlg.set_filter(filter)
+        if dlg.run() == gtk.RESPONSE_OK:
+            self._filename = dlg.get_filename()
+            gobject.idle_add(self.save_file)
+            self.app.config.set("editor.recent_folder", dlg.get_current_folder())
+        dlg.destroy()
+    
+    def get_buffer(self):
+        return self.textview.get_buffer()
         
     def show_in_separate_window(self):
         win = EditorWindow(self.app, self.instance)

@@ -20,6 +20,8 @@
 
 """Database backends"""
 
+__doc_all__ = ["schema",]
+
 import gobject
 import gtk
 

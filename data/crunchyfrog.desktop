@@ -9,3 +9,4 @@ Icon=crunchyfrog
 Terminal=false
 Type=Application
 Categories=GNOME;GTK;Development;Databases;
+MimeType=text/x-sql

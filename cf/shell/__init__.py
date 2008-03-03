@@ -18,6 +18,8 @@
 
 # $Id$
 
+"""Python shell plugin"""
+
 import gtk
 import gobject
 

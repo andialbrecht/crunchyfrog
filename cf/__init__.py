@@ -18,6 +18,8 @@
 
 # $Id$
 
+__doc_all__ = ["main", "backends"]
+
 import bonobo
 import gnome
 import gnomevfs
@@ -74,6 +76,8 @@ def new_instance_cb(xapp, argc, argv):
     l = xapp.get_data("instances")
     l.append(app)
     xapp.set_data("instances", l)
+    for item in argv:
+        app.new_editor(item)
     app.widget.show_all()
     app.widget.connect("destroy", ui_destroy_cb, app, xapp)
     xapp.cb.emit("instance-created", app)

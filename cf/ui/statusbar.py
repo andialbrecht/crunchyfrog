@@ -18,6 +18,8 @@
 
 # $Id$
 
+"""Custom statusbar"""
+
 import gtk
 import gobject
 

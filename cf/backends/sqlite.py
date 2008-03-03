@@ -18,6 +18,8 @@
 
 # $Id$
 
+"""SQLite3 backend"""
+
 import gtk
 
 from cf.backends import DBConnectError
@@ -115,6 +117,14 @@ class SQLiteSchema(SchemaProvider):
             for item in self.q(connection, sql):
                 ret.append(View(item[0]))
             return ret
+        
+        elif isinstance(parent, Table) or isinstance(parent, View):
+            return [ColumnCollection(table=parent)]
+        
+        elif isinstance(parent, ColumnCollection):
+            ret = []
+            sql = "pragma table_info('%s')" % parent.get_data("table").name
+            return [Column(item[1]) for item in self.q(connection, sql)]
         
 class SQLiteReferenceProvider(ReferenceProvider):
     name = _(u"SQLite Reference")

@@ -18,6 +18,8 @@
 
 # $Id$
 
+"""Nifty little helpers"""
+
 import gtk
 import gobject
 

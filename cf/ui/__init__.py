@@ -18,6 +18,8 @@
 
 # $Id$
 
+"""User interface"""
+
 import gobject
 import gtk
 

@@ -18,6 +18,8 @@
 
 # $Id$
 
+"""Datasource handling"""
+
 import gobject
 import cPickle
 

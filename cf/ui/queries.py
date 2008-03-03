@@ -17,11 +17,14 @@
 
 # $Id$
 
+"""Notebook that holds SQL editors"""
+
 import gtk
 import gobject
 import pango
 
 import re
+import os
 
 from gettext import gettext as _
 
@@ -84,15 +87,33 @@ class TabLabel(gtk.EventBox):
             item = gtk.MenuItem(_(u"Show in separate window"))
             item.connect("activate", self.on_show_in_separate_window)
             popup.append(item)
+            sep = gtk.SeparatorMenuItem()
+            sep.show()
+            popup.append(sep)
+            item = gtk.ImageMenuItem("gtk-close")
+            item.connect("activate", self.on_close_editor)
+            item.show()
+            popup.append(item)
             popup.show_all()
             popup.popup( None, None, None, event.button, time)
+            
+    def on_close_editor(self, *args):
+        self.editor.close()
             
     def on_show_in_separate_window(self, item):
         gobject.idle_add(self.editor.show_in_separate_window)
         
     def update_label(self, buffer):
-        txt = buffer.get_text(*buffer.get_bounds())
-        txt = re.sub("\s+", " ", txt)
+        if self.editor.get_filename():
+            fname = self.editor.get_filename()
+            txt = os.path.split(fname)[-1]
+            self.label.set_tooltip_text(fname)
+            if self.editor.file_contents_changed():
+                txt = "*"+txt
+        else:
+            self.label.set_tooltip_text("")
+            txt = buffer.get_text(*buffer.get_bounds())
+            txt = re.sub("\s+", " ", txt)
         txt = txt.strip()
         if not txt:
             txt = _(u"Query")

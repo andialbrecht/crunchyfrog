@@ -18,6 +18,8 @@
 
 # $Id$
 
+"""Helper classes for DB-API2 connections""" 
+
 import sys
 
 from cf.backends import DBConnection, DBCursor
