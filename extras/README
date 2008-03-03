@@ -1,0 +1,2 @@
+apydia_exclude_gtk.patch
+	This patch is required to build the API documentation.

@@ -1,0 +1,96 @@
+* { margin: 0; padding: 0; }
+body {
+	font-family: sans-serif;
+	color: #555753;
+	background-color: white;	
+}
+p {
+	margin-top: .5em;
+	margin-bottom: .5em;	
+}
+
+dd {
+	margin-left: 1.5em;
+	margin-bottom: .8em;
+	margin-top: .3em;	
+}
+ul {
+	margin-left: 1.5em;
+	margin-bottom: .5em;	
+}
+
+a {
+	color: #4e9a06;
+	text-decoration: none;	
+}
+a:hover {
+	color: #5c7f91;	
+}
+a:visited {
+	color: #5c7f91;	
+}
+
+#devref {
+	font-family: Impact, Helvetica, sans-serif;
+    text-align: left;
+    font-size: 9pt;
+    letter-spacing: .2em;
+    color: #eeeeec;
+    background-color: #555753;
+    padding: .2em;
+    padding-left: 20px;
+	
+}
+#devref a { color: #eeeeec; text-decoration: none; }
+#devref a:hover { color: #eeeeec; }
+#devref a:after { content: " <<"; }
+
+#page { margin: 20px; }
+
+#header {
+	border-bottom: 1px solid #babdb6;
+	padding-bottom: .3em;	
+}
+
+#logo {
+	height: 70px;
+	background: url(../img/crunchyfrog_logo_70x70.png) top left no-repeat;
+	padding-left: 80px;
+}
+#appname {
+	text-align: right;
+	text-transform: uppercase;
+	font-weight: normal;
+	letter-spacing: .3em;
+	font-size: 1.7em;
+	margin-bottom: .3em;
+	color: #2e3436;
+}
+#appname .emph { font-weight: bold; color: #555753; }
+.slogan {
+	display: block;
+	font-size: 12pt;
+	letter-spacing: .1em;
+	float: right;
+}
+
+#content h2 {
+	margin-top: 2em;
+	margin-bottom: .5em;	
+}
+
+.skip { display: none; }
+.clearfix { clear: both; }
+.fr { float: right; }
+ul.hmenu { list-style-type: none; }
+ul.hmenu li { float: left; margin-left: 1em; }
+
+#mainmenu { margin-top: .7em; }
+
+#mainmenu a {
+	text-decoration: none;
+	font-size: .8em;
+	text-transform: uppercase;
+	color: #555753;
+}
+#mainmenu a:hover { color: #2e3436; }

@@ -3,6 +3,7 @@ RELEASENAME=snapshot
 
 clean: po-clean
 	find . -name "*.pyc" -delete
+	find . -name "*~" -delete
 	rm -rf build/
 	
 ChangeLog:
@@ -55,4 +56,4 @@ po-gen:
 	for lang in $(PO); do msgmerge -U po/$$lang/LC_MESSAGES/crunchyfrog.po po/crunchyfrog.pot; done
 	
 api:
-	epydoc -o api/ --docformat="restructuredtext" --parse-only --no-private --url=http://cf.andialbrecht.de --no-frames -v cf
+	PYTHONPATH=`pwd`/data/:`pwd` apydia -c data/apydia.ini

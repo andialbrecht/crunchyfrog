@@ -1,0 +1,5 @@
+<div xmlns:py="http://genshi.edgewall.org/"
+      xmlns:xi="http://www.w3.org/2001/XInclude" style="padding-left: 20px;">
+<a href="${xdesc.href}" title="${xdesc.docstring.splitlines()[0]}">${xdesc.name}</a>
+<py:if test="xdesc.parent"><xi:include href="breadcrumbs.html" py:with="xdesc=xdesc.parent" /></py:if>
+</div>
