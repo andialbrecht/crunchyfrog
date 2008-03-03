@@ -58,9 +58,13 @@
                     </li>
                 </ul>
             </div> -->
-	    <div class="browser-section" py:if="desc.parent">
+	    <div class="browser-section" py:if="desc.get_parents()">
 		<h2>Hierarchy</h2>
-		<xi:include href="breadcrumbs.html" py:with="xdesc=desc.parent" />
+		<ul>
+			<li py:for="parent in desc.get_parents()">
+				<a href="${parent.href}" title="${parent.docstring.splitlines()[0]}">${parent.name}</a>
+		 	</li>
+		</ul>
             </div>
             
             <div py:if="desc.modules" class="browser-section">
