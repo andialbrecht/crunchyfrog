@@ -39,6 +39,10 @@
 	clear: both;
 }
 
+#main p {
+	text-align: justify;	
+}
+
 
 #main .field-list tbody {
 	background-color: #eeeeec;
@@ -79,16 +83,17 @@
 
 .rst h1 {
 	text-transform: uppercase;
-	font-size: 1.3em;
+	font-size: 1.1em;
 	font-weight: normal;
+	margin-bottom: .7em;
+	margin-top: 1.5em;
 }
 .rst h1 a {
 	color: #555753;
 }
 .rst .literal {
-	background-color: #eeeeec;
-	border: 1px solid #dddddd;
-	padding: .3em;
+	font-size: 1.2em;
+	color: #2e3436;
 }
 .rst dt {
 	font-weight: bold;

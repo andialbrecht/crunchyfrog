@@ -23,10 +23,7 @@
 The user database can be used by plugins to store some information.
 It is also used by CrunchyFrog itself i.e. to store connection data.
 
-:var USER_DB: Path to sqlite3 file
-:type USER_DB: ``str``
-:var log: Log function
-:type log: ``callable``
+:USER_DB: Path to sqlite3 file
 """
 
 import gobject
@@ -47,32 +44,35 @@ log = logging.getLogger("USERDB")
 class UserDB(gobject.GObject):
     """User database class.
     
-    An instance of this class is available as the ``userdb`` instance
-    variable of the `CFApplication` instance.
+    An instance of this class is accessible through the ``userdb``
+    attribute of an `CFApplication`_ instance.
     
     Usage example
     =============
     
-    CrunchyFrog shell:
+        .. sourcecode:: python
         
-        >>> app.userdb.get_table_version("foo")
-        None
-        >>> app.userdb.create_table("foo", "0.1", create_statement)
-        >>> app.userdb.get_table_version("foo")
-        '0.1'
-        >>> app.userdb.cursor.execute("insert into foo (value) values (?)", ("bar",))
-        >>> app.userdb.conn.commit()
-        >>> app.userdb.cursor.execute("select * from foo")
-        >>> app.userdb.cursor.fetchone()
-        ('bar',)
-        >>> app.userdb.drop_table("foo")
+            >>> app.userdb.get_table_version("foo")
+            None
+            >>> app.userdb.create_table("foo", "0.1", create_statement)
+            >>> app.userdb.get_table_version("foo")
+            '0.1'
+            >>> app.userdb.cursor.execute("insert into foo (value) values (?)", ("bar",))
+            >>> app.userdb.conn.commit()
+            >>> app.userdb.cursor.execute("select * from foo")
+            >>> app.userdb.cursor.fetchone()
+            ('bar',)
+            >>> app.userdb.drop_table("foo")
     
-    :ivar conn: Database connection
-    :ivar cursor: Datbase cursor
     
-    :group Creating tables / Meta: create_table, drop_table, get_table_version
-    :group Accessing the database: get_cursor, cursor, conn
-    :group Internal methods: _*
+    Instance attributes
+    ===================
+    
+        :conn: Database connection (sqlite connection)
+        :cursor: Database cursor (sqlite cursor)
+    
+    
+    .. _CFApplication: cf.app.CFApplication.html
     """
     
     def __init__(self, app):
@@ -111,7 +111,6 @@ class UserDB(gobject.GObject):
         """Returns a new DB-API compliant cursor.
         
         :Returns: DB-API compliant cursor
-        :Rtype: ``cursor``
         """
         return self.conn.cursor()
     
@@ -122,12 +121,11 @@ class UserDB(gobject.GObject):
         with the `create_table` method, that means, if it's not
         found in ``sy_table_version``.
         
-        :Parameters:
+        :Parameter:
             table_name
                 Name of the table
         
         :Returns: Version of the table, or ``None``
-        :Rtype: ``str``
         """
         sql = "select version from sy_table_version \
         where tablename=?"
@@ -145,7 +143,7 @@ class UserDB(gobject.GObject):
     def create_table(self, name, version, statement):
         """Creates and registers a table.
         
-        :Parameters:
+        :Parameter:
             name
                 Table name
             version
@@ -154,7 +152,6 @@ class UserDB(gobject.GObject):
                 ``CREATE`` statement to create the table
                 
         :Returns: ``True`` if the table was successfully created, otherwise ``False``
-        :Rtype: ``bool``
         """
         if self.get_table_version(name):
             log.error("Table '%s' already exists.", name)
@@ -173,12 +170,11 @@ class UserDB(gobject.GObject):
     def drop_table(self, name):
         """Deletes and unregisters a table.
         
-        :Parameters:
+        :Parameter:
             name
                 Table name
                 
         :Returns: ``True`` if the table was successfully dropped, otherwise ``False``
-        :Rtype: ``bool``
         """
         sql = "delete from sy_table_version where tablename=?"
         self.cursor.execute(sql, (name,))
@@ -186,7 +182,7 @@ class UserDB(gobject.GObject):
         sql = "drop table %s" % name
         try:
             self.cursor.execute(sql)
-        except sqlite3.OperationalError, e:
+        except sqlite.OperationalError, e:
             log.error("Failed to delete table: %s", str(e))
             return False
         return True

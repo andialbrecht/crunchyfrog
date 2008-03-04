@@ -6,7 +6,9 @@ body {
 }
 p {
 	margin-top: .5em;
-	margin-bottom: .5em;	
+	margin-bottom: .8em;
+	text-align: justify;
+	font-size: .9em;
 }
 
 dd {
@@ -27,7 +29,7 @@ a:hover {
 	color: #5c7f91;	
 }
 a:visited {
-	color: #5c7f91;	
+	color: #4e9a06;	
 }
 
 #devref {
@@ -153,3 +155,18 @@ ul.hmenu li { float: left; margin-left: 1em; }
 }
 
 .clearfix { clear: both; }
+
+.source {
+	border-left: 5px solid #eeeeec;
+	padding-left: 1em;
+}
+
+.note {
+	background: url(../img/dialog-information.png) 5px 5px no-repeat #fffce8;
+	padding: 5px;
+	padding-left: 45px;
+	font-size: .8em;
+	border: 1px solid #eeeeec;
+	-moz-border-radius: 8px;
+}
+.note .first { display: none; }

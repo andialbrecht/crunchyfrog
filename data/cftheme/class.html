@@ -24,7 +24,7 @@
 
     <ul py:replace="link_bar(desc, False)" />
 
-    <div py:if="desc.classes">
+    <div py:if="desc.classes" class="child-elements">
         <h2>Classes</h2>
         
         <py:for each="class_ in desc.classes">
@@ -39,7 +39,7 @@
         </py:for>
     </div>
 
-    <div py:if="desc.methods">
+    <div py:if="desc.methods" class="child-elements">
         <h2>Methods</h2>
         
         <py:for each="method in desc.methods">

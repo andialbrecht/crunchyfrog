@@ -21,13 +21,22 @@
 """
 CrunchyFrog is a database explorer and query tool for `GNOME`_.
 
+A good starting point to read this API documentation is the `CFApplication`_
+class.
 
-*Resources*
-    :Development pages: http://crunchyfrog.googlecode.com
-    :Additional documentation: http://code.google.com/p/crunchyfrog/wiki/Documentation?tm=6
+
+Other Resources
+===============
+    Development pages
+        http://crunchyfrog.googlecode.com
+    Additional documentation
+        http://code.google.com/p/crunchyfrog/wiki/Documentation?tm=6
+    Discussions
+        http://groups.google.com/group/crunchyfrog
 
 .. _GNOME: http://www.gnome.org
 .. _Wiki: http://code.google.com/p/crunchyfrog/wiki/Documentation?tm=6
+.. _CFApplication: cf.app.CFApplication.html
 """
 
 __doc_all__ = ["main", "backends"]

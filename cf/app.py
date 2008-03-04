@@ -39,16 +39,29 @@ log = logging.getLogger("APP")
 
 class CFApplication(bonobo.Application):
     """Main application object
+    
+    An instance of this class is accessible in almost every class in
+    CrunchyFrog through the ``app`` attribute. It provides access
+    to application internals.
+    
+    The easiest way to learn more about this object is to activate the
+    Python shell plugin. The shell has two local variables: ``app``
+    is the CFApplication instance and ``instance`` is the `CFInstance`_
+    object for the GUI the shell runs in.
         
-    :IVariables:
-        config : `Config`
-            preferences
-        userdb : `UserDB`
-            user database
-        plugins : `PluginManager`
-            pugin manager
-        datasources : `DatasourceManager`
-            datasource manager
+    Attributes
+    ==========
+    
+        :config: Configuration (see `Config`_ class)
+        :userdb: User database (see `UserDB`_ class)
+        :plugins: Plugin registry (see `PluginManager`_ class)
+        :datasources: Datasource information (see `DatasourceManager`_ class)
+            
+    .. _Config: cf.config.Config.html
+    .. _UserDB: cf.userdb.UserDB.html
+    .. _PluginManager: cf.plugins.core.PluginManager.html
+    .. _DatasourceManager: cf.datasources.DatasourceManager.html
+    .. _CFInstance: cf.instance.CFInstance.html
     """
     
     def __init__(self, options):
