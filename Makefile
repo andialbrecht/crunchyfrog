@@ -57,3 +57,4 @@ po-gen:
 	
 api:
 	PYTHONPATH=`pwd`/data/:`pwd` apydia -c data/apydia.ini
+	cp docs/api/cf.html docs/api/index.html

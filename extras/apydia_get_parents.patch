@@ -1,0 +1,22 @@
+Index: apydia/descriptors.py
+===================================================================
+--- .	(revision 45)
++++ .	(working copy)
+@@ -201,6 +201,17 @@
+                 return keys
+         return None
+     
++    def get_parents(self, root_first=True):
++        """ Returns the path to the root object as a flattened list."""
++        ret = []
++        parent = self.parent
++        while parent:
++            ret.append(parent)
++            parent = parent.parent
++        if root_first:
++            ret.reverse()
++        return ret
++    
+     def __cmp__(self, other):
+         return cmp(self.name, other.name)
+

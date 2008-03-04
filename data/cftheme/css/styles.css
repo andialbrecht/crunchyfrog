@@ -49,11 +49,12 @@ a:visited {
 
 #header {
 	border-bottom: 1px solid #babdb6;
-	padding-bottom: .3em;	
+	padding-bottom: .3em;
+	margin-bottom: 1em;	
 }
 
 #logo {
-	height: 70px;
+	height: 75px;
 	background: url(../img/crunchyfrog_logo_70x70.png) top left no-repeat;
 	padding-left: 80px;
 }
@@ -72,6 +73,16 @@ a:visited {
 	font-size: 12pt;
 	letter-spacing: .1em;
 	float: right;
+}
+
+#footer {
+	text-align: right;
+	color: #babdb6;
+	font-size: .8em;
+	margin-top: 2em;
+	border-top: 1px solid #eeeeec;
+	padding-top: 1em;
+	clear: both;
 }
 
 #content h2 {
@@ -94,3 +105,51 @@ ul.hmenu li { float: left; margin-left: 1em; }
 	color: #555753;
 }
 #mainmenu a:hover { color: #2e3436; }
+
+.browser-help {
+	font-size: .8em;
+	text-transform: uppercase;
+	color: #babdb6;
+}
+
+.child-elements h2 {
+	font-weight: normal;
+	text-transform: uppercase;	
+}
+
+.child-elements ul {
+	list-style-type: none;
+	margin: 0;
+}
+.child-element li {
+	clear: both;
+}
+.child-elements a {
+	display: block;
+	padding: .2em;
+	width: 100%;
+	vertical-align:  baseline;
+}
+.child-elements li:hover {
+	background-color: #eeeeec;	
+}
+.child-elements div.name {
+	float: left;	
+	width: 25%;
+}
+.child-elements div.doc {
+	text-transform: uppercase;
+	margin-top: .3em;
+	color: #babdb6;
+	font-size: .8em;
+}
+
+.even, .odd {
+	border-bottom: 1px solid #eeeeec;
+}
+
+.odd {
+
+}
+
+.clearfix { clear: both; }

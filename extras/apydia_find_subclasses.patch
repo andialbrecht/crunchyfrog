@@ -1,0 +1,21 @@
+Index: apydia/descriptors.py
+===================================================================
+--- .	(revision 45)
++++ .	(working copy)
+@@ -344,6 +363,16 @@
+                 pass
+         return results
+     
++    def find_subclasses(self):
++        """Returns a list of ClassDesc for the subclasses of value.""" 
++        ret = []
++        if hasattr(self.value, "__subclasses__"):
++            for class_ in self.value.__subclasses__():
++                desc = Descriptor.instances.get(class_, None)
++                if desc:
++                    ret.append(desc)
++        return ret
++    
+     @property
+     def details(self):
+         return self.href

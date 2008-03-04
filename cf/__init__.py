@@ -18,6 +18,18 @@
 
 # $Id$
 
+"""
+CrunchyFrog is a database explorer and query tool for `GNOME`_.
+
+
+*Resources*
+    :Development pages: http://crunchyfrog.googlecode.com
+    :Additional documentation: http://code.google.com/p/crunchyfrog/wiki/Documentation?tm=6
+
+.. _GNOME: http://www.gnome.org
+.. _Wiki: http://code.google.com/p/crunchyfrog/wiki/Documentation?tm=6
+"""
+
 __doc_all__ = ["main", "backends"]
 
 import bonobo
@@ -28,13 +40,13 @@ import gtk
 import gtk.glade
 import gettext
 
+from cf import release
+
 from optparse import OptionParser
 from os.path import abspath, dirname, join, isfile, isdir, expanduser
 from os import makedirs
 import sys
 import logging
-
-from cf import release
 
 if isfile(abspath(join(dirname(__file__), "../setup.py"))):
     DATA_DIR = abspath(join(dirname(__file__), "../data"))

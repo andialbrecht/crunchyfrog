@@ -16,6 +16,11 @@
     
     <div class="docstring ${project.renderer_id(desc)}"
           py:content="project.render_description(desc)" />
+          
+    <div py:if="desc.find_subclasses()">
+    	<p>Subclasses: <py:for each="i, cls in enumerate(desc.find_subclasses())"><py:if test="i != 0">, </py:if><a href="${project.href(cls)}">${cls.name}</a></py:for>
+    	</p>
+    </div>
 
     <ul py:replace="link_bar(desc, False)" />
 
@@ -50,7 +55,7 @@
         </py:for>
     </div>
     
-    <div py:if="desc.attributes">
+    <div py:if="desc.attributes" class="child-elements">
         <h2>Attributes</h2>
         
         <py:for each="member in desc.attributes">
@@ -59,8 +64,7 @@
             <div class="docstring ${project.renderer_id(member)}"
                  py:content="project.render_description(member)" />
             
-            <h4>Value of <span py:replace="member.name" /></h4>
-            <pre class="code"><code py:content="helpers.pformat(helpers.safe_get(member, 'value'))" /></pre>
+            <p>Value: <code py:content="helpers.pformat(helpers.safe_get(member, 'value'))" /></p>
             
             <ul py:replace="link_bar(member)" />
         </py:for>

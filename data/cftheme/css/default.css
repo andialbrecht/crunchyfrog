@@ -1,10 +1,10 @@
 #page {
-	width: 60em;	
+	width: 95%;	
 }
 
 
 #browser {
-	width: 20em;
+	width: 25%;
 	float: left;
 }
 #browser ul {
@@ -25,8 +25,9 @@
 
 
 #main {
-	width: 39em;
+	width: 75%;
 	float: left;
+	padding-bottom: 2em;
 }
 
 #main h2 {
@@ -74,10 +75,6 @@
 #main .link-bar a {
 	color: #aaaaaa;
 	text-transform: uppercase;
-}
-
-#main .docstring {
-	margin-left: 1em;
 }
 
 .rst h1 {
