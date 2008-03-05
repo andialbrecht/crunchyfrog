@@ -19,7 +19,7 @@
 # $Id$
 
 """
-CrunchyFrog is a database explorer and query tool for `GNOME`_.
+CrunchyFrog Package
 
 A good starting point to read this API documentation is the `CFApplication`_
 class.

@@ -77,7 +77,9 @@ class CFApplication(bonobo.Application):
     def get_instances(self):
         """Returns a list of active instances
         
-        See `CFInstance` for details.
+        :Returns: List of `CFInstance`_ instances
+        
+        .. _CFInstance: cf.instance.CFInstance.html
         """
         ret = self.get_data("instances")
         if not ret:
@@ -93,20 +95,32 @@ class CFApplication(bonobo.Application):
     def register_shutdown_task(self, func, msg, *args, **kwargs):
         """Registers a new shutdown task.
         
-        :param func: a callable
-        :param msg: a human-readable message explaining what this task does
-        :param args, kwargs: arguments and kw arguments for this task
+        Shutdown tasks are executed when the ``shutdown`` method is
+        called.
+        
+        :Parameter:
+            func
+                A callable
+            msg
+                A human readable message explaingin what the task does
+            args, kwargs
+                arguments and keyword arguments for ``func`` (optional)
         """
         self.__shutdown_tasks.append((func, msg, args, kwargs))
         
     def shutdown(self):
-        """Execute all shutdown tasks and quit application"""
+        """Execute all shutdown tasks and quit application
+        
+        Shutdown tasks are called within a try-except-block. If an
+        exception is raised it will be printed to stdout.
+        """
         while self.__shutdown_tasks:
             func, msg, args, kwargs = self.__shutdown_tasks.pop()
             log.info(msg)
             try:
                 func(*args, **kwargs)
             except:
+                import traceback; traceback.print_exc()
                 log.error("Task failed: %s" % str(sys.exc_info()[1])) 
         
 class CFAppCallbacks(gobject.GObject):

@@ -134,25 +134,27 @@ class DatasourceInfo(gobject.GObject):
 class DatasourceManager(gobject.GObject):
     """Datasource manager
     
-    An instance of the ``DatasourceManager`` class is available
-    as the ``datasources`` instance attribute of `CFApplication`.
+    An instance of this class is accessible through the ``datasources``
+    attribute of an `CFApplication`_ instance.
     
     Signals
     =======
         datasource-added
-            ```def callback(manager, datasource_info, user_param1, ...)```
+            ``def callback(manager, datasource_info, user_param1, ...)``
             
             Emitted when a datsource was added
             
         datasource-deleted
-            ```def callback(manager, datasource_info, user_param1, ...)```
+            ``def callback(manager, datasource_info, user_param1, ...)``
             
             Emitted when a datasource was removed
             
         datasource-modified
-            ```def callback(manager, datasource_info, user_param1, ...)```
+            ``def callback(manager, datasource_info, user_param1, ...)``
             
             Emitted when a datasource was modified
+            
+    .. _CFApplication: cf.app.CFApplication.html
             
     """
     
@@ -208,6 +210,12 @@ class DatasourceManager(gobject.GObject):
                 self.emit("datasource-deleted", item)
         
     def get_all(self):
+        """Returns all datasources
+        
+        :Returns: List of `DatasourceInfo`_ instances
+        
+        .. _DatasourceInfo: cf.datasource.DatasourceInfo.html
+        """
         return self._cache
         
     

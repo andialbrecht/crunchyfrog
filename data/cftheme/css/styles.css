@@ -173,13 +173,13 @@ ul.hmenu li { float: left; margin-left: 1em; }
 .note .first { display: none; }
 
 .breadcrumbs {
-	font-family: Monospace;
-	margin-top: .5em;
+	m/argin-top: .5em;
 	margin-bottom: 1.5em;
 	padding-left: .5em;
 	border-left: 3px solid #eeeeec;
 }
-.breadcrumbs .crumbs { 
+.breadcrumbs .crumbs {
+	font-family: Monospace; 
 	float: left;
 	font-size: .8em; 
 }
@@ -187,4 +187,8 @@ ul.hmenu li { float: left; margin-left: 1em; }
 	float: right;
 	text-transform: uppercase;
 	color: #babdb6;
+}
+
+a.reference {
+	display: inline;
 }

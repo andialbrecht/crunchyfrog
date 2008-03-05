@@ -1,0 +1,15 @@
+Index: apydia/descriptors.py
+===================================================================
+--- .	(revision 46)
++++ .	(working copy)
+@@ -330,7 +341,9 @@
+         if exported_keys:
+             keys = [key for key in keys if key in exported_keys]
+         elif exported_keys is None:
+-            keys = [key for key in keys if not key.startswith("_")]
++            keys = [key for key in keys if not (key.startswith("_") \
++                                                or key.startswith("on_") \
++                                                or key.startswith("do_"))]
+         else:
+             keys = []
+         results = dict()

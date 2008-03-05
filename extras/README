@@ -7,3 +7,6 @@ apydia_find_subclasses.patch
 	
 apydia_skip_firstline.patch
 	render_description flag to ignore first line of docstring.
+	
+apydia_exclude_gcallbacks.patch
+	ignore methods starting with "on_" or "do_"
