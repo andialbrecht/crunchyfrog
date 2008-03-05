@@ -107,7 +107,32 @@ ENTRY_POINTS = {
 } 
 
 class PluginManager(gobject.GObject):
-    """Plugin manager"""
+    """Plugin manager
+    
+    An instance of this class is accessible through the ``plugins``
+    attribute of an `CFApplication`_ instance.
+    
+    Signals
+    =======
+        
+        plugin-added
+            ``def callback(manager, plugin, user_param1, ...)``
+            
+            Emitted when a plugin was added to the registry.
+            
+        plugin-removed
+            ``def callback(manager, plugin, user_param1, ...)``
+            
+            Emitted when a plugin is removed from the registry.
+            
+        plugin-active
+            ``def callback(manager, plugin, active, user_param1, ...)``
+            
+            Emitted when a plugin is activated or deactivated. `active`
+            is either ``True`` or ``False``.
+    
+    .. _CFApplication: cf.app.CFApplication.html
+    """
     
     entry_points = ENTRY_POINTS
     
@@ -142,6 +167,21 @@ class PluginManager(gobject.GObject):
             gobject.idle_add(self.refresh)
         
     def get_plugins(self, entry_point_name, active_only=False):
+        """Returns a list of plugins.
+        
+        :Parameter:
+            entry_point_name
+                The name of an entry point. Must be a key of the ``ENTRY_POINTS``
+                dictionary.
+            
+            active_only
+                If set to ``True`` only activated plugins are returned.
+                
+        :Returns: 
+            List of `plugins`_
+        
+        .. _plugins: cf.plugins.core.GenericPlugin.html
+        """
         ret = list()
         if active_only:
             plugins = self.__active_plugins.values()
@@ -153,6 +193,11 @@ class PluginManager(gobject.GObject):
         return ret
     
     def refresh(self):
+        """Refreshs the plugin registry.
+        
+        This method is called when the contents of a plugin folder
+        changes.
+        """
         # cleanup sys.path to remove deleted eggs
         for path in sys.path:
             if path.endswith(".egg") and not os.path.isfile(path):
@@ -203,6 +248,15 @@ class PluginManager(gobject.GObject):
                 self.emit("plugin-removed", plugin)
     
     def set_active(self, plugin, active):
+        """Activates / deactivates a plugin
+        
+        :Parameter:
+            plugin
+                Plugin to activate / deactivate
+            active
+                If ``True`` the plugin gets activated, otherwise it will
+                be deactivated.
+        """
         id = None
         for key, value in self.__plugins.items():
             if value == plugin:
@@ -227,11 +281,31 @@ class PluginManager(gobject.GObject):
         self.emit("plugin-active", plugin, active)
         
     def is_active(self, plugin):
+        """Returns ``True`` if the plugin is active
+        
+        :Parameter:
+            plugin
+                A plugin
+                
+        :Returns: ``True`` if the plugin is active.
+        """
         if isinstance(plugin, GenericPlugin):
             plugin = plugin.__class__
         return self.__active_plugins.has_key(plugin)
     
     def by_id(self, id, active_only=True):
+        """Returns a plugin by its id
+        
+        :Parameter:
+            id
+                Plugin ID
+            active_only
+                If ``True`` only active plugins are returned.
+        
+        :Returns: `Plugin`_ or ``None``
+        
+        .. _Plugin: cf.plugins.core.GenricPlugin.html
+        """
         if active_only:
             plugins = self.__active_plugins.values()
         else:

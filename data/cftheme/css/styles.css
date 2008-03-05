@@ -2,7 +2,8 @@
 body {
 	font-family: sans-serif;
 	color: #555753;
-	background-color: white;	
+	background-color: white;
+	font-size: 11pt;	
 }
 p {
 	margin-top: .5em;
@@ -165,8 +166,25 @@ ul.hmenu li { float: left; margin-left: 1em; }
 	background: url(../img/dialog-information.png) 5px 5px no-repeat #fffce8;
 	padding: 5px;
 	padding-left: 45px;
-	font-size: .8em;
+	font-size: .9em;
 	border: 1px solid #eeeeec;
 	-moz-border-radius: 8px;
 }
 .note .first { display: none; }
+
+.breadcrumbs {
+	font-family: Monospace;
+	margin-top: .5em;
+	margin-bottom: 1.5em;
+	padding-left: .5em;
+	border-left: 3px solid #eeeeec;
+}
+.breadcrumbs .crumbs { 
+	float: left;
+	font-size: .8em; 
+}
+.breadcrumbs .short_desc { 
+	float: right;
+	text-transform: uppercase;
+	color: #babdb6;
+}

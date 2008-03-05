@@ -7,3 +7,6 @@ apydia_get_parents.patch
 	
 apydia_find_subclasses.patch
 	Adds a method to ClassDesc to find subclasses.
+	
+apydia_skip_firstline.patch
+	render_description flag to ignore first line of docstring.

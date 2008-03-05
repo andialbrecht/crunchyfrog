@@ -13,9 +13,17 @@
 
 <body>
     <h1>Module: <span py:replace="desc.name" /></h1>
+    <div class="breadcrumbs">
+    	<div class="crumbs">
+    		<py:for each="i, parent in enumerate(desc.get_parents())"><py:if test="i != 0">.</py:if><a href="${project.href(parent)}">${parent.name}</a></py:for><py:if test="desc.get_parents()">.</py:if>${desc.name}
+    	</div>
+    	<div class="short_desc" py:if="desc.docstring">${desc.docstring.splitlines()[0]}</div>
+    	<div class="clearfix"></div>
+    </div>
+    
     
     <div class="docstring ${project.renderer_id(desc)}"
-          py:content="project.render_description(desc)" />
+          py:content="project.render_description(desc, True)" />
     
     <ul py:replace="link_bar(desc, False)" />
     

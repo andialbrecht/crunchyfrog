@@ -1,0 +1,36 @@
+Index: apydia/project.py
+===================================================================
+--- .	(revision 45)
++++ .	(working copy)
+@@ -147,10 +147,10 @@
+         for the given source. """
+         return Markup(self.parser().render_page_title(source, fallback))
+     
+-    def render_description(self, desc):
++    def render_description(self, desc, skip_firstline=False):
+         """ Returns the rendered docstring for the descriptor given in
+         `desc` as a Genshi-HTML-object. """
+-        return HTML(self.parser(desc).render_description(desc))
++        return HTML(self.parser(desc).render_description(desc, skip_firstline))
+     
+     def render_short_desc(self, desc):
+         """ Returns the first paragraph from a rendered docstring for the
+Index: apydia/renderers/base.py
+===================================================================
+--- .	(revision 45)
++++ .	(working copy)
+@@ -30,9 +30,12 @@
+             if title: return title.renderContents()
+         return fallback
+     
+-    def render_description(self, desc):
++    def render_description(self, desc, skip_firstline=False):
+         """ render full description (without title) """
+-        return self._render(desc.docstring)
++        if not skip_firstline:
++            return self._render(desc.docstring)
++        else:
++            return self._render("\n".join(desc.docstring.splitlines()[1:]))
+     
+     def render_short_desc(self, desc):
+         """ render first paragraph (without title) """
