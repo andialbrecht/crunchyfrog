@@ -236,9 +236,9 @@ class Editor(GladeWidget):
             return buffer.get_text(*buffer.get_bounds()) != self._filecontent_read
         return False
     
-    def save_file(self):
+    def save_file(self, parent=None):
         if not self._filename:
-            return self.save_file_as()
+            return self.save_file_as(parent=parent)
         buffer = self.get_buffer()
         a = buffer.get_text(*buffer.get_bounds())
         f = open(self._filename, "w")
@@ -247,9 +247,11 @@ class Editor(GladeWidget):
         self._filecontent_read = a
         gobject.idle_add(buffer.emit, "changed")
         
-    def save_file_as(self):
+    def save_file_as(self, parent=None):
+        if not parent:
+            parent = self.instance.widget
         dlg = gtk.FileChooserDialog(_(u"Save file"),
-                            self.instance.widget,
+                            parent,
                             gtk.FILE_CHOOSER_ACTION_SAVE,
                             (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                              gtk.STOCK_SAVE, gtk.RESPONSE_OK))
@@ -365,8 +367,47 @@ class EditorWindow(GladeWidget):
     def on_close(self, *args):
         self.close()
         
+    def on_execute_query(self, *args):
+        gobject.idle_add(self.editor.execute_query)
+        
+    def on_begin_transaction(self, *args):
+        gobject.idle_add(self.editor.begin_transaction)
+        
+    def on_commit(self, *args):
+        gobject.idle_add(self.editor.commit)
+        
+    def on_rollback(self, *args):
+        gobject.idle_add(self.editor.rollback)
+        
     def on_query_new(self, *args):
         self.instance.on_query_new(self, *args)
+        
+    def on_open_file(self, *args):
+        dlg = gtk.FileChooserDialog(_(u"Select file"),
+                            self.widget,
+                            gtk.FILE_CHOOSER_ACTION_OPEN,
+                            (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                             gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+        dlg.set_current_folder(self.app.config.get("editor.recent_folder", ""))
+        filter = gtk.FileFilter()
+        filter.set_name(_(u"All files (*)"))
+        filter.add_pattern("*")
+        dlg.add_filter(filter)
+        filter = gtk.FileFilter()
+        filter.set_name(_(u"SQL files (*.sql)"))
+        filter.add_pattern("*.sql")
+        dlg.add_filter(filter)
+        dlg.set_filter(filter)
+        if dlg.run() == gtk.RESPONSE_OK:
+            gobject.idle_add(self.editor.set_filename, dlg.get_filename())
+            self.app.config.set("editor.recent_folder", dlg.get_current_folder())
+        dlg.destroy()
+        
+    def on_save_file(self, *args):
+        self.editor.save_file(parent=self.widget)
+        
+    def on_save_file_as(self, *args):
+        self.editor.save_file_as(parent=self.widget)
         
     def on_copy(self, *args):
         self.editor.textview.get_buffer().copy_clipboard(gtk.clipboard_get())
