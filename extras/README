@@ -1,6 +1,3 @@
-apydia_exclude_gtk.patch
-	This patch is required to build the API documentation.
-	
 apydia_get_parents.patch
 	Adds a method to get all parents of an object as a
 	flattened list.
