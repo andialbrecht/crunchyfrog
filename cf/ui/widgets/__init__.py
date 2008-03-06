@@ -28,7 +28,11 @@ import gnomevfs
 
 import os
 
+from kiwi.ui import dialogs
+
 from gettext import gettext as _
+
+from cf.backends import DBConnectError
 
 class ConnectionButton(gdl.ComboButton):
     
@@ -52,9 +56,12 @@ class ConnectionButton(gdl.ComboButton):
         self.rebuild_menu()
         
     def on_new_connection(self, item, datasource_info):
-        conn = datasource_info.dbconnect()
-        self._editor.set_connection(conn)
-        self.set_editor(self._editor)
+        try:
+            conn = datasource_info.dbconnect()
+            self._editor.set_connection(conn)
+            self.set_editor(self._editor)
+        except DBConnectError, err:
+            dialogs.error(_(u"Connection failed"), err.message)
         
     def on_set_connection(self, item, connection):
         self._editor.set_connection(connection)
@@ -66,7 +73,10 @@ class ConnectionButton(gdl.ComboButton):
         if not self._editor:
             return
         ghas_connections = False
-        for datasource_info in self.app.datasources.get_all():
+        dinfos = self.app.datasources.get_all()
+        dinfos.sort(lambda x, y: cmp(x.get_label().lower(),
+                                     y.get_label().lower()))
+        for datasource_info in dinfos:
             item = gtk.MenuItem(datasource_info.get_label())
             item.show()
             self._menu.append(item)

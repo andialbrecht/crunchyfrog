@@ -201,6 +201,8 @@ class PreferencesDialog(GladeWidget):
         config = self.app.config
         gw = self.xml.get_widget
         gw("editor_open_separate").set_active(config.get("editor.open_in_window"))
+        gw("editor_replace_variables").set_data("config_option", "editor.replace_variables")
+        gw("editor_replace_variables").set_active(config.get("editor.replace_variables"))
         gw("editor_wrap_text").set_data("config_option", "editor.wrap_text")
         gw("editor_wrap_text").set_active(config.get("editor.wrap_text"))
         gw("editor_wrap_split").set_data("config_option", "editor.wrap_split")

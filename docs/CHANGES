@@ -7,6 +7,8 @@
  * file handling
  * SQLite: columns
  * API documentation
+ * SQL library
+ * EXPLAIN tab
 
 
 = 0.2 alpha1 =

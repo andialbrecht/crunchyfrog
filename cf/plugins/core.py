@@ -34,6 +34,9 @@ from gettext import gettext as _
 
 from cf import USER_PLUGIN_DIR, PLUGIN_DIR
 
+from cf.plugins.mixins import InstanceMixin, MenubarMixin, EditorMixin
+from cf.plugins.mixins import UserDBMixin
+
 class GenericPlugin(gobject.GObject):
     
     name = None
@@ -156,11 +159,17 @@ class PluginManager(gobject.GObject):
         gnomevfs.monitor_add(USER_PLUGIN_DIR, gnomevfs.MONITOR_DIRECTORY, self.on_plugin_folder_changed)
         gnomevfs.monitor_add(PLUGIN_DIR, gnomevfs.MONITOR_DIRECTORY, self.on_plugin_folder_changed)
         self.app.register_shutdown_task(self.on_app_shutdown, _(u"Closing plugins"))
+        self.app.cb.connect("instance-created", self.on_instance_created)
         self.refresh()
         
     def on_app_shutdown(self):
         for plugin in self.__active_plugins.values():
             plugin.shutdown()
+            
+    def on_instance_created(self, cb, instance):
+        for plugin in self.__active_plugins.values():
+            if isinstance(plugin, InstanceMixin):
+                self.init_instance_mixins(plugin, instance)
         
     def on_plugin_folder_changed(self, folder, path, change):
         if change in [gnomevfs.MONITOR_EVENT_DELETED, gnomevfs.MONITOR_EVENT_CREATED]:
@@ -247,7 +256,7 @@ class PluginManager(gobject.GObject):
                 del self.__plugins[id]
                 self.emit("plugin-removed", plugin)
     
-    def set_active(self, plugin, active):
+    def set_active(self, plugin, active, instance=None):
         """Activates / deactivates a plugin
         
         :Parameter:
@@ -268,11 +277,20 @@ class PluginManager(gobject.GObject):
         if active:
             x = plugin(self.app)
             self.__active_plugins[plugin] = x
+            if isinstance(x, UserDBMixin):
+                x.userdb_set(self.app.userdb)
+                x.userdb_init()
+            if isinstance(x, InstanceMixin):
+                for instance in self.app.get_data("instances") or []:
+                    self.init_instance_mixins(x, instance)
             if id not in l:
                 l.append(id)
         elif not active:
             x = self.__active_plugins.get(plugin, None)
             if x:
+                if isinstance(x, InstanceMixin):
+                    for instance in self.app.get_data("instances") or []:
+                        self.unload_instance_mixins(x, instance)
                 x.shutdown()
                 del self.__active_plugins[plugin]
             if id in l:
@@ -314,3 +332,27 @@ class PluginManager(gobject.GObject):
             if plugin.id == id:
                 return plugin
         return None
+    
+    def init_instance_mixins(self, plugin, instance):
+        plugin.init_instance(instance)
+        if isinstance(plugin, MenubarMixin):
+            plugin.menubar_load(instance.xml.get_widget("menubar"), instance)
+        if isinstance(plugin, EditorMixin):
+            self.editor_notify(instance._editor, instance)
+            
+    def unload_instance_mixins(self, plugin, instance):
+        if isinstance(plugin, MenubarMixin):
+            plugin.menubar_unload(instance.xml.get_widget("menubar"), instance)
+            
+    def editor_notify(self, editor, instance):
+        """Called by an instance when the current editor has changed
+        
+        :Parameter:
+            editor
+                an editor or ``None``
+            instance
+                an instance
+        """
+        for plugin in self.__active_plugins.values():
+            if isinstance(plugin, EditorMixin):
+                plugin.set_editor(editor, instance)

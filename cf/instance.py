@@ -217,6 +217,15 @@ class CFInstance(GladeWidget):
         config.set("gui.maximized", bit)
         
     def new_editor(self, fname=None):
+        """Creates a new SQL editor
+        
+        :Parameter:
+            fname
+                If given, the file ``fname`` is opened with this editor
+        :Returns: `Editor`_ instance
+        
+        .. _Editor: cf.ui.editor.Editor.html
+        """
         editor = Editor(self.app, self)
         if fname:
             if fname.startswith("file://"):
@@ -227,6 +236,7 @@ class CFInstance(GladeWidget):
         else:
             self.queries.attach(editor)
         editor.show_all()
+        return editor
         
     def open_website(self, url):
         gnome.url_show(url)
@@ -236,6 +246,14 @@ class CFInstance(GladeWidget):
             editor = None
         self._editor = editor
         self.toolbar.set_editor(editor)
+        self.app.plugins.editor_notify(editor, self)
+        
+    def get_editor(self):
+        """Returns the active editor
+        
+        :Returns: editor instance or ``None``
+        """
+        return self._editor
         
     def show_help(self, topic=None):
         gnome.help_display(release.appname, topic)

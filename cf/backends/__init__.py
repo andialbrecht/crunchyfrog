@@ -100,6 +100,9 @@ class DBConnection(gobject.GObject):
     def rollback(self):
         raise NotImplementedError
     
+    def explain(self, statement):
+        return []
+    
 class DBCursor(gobject.GObject):
     
     def __init__(self, connection):

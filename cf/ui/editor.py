@@ -31,6 +31,7 @@ import re
 import thread
 import time
 import os
+import string
 
 from gettext import gettext as _
 
@@ -109,6 +110,9 @@ class Editor(GladeWidget):
     def on_connection_closed(self, connection):
         connection.disconnect(self.__conn_close_tag)
         self.set_connection(None)
+        
+    def on_explain(self, *args):
+        gobject.idle_add(self.explain)
         
     def on_populate_popup(self, textview, popup):
         sep = gtk.SeparatorMenuItem()
@@ -196,19 +200,45 @@ class Editor(GladeWidget):
         buffer = self.textview.get_buffer()
         bounds = buffer.get_selection_bounds()
         self.results.reset()
+        if not bounds:
+            bounds = buffer.get_bounds()
+        statement = buffer.get_text(*bounds)
+        if self.app.config.get("editor.replace_variables"):
+            tpl = string.Template(statement)
+            tpl_search = tpl.pattern.search(tpl.template)
+            if tpl_search and tpl_search.groupdict().get("named"):
+                dlg = StatementVariablesDialog(tpl)
+                gtk.gdk.threads_enter()
+                if dlg.run() == gtk.RESPONSE_OK:
+                    statement = dlg.get_statement()
+                else:
+                    statement = None
+                dlg.destroy()
+                gtk.gdk.threads_leave()
+                if not statement:
+                    self.lbl_status.set_text(_(u"Query cancelled"))
+                    return
         def foo(connection, msg):
             self.results.add_message(msg)
         tag_notice = self.connection.connect("notice", foo)
-        if not bounds:
-            bounds = buffer.get_bounds()
         if self.connection.threadsafety >= 2:
-            statement = buffer.get_text(*bounds)
             thread.start_new_thread(exec_threaded, (statement,))
         else:
             cur = self.connection.cursor()
-            query = Query(buffer.get_text(*bounds), cur)
+            query = Query(statement, cur)
             query.connect("finished", self.on_query_finished, tag_notice)
             query.execute()
+            
+    def explain(self):
+        buffer = self.textview.get_buffer()
+        bounds = buffer.get_selection_bounds()
+        if not bounds:
+            bounds = buffer.get_bounds()
+        statement = buffer.get_text(*bounds)
+        data = []
+        if self.connection:
+            data = self.connection.explain(statement)
+        self.results.set_explain(data)
         
     def set_connection(self, conn):
         self.connection = conn
@@ -486,6 +516,13 @@ class ResultsView(GladeWidget):
         buffer = self.messages.get_buffer()
         buffer.create_tag("error", foreground="#a40000", weight=pango.WEIGHT_BOLD)
         
+    def _setup_widget(self):
+        self.explain_model = gtk.ListStore(str)
+        treeview = self.xml.get_widget("editor_explain")
+        treeview.set_model(self.explain_model)
+        col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=0)
+        treeview.append_column(col)
+        
     def on_export_data(self, *args):
         gobject.idle_add(self.export_data)
         
@@ -511,6 +548,12 @@ class ResultsView(GladeWidget):
         buffer = self.messages.get_buffer()
         buffer.set_text("")
         self.set_current_page(2)
+        
+    def set_explain(self, data):
+        self.explain_model.clear()
+        for item in data:
+            iter = self.explain_model.append()
+            self.explain_model.set(iter, 0, item)
     
     def set_query(self, query):
         self.grid.set_query(query)
@@ -630,3 +673,46 @@ class ResultsGrid(GladeWidget):
             return (self._idx < len(self._query.rows)-1)
             
 
+class StatementVariablesDialog(gtk.Dialog):
+    
+    def __init__(self, template):
+        gtk.Dialog.__init__(self, _(u"Variables"),
+                            None,
+                            gtk.DIALOG_MODAL|gtk.DIALOG_DESTROY_WITH_PARENT,
+                            (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                             gtk.STOCK_OK, gtk.RESPONSE_OK))
+        self.template = template
+        self._widgets = dict()
+        self._setup_widget()
+        
+    def _setup_widget(self):
+        vars = []
+        for match in self.template.pattern.finditer(self.template.template):
+            vars.append(match.groupdict().get("named")) 
+        table = gtk.Table(len(vars), 2)
+        table.set_row_spacings(5)
+        table.set_col_spacings(7)
+        for i in range(len(vars)):
+            lbl = gtk.Label(vars[i])
+            lbl.set_alignment(0, 0.5)
+            table.attach(lbl, 0, 1, i, i+1, gtk.FILL, gtk.FILL)
+            entry = gtk.Entry()
+            table.attach(entry, 1, 2, i, i+1, gtk.EXPAND|gtk.FILL, gtk.FILL)
+            self._widgets[vars[i]] = entry
+        sw = gtk.ScrolledWindow()
+        sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        sw.add_with_viewport(table)
+        sw.set_border_width(10)
+        self.vbox.pack_start(sw, True, True)
+        self.vbox.show_all()
+        
+    def on_value_edited(self, renderer, path, value):
+        model = self.treeview.get_model()
+        iter = model.get_iter(path)
+        model.set_value(iter, 1, value)
+        
+    def get_statement(self):
+        data = dict()
+        for var, widget in self._widgets.items():
+            data[var] = widget.get_text()
+        return self.template.safe_substitute(data)

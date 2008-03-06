@@ -23,7 +23,10 @@
 import gtk
 import gobject
 
+from kiwi.ui import dialogs
+
 from cf.datasources import DatasourceInfo
+from cf.backends import DBConnectError
 
 from gettext import gettext as _
 
@@ -93,10 +96,16 @@ class Browser(gtk.ScrolledWindow):
         
     def _create_dsinfo_menu(self, model, iter, popup):
         def connect(item, datasource_info):
-            datasource_info.dbconnect()
-            self.on_object_tree_selection_changed(self.object_tree.get_selection())
+            try:
+                datasource_info.dbconnect()
+                self.on_object_tree_selection_changed(self.object_tree.get_selection())
+            except DBConnectError, err:
+                dialogs.error(_(u"Connection failed"), err.message)
         def disconnect(item, datasource_info):
             datasource_info.dbdisconnect()
+            iter = self.get_iter_for_datasource(datasource_info)
+            model = self.object_tree.get_model()
+            self.object_tree.collapse_row(model.get_path(iter))
         datasource_info = model.get_value(iter, 0)
         if datasource_info.get_connections():
             lbl = _(u"Disconnect")

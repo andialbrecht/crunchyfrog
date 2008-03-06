@@ -76,3 +76,11 @@ class DbAPI2Connection(DBConnection):
     def rollback(self):
         self._conn.rollback()
         self.update_transaction_status()
+        
+    def explain(self, statement):
+        sql = "EXPLAIN %s" % statement
+        cur = self._conn.cursor()
+        cur.execute(sql)
+        data = cur.fetchall()
+        cur.close()
+        return data

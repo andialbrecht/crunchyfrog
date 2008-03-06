@@ -60,6 +60,7 @@ setup(
     [crunchyfrog.plugin]
     cfshell = cf.shell:CFShell
     refbrowser = cf.ui.refviewer:ReferenceViewer
+    library = cf.library:SQLLibraryPlugin
     
     [crunchyfrog.export]
     csv = cf.filter.exportfilter:CSVExportFilter

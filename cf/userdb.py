@@ -87,6 +87,10 @@ class UserDB(gobject.GObject):
         self.__gobject_init__()
         self.__init_userdb()
         
+    def _get_connection(self):
+        return self.conn
+    connection = property(fget=_get_connection)
+        
     def __init_userdb(self):
         """Initializes the connection and cursor.
         
