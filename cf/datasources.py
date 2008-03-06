@@ -214,7 +214,7 @@ class DatasourceManager(gobject.GObject):
         
         :Returns: List of `DatasourceInfo`_ instances
         
-        .. _DatasourceInfo: cf.datasource.DatasourceInfo.html
+        .. _DatasourceInfo: cf.datasources.DatasourceInfo.html
         """
         return self._cache
         

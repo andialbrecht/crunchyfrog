@@ -99,7 +99,7 @@ def new_instance_cb(xapp, argc, argv):
     xapp.set_data("instances", l)
     for item in argv:
         app.new_editor(item)
-    app.widget.show_all()
+    app.widget.show()
     app.widget.connect("destroy", ui_destroy_cb, app, xapp)
     xapp.cb.emit("instance-created", app)
     return argc

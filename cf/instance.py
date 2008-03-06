@@ -58,6 +58,7 @@ class CFInstance(GladeWidget):
         self.tt = gtk.Tooltips()
         # Toolbar
         self.toolbar = CFToolbar(self.app, self.xml)
+        self.toolbar.show_all()
         # Statusbar
         self.statusbar = CFStatusbar(self.app, self.xml)
         # Dock
@@ -65,6 +66,7 @@ class CFInstance(GladeWidget):
         box = self.xml.get_widget("box_main")
         box.pack_start(self.dock, True, True)
         box.reorder_child(self.dock, 2)
+        self.dock.show_all()
         # Queries
         self.queries = QueriesNotebook(self.app, self)
         item = pdock.DockItem(self.dock, "queries", self.queries, _(u"Queries"),
@@ -72,9 +74,11 @@ class CFInstance(GladeWidget):
         self.dock.add_item(item)
         # Browser
         self.browser = Browser(self.app, self)
-        item = pdock.DockItem(self.dock, "browser", self.browser, _(u"Browser"), 
-                              "gtk-find", gtk.POS_LEFT)
+        item = pdock.DockItem(self.dock, "browser", self.browser, _(u"Navigator"), 
+                              "gtk-find", gtk.POS_LEFT, pdock.DOCK_ITEM_BEH_CANT_CLOSE)
         self.dock.add_item(item)
+        self.browser.set_data("dock_item", item)
+        gobject.idle_add(self.xml.get_widget("mn_navigator").set_active, self.app.config.get("navigator.visible", True))
     
     def _init_ui(self, argv):
         pass
@@ -146,6 +150,14 @@ class CFInstance(GladeWidget):
         
     def on_help(self, *args):
         self.show_help()
+        
+    def on_navigator_toggled(self, menuitem):
+        if menuitem.get_active():
+            self.browser.get_data("dock_item").show()
+            self.app.config.set("navigator.visible", True)
+        else:
+            self.browser.get_data("dock_item").hide()
+            self.app.config.set("navigator.visible", False)
     
     def on_new_instance(self, *args):
         self.app.new_instance(tuple())
