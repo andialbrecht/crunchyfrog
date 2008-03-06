@@ -161,6 +161,14 @@ class PgConnection(DbAPI2Connection):
         cur.close()
         return ret[0]
     
+class PgLanguageCollection(Collection):
+    name = _(u"Languages")
+    
+class PgLanguage(Node):
+    name = _(u"Language")
+    icon = "stock_script"
+    has_children = False
+    
 class PgSchema(SchemaProvider):
     
     def __init__(self):
@@ -173,7 +181,8 @@ class PgSchema(SchemaProvider):
         
     def fetch_children(self, connection, parent):
         if isinstance(parent, DatasourceInfo):
-            return [SchemaCollection()]
+            return [SchemaCollection(),
+                    PgLanguageCollection()]
         
         elif isinstance(parent, SchemaCollection):
             ret = []
@@ -266,3 +275,9 @@ class PgSchema(SchemaProvider):
             for item in self.q(connection, sql):
                 ret.append(Index(item[1], item[2], oid=item[0]))
             return ret
+        
+        elif isinstance(parent, PgLanguageCollection):
+            sql = "select lan.oid, lan.lanname, dsc.description \
+            from pg_language lan \
+            left join pg_description dsc on dsc.objoid = lan.oid"
+            return [PgLanguage(item[1], item[2], oid=item[0]) for item in self.q(connection, sql)]
