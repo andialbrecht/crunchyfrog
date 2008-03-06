@@ -10,6 +10,7 @@ p {
 	margin-bottom: .8em;
 	text-align: justify;
 	font-size: .9em;
+	line-height: 1.8em;
 }
 
 dd {
@@ -162,15 +163,24 @@ ul.hmenu li { float: left; margin-left: 1em; }
 	padding-left: 1em;
 }
 
-.note {
-	background: url(../img/dialog-information.png) 5px 5px no-repeat #fffce8;
+.note, .warning {
 	padding: 5px;
 	padding-left: 45px;
+	padding-top: 0px;
 	font-size: .9em;
 	border: 1px solid #eeeeec;
 	-moz-border-radius: 8px;
 }
-.note .first { display: none; }
+.note { 
+	background: url(../img/dialog-information.png) 5px 5px no-repeat #fffce8; 
+}
+.warning { 
+	background: url(../img/dialog-warning.png) 5px 5px no-repeat #ffe4cc; 
+}
+.note .first, .warning .first { 
+	text-transform: uppercase;
+	letter-spacing: 0.25em; 
+}
 
 .breadcrumbs {
 	m/argin-top: .5em;
