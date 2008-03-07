@@ -26,13 +26,15 @@ add an item to the menubar of an instance, the plugin must connect
 to the ``instance-created`` signal and have to fetch the menubar from
 the instances widget tree. The `MenubarMixin`_ provides a 
 ``menubar_load(menubar, instance)`` method which is automatically called
-by the `plugin manager`_. 
+by the `plugin manager`_. So you don't need to pay attention on instance
+creation and can focus on the menubar itself when your plugin implements
+these methods.
 
 .. _MenubarMixin: cf.plugins.mixins.MenubarMixin.html
 .. _plugin manager: cf.plugins.core.PluginManager.html
 """
 
-class InstanceMixin:
+class InstanceMixin(object):
     """Instance relation
     
     This mixin can be used by plugins that require a relation to a 

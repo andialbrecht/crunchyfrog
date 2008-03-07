@@ -38,6 +38,7 @@ from cf.plugins.mixins import InstanceMixin, MenubarMixin, EditorMixin
 from cf.plugins.mixins import UserDBMixin
 
 class GenericPlugin(gobject.GObject):
+    """Plugin base class"""
     
     name = None
     description = None
@@ -56,6 +57,7 @@ class GenericPlugin(gobject.GObject):
         pass
     
 class ExportPlugin(GenericPlugin):
+    """Export filter base class"""
     icon = "gtk-save-as"
     file_filter_name = None
     file_filter_mime = []
@@ -72,6 +74,7 @@ class ExportPlugin(GenericPlugin):
         return dict()
         
 class DBBackendPlugin(GenericPlugin):
+    """Database backend base class"""
     icon = "stock_database"
     context_help_pattern = None
     

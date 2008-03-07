@@ -18,4 +18,18 @@
 
 # $Id$
 
-"""Plugins"""
+"""Plugins
+
+This package provides base classes for writing plugins. The `core`_ module
+contains very basic classes, like `GenericPlugin`_ - the base class for all 
+plugins. `mixins`_ has some mixin classes for common tasks.
+
+Related documents
+=================
+ * `Plugin HowTo`_
+ 
+.. _core: cf.plugins.core.html
+.. _mixins: cf.plugins.mixins.html
+.. _GenericPlugin: cf.plugins.core.GenericPlugin.html
+.. _Plugin HowTo: http://code.google.com/p/crunchyfrog/wiki/PluginDevelopment
+"""
