@@ -178,6 +178,23 @@ class PreferencesDialog(GladeWidget):
                       3, ico,
                       4, True)
             
+    def on_plugin_install(self, *args):
+        dlg = gtk.FileChooserDialog(_(u"Install plugin"), None,
+                                    gtk.FILE_CHOOSER_ACTION_OPEN,
+                                    (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                     gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+        filter = gtk.FileFilter()
+        filter.set_name(_(u"CrunchyFrog plugins (*.egg)"))
+        filter.add_pattern("*.egg")
+        dlg.add_filter(filter)
+        dlg.set_filter(filter)
+        if dlg.run() == gtk.RESPONSE_OK:
+            uri = dlg.get_uri()
+        else:
+            uri = None
+        dlg.destroy()
+        gobject.idle_add(self.app.plugins.install_plugin, uri)
+            
     def on_plugin_removed(self, manager, plugin):
         iter = self.plugin_model.get_iter_first()
         while iter:

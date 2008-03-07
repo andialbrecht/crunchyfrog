@@ -32,10 +32,11 @@ log = logging.getLogger("PLUGINS")
 
 from gettext import gettext as _
 
-from cf import USER_PLUGIN_DIR, PLUGIN_DIR
+from cf import USER_PLUGIN_DIR, PLUGIN_DIR, USER_PLUGIN_URI
 
 from cf.plugins.mixins import InstanceMixin, MenubarMixin, EditorMixin
 from cf.plugins.mixins import UserDBMixin
+from cf.ui.widgets import ProgressDialog
 
 class GenericPlugin(gobject.GObject):
     """Plugin base class"""
@@ -359,3 +360,35 @@ class PluginManager(gobject.GObject):
         for plugin in self.__active_plugins.values():
             if isinstance(plugin, EditorMixin):
                 plugin.set_editor(editor, instance)
+                
+    def install_plugin(self, uri):
+        """Installs a plugin from URI
+        
+        :Parameter:
+            uri
+                URI pointing to .egg file
+        """
+        def progress_cb(info, dlg):
+            if info.bytes_total:
+                fraction = info.total_bytes_copied/float(info.bytes_total)
+            else:
+                fraction = 0
+            dlg.set_progress(fraction)
+            return True
+        source = gnomevfs.URI(uri)
+        dest = gnomevfs.URI(USER_PLUGIN_URI).append_file_name(source.short_name)
+        try:
+            dlg = ProgressDialog(self.app)
+            dlg.show_all()
+            dlg.set_info(_(u"Copying files..."))
+            gnomevfs.xfer_uri(source, dest, gnomevfs.XFER_DEFAULT,
+                              gnomevfs.XFER_ERROR_MODE_QUERY,
+                              gnomevfs.XFER_OVERWRITE_MODE_QUERY,
+                              progress_cb, dlg)
+            dlg.set_info(_(u"Plugin installed."))
+        except:
+            err = sys.exc_info()[1]
+            dlg.set_error(err.message)
+        dlg.set_finished(True)
+            
+            

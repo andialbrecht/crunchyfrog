@@ -33,6 +33,7 @@ from kiwi.ui import dialogs
 from gettext import gettext as _
 
 from cf.backends import DBConnectError
+from cf.ui import GladeWidget
 
 class ConnectionButton(gdl.ComboButton):
     
@@ -203,3 +204,69 @@ class DataExportDialog(gtk.FileChooserDialog):
             app_desc = gnomevfs.mime_get_default_application(mime)
             cmd = app_desc[2].split(" ")
             os.spawnvp(os.P_NOWAIT, cmd[0], cmd+[opts["uri"]])
+            
+class ProgressDialog(GladeWidget):
+    """Progress dialog with a message
+    
+    Usage example
+    =============
+    
+        .. sourcecode:: python
+        
+            >>> from cf.ui.widgets import ProgressDialog
+            >>> dlg = ProgressDialog(app)
+            >>> dlg.show_all()
+            >>> dlg.set_progress(0.75)
+            >>> dlg.set_info("Progress set to 75%")
+            >>> dlg.set_error("Uuups...")
+            >>> dlg.set_finished(True)
+            
+    """
+    
+    def __init__(self, app, parent=None):
+        GladeWidget.__init__(self, app, "crunchyfrog", "progressdialog")
+        if parent:
+            self.reparent(parent)
+        
+    def on_close(self, *args):
+        self.destroy()
+        
+    def set_progress(self, fraction):
+        """Sets fraction for progress bar
+        
+        :Parameter:
+            fraction
+                The fraction (``float``)
+        """
+        self.xml.get_widget("progress_progress").set_fraction(fraction)
+        
+    def set_error(self, message):
+        """Displays an error
+        
+        :Parameter:
+            message
+                Error message
+        """
+        message = gobject.markup_escape_text(message)
+        self.xml.get_widget("progress_label").set_markup("<b>"+message+"</b>")
+        self.xml.get_widget("progress_image").set_from_stock("gtk-dialog-error", gtk.ICON_SIZE_DIALOG)
+        
+    def set_info(self, message):
+        """Displays an information
+        
+        :Parameter:
+            message
+                A message
+        """
+        message = gobject.markup_escape_text(message)
+        self.xml.get_widget("progress_label").set_markup("<b>"+message+"</b>")
+        self.xml.get_widget("progress_image").set_from_stock("gtk-dialog-info", gtk.ICON_SIZE_DIALOG)
+    
+    def set_finished(self, finished):
+        """Activates/deactivates close button
+        
+        :Parameter:
+            finished
+                If ``True`` the close button gets sensitive.
+        """
+        self.xml.get_widget("progress_btn_close").set_sensitive(finished)
