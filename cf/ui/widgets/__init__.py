@@ -18,7 +18,7 @@
 
 # $Id$
 
-"""Shared widgets"""
+"""Common widgets"""
 
 import gtk
 import gobject
@@ -36,6 +36,15 @@ from cf.backends import DBConnectError
 from cf.ui import GladeWidget
 
 class ConnectionButton(gdl.ComboButton):
+    """Connection chooser used in toolbars
+    
+    This widget is a ``gdl.ComboButton`` subclass and can be used to let
+    the user choose a database connection.
+    
+    It is always bound to an `SQL Editor`_.
+    
+    .. _SQL Editor: cf.ui.editor.Editor.html
+    """
     
     def __init__(self, app):
         gdl.ComboButton.__init__(self)
@@ -69,6 +78,7 @@ class ConnectionButton(gdl.ComboButton):
         self.set_editor(self._editor)
         
     def rebuild_menu(self):
+        """Rebuilds the drop-down menu"""
         while self._menu.get_children():
             self._menu.remove(self._menu.get_children()[0])
         if not self._editor:
@@ -108,6 +118,14 @@ class ConnectionButton(gdl.ComboButton):
         self._menu.append(item)    
         
     def set_editor(self, editor):
+        """Associates an editor
+        
+        :Parameter:
+            editor
+                `SQL editor`_
+                
+        .. _SQL editor: cf.ui.editor.Editor.html
+        """
         self._editor = editor
         self.set_sensitive(bool(editor))
         self.rebuild_menu()
@@ -122,6 +140,58 @@ class ConnectionButton(gdl.ComboButton):
                 self.set_tooltip_markup(_(u"Click to open a connection"))
                  
 class DataExportDialog(gtk.FileChooserDialog):
+    """Export dialog
+    
+    A modified ``gtk.FileChooserDialog`` for exporting data.
+    
+    The constructor of this class takes 6 arguments:
+    
+    .. sourcecode:: python
+    
+        dlg = DataExportDialog(app, parent, data, selected, statement, description)
+    
+        
+    :app: `CFApplication`_ instance
+    :parent: The parent widget, usualy something like ``self.instance.widget``
+    :data: List of rows (``[ [col1, col2, col3], ...]``)
+    :selected: List of indices of selected rows (``None`` means that no rows are selected)
+    :statement: The SQL statement that produced the data.
+        This parameter is only used by some filters to give additional
+        information.
+    :description: A DB-API2-like description.
+        Read the comments on the ``description`` attribute of cursor
+        objects in `PEP 249`_ for details.
+        
+        
+    .. Note:: Usually there's no need to define ``data`` and ``description``
+        by hand. If it's a DB-API2-based backend, these parameters are
+        retrieved from the cursor object (``cursor.fetchall()`` and 
+        ``cursor.description``).
+    
+    Usage example
+    =============
+    
+        .. sourcecode:: python
+        
+            >>> from cf.ui.widgets import DataExportDialog
+            >>> import gtk
+            >>> data = [["foo", 1, True], ["bar", 2, False], ["anything else", 7, None]]
+            >>> selected = [2,]
+            >>> statement = "select name, anumber, anotherfield from foo limit 3;"
+            >>> description = (("name", str, None, None, None, None, None),
+            ...            ("anumber", int, None, None, None, None, None),
+            ...            ("anotherfield", bool, None, None, None, None, None))
+            >>> dlg = DataExportDialog(app, instance.widget, 
+            ...                        data, selected, statement, description)
+            >>> if dlg.run() == gtk.RESPONSE_OK:
+            ...     dlg.hide()
+            ...     dlg.export_data()
+            ... 
+            >>> dlg.destroy()
+            
+    .. _CFApplication: cf.app.CFApplication.html
+    .. _PEP 249: http://www.python.org/dev/peps/pep-0249/
+    """
     
     def __init__(self, app, parent, data, selected, statement, description):
         gtk.FileChooserDialog.__init__(self, _(u"Export data"),
@@ -167,21 +237,28 @@ class DataExportDialog(gtk.FileChooserDialog):
             if self.app.config.get("editor.export.recent_filter", None) == plugin.id:
                 recent_filter = filter
         if recent_filter:
-            self.filter_changed(recent_filter)
+            self._filter_changed(recent_filter)
         else:
-            self.filter_changed(self.get_filter())
+            self._filter_changed(self.get_filter())
     
     def _setup_connections(self):
         self.connect("notify::filter", self.on_filter_changed)
         
     def on_filter_changed(self, dialog, param):
-        gobject.idle_add(self.filter_changed, self.get_filter())
+        gobject.idle_add(self._filter_changed, self.get_filter())
         
-    def filter_changed(self, filter):
+    def _filter_changed(self, filter):
         plugin = filter.get_data("plugin")
         self.edit_export_options.set_sensitive(plugin.has_options)
         
     def export_data(self):
+        """Exports the data
+        
+        This method handles the export options given in the dialog and
+        calls the ``export`` method of the choosen `export filter`_.
+        
+        .. _export filter: cf.plugins.core.ExportPlugin.html
+        """
         self.app.config.set("editor.export.recent_folder", self.get_current_folder())
         plugin = self.get_filter().get_data("plugin")
         self.app.config.set("editor.export.recent_filter", plugin.id)
@@ -208,6 +285,8 @@ class DataExportDialog(gtk.FileChooserDialog):
 class ProgressDialog(GladeWidget):
     """Progress dialog with a message
     
+    A simple window with a message, an icon and a progress bar.
+    
     Usage example
     =============
     
@@ -216,9 +295,12 @@ class ProgressDialog(GladeWidget):
             >>> from cf.ui.widgets import ProgressDialog
             >>> dlg = ProgressDialog(app)
             >>> dlg.show_all()
+            >>> dlg = ProgressDialog(app)
+            >>> dlg.set_modal(False) # only needed to run this in CrunchyFrog's python shell
+            >>> dlg.show_all()
+            >>> dlg.set_info("This is an information")
+            >>> dlg.set_error("Uuups... an error occured")
             >>> dlg.set_progress(0.75)
-            >>> dlg.set_info("Progress set to 75%")
-            >>> dlg.set_error("Uuups...")
             >>> dlg.set_finished(True)
             
     """
