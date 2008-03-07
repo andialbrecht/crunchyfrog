@@ -1,0 +1,16 @@
+This is a very basic CrunchyFrog plugin. In fact it
+does nothing except showing up in the plugin list on
+the preferences page.
+
+It can be used as a template for custom plugins.
+
+To install the plugin run
+
+	python setup.py bdist_egg
+	
+and copy the generated egg file into the user plugin
+directory:
+
+	cp dist/*.egg ~/.cruncyfrog/plugins/
+	
+	
