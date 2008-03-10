@@ -44,6 +44,15 @@ from cf.ui.widgets import ConnectionButton
 class CFInstance(GladeWidget):
     
     def __init__(self, app):
+        """
+        The constructor of this class takes one argument:
+        
+        :Parameter:
+            app
+                `CFApplication`_ instance
+                
+        .. _CFApplication: cf.app.CFApplication.html
+        """
         GladeWidget.__init__(self, app, "crunchyfrog", "mainwindow")
         self._editor = None
         
@@ -120,20 +129,24 @@ class CFInstance(GladeWidget):
             config.set("gui.width", event.width)
             config.set("gui.height", event.height)
             
+    def _get_clipboard(self):
+        display = gtk.gdk.display_manager_get().get_default_display()
+        return gtk.Clipboard(display, "CLIPBOARD")
+            
     def on_copy(self, *args):
         if not self._editor:
             return
-        self._editor.textview.get_buffer().copy_clipboard(gtk.clipboard_get())
+        self._editor.textview.get_buffer().copy_clipboard(self._get_clipboard())
         
     def on_paste(self, *args):
         if not self._editor:
             return 
-        self._editor.textview.get_buffer().paste_clipboard(gtk.clipboard_get(), None, True)
+        self._editor.textview.get_buffer().paste_clipboard(self._get_clipboard(), None, True)
         
     def on_cut(self, *args):
         if not self._editor:
             return
-        self._editor.textview.get_buffer().cut_clipboard(gtk.clipboard_get(), True)
+        self._editor.textview.get_buffer().cut_clipboard(self._get_clipboard(), True)
         
     def on_delete(self, *args):
         if not self._editor:

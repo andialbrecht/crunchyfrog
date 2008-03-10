@@ -49,12 +49,39 @@ class GenericPlugin(gobject.GObject):
     license = None
     homepage = None
     version = None
+    has_custom_options = False
     
     def __init__(self, app):
+        """
+        The constructor of this class takes one argument:
+        
+        :Parameter:
+            app
+                `CFApplication`_ instance
+                
+        .. _CFApplication: cf.app.CFApplication.html
+        """
         self.app = app
         self.__gobject_init__()
         
+    @classmethod
+    def run_custom_options_dialog(cls, app):
+        """Runs a preferences dialog
+        
+        If ``has_custom_options`` is ``True`` this method will
+        be called if the user clicks on the *Configure plugin* button
+        in the preferences dialog.
+        
+        :Parameter:
+            app
+                `CFApplication`_ instance
+                
+        .. _CFApplication: cf.app.CFApplication.html
+        """
+        pass
+        
     def shutdown(self):
+        """Called when the plugin is deactivated."""
         pass
     
 class ExportPlugin(GenericPlugin):
@@ -156,6 +183,15 @@ class PluginManager(gobject.GObject):
     }
     
     def __init__(self, app):
+        """
+        The constructor of this class takes one argument:
+        
+        :Parameter:
+            app
+                `CFApplication`_ instance
+                
+        .. _CFApplication: cf.app.CFApplication.html
+        """
         self.app = app
         self.__gobject_init__()
         self.__plugins = dict()

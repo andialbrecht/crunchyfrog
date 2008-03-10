@@ -77,9 +77,13 @@ class UserDB(gobject.GObject):
     
     def __init__(self, app):
         """
+        The constructor of this class takes one argument:
+        
         :Parameters:
             app
-                `CFApplication` instance
+                `CFApplication`_ instance
+                
+        .. _CFApplication: cf.app.CFApplication.html
         """
         self.app = app
         self.conn = None

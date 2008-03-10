@@ -144,11 +144,11 @@ class Query(gobject.GObject):
         self.errors = list()
         
     def execute(self, threaded=False):
-        start = time.time()
         if threaded:
             Emit(self, "started")
         else:
             self.emit("started")
+        start = time.time()
         try:
             self.cursor.execute(self.statement)
         except:

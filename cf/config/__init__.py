@@ -96,6 +96,17 @@ class Config(gobject.GObject):
     }
     
     def __init__(self, app, config_file):
+        """
+        The constructor of this class takes two arguments:
+        
+        :Parameter:
+            app
+                `CFApplication`_ instance
+            config_file
+                Path to user configuration file
+                
+        .. _CFApplication: cf.app.CFApplication.html
+        """
         self.app = app
         self.__gobject_init__() # IGNORE:E1101
         self.__conf = None

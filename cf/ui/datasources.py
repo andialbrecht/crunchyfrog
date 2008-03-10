@@ -59,6 +59,7 @@ class DatasourceManager(GladeWidget):
         tv = self.xml.get_widget("tv_stored_connections")
         model = gtk.ListStore(gobject.TYPE_PYOBJECT,
                               str)
+        model.set_sort_column_id(1, gtk.SORT_ASCENDING)
         tv.set_model(model)
         col = gtk.TreeViewColumn("", gtk.CellRendererText(), markup=1)
         tv.append_column(col)

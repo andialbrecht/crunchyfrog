@@ -28,10 +28,59 @@ from os.path import abspath, join, dirname
 import cf
 
 class GladeWidget(gobject.GObject):
+    """Helper for Glade widgets
+    
+    This class is a helper for widgets defined in Glade files. It
+    shouldn't be used directly.
+    
+    Upon intialization the two methods ``_setup_widget()`` and 
+    ``_setup_connections()`` are called.
+    
+    Read the source of one of the subclasses to get an idea how
+    this class works.
+    
+    Instance attributes
+    ===================
+    
+        :app: `CFApplication`_ instance
+        :xml: `gtk.glade.XML`_ instance
+        :widget: The *real* GTK widget
+        
+    .. _CFApplication: cf.app.CFApplication.html
+    .. _gtk.glade.XML: http://pygtk.org/docs/pygtk/class-gladexml.html
+    """
     
     def __init__(self, app, xml, widget_name,
                  signal_autoconnect=True,
                  cb_provider=None):
+        """
+        This constructor takes up to five arguments:
+        
+        :Parameter:
+            app
+                `CFApplication`_ instance
+            xml
+                Glade source
+            widget_name
+                Name of the widget to fetch
+            signal_autoconnect
+                Auto-connect signals (optional, default ``True``)
+            cb_provider
+                Argument for ``signal_autoconnect`` (optional)
+                
+        If ``xml`` is a string it is assumed that it is the name of
+        a Glade file located in the data directory. If it's a `gtk.glade.XML`_
+        instance, this instance is taken as the widget source.
+        
+        If ``signal_autoconnect`` is ``True`` the ``signal_autoconnect()`` method
+        of the `gtk.glade.XML`_ instance is called upon initialization.
+        If the optional ``cb_provider`` argument is given, it will be used as
+        the parameter for ``signal_autoconnect()``. Otherwise 
+        ``signal_autoconnect(self)`` is called.
+        
+        .. _CFApplication: cf.app.CFApplication.html
+        .. _gtk.glade.XML: http://pygtk.org/docs/pygtk/class-gladexml.html 
+        """
         self.__gobject_init__()
         self.app = app
         if isinstance(xml, basestring):

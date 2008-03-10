@@ -27,8 +27,11 @@ import gconf
 
 from gettext import gettext as _
 
+from inspect import isclass
+
 import cf
 from cf.ui import GladeWidget
+from cf.plugins.core import GenericPlugin
 
 class PreferencesDialog(GladeWidget):
     
@@ -58,7 +61,7 @@ class PreferencesDialog(GladeWidget):
         model.append([2, _(u"Editor"), get_pb("gtk-edit")])
         model.append([3, _(u"Fonts & Colors"), get_pb("gtk-font")])
         iconview.connect("selection-changed", self.on_editor_selection_changed)
-        from cf.ui.editor import USE_GTKSOURCEVIEW2
+        from cf.ui.widgets.sqlview import USE_GTKSOURCEVIEW2
         if not USE_GTKSOURCEVIEW2:
             self.xml.get_widget("editor_schemes_box").set_sensitive(False)
             self.xml.get_widget("editor_schemes_box").hide()
@@ -115,6 +118,8 @@ class PreferencesDialog(GladeWidget):
         renderer.connect("toggled", self.on_plugin_active_toggled)
         col = gtk.TreeViewColumn("", renderer, active=1, visible=4)
         self.plugin_list.append_column(col)
+        sel = self.plugin_list.get_selection()
+        sel.connect("changed", self.on_plugin_selection_changed)
         
     def _setup_connections(self):
         self.app.plugins.connect("plugin-added", self.on_plugin_added)
@@ -206,6 +211,47 @@ class PreferencesDialog(GladeWidget):
                         return
                     citer = self.plugin_model.iter_next(citer)
             iter = self.plugin_model.iter_next(iter)
+            
+    def on_plugin_prefs_show(self, *args):
+        sel = self.plugin_list.get_selection()
+        model, iter = sel.get_selected()
+        if not iter: return
+        obj = model.get_value(iter, 0)
+        if not isclass(obj) or not issubclass(obj, GenericPlugin):
+            return
+        if not obj.has_custom_options:
+            return
+        obj.run_custom_options_dialog(self.app)
+            
+    def on_plugin_show_about(self, *args):
+        sel = self.plugin_list.get_selection()
+        model, iter = sel.get_selected()
+        if not iter: return
+        obj = model.get_value(iter, 0)
+        if not isclass(obj) or not issubclass(obj, GenericPlugin):
+            return
+        dlg = gtk.AboutDialog()
+        if obj.name: dlg.set_name(obj.name)
+        if obj.description: dlg.set_comments(obj.description)
+        if obj.icon: dlg.set_logo_icon_name(obj.icon)
+        if obj.author: dlg.set_authors([obj.author])
+        if obj.license: dlg.set_license(obj.license)
+        if obj.homepage: dlg.set_website(obj.homepage)
+        if obj.version: dlg.set_version(obj.version)
+        dlg.run()
+        dlg.destroy()
+            
+    def on_plugin_selection_changed(self, selection, *args):
+        model, iter = selection.get_selected()
+        if not iter:
+            return
+        obj = model.get_value(iter, 0)
+        if isclass(obj) and issubclass(obj, GenericPlugin):
+            self.xml.get_widget("plugin_about").set_sensitive(True)
+            self.xml.get_widget("plugin_prefs").set_sensitive(obj.has_custom_options)
+        else:
+            self.xml.get_widget("plugin_about").set_sensitive(False)
+            self.xml.get_widget("plugin_prefs").set_sensitive(False)
                 
     def on_plugin_folder_show(self, *args):
         gnome.url_show(cf.USER_PLUGIN_URI)

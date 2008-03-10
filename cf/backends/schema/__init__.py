@@ -32,17 +32,23 @@ class SchemaProvider(gobject.GObject):
     def fetch_children(self, connection, parent):
         return []
     
+    def get_details(self, connection, obj):
+        return None
+    
 class Node(gobject.GObject):
     name = None
     description = None
     icon = "gtk-missing-image"
     has_children = True
+    has_details = False
     
     def __init__(self, name=None, description=None, *args, **kwargs):
         self.__gobject_init__()
         if name:
             self.name = name
         self.description = description
+        if kwargs.has_key("has_details"):
+            self.has_details = kwargs.pop("has_details")
         for key, value in kwargs.items():
             self.set_data(key, value)
     

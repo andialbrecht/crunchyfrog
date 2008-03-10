@@ -32,7 +32,7 @@
     </div>
         
           
-    <div py:if="desc.find_subclasses()">
+    <div py:if="desc.find_subclasses()" name="#subclasses">
     	<p>Subclasses: <py:for each="i, cls in enumerate(desc.find_subclasses())"><py:if test="i != 0">, </py:if><a href="${project.href(cls)}">${cls.name}</a></py:for>
     	</p>
     </div>

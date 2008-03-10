@@ -118,18 +118,20 @@ class PgCursor(DbAPI2Cursor):
         self._notice_tag = None
         
     def _check_notices(self):
+        return
         while self.connection._conn.notices:
-            Emit(self.connection, "notice", self.connection._conn.notices.pop())
+            gobject.idle_add(self.connection.emit, "notice", self.connection._conn.notices.pop())
+            #Emit(self.connection, "notice", self.connection._conn.notices.pop())
     
     def execute(self, *args, **kw):
-        gtk.gdk.threads_enter()
-        self._notice_tag = gobject.timeout_add(10, self._check_notices)
-        gtk.gdk.threads_leave()
+        #gtk.gdk.threads_enter()
+        #self._notice_tag = gobject.timeout_add(100, self._check_notices)
+        #gtk.gdk.threads_leave()
         DbAPI2Cursor.execute(self, *args, **kw)
-        gtk.gdk.threads_enter()
-        gobject.source_remove(self._notice_tag)
-        gtk.gdk.threads_leave()
-        self._check_notices()
+        #gtk.gdk.threads_enter()
+        #gobject.source_remove(self._notice_tag)
+        #gtk.gdk.threads_leave()
+        #self._check_notices()
         
     def get_messages(self):
         if self._cur.statusmessage:
@@ -208,12 +210,15 @@ class PgSchema(SchemaProvider):
             if isinstance(parent, TableCollection):
                 obj = Table
                 relkind = 'r'
+                has_details = False
             elif isinstance(parent, ViewCollection):
                 obj = View
                 relkind = 'v'
+                has_details = True
             elif isinstance(parent, SequenceCollection):
                 obj = Sequence
                 relkind = 'S'
+                has_details = False
             schema = parent.get_data("schema")
             sql = "select rel.oid, rel.relname, dsc.description from pg_class rel \
             left join pg_description dsc on dsc.objoid = rel.oid and dsc.objsubid = 0 \
@@ -222,7 +227,8 @@ class PgSchema(SchemaProvider):
                                                 "relkind" : relkind}
             ret = []
             for item in self.q(connection, sql):
-                ret.append(obj(item[1], item[2], oid=item[0]))
+                ret.append(obj(item[1], item[2], oid=item[0],
+                               has_details=has_details))
             return ret
         
         elif isinstance(parent, Table):
@@ -281,3 +287,16 @@ class PgSchema(SchemaProvider):
             from pg_language lan \
             left join pg_description dsc on dsc.objoid = lan.oid"
             return [PgLanguage(item[1], item[2], oid=item[0]) for item in self.q(connection, sql)]
+        
+    def get_details(self, connection, obj):
+        func = getattr(self, "details_%s" % obj.__class__.__name__.lower(), None)
+        if func:
+            return func(connection, obj)
+        return None
+    
+    def details_view(self, connection, view):
+        ret = dict()
+        sql = "select pg_get_viewdef(%(oid)s, true)" %{"oid" : view.get_data("oid")}
+        res = self.q(connection, sql)
+        ret[_(u"Definition")] =  res[0][0]
+        return ret

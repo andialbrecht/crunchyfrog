@@ -29,6 +29,24 @@ log = logging.getLogger("DS")
 class DatasourceInfo(gobject.GObject):
     
     def __init__(self, app, backend, name=None, description=None, options={}):
+        """
+        The constructor of this class takes up to five arguments:
+        
+        :Parameter:
+            app
+                `CFApplication`_ instance
+            backend
+                Instance of a `DBBackendPlugin`_ plugin
+            name
+                Datasource name (optional)
+            description
+                Datasource description (optional)
+            options
+                Backend specific options (optional)
+        
+        .. _CFApplication: cf.app.CFApplication.html
+        .. _DBBackendPlugin: cf.plugins.core.DBBackendPlugin.html
+        """
         self.__gobject_init__()
         self.app = app
         self.db_id = None
@@ -36,6 +54,7 @@ class DatasourceInfo(gobject.GObject):
         self.name = name
         self.description = description
         self.options = options
+        self.has_details = False
         self.__conncount = 1L
         self.__connections = list()
         self.internal_connection = None
@@ -171,6 +190,15 @@ class DatasourceManager(gobject.GObject):
     }
     
     def __init__(self, app):
+        """
+        The constructor of this class takes one argument:
+        
+        :Parameter:
+            app
+                `CFApplication`_ instance
+        
+        .. _CFApplication: cf.app.CFApplication.html
+        """
         self.app = app
         self._cache = list()
         self.__gobject_init__()

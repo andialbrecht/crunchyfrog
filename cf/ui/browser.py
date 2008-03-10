@@ -27,6 +27,8 @@ from kiwi.ui import dialogs
 
 from cf.datasources import DatasourceInfo
 from cf.backends import DBConnectError
+from cf.ui import pdock
+from cf.ui.editor import SQLView
 
 from gettext import gettext as _
 
@@ -131,6 +133,13 @@ class Browser(gtk.ScrolledWindow):
                 popup = gtk.Menu()
                 model = treeview.get_model()
                 iter = model.get_iter(path)
+                obj = model.get_value(iter, 0)
+                if obj.has_details:
+                    item = gtk.MenuItem(_(u"Details"))
+                    item.connect("activate", self.on_show_details, obj, model, iter)
+                    popup.append(item)
+                if popup.get_children():
+                    popup.append(gtk.SeparatorMenuItem())
                 cb = model.get_value(iter, 4)
                 if cb:
                     try:
@@ -204,6 +213,28 @@ class Browser(gtk.ScrolledWindow):
                     citer = model.iter_children(iter)
                     if citer:
                         treeview.expand_row(model.get_path(iter), False)
+                        
+    def on_show_details(self, menuitem, object, model, iter):
+        datasource_info = self.find_datasource_info(model, iter)
+        if datasource_info.backend.schema:
+            data = datasource_info.backend.schema.get_details(datasource_info.internal_connection, object)
+            if not data:
+                return
+            nb = gtk.Notebook()
+            for key, value in data.items():
+                if isinstance(value, basestring):
+                    widget = SQLView(self.app)
+                    sw = gtk.ScrolledWindow()
+                    sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+                    sw.add(widget)
+                    widget.set_editable(False)
+                    widget.get_buffer().set_text(value)
+                    nb.append_page(sw, gtk.Label(key))
+            nb.show_all()
+            item = pdock.DockItem(self.instance.dock, "details", nb, _(u"Details: %(objname)s") % {"objname": object.name},
+                              "gtk-edit", None)
+            self.instance.dock.add_item(item)
+            item.show_all()
                     
     def find_datasource_info(self, model, iter):
         while iter:

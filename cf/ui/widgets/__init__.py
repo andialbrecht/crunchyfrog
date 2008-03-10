@@ -51,7 +51,9 @@ class ConnectionButton(gdl.ComboButton):
         self.app = app
         self._setup_widget()
         self.set_editor(None)
-        self.app.datasources.connect("datasource-modified", self.on_datasource_modified)
+        self.app.datasources.connect("datasource-modified", self.on_datasources_changed)
+        self.app.datasources.connect("datasource-added", self.on_datasources_changed)
+        self.app.datasources.connect("datasource-deleted", self.on_datasources_changed)
         
     def _setup_widget(self):
         lbl = self.get_children()[0].get_children()[0].get_children()[0].get_children()[1]
@@ -62,7 +64,7 @@ class ConnectionButton(gdl.ComboButton):
         self._menu = gtk.Menu()
         self.set_menu(self._menu)
         
-    def on_datasource_modified(self, *args):
+    def on_datasources_changed(self, *args):
         self.rebuild_menu()
         
     def on_new_connection(self, item, datasource_info):

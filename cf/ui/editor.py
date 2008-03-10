@@ -39,13 +39,8 @@ from cf.backends import Query
 from cf.ui import GladeWidget
 from cf.ui.toolbar import CFToolbar
 from cf.ui.widgets import DataExportDialog
-
-try:
-    import gtksourceview2
-    USE_GTKSOURCEVIEW2 = True
-except ImportError:
-    import gtksourceview
-    USE_GTKSOURCEVIEW2 = False
+from cf.ui.widgets.sqlview import SQLView
+    
 
 class Editor(GladeWidget):
     
@@ -73,23 +68,7 @@ class Editor(GladeWidget):
         self.lbl_status = self.xml.get_widget("editor_label_status")
         
     def _setup_textview(self):
-        if USE_GTKSOURCEVIEW2:
-            self.textview = gtksourceview2.View()
-            buffer = gtksourceview2.Buffer()
-            self.textview.set_buffer(buffer)
-            lm = gtksourceview2.language_manager_get_default()
-            buffer.set_language(lm.get_language("sql"))
-        else:
-            self.textview = gtksourceview.SourceView()
-            buffer = gtksourceview.SourceBuffer()
-            self.textview.set_buffer(buffer)
-            buffer.set_highlight(True)
-            lm = gtksourceview.SourceLanguagesManager()
-            for lang in lm.get_available_languages():
-                if lang.get_id() == "SQL":
-                    buffer.set_language(lang)
-                    break
-        self.update_textview_options()
+        self.textview = SQLView(self.app)
         sw = self.xml.get_widget("sw_editor_textview")
         sw.add(self.textview)
         
@@ -98,14 +77,9 @@ class Editor(GladeWidget):
         
     def _setup_connections(self):
         self.textview.connect("populate-popup", self.on_populate_popup)
-        self.app.config.connect("changed", self.on_config_changed)
         
     def on_close(self, *args):
         self.close()
-            
-    def on_config_changed(self, config, option, value):
-        if option.startswith("editor."):
-            gobject.idle_add(self.update_textview_options)
             
     def on_connection_closed(self, connection):
         connection.disconnect(self.__conn_close_tag)
@@ -148,10 +122,16 @@ class Editor(GladeWidget):
         
     def on_query_started(self, query):
         start = time.time()
-        self._query_timer = gobject.timeout_add(10, self.update_exectime, start, query)
+        #self._query_timer = gobject.timeout_add(10, self.update_exectime, start, query)
         
     def on_query_finished(self, query, tag_notice):
         self.results.set_query(query)
+        if query.failed:
+            gobject.idle_add(self.lbl_status.set_text, _(u"Query failed (%.3f seconds)") % query.execution_time)
+        elif query.description:
+            gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s rows)") % (query.execution_time, query.rowcount))
+        else:
+            gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s affected rows)") % (query.execution_time, query.rowcount))
         self.connection.disconnect(tag_notice)
         
     def on_show_context_help(self, menuitem, refviewer, url):
@@ -188,12 +168,17 @@ class Editor(GladeWidget):
         cur.close()
         
     def execute_query(self):
+        #def footrace(frame, event, *args):
+        #    if event == 'call':
+        #        print frame.f_code.co_name
+        #import sys
+        #sys.settrace(footrace)
         self.lbl_status.set_text(_(u"Executing query..."))
         def exec_threaded(statement):
             cur = self.connection.cursor() 
             query = Query(statement, cur)
             gtk.gdk.threads_enter()
-            query.connect("started", self.on_query_started)
+            #query.connect("started", self.on_query_started)
             query.connect("finished", self.on_query_finished, tag_notice)
             gtk.gdk.threads_leave()
             query.execute(True)
@@ -319,6 +304,7 @@ class Editor(GladeWidget):
         
     def update_exectime(self, start, query):
         gobject.idle_add(self.lbl_status.set_text, "Query running... (%.3f seconds)" % (time.time()-start))
+        self.lbl_status.set_text("Query running... (%.3f seconds)" % (time.time()-start))
         if not query.executed:
             gobject.timeout_add(233, self.update_exectime, start, query)
         else:
@@ -328,42 +314,7 @@ class Editor(GladeWidget):
                 gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s rows)") % (query.execution_time, query.rowcount))
             else:
                 gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s affected rows)") % (query.execution_time, query.rowcount))
-            
-        
-    def update_textview_options(self):
-        conf = self.app.config
-        tv = self.textview
-        buffer = tv.get_buffer()
-        if USE_GTKSOURCEVIEW2:
-            tv.set_show_right_margin(conf.get("editor.right_margin"))
-            tv.set_right_margin_position(conf.get("editor.right_margin_position"))
-            buffer.set_highlight_matching_brackets(conf.get("editor.bracket_matching"))
-            tv.set_tab_width(conf.get("editor.tabs_width"))
-            sm = gtksourceview2.style_scheme_manager_get_default()
-            scheme = sm.get_scheme(conf.get("editor.scheme"))
-            buffer.set_style_scheme(scheme)
-        else:
-            tv.set_show_margin(conf.get("editor.right_margin"))
-            #tv.set_right_margin(conf.get("editor.right_margin_position"))
-            buffer.set_check_brackets(conf.get("editor.bracket_matching"))
-            tv.set_tabs_width(conf.get("editor.tabs_width"))
-        if conf.get("editor.wrap_text"):
-            if conf.get("editor.wrap_split"):
-                tv.set_wrap_mode(gtk.WRAP_CHAR)
-            else:
-                tv.set_wrap_mode(gtk.WRAP_WORD)
-        else:
-            tv.set_wrap_mode(gtk.WRAP_NONE)
-        tv.set_show_line_numbers(conf.get("editor.display_line_numbers"))
-        tv.set_highlight_current_line(conf.get("editor.highlight_current_line"))
-        tv.set_insert_spaces_instead_of_tabs(conf.get("editor.insert_spaces"))
-        tv.set_auto_indent(conf.get("editor.auto_indent"))
-        if conf.get("editor.default_font"):
-            client = gconf.client_get_default()
-            font = client.get_string("/desktop/gnome/interface/monospace_font_name")
-        else:
-            font = conf.get("editor.font")
-        tv.modify_font(pango.FontDescription(font))
+
         
 class EditorWindow(GladeWidget):
     
@@ -576,6 +527,43 @@ class ResultsView(GladeWidget):
         buffer = self.messages.get_buffer()
         buffer.insert_at_cursor(msg.strip()+"\n")
         
+#class CellRendererCustom(gtk.GenericCellRenderer):
+#    __gproperties__ = {
+#        "data": (gobject.TYPE_PYOBJECT, "Value",
+#                    "Value", gobject.PARAM_READWRITE),
+#    }
+#    
+#    def __init__(self):
+#        self.__gobject_init__()
+#        self.custom = gtk.Label()
+#        self.value = None
+#
+#    def do_set_property(self, pspec, value):
+#        if pspec.name == "data":
+#            self.value = value
+#
+#    def do_get_property(self, pspec):
+#        if pspec.name == "data":
+#            return self.value
+#
+#    def on_render(self, window, widget, background_area, cell_area, expose_area, flags):
+#        context = widget.get_pango_context()
+#        layout = pango.Layout(context)
+#        layout.set_text(str(self.value) or "NO VALUE")
+#        layout.set_wrap(gtk.WRAP_CHAR)
+#        layout.set_width(cell_area.width)
+#        widget.style.paint_layout(window, gtk.STATE_NORMAL, gtk.TRUE,
+#                                  cell_area, widget, 'footext',
+#                                  cell_area.x, cell_area.y,
+#                                  layout)
+#
+#    def on_get_size(self, widget, cell_area=None):
+#        return (0, 0,
+#                self.custom.allocation.width,
+#                self.custom.allocation.height)
+#
+#gobject.type_register(CellRendererCustom)
+        
         
 class ResultsGrid(GladeWidget):
     
@@ -591,6 +579,40 @@ class ResultsGrid(GladeWidget):
         sel.set_mode(gtk.SELECTION_MULTIPLE)
         self.grid.set_rubber_banding(True)
         
+    def on_button_pressed(self, widget, event):
+        if event.button == 3:
+            x = int(event.x)
+            y = int(event.y)
+            time = event.time
+            pthinfo = self.grid.get_path_at_pos(x, y)
+            if pthinfo is not None:
+                path, col, cellx, celly = pthinfo
+                self.grid.grab_focus()
+                self.grid.set_cursor( path, col, 0)
+                model = self.grid.get_model()
+                iter = model.get_iter(path)
+                cols = self.grid.get_columns()
+                obj = None
+                for i in range(len(cols)):
+                    if i == 0: continue
+                    if cols[i] == col:
+                        obj = self._query.rows[int(model.get_value(iter, model.get_n_columns()-2))-1][i-1]
+                        break
+                if obj:
+                    popup = gtk.Menu()
+                    item = gtk.MenuItem(_(u"Show content"))
+                    item.connect("activate", self.on_show_data, obj)
+                    item.show()
+                    popup.append(item)
+                    popup.popup( None, None, None, event.button, time)
+        
+    def on_cell_edited(self, *args):
+        # we don't want to change data in the grid
+        pass
+    
+    def on_key_pressed(self, *args):
+        print args
+        
     def on_select_all_rows(self, *args):
         sel = self.grid.get_selection()
         sel.select_all()
@@ -600,6 +622,23 @@ class ResultsGrid(GladeWidget):
         
     def on_show_all(self, *args):
         gobject.idle_add(self.fetch_all)
+        
+    def on_show_data(self, menuitem, data):
+        dlg = gtk.Dialog(_(u"Data"), self.instance.widget,
+                         gtk.DIALOG_DESTROY_WITH_PARENT,
+                         (gtk.STOCK_CLOSE, gtk.RESPONSE_OK))
+        tv = gtk.TextView()
+        tv.get_buffer().set_text(str(data))
+        tv.set_editable(False)
+        tv.set_wrap_mode(gtk.WRAP_WORD)
+        sw = gtk.ScrolledWindow()
+        sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        sw.add(tv)
+        dlg.vbox.pack_start(sw, True, True)
+        sw.show_all()
+        sw.set_size_request(350, 350)
+        dlg.run()
+        dlg.destroy()
         
     def set_query(self, query):
         self._query = query
@@ -623,6 +662,8 @@ class ResultsGrid(GladeWidget):
             renderer.set_property("wrap-mode", gtk.WRAP_CHAR)
             renderer.set_property("single-paragraph-mode", True)
             renderer.set_property("width-chars", 10)
+            renderer.set_property("editable", True)
+            renderer.connect("edited", self.on_cell_edited)
             col = gtk.TreeViewColumn(name.replace("_", "__"), renderer, markup=len(model_args)-1)
             col.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
             col.set_resizable(True)
@@ -652,9 +693,11 @@ class ResultsGrid(GladeWidget):
                     value = self._query.rows[i][j]
                     if value == None: 
                         value = '<span foreground="%s">&lt;NULL&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
+                    elif isinstance(value, buffer):
+                        value = '<span foreground="%s">&lt;LOB&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
                     else:
                         value = gobject.markup_escape_text(str(value))
-                    row.append(value)
+                    row.append(value[:100])
                 row.append(i+1)
                 row.append(style.dark[gtk.STATE_ACTIVE].to_string())
                 model.append(row)

@@ -65,6 +65,15 @@ class CFApplication(bonobo.Application):
     """
     
     def __init__(self, options):
+        """
+        The constructor of this class takes one argument:
+        
+        :Parameter:
+            options
+                Commandline options as returned by `optparse`_
+                
+        .. _optparse: http://docs.python.org/lib/module-optparse.html
+        """
         bonobo.Application.__init__(self, release.name)
         self.options = options
         self.cb = CFAppCallbacks()
