@@ -57,8 +57,6 @@ from os import makedirs
 import sys
 import logging
 
-__file__="/storage/devel2/crunchyfrog/trunk/cf/__init__.py"
-
 if isfile(abspath(join(dirname(__file__), "../setup.py"))):
     DATA_DIR = abspath(join(dirname(__file__), "../data"))
     LOCALE_DIR = abspath(join(dirname(__file__), "../po"))
