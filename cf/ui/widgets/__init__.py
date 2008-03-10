@@ -144,30 +144,6 @@ class DataExportDialog(gtk.FileChooserDialog):
     
     A modified ``gtk.FileChooserDialog`` for exporting data.
     
-    The constructor of this class takes 6 arguments:
-    
-    .. sourcecode:: python
-    
-        dlg = DataExportDialog(app, parent, data, selected, statement, description)
-    
-        
-    :app: `CFApplication`_ instance
-    :parent: The parent widget, usualy something like ``self.instance.widget``
-    :data: List of rows (``[ [col1, col2, col3], ...]``)
-    :selected: List of indices of selected rows (``None`` means that no rows are selected)
-    :statement: The SQL statement that produced the data.
-        This parameter is only used by some filters to give additional
-        information.
-    :description: A DB-API2-like description.
-        Read the comments on the ``description`` attribute of cursor
-        objects in `PEP 249`_ for details.
-        
-        
-    .. Note:: Usually there's no need to define ``data`` and ``description``
-        by hand. If it's a DB-API2-based backend, these parameters are
-        retrieved from the cursor object (``cursor.fetchall()`` and 
-        ``cursor.description``).
-    
     Usage example
     =============
     
@@ -188,12 +164,40 @@ class DataExportDialog(gtk.FileChooserDialog):
             ...     dlg.export_data()
             ... 
             >>> dlg.destroy()
-            
-    .. _CFApplication: cf.app.CFApplication.html
-    .. _PEP 249: http://www.python.org/dev/peps/pep-0249/
+    
     """
     
     def __init__(self, app, parent, data, selected, statement, description):
+        """
+        The constructor of this class takes 6 arguments:
+        
+        :Parameter:
+            app
+                `CFApplication`_ instance
+            parent
+                The parent widget, usualy something like ``self.instance.widget``
+            data
+                List of rows (``[ [col1, col2, col3], ...]``)
+            selected
+                List of indices of selected rows (``None`` means that no rows are selected)
+            statement
+                The SQL statement that produced the data.
+                This parameter is only used by some filters to give additional
+                information.
+            description
+                A DB-API2-like description.
+                Read the comments on the ``description`` attribute of cursor
+                objects in `PEP 249`_ for details.
+                
+                
+        .. Note:: Usually there's no need to define ``data`` and ``description``
+            by hand. If it's a DB-API2-based backend, these parameters are
+            retrieved from the cursor object (``cursor.fetchall()`` and 
+            ``cursor.description``).
+                
+        .. _CFApplication: cf.app.CFApplication.html
+        .. _PEP 249: http://www.python.org/dev/peps/pep-0249/
+        """
         gtk.FileChooserDialog.__init__(self, _(u"Export data"),
                                        parent,
                                        gtk.FILE_CHOOSER_ACTION_SAVE,

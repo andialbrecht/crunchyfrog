@@ -24,6 +24,14 @@
     <div class="docstring ${project.renderer_id(desc)}"
           py:content="project.render_description(desc, True)" />
           
+    <div py:if="desc.constructor" class="constructor child-elements">
+    	<h2>Constructor</h2>
+    	<h3><span py:replace="desc.name" /><span class="args" py:content="desc.constructor.argspec" /></h3>
+    	<div class="docstring ${project.renderer_id(desc.constructor)}"
+          py:content="project.render_description(desc.constructor, False)" />
+    </div>
+        
+          
     <div py:if="desc.find_subclasses()">
     	<p>Subclasses: <py:for each="i, cls in enumerate(desc.find_subclasses())"><py:if test="i != 0">, </py:if><a href="${project.href(cls)}">${cls.name}</a></py:for>
     	</p>
