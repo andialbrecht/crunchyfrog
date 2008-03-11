@@ -563,6 +563,8 @@ class ResultsView(GladeWidget):
 #                self.custom.allocation.height)
 #
 #gobject.type_register(CellRendererCustom)
+
+from cf.ui.widgets.renderer import *
         
         
 class ResultsGrid(GladeWidget):
@@ -655,16 +657,17 @@ class ResultsGrid(GladeWidget):
         if not query.description: return
         model_args = list()
         for name, type_code, display_size, internal_size, precision, scale, null_ok in query.description:
-            model_args.append(str)
-            renderer = gtk.CellRendererText()
-            renderer.set_property("ellipsize", pango.ELLIPSIZE_END)
-            renderer.set_property("wrap-width", 75)
-            renderer.set_property("wrap-mode", gtk.WRAP_CHAR)
-            renderer.set_property("single-paragraph-mode", True)
-            renderer.set_property("width-chars", 10)
-            renderer.set_property("editable", True)
-            renderer.connect("edited", self.on_cell_edited)
-            col = gtk.TreeViewColumn(name.replace("_", "__"), renderer, markup=len(model_args)-1)
+            model_args.append(gobject.TYPE_PYOBJECT)
+            #renderer = gtk.CellRendererText()
+            #renderer.set_property("ellipsize", pango.ELLIPSIZE_END)
+            #renderer.set_property("wrap-width", 75)
+            #renderer.set_property("wrap-mode", gtk.WRAP_CHAR)
+            #renderer.set_property("single-paragraph-mode", True)
+            #renderer.set_property("width-chars", 10)
+            #renderer.set_property("editable", True)
+            #renderer.connect("edited", self.on_cell_edited)
+            renderer = CellRendererText()
+            col = gtk.TreeViewColumn(name.replace("_", "__"), renderer, text=len(model_args)-1)
             col.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
             col.set_resizable(True)
             self.grid.append_column(col)
@@ -691,13 +694,13 @@ class ResultsGrid(GladeWidget):
                 row = []
                 for j in range(len(self._query.rows[i])):
                     value = self._query.rows[i][j]
-                    if value == None: 
-                        value = '<span foreground="%s">&lt;NULL&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
-                    elif isinstance(value, buffer):
-                        value = '<span foreground="%s">&lt;LOB&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
-                    else:
-                        value = gobject.markup_escape_text(str(value))
-                    row.append(value[:100])
+                    #if value == None: 
+                    #    value = '<span foreground="%s">&lt;NULL&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
+                    #elif isinstance(value, buffer):
+                    #    value = '<span foreground="%s">&lt;LOB&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
+                    #else:
+                    #    value = gobject.markup_escape_text(str(value))
+                    row.append(value)
                 row.append(i+1)
                 row.append(style.dark[gtk.STATE_ACTIVE].to_string())
                 model.append(row)
