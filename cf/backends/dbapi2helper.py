@@ -20,7 +20,13 @@
 
 """Helper classes for DB-API2 connections""" 
 
+import gtk
+
+from kiwi.ui import dialogs
+
 import sys
+
+from gettext import gettext as _
 
 from cf.backends import DBConnection, DBCursor
 
@@ -78,9 +84,15 @@ class DbAPI2Connection(DBConnection):
         self.update_transaction_status()
         
     def explain(self, statement):
-        sql = "EXPLAIN %s" % statement
-        cur = self._conn.cursor()
-        cur.execute(sql)
-        data = cur.fetchall()
-        cur.close()
+        try:
+            sql = "EXPLAIN %s" % statement
+            cur = self._conn.cursor()
+            cur.execute(sql)
+            data = cur.fetchall()
+            cur.close()
+        except:
+            gtk.gdk.threads_enter()
+            dialogs.error(_(u"An error occured"), str(sys.exc_info()[1]))
+            gtk.gdk.threads_leave()
+            return []
         return data

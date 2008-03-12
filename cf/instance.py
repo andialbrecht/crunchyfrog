@@ -192,7 +192,7 @@ class CFInstance(GladeWidget):
         dlg.add_filter(filter)
         dlg.set_filter(filter)
         if dlg.run() == gtk.RESPONSE_OK:
-            gobject.idle_add(self.new_editor, dlg.get_filename())
+            self.new_editor(dlg.get_filename())
             self.app.config.set("editor.recent_folder", dlg.get_current_folder())
         dlg.destroy()
         
