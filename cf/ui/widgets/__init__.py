@@ -32,7 +32,8 @@ from kiwi.ui import dialogs
 
 from gettext import gettext as _
 
-from cf.backends import DBConnectError
+from cf.backends import DBConnectError, DBConnection
+from cf.datasources import DatasourceInfo
 from cf.ui import GladeWidget
 
 class ConnectionButton(gdl.ComboButton):
@@ -67,6 +68,9 @@ class ConnectionButton(gdl.ComboButton):
     def on_datasources_changed(self, *args):
         self.rebuild_menu()
         
+    def on_manage_connections(self, *args):
+        self.manage_connections()
+        
     def on_new_connection(self, item, datasource_info):
         try:
             conn = datasource_info.dbconnect()
@@ -78,6 +82,12 @@ class ConnectionButton(gdl.ComboButton):
     def on_set_connection(self, item, connection):
         self._editor.set_connection(connection)
         self.set_editor(self._editor)
+        
+    def manage_connections(self):
+        """Displays a dialog to manage connections"""
+        dlg = ConnectionsDialog(self.app)
+        dlg.run()
+        dlg.destroy()
         
     def rebuild_menu(self):
         """Rebuilds the drop-down menu"""
@@ -114,8 +124,8 @@ class ConnectionButton(gdl.ComboButton):
         sep = gtk.SeparatorMenuItem()
         sep.show()
         self._menu.append(sep)
-        item = gtk.MenuItem(_(u"Manage open connections"))
-        item.set_sensitive(ghas_connections)
+        item = gtk.MenuItem(_(u"Show connections"))
+        item.connect("activate", self.on_manage_connections)
         item.show()
         self._menu.append(item)    
         
@@ -358,3 +368,82 @@ class ProgressDialog(GladeWidget):
                 If ``True`` the close button gets sensitive.
         """
         self.xml.get_widget("progress_btn_close").set_sensitive(finished)
+        
+class ConnectionsDialog(GladeWidget):
+    
+    def __init__(self, app):
+        GladeWidget.__init__(self, app, "crunchyfrog", "connectionsdialog")
+        self.refresh()
+        
+    def _setup_widget(self):
+        self.list_conn = self.xml.get_widget("list_connections")
+        model = gtk.TreeStore(gobject.TYPE_PYOBJECT, str)
+        model.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        self.list_conn.set_model(model)
+        col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=1)
+        self.list_conn.append_column(col)
+        
+    def _setup_connections(self):
+        sel = self.list_conn.get_selection()
+        sel.connect("changed", self.on_selection_changed)
+        
+    def on_connect(self, *args):
+        sel = self.list_conn.get_selection()
+        model, iter = sel.get_selected()
+        if not iter:
+            return
+        obj = model.get_value(iter, 0)
+        if not isinstance(obj, DatasourceInfo):
+            return
+        conn = obj.dbconnect()
+        conn.connect("closed", self.on_connection_closed)
+        iter = model.get_iter_first()
+        while iter:
+            if model.get_value(iter, 0) == conn.datasource_info:
+                citer = model.append(iter)
+                model.set(citer, 0, conn, 1, conn.get_label())
+                break
+            iter = model.iter_next(iter)
+        
+    def on_disconnect(self, *args):
+        sel = self.list_conn.get_selection()
+        model, iter = sel.get_selected()
+        if not iter:
+            return
+        obj = model.get_value(iter, 0)
+        if not isinstance(obj, DBConnection):
+            return
+        obj.close()
+    
+    def on_connection_closed(self, connection):
+        model = self.list_conn.get_model()
+        iter = model.get_iter_first()
+        while iter:
+            if model.get_value(iter, 0) == connection.datasource_info:
+                citer = model.iter_children(iter)
+                while citer:
+                    if model.get_value(citer, 0) == connection:
+                        model.remove(citer)
+                        break
+                    citer = model.iter_next(citer)
+            iter = model.iter_next(iter)
+        
+    def on_selection_changed(self, selection):
+        model, iter = selection.get_selected()
+        is_connection = False
+        is_ds = False
+        if iter:
+            obj = model.get_value(iter, 0)
+            is_ds = isinstance(obj, DatasourceInfo)
+            is_connection = isinstance(obj, DBConnection)
+        self.xml.get_widget("btn_disconnect").set_sensitive(is_connection)
+        self.xml.get_widget("btn_connect").set_sensitive(is_ds)
+        
+    def refresh(self):
+        model = self.list_conn.get_model()
+        for datasource_info in self.app.datasources.get_all():
+            iter = model.append(None)
+            model.set(iter, 0, datasource_info, 1, datasource_info.get_label())
+            for conn in datasource_info.get_connections():
+                citer = model.append(iter)
+                model.set(citer, 0, conn, 1, conn.get_label())
