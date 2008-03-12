@@ -369,10 +369,11 @@ class ProgressDialog(GladeWidget):
         """
         self.xml.get_widget("progress_btn_close").set_sensitive(finished)
         
-class ConnectionsDialog(GladeWidget):
+class ConnectionsWidget(GladeWidget):
+    """Lists datasources and active connections"""
     
-    def __init__(self, app):
-        GladeWidget.__init__(self, app, "crunchyfrog", "connectionsdialog")
+    def __init__(self, app, xml="crunchyfrog"):
+        GladeWidget.__init__(self, app, xml, "connections_widget")
         self.refresh()
         
     def _setup_widget(self):
@@ -386,6 +387,9 @@ class ConnectionsDialog(GladeWidget):
     def _setup_connections(self):
         sel = self.list_conn.get_selection()
         sel.connect("changed", self.on_selection_changed)
+        self.app.datasources.connect("datasource-added", self.on_datasource_added)
+        self.app.datasources.connect("datasource-deleted", self.on_datasource_deleted)
+        self.app.datasources.connect("datasource-modified", self.on_datasource_modified)
         
     def on_connect(self, *args):
         sel = self.list_conn.get_selection()
@@ -427,6 +431,29 @@ class ConnectionsDialog(GladeWidget):
                         break
                     citer = model.iter_next(citer)
             iter = model.iter_next(iter)
+            
+    def on_datasource_added(self, manager, datasource_info):
+        model = self.list_conn.get_model()
+        iter = model.append(None)
+        model.set(iter, 0, datasource_info, 1, datasource_info.get_label())
+    
+    def on_datasource_modified(self, manager, datasource_info):
+        model = self.list_conn.get_model()
+        iter = model.get_iter_first()
+        while iter:
+            if model.get_value(iter, 0) == datasource_info:
+                model.set(iter, 0, datasource_info, 1, datasource_info.get_label())
+                return
+            iter = model.iter_next(iter)
+    
+    def on_datasource_deleted(self, manager, datasource_info):
+        model = self.list_conn.get_model()
+        iter = model.get_iter_first()
+        while iter:
+            if model.get_value(iter, 0) == datasource_info:
+                model.remove(iter)
+                return
+            iter = model.iter_next(iter)
         
     def on_selection_changed(self, selection):
         model, iter = selection.get_selected()
@@ -440,6 +467,7 @@ class ConnectionsDialog(GladeWidget):
         self.xml.get_widget("btn_connect").set_sensitive(is_ds)
         
     def refresh(self):
+        """Initializes the data model"""
         model = self.list_conn.get_model()
         for datasource_info in self.app.datasources.get_all():
             iter = model.append(None)
@@ -447,3 +475,13 @@ class ConnectionsDialog(GladeWidget):
             for conn in datasource_info.get_connections():
                 citer = model.append(iter)
                 model.set(citer, 0, conn, 1, conn.get_label())
+        
+class ConnectionsDialog(GladeWidget):
+    """Dialog displaying connections"""
+    
+    def __init__(self, app):
+        GladeWidget.__init__(self, app, "crunchyfrog", "connectionsdialog")
+        
+    def _setup_widget(self):
+        self.connections = ConnectionsWidget(self.app, self.xml)
+    

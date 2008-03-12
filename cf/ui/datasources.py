@@ -28,6 +28,7 @@ from kiwi.ui import dialogs
 from gettext import gettext as _
 
 from cf.ui import GladeWidget
+from cf.ui.widgets import ConnectionsWidget
 from cf.datasources import DatasourceInfo
 
 COMMON_OPTIONS = ["dsn", "database", "host", "port", "user", "password"]
@@ -66,6 +67,13 @@ class DatasourceManager(GladeWidget):
         sel = tv.get_selection()
         sel.connect("changed", self.on_selected_datasource_changed)
         self.refresh_saved_connections()
+        # Connections
+        notebook = self.xml.get_widget("dsmanager_notebook")
+        self.connections = ConnectionsWidget(self.app)
+        lbl = gtk.Label(_(u"_Connections"))
+        lbl.set_use_underline(True)
+        self.connections.widget.set_border_width(5)
+        notebook.append_page(self.connections.widget, lbl)
         
     def run_warning(self):
         dialogs.warning(_(u"No active database backends."),
