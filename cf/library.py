@@ -29,9 +29,12 @@ This module contains the SQL library plugin.
 import gtk
 import gobject
 
+from kiwi.ui import dialogs
+
 from cf.plugins.core import GenericPlugin
 from cf.plugins.mixins import MenubarMixin, EditorMixin, UserDBMixin
 from cf.ui import GladeWidget
+from cf.ui.widgets.sqlview import SQLView
 
 from gettext import gettext as _
 
@@ -67,6 +70,9 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
         self.userdb.cursor.execute(sql)
         editor.textview.get_buffer().set_text(self.userdb.cursor.fetchone()[0])
         
+    def on_show_library(self, *args):
+        self.show_library()
+        
     def add_to_library(self, txt):
         dlg = LibSaveDialog(self.app)
         dlg.set_statement(txt)
@@ -97,6 +103,10 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
         item.show()
         menu.append(item)
         self._menu_items[instance] = menu
+        item = gtk.MenuItem(_(u"_Open library"))
+        item.connect("activate", self.on_show_library)
+        item.show()
+        menu.append(item)
         item = gtk.MenuItem(_(u"_Add to library"))
         item.set_sensitive(False)
         item.show()
@@ -161,6 +171,11 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
                     break
                 menuitem.remove(child)
             add_items(menuitem, None, instance)
+            
+    def show_library(self):
+        dlg = SQLLibraryDialog(self.app, self)
+        dlg.run()
+        dlg.destroy()
             
 class LibSaveDialog(GladeWidget):
     """Save statement to library dialog"""
@@ -255,6 +270,207 @@ class LibSaveDialog(GladeWidget):
             return model.get_value(iter, 0)
         else:
             return None
+        
+class SQLLibraryDialog(GladeWidget):
+    
+    def __init__(self, app, plugin):
+        GladeWidget.__init__(self, app, "crunchyfrog", "sqllib_manage")
+        self.plugin = plugin
+        self.refresh()
+        
+    def _setup_widget(self):
+        # treeview
+        self.list = self.xml.get_widget("sqlmanage_list")
+        self.list.set_reorderable(True)
+        model = gtk.TreeStore(gobject.TYPE_PYOBJECT,
+                              str, 
+                              str,
+                              bool,
+                              str)
+        model.set_sort_column_id(4, gtk.SORT_ASCENDING)
+        self.list.set_model(model)
+        col = gtk.TreeViewColumn()
+        renderer = gtk.CellRendererPixbuf()
+        col.pack_start(renderer, expand=False)
+        col.add_attribute(renderer, 'stock-id', 2)
+        renderer = gtk.CellRendererText()
+        col.pack_start(renderer, expand=True)
+        col.add_attribute(renderer, 'markup', 1)
+        self.list.append_column(col)
+        # Statement
+        self.statement = SQLView(self.app)
+        self.xml.get_widget("sqlmanage_sw_statement").add(self.statement)
+        self.statement.show_all()
+        
+    def _setup_connections(self):
+        sel = self.list.get_selection()
+        sel.connect("changed", self.on_selection_changed)
+        
+    def on_button_pressed(self, treeview, event):
+        if event.button == 3:
+            x = int(event.x)
+            y = int(event.y)
+            time = event.time
+            popup = gtk.Menu()
+            pthinfo = treeview.get_path_at_pos(x, y)
+            if pthinfo is not None:
+                path, col, cellx, celly = pthinfo
+                model = treeview.get_model()
+                iter = model.get_iter(path)
+                if not model.get_value(iter, 3):
+                    item = gtk.MenuItem(_(u"Add category"))
+                    item.connect("activate", self.on_category_new, model.get_value(iter, 0))
+                    popup.append(item)
+                    item = gtk.MenuItem(_(u"Add query"))
+                    item.connect("activate", self.on_statement_new, model.get_value(iter,0))
+                    popup.append(item)
+            else:
+                item = gtk.MenuItem(_(u"Add category"))
+                item.connect("activate", self.on_category_new, None)
+                popup.append(item)
+                item = gtk.MenuItem(_(u"Add query"))
+                item.connect("activate", self.on_statement_new, None)
+                popup.append(item)
+            if popup.get_children():
+                popup.show_all()
+                popup.popup( None, None, None, event.button, time)
+                
+    def on_category_new(self, menuitem, parent):
+        sql = "insert into sqllib_cat (name, parent) values (?, ?)"
+        self.app.userdb.cursor.execute(sql, (_(u"New category"), parent))
+        self.app.userdb.connection.commit()
+        self.plugin.rebuild_menues()
+        self.refresh()
+        
+    def on_delete(self, *args):
+        selection = self.list.get_selection()
+        model, iter = selection.get_selected()
+        if not iter: return
+        if model.get_value(iter, 3):
+            id_ = model.get_value(iter, 0)
+            sql = "delete from sqllib_sql where id = %s" % id_
+            self.app.userdb.cursor.execute(sql)
+            self.app.userdb.connection.commit()
+            self.refresh()
+            self.plugin.rebuild_menues()
+        else:
+            id_ = model.get_value(iter, 0)
+            sql = "select id from sqllib_cat where parent = %s \
+            union select id from sqllib_sql where category = %s"
+            sql = sql % (id_, id_)
+            self.app.userdb.cursor.execute(sql)
+            if self.app.userdb.cursor.fetchall():
+                dialogs.error(_(u"Category is not empty."))
+            else:
+                sql = "delete from sqllib_cat where id = %s" % id_
+                self.app.userdb.cursor.execute(sql)
+                self.app.userdb.connection.commit()
+                self.refresh()
+                self.plugin.rebuild_menues()
+            
+    def on_save(self, *args):
+        selection = self.list.get_selection()
+        model, iter = selection.get_selected()
+        if not iter: return
+        if model.get_value(iter, 3):
+            id_ = model.get_value(iter, 0)
+            sql = "update sqllib_sql set title = ?, description = ?, \
+            statement = ? where id = ?"
+            args= (self.xml.get_widget("sqllib_name").get_text(),
+                   self.xml.get_widget("sqllib_description").get_text() or None,
+                   self.statement.get_buffer().get_text(*self.statement.get_buffer().get_bounds()),
+                   id_
+                   )
+            self.app.userdb.cursor.execute(sql, args)
+            self.app.userdb.connection.commit()
+            self.refresh()
+            self.plugin.rebuild_menues()
+        else:
+            id_ = model.get_value(iter, 0)
+            sql = "update sqllib_cat set name = ? where id = ?"
+            self.app.userdb.cursor.execute(sql, 
+                                           (self.xml.get_widget("sqllib_name").get_text(),
+                                            id_))
+            self.app.userdb.connection.commit()
+            self.refresh()
+            self.plugin.rebuild_menues()
+        
+    def on_selection_changed(self, selection):
+        model, iter = selection.get_selected()
+        if iter and model.get_value(iter, 3):
+            id_ = model.get_value(iter, 0)
+            sql = "select title, description, statement from sqllib_sql \
+            where id = %s" % id_
+            self.app.userdb.cursor.execute(sql)
+            data = self.app.userdb.cursor.fetchone()
+            self.xml.get_widget("sqllib_name").set_text(data[0] or "")
+            self.xml.get_widget("sqllib_description").set_text(data[1] or "")
+            self.xml.get_widget("sqllib_description").set_sensitive(True)
+            self.statement.get_buffer().set_text(data[2] or "")
+            self.statement.set_sensitive(True)
+            self.xml.get_widget("sqllib_details_table").set_sensitive(True)
+        elif iter:
+            id_ = model.get_value(iter, 0)
+            sql = "select name from sqllib_cat where id = %s" % id_
+            self.app.userdb.cursor.execute(sql)
+            data = self.app.userdb.cursor.fetchone()
+            self.xml.get_widget("sqllib_name").set_text(data[0] or None)
+            self.xml.get_widget("sqllib_description").set_text("")
+            self.xml.get_widget("sqllib_description").set_sensitive(False)
+            self.statement.get_buffer().set_text("")
+            self.statement.set_sensitive(False)
+            self.xml.get_widget("sqllib_details_table").set_sensitive(True)
+        else:
+            self.xml.get_widget("sqllib_name").set_text("")
+            self.xml.get_widget("sqllib_description").set_text("")
+            self.statement.get_buffer().set_text("")
+            self.xml.get_widget("sqllib_details_table").set_sensitive(False)
+        
+    def on_statement_new(self, menuitem, parent):
+        sql = "insert into sqllib_sql (title, category, statement) \
+        values (?, ?, 'SELECT * FROM table;')"
+        self.app.userdb.cursor.execute(sql, (_(u"New query"), parent))
+        id = self.app.userdb.cursor.lastrowid
+        self.app.userdb.connection.commit()
+        self.plugin.rebuild_menues()
+        self.refresh()
+        
+    def refresh(self):
+        model = self.list.get_model()
+        model.clear()
+        self.init_items(model)
+        
+    def init_items(self, model, parent=None):
+        sql = "select id, name from sqllib_cat where parent "
+        if parent:
+            sql += "= %s" % model.get_value(parent, 0)
+        else:
+            sql += "is null"
+        self.app.userdb.cursor.execute(sql)
+        for item in self.app.userdb.cursor.fetchall():
+            iter = model.append(parent)
+            model.set(iter, 0, item[0], 1, item[1], 
+                      2, "gtk-open", 3, False,
+                      4, item[0])
+            sql = "select id, title from sqllib_sql where category = %s" % item[0]
+            self.app.userdb.cursor.execute(sql)
+            for citem in self.app.userdb.cursor.fetchall():
+                citer = model.append(iter)
+                model.set(citer, 0, citem[0], 1, citem[1], 
+                          2, "gtk-edit", 3, True,
+                          4, "ZZZZZZZZZZZZZZZZZZZZ%s" % citem[1])
+            sql = "select count(*) from sqllib_cat where parent = %s" % item[0]
+            self.app.userdb.cursor.execute(sql)
+            if self.app.userdb.cursor.fetchone()[0] != 0:
+                self.init_items(model, iter)
+        if parent == None:
+            sql = "select id, title from sqllib_sql where category is null"
+            self.app.userdb.cursor.execute(sql)
+            for citem in self.app.userdb.cursor.fetchall():
+                citer = model.append(None)
+                model.set(citer, 0, citem[0], 1, citem[1], 
+                          2, "gtk-edit", 3, True,
+                          4, "ZZZZZZZZZZZZZZZZZZZZ%s" % citem[1])
             
             
 TABLE_LIB_CAT = """create table sqllib_cat (
