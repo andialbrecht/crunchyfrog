@@ -39,6 +39,7 @@ from cf.backends import Query
 from cf.ui import GladeWidget
 from cf.ui.toolbar import CFToolbar
 from cf.ui.widgets import DataExportDialog
+from cf.ui.widgets.grid import Grid
 from cf.ui.widgets.sqlview import SQLView
     
 
@@ -122,7 +123,11 @@ class Editor(GladeWidget):
         
     def on_query_started(self, query):
         start = time.time()
-        #self._query_timer = gobject.timeout_add(10, self.update_exectime, start, query)
+        # Note: The higher the time out value, the longer the query takes.
+        #    50 is a reasonable value anyway.
+        #    The start time is for the UI only. The real execution time
+        #    is calculated in the Query class.
+        self._query_timer = gobject.timeout_add(50, self.update_exectime, start, query)
         
     def on_query_finished(self, query, tag_notice):
         self.results.set_query(query)
@@ -168,17 +173,12 @@ class Editor(GladeWidget):
         cur.close()
         
     def execute_query(self):
-        #def footrace(frame, event, *args):
-        #    if event == 'call':
-        #        print frame.f_code.co_name
-        #import sys
-        #sys.settrace(footrace)
         self.lbl_status.set_text(_(u"Executing query..."))
         def exec_threaded(statement):
             cur = self.connection.cursor() 
             query = Query(statement, cur)
             gtk.gdk.threads_enter()
-            #query.connect("started", self.on_query_started)
+            query.connect("started", self.on_query_started)
             query.connect("finished", self.on_query_finished, tag_notice)
             gtk.gdk.threads_leave()
             query.execute(True)
@@ -303,17 +303,19 @@ class Editor(GladeWidget):
         self.set_data("win", None)
         
     def update_exectime(self, start, query):
-        gobject.idle_add(self.lbl_status.set_text, "Query running... (%.3f seconds)" % (time.time()-start))
         self.lbl_status.set_text("Query running... (%.3f seconds)" % (time.time()-start))
-        if not query.executed:
-            gobject.timeout_add(233, self.update_exectime, start, query)
-        else:
+        if query.executed:
+            gobject.source_remove(self._query_timer)
+            self._query_timer = None
             if query.failed:
                 gobject.idle_add(self.lbl_status.set_text, _(u"Query failed (%.3f seconds)") % query.execution_time)
             elif query.description:
                 gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s rows)") % (query.execution_time, query.rowcount))
             else:
                 gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s affected rows)") % (query.execution_time, query.rowcount))
+            return False
+        else:
+            return True
 
         
 class EditorWindow(GladeWidget):
@@ -462,7 +464,7 @@ class ResultsView(GladeWidget):
     def __init__(self, app, instance, xml):
         GladeWidget.__init__(self, app, xml, "editor_results")
         self.instance = instance
-        self.grid = ResultsGrid(app, instance, xml)
+        self.grid = ResultList(app, instance, xml)
         self.messages = self.xml.get_widget("editor_results_messages")
         buffer = self.messages.get_buffer()
         buffer.create_tag("error", foreground="#a40000", weight=pango.WEIGHT_BOLD)
@@ -478,14 +480,10 @@ class ResultsView(GladeWidget):
         gobject.idle_add(self.export_data)
         
     def export_data(self):
-        data = self.grid._query.rows
-        description = self.grid._query.description
-        selected = []
-        sel = self.grid.grid.get_selection()
-        model, paths = sel.get_selected_rows()
-        if paths:
-            selected = [x[0] for x in paths]
-        statement = self.grid._query.statement
+        data = self.grid.grid.get_grid_data()
+        description = self.grid.grid.description
+        selected = self.grid.grid.get_selected_rows()
+        statement = self.grid.query.statement
         gtk.gdk.threads_enter()
         dlg = DataExportDialog(self.app, self.instance.widget, 
                                data, selected, statement, description)
@@ -526,197 +524,27 @@ class ResultsView(GladeWidget):
     def add_message(self, msg):
         buffer = self.messages.get_buffer()
         buffer.insert_at_cursor(msg.strip()+"\n")
-        
-#class CellRendererCustom(gtk.GenericCellRenderer):
-#    __gproperties__ = {
-#        "data": (gobject.TYPE_PYOBJECT, "Value",
-#                    "Value", gobject.PARAM_READWRITE),
-#    }
-#    
-#    def __init__(self):
-#        self.__gobject_init__()
-#        self.custom = gtk.Label()
-#        self.value = None
-#
-#    def do_set_property(self, pspec, value):
-#        if pspec.name == "data":
-#            self.value = value
-#
-#    def do_get_property(self, pspec):
-#        if pspec.name == "data":
-#            return self.value
-#
-#    def on_render(self, window, widget, background_area, cell_area, expose_area, flags):
-#        context = widget.get_pango_context()
-#        layout = pango.Layout(context)
-#        layout.set_text(str(self.value) or "NO VALUE")
-#        layout.set_wrap(gtk.WRAP_CHAR)
-#        layout.set_width(cell_area.width)
-#        widget.style.paint_layout(window, gtk.STATE_NORMAL, gtk.TRUE,
-#                                  cell_area, widget, 'footext',
-#                                  cell_area.x, cell_area.y,
-#                                  layout)
-#
-#    def on_get_size(self, widget, cell_area=None):
-#        return (0, 0,
-#                self.custom.allocation.width,
-#                self.custom.allocation.height)
-#
-#gobject.type_register(CellRendererCustom)
 
-from cf.ui.widgets.renderer import *
-        
-        
-class ResultsGrid(GladeWidget):
+
+
+class ResultList(GladeWidget):
+    """Result list with toolbar"""
     
     def __init__(self, app, instance, xml):
         GladeWidget.__init__(self, app, xml, "editor_results_data")
         self.instance = instance
-        self._idx = 0
-        self._query = None
+        self.query = None
         
     def _setup_widget(self):
-        self.grid = self.xml.get_widget("editor_resultsgrid")
-        sel = self.grid.get_selection()
-        sel.set_mode(gtk.SELECTION_MULTIPLE)
-        self.grid.set_rubber_banding(True)
-        
-    def on_button_pressed(self, widget, event):
-        if event.button == 3:
-            x = int(event.x)
-            y = int(event.y)
-            time = event.time
-            pthinfo = self.grid.get_path_at_pos(x, y)
-            if pthinfo is not None:
-                path, col, cellx, celly = pthinfo
-                self.grid.grab_focus()
-                self.grid.set_cursor( path, col, 0)
-                model = self.grid.get_model()
-                iter = model.get_iter(path)
-                cols = self.grid.get_columns()
-                obj = None
-                for i in range(len(cols)):
-                    if i == 0: continue
-                    if cols[i] == col:
-                        obj = self._query.rows[int(model.get_value(iter, model.get_n_columns()-2))-1][i-1]
-                        break
-                if obj:
-                    popup = gtk.Menu()
-                    item = gtk.MenuItem(_(u"Show content"))
-                    item.connect("activate", self.on_show_data, obj)
-                    item.show()
-                    popup.append(item)
-                    popup.popup( None, None, None, event.button, time)
-        
-    def on_cell_edited(self, *args):
-        # we don't want to change data in the grid
-        pass
-    
-    def on_key_pressed(self, *args):
-        print args
-        
-    def on_select_all_rows(self, *args):
-        sel = self.grid.get_selection()
-        sel.select_all()
-        
-    def on_show_more(self, *args):
-        gobject.idle_add(self.fetch_next)
-        
-    def on_show_all(self, *args):
-        gobject.idle_add(self.fetch_all)
-        
-    def on_show_data(self, menuitem, data):
-        dlg = gtk.Dialog(_(u"Data"), self.instance.widget,
-                         gtk.DIALOG_DESTROY_WITH_PARENT,
-                         (gtk.STOCK_CLOSE, gtk.RESPONSE_OK))
-        tv = gtk.TextView()
-        tv.get_buffer().set_text(str(data))
-        tv.set_editable(False)
-        tv.set_wrap_mode(gtk.WRAP_WORD)
-        sw = gtk.ScrolledWindow()
-        sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        sw.add(tv)
-        dlg.vbox.pack_start(sw, True, True)
-        sw.show_all()
-        sw.set_size_request(350, 350)
-        dlg.run()
-        dlg.destroy()
+        self.grid = Grid()
+        self.xml.get_widget("sw_grid").add(self.grid)
         
     def set_query(self, query):
-        self._query = query
-        self._idx = 0
-        while self.grid.get_columns():
-            col = self.grid.get_column(0)
-            self.grid.remove_column(col)
-        btn_more = self.xml.get_widget("editor_results_more")
-        btn_all = self.xml.get_widget("editor_results_all")
-        btn_more.set_sensitive(False)
-        btn_all.set_sensitive(False)
-        btn_more.set_tooltip(self.instance.tt, _(u"Show next %(num)s rows") % {"num" : self.app.config.get("editor.results.offset")})
-        btn_all.set_tooltip(self.instance.tt, _(u"Show all %(num)s rows") % {"num" : query.rowcount})
-        if not query.description: return
-        model_args = list()
-        for name, type_code, display_size, internal_size, precision, scale, null_ok in query.description:
-            model_args.append(gobject.TYPE_PYOBJECT)
-            #renderer = gtk.CellRendererText()
-            #renderer.set_property("ellipsize", pango.ELLIPSIZE_END)
-            #renderer.set_property("wrap-width", 75)
-            #renderer.set_property("wrap-mode", gtk.WRAP_CHAR)
-            #renderer.set_property("single-paragraph-mode", True)
-            #renderer.set_property("width-chars", 10)
-            #renderer.set_property("editable", True)
-            #renderer.connect("edited", self.on_cell_edited)
-            renderer = CellRendererText()
-            col = gtk.TreeViewColumn(name.replace("_", "__"), renderer, text=len(model_args)-1)
-            col.set_sizing(gtk.TREE_VIEW_COLUMN_AUTOSIZE)
-            col.set_resizable(True)
-            self.grid.append_column(col)
-        model_args.append(int)
-        model_args.append(str)
-        col = gtk.TreeViewColumn("#", gtk.CellRendererText(), text=len(model_args)-2, cell_background=len(model_args)-1)
-        col.set_clickable(True)
-        col.connect("clicked", self.on_select_all_rows)
-        self.grid.insert_column(col, 0)
-        model = gtk.ListStore(*model_args)
-        self.grid.set_model(model)
-        self.fetch_next()
-        
-    def fetch_all(self):
-        while self.fetch_next():
-            pass
-        
-    def fetch_next(self, fetch_all=False):
-        model = self.grid.get_model()
-        offset = self.app.config.get("editor.results.offset")
-        style = self.grid.get_style()
-        for i in range(self._idx, self._idx+offset):
-            try:
-                row = []
-                for j in range(len(self._query.rows[i])):
-                    value = self._query.rows[i][j]
-                    #if value == None: 
-                    #    value = '<span foreground="%s">&lt;NULL&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
-                    #elif isinstance(value, buffer):
-                    #    value = '<span foreground="%s">&lt;LOB&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
-                    #else:
-                    #    value = gobject.markup_escape_text(str(value))
-                    row.append(value)
-                row.append(i+1)
-                row.append(style.dark[gtk.STATE_ACTIVE].to_string())
-                model.append(row)
-            except IndexError:
-                pass
-        self._idx = self._idx+offset
-        if self._idx > len(self._query.rows)-1:
-            self._idx = len(self._query.rows)-1
-        btn_more = self.xml.get_widget("editor_results_more")
-        btn_all = self.xml.get_widget("editor_results_all")
-        btn_more.set_sensitive(self._idx < len(self._query.rows)-1)
-        btn_all.set_sensitive(self._idx < len(self._query.rows)-1)
-        if fetch_all and self._idx < len(self._query.rows)-1:
-            gobject.idle_add(self.fetch_next, fetch_all)
-        else: 
-            return (self._idx < len(self._query.rows)-1)
+        self.query = query
+        self.grid.reset()
+        if self.query.description:
+            self.grid.set_result(self.query.rows, self.query.description)
+
             
 
 class StatementVariablesDialog(gtk.Dialog):
