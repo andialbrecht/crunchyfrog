@@ -484,4 +484,64 @@ class ConnectionsDialog(GladeWidget):
         
     def _setup_widget(self):
         self.connections = ConnectionsWidget(self.app, self.xml)
+        
+class CustomImageMenuItem(gtk.ImageMenuItem):
+    """Menu item with custom image
+    
+    This widget simplifies the creation of an ``gtk.ImageMenuItem`` with an 
+    custom image. ``icon_name`` is used to lookup an icon in the default GTK
+    icon theme and so it is not restricted to stock id's. The additional method
+    ``set_markup()`` can be used to set a markup string as the menu items label.
+    
+    .. Note:: It is not recommended to use ``set_markup()`` because it is very
+        unusual to have formatted text in menu items.
+    """
+    
+    def __init__(self, icon_name, label, is_markup=False):
+        """
+        The constructor of this class takes up to 3 arguments:
+        
+        :Parameter:
+            icon_name
+                Name of the icon or stock id
+            label
+                Menu item label
+            is_markup
+                If ``True``, ``label`` is set as markup (default: ``False``)
+        """
+        gtk.ImageMenuItem.__init__(self, "gtk-open")
+        self.set_icon_name(icon_name)
+        if is_markup:
+            self.set_markup(label)
+        else:
+            self.set_label(label)
+        
+    def set_icon_name(self, icon_name):
+        """Sets the image
+        
+        :Parameter:
+            icon_name
+                Icon name of the image
+        """
+        it = gtk.icon_theme_get_default()
+        pb = it.load_icon(icon_name, gtk.ICON_SIZE_MENU, gtk.ICON_LOOKUP_FORCE_SVG)
+        self.get_children()[1].set_from_pixbuf(pb)
+        
+    def set_label(self, label):
+        """Sets the label
+        
+        :Parameter:
+            label
+                Menu item label
+        """
+        self.get_children()[0].set_label(label)
+        
+    def set_markup(self, markup):
+        """Sets the label as markup
+        
+        :Parameter:
+            markup
+                Menu item markup
+        """
+        self.get_children()[0].set_markup(markup)
     

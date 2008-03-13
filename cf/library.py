@@ -34,6 +34,7 @@ from kiwi.ui import dialogs
 from cf.plugins.core import GenericPlugin
 from cf.plugins.mixins import MenubarMixin, EditorMixin, UserDBMixin
 from cf.ui import GladeWidget
+from cf.ui.widgets import CustomImageMenuItem
 from cf.ui.widgets.sqlview import SQLView
 
 from gettext import gettext as _
@@ -43,7 +44,7 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
     """SQL library plugin"""
     name = _(u"Library")
     description = _(u"A personal SQL library")
-    icon = "gnome-terminal"
+    icon = "stock_book_green"
     author = "Andi Albrecht"
     license = "GPL"
     homepage = "http://crunchyfrog.googlecode.com"
@@ -103,11 +104,11 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
         item.show()
         menu.append(item)
         self._menu_items[instance] = menu
-        item = gtk.MenuItem(_(u"_Open library"))
+        item = CustomImageMenuItem("stock_book_open", _(u"_Open library"))
         item.connect("activate", self.on_show_library)
         item.show()
         menu.append(item)
-        item = gtk.MenuItem(_(u"_Add to library"))
+        item = CustomImageMenuItem("gtk-add", _(u"_Add to library"))
         item.set_sensitive(False)
         item.show()
         menu.append(item)
