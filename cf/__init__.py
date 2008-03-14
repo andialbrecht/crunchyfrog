@@ -55,7 +55,15 @@ from optparse import OptionParser
 from os.path import abspath, dirname, join, isfile, isdir, expanduser
 from os import makedirs
 import sys
+
+#if sys.version_info[:2] >= (2, 5):
+#    LOG_FORMAT_APP = '[%(levelname)s] %(asctime)s %(message)s\n\t%(pathname)s:%(lineno)s in %(funcName)s\n\tPID: %(process)s, Thread: %(threadName)s [%(thread)d], Logger: %(name)s\n'
+#else:
+#    LOG_FORMAT_APP = '[%(levelname)s] %(asctime)s %(message)s\n\t%(pathname)s:%(lineno)s\n\tPID: %(process)s, Thread: %(threadName)s [%(thread)d], Logger: %(name)s\n'
+LOG_FORMAT_APP = '%(levelname)s\t%(name)s\t%(created)f\t%(message)s'
+
 import logging
+logging.basicConfig(format=LOG_FORMAT_APP)
 
 if isfile(abspath(join(dirname(__file__), "../setup.py"))):
     DATA_DIR = abspath(join(dirname(__file__), "../data"))
@@ -81,12 +89,6 @@ gettext.bindtextdomain("crunchyfrog", LOCALE_DIR)
 gettext.textdomain("crunchyfrog")
 gtk.glade.bindtextdomain("crunchyfrog", LOCALE_DIR)
 gtk.glade.textdomain("crunchyfrog")
-
-if sys.version_info[:2] >= (2, 5):
-    LOG_FORMAT_APP = '[%(levelname)s] %(message)s\n\t%(pathname)s:%(lineno)s in %(funcName)s\n\tPID: %(process)s, Thread: %(threadName)s [%(thread)d]\n'
-else:
-    LOG_FORMAT_APP = '[%(levelname)s] %(message)s\n\t%(pathname)s:%(lineno)s\n\tPID: %(process)s, Thread: %(threadName)s [%(thread)d]\n'
-
 
 from cf.app import CFApplication
 
@@ -143,8 +145,8 @@ def main():
         log_level = logging.DEBUG
     else:
         log_level = logging.WARNING
-    logging.basicConfig(format=LOG_FORMAT_APP,
-                        level=log_level)
+    logger = logging.getLogger()
+    logger.setLevel(log_level)
     bonobo.activate()
     app = CFApplication(options)
     client = app.register_unique(app.create_serverinfo(("LANG",)))
