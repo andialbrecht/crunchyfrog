@@ -132,6 +132,8 @@ class DatasourceInfo(gobject.GObject):
     def on_connection_closed(self, connection):
         if connection in self.__connections:
             self.__connections.remove(connection)
+        if connection == self.internal_connection:
+            self.internal_connection = None
         gobject.idle_add(self.app.datasources.emit, "datasource-modified", self)
             
     def dbconnect(self):

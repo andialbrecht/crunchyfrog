@@ -195,7 +195,7 @@ class Browser(gtk.ScrolledWindow):
             if isinstance(cobj, DummyNode):
                 datasource_info = self.find_datasource_info(model, citer)
                 model.remove(citer)
-                if datasource_info.backend.schema:
+                if datasource_info.backend.schema and datasource_info.internal_connection:
                     for child in datasource_info.backend.schema.fetch_children(datasource_info.internal_connection, obj) or []:
                         citer = model.append(iter)
                         if child.icon:
