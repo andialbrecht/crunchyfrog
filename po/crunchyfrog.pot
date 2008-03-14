@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-26 15:48+0100\n"
+"POT-Creation-Date: 2008-03-14 15:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,349 +21,457 @@ msgid "    "
 msgstr ""
 
 #: data/crunchyfrog.glade.h:2
-msgid "<b>Automatic Indentation</b>"
+msgid "(objectclass=*)"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:3
-msgid "<b>Bracket Matching</b>"
+msgid "<b>Automatic Indentation</b>"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:4
-msgid "<b>Current Line</b>"
+msgid "<b>Bracket Matching</b>"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:5
-msgid "<b>Font</b>"
+msgid "<b>Current Line</b>"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:6
-msgid "<b>Line Numbers</b>"
+msgid "<b>Font</b>"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:7
-msgid "<b>New editors</b>"
+msgid "<b>Line Numbers</b>"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:8
-msgid "<b>Right Margin</b>"
+msgid "<b>New editors</b>"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:9
-msgid "<b>Tab Stops</b>"
+msgid "<b>Right Margin</b>"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:10
-msgid "<b>Text Wrapping</b>"
+msgid "<b>Tab Stops</b>"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:11
-msgid "<span weight=\"bold\">Color Scheme</span>"
+msgid "<b>Text Wrapping</b>"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:12
-msgid "Begin transaction"
+msgid "<b>Variables</b>"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:13
-msgid "Cancel query"
+msgid "<span weight=\"bold\">Color Scheme</span>"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:14
-msgid "Commit"
+msgid "Begin transaction"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:15
-msgid "Create a new application instance"
+msgid "Cancel query"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:16
-msgid "CrunchyFrog"
+msgid "Commit"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:17
-msgid "Datasource Manager"
+msgid "Connections"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:18
-msgid "Developer _Pages"
+msgid "Create a new application instance"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:19
-msgid "Display right _margin"
+msgid "CrunchyFrog"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:20
-msgid "Do not _split words over two lines"
+msgid "D_atasource:"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:21
-msgid "E_xplain"
+msgid "Datasource Manager"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:22
-msgid "Editor"
+msgid "Developer _Pages"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:23
-msgid "Editor _font: "
+msgid "Display right _margin"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:24
-msgid "Enable text _wrapping"
+msgid "Do not _split words over two lines"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:25
-msgid "Execute query"
+msgid "E_xplain"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:26
-msgid "Font & Colors"
+msgid "Editor"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:27
-msgid "General"
+msgid "Editor _font: "
 msgstr ""
 
 #: data/crunchyfrog.glade.h:28
-msgid "Highlight current _line"
+msgid "Enable text _wrapping"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:29
-msgid "Highlight matching _bracket"
+msgid "Execute query"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:30
-msgid "Insert _spaces instead of tabs"
+msgid "Font & Colors"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:31
-msgid "New Query"
+msgid "General"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:32
-msgid "Open a new query window"
+msgid "Highlight current _line"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:33
-msgid "Open editor in _separate window"
+msgid "Highlight matching _bracket"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:34
-msgid "Pick the editor font"
+msgid "Insert _spaces instead of tabs"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:35
-msgid "Preferences"
+msgid "New Query"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:36
-msgid "Query"
+msgid "Open a new query window"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:37
-msgid "Refresh"
+msgid "Open editor in _separate window"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:38
-msgid "Rollback"
+msgid "Pick the editor font"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:39
-msgid "Show in _main window"
+msgid "Preferences"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:40
-msgid "St_ored connections"
+msgid "Progress"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:41
-msgid "Synchronize with plugin repository"
+msgid "Query"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:42
-msgid "TODO"
+msgid "Refresh"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:43
-msgid "View"
+msgid "Replace _variables (e.g. '$MyVar')"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:44
-msgid "_About this plugin"
+msgid "Rollback"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:45
-msgid "_Backend:"
+msgid "SQL library"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:46
-msgid "_Configure plugin"
+msgid "S_tatement"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:47
-msgid "_Datasource Manager"
+msgid "S_ub-tree level"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:48
-msgid "_Description:"
+msgid "Save to library"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:49
-msgid "_Display line numbers"
+msgid "Search s_cope:"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:50
-msgid "_Edit"
+msgid "Separate attributes by commas"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:51
-msgid "_Editor"
+msgid "Show in _main window"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:52
-msgid "_Enable automatic indentation"
+msgid "St_ored connections"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:53
-msgid "_File"
+msgid "Synchronize with plugin repository"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:54
-msgid "_General"
+msgid "TODO"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:55
-msgid "_Help"
+msgid "Toggle favorites"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:56
-msgid "_Install plugin"
+msgid "Toggle navigation bar"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:57
-msgid "_Instance"
+msgid "View"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:58
-msgid "_Messages"
+msgid "_About this plugin"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:59
-msgid "_Name:"
+msgid "_Attributes:"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:60
-msgid "_New"
+msgid "_Backend:"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:61
-msgid "_Online Resources"
+msgid "_Category:"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:62
-msgid "_Open plugin folder"
+msgid "_Configure plugin"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:63
-msgid "_Plugins"
+msgid "_Datasource Manager"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:64
-msgid "_Query"
+msgid "_Datasources"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:65
-msgid "_Remove plugin"
+msgid "_Description:"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:66
-msgid "_Report a Problem"
+msgid "_Display line numbers"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:67
-msgid "_Results"
+msgid "_Edit"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:68
-msgid "_Right margin at column:"
+msgid "_Editor"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:69
-msgid "_Synchronize"
+msgid "_Enable automatic indentation"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:70
-msgid "_Tab width:"
+msgid "_Enable repository"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:71
-msgid "_Test connection"
+msgid "_File"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:72
-msgid "_Translate CrunchyFrog"
+msgid "_Filter:"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:73
-msgid "_View"
+msgid "_General"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:74
-msgid "gtk-about"
+msgid "_Help"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:75
-msgid "gtk-close"
+msgid "_Install plugin"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:76
-msgid "gtk-copy"
+msgid "_Instance"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:77
-msgid "gtk-cut"
+msgid "_Messages"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:78
-msgid "gtk-delete"
+msgid "_Name:"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:79
-msgid "gtk-help"
+msgid "_Navigator"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:80
-msgid "gtk-new"
+msgid "_New"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:81
-msgid "gtk-ok"
+msgid "_One level"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:82
-msgid "gtk-open"
+msgid "_Online Resources"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:83
-msgid "gtk-paste"
+msgid "_Open plugin folder"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:84
-msgid "gtk-preferences"
+msgid "_Plugins"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:85
-msgid "gtk-quit"
+msgid "_Query"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:86
-msgid "gtk-save"
+msgid "_Remove plugin"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:87
-msgid "gtk-save-as"
+msgid "_Report a Problem"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:88
-msgid "label"
+msgid "_Results"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:89
+msgid "_Right margin at column:"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:90
+msgid "_Search DN:"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:91
+msgid "_Statement:"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:92
+msgid "_Synchronize"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:93
+msgid "_Tab width:"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:94
+msgid "_Test connection"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:95
+msgid "_Translate CrunchyFrog"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:96
+msgid "_URL:"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:97
+msgid "_View"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:98
+msgid "gtk-about"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:99
+msgid "gtk-cancel"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:100
+msgid "gtk-close"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:101
+msgid "gtk-connect"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:102
+msgid "gtk-copy"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:103
+msgid "gtk-cut"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:104
+msgid "gtk-delete"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:105
+msgid "gtk-disconnect"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:106
+msgid "gtk-find"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:107
+msgid "gtk-help"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:108
+msgid "gtk-new"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:109
+msgid "gtk-ok"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:110
+msgid "gtk-open"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:111
+msgid "gtk-paste"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:112
+msgid "gtk-preferences"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:113
+msgid "gtk-quit"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:114
+msgid "gtk-save"
+msgstr ""
+
+#: data/crunchyfrog.glade.h:115
+msgid "gtk-save-as"
 msgstr ""
