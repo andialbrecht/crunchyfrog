@@ -462,22 +462,49 @@ class EditorWindow(GladeWidget):
 class ResultsView(GladeWidget):
     
     def __init__(self, app, instance, xml):
-        GladeWidget.__init__(self, app, xml, "editor_results")
         self.instance = instance
-        self.grid = ResultList(app, instance, xml)
+        GladeWidget.__init__(self, app, xml, "editor_results")
+        
+    def _setup_widget(self):
+        self.grid = ResultList(self.app, self.instance, self.xml)
         self.messages = self.xml.get_widget("editor_results_messages")
         buffer = self.messages.get_buffer()
         buffer.create_tag("error", foreground="#a40000", weight=pango.WEIGHT_BOLD)
-        
-    def _setup_widget(self):
         self.explain_model = gtk.ListStore(str)
         treeview = self.xml.get_widget("editor_explain")
         treeview.set_model(self.explain_model)
         col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=0)
         treeview.append_column(col)
         
+    def _setup_connections(self):
+        self.grid.grid.connect("selection-changed", self.on_grid_selection_changed)
+        
+    def on_copy_data(self, *args):
+        gobject.idle_add(self.copy_data)
+        
     def on_export_data(self, *args):
         gobject.idle_add(self.export_data)
+        
+    def on_grid_selection_changed(self, grid, selected_cells):
+        self.xml.get_widget("editor_copy_data").set_sensitive(bool(selected_cells))
+        
+    def copy_data(self):
+        rows = dict()
+        for cell in self.grid.grid.get_selected_cells():
+            value = self.grid.grid.get_cell_data(cell, repr=True)
+            if rows.has_key(cell[0]):
+                rows[cell[0]] += "%s\t" % value
+            else:
+                rows[cell[0]] = "%s\t" % value
+        rownums = rows.keys()
+        rownums.sort()
+        txt = ""
+        for rownum in rownums:
+            txt += "%s\n" % rows.get(rownum)
+        display = gtk.gdk.display_manager_get().get_default_display()
+        clipboard = gtk.Clipboard(display, "CLIPBOARD")
+        clipboard.set_text(txt)
+        self.instance.statusbar.set_message(_(u"Data copied to clipboard"))
         
     def export_data(self):
         data = self.grid.grid.get_grid_data()

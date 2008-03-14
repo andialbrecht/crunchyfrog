@@ -40,6 +40,15 @@ class Grid(gtk.TreeView):
     
     The view component of the grid.
     
+    Signals
+    =======
+    
+        selection-changed
+            ``def callback(grid, selected_cells, user_param1, ...)``
+            
+            Emitted when selected cells have changed
+            
+    
     Selection
     =========
     
@@ -55,6 +64,12 @@ class Grid(gtk.TreeView):
     selected by clicking on the first column of a row. Individual cells can
     be selected by clicking on that cell.
     """
+    
+    __gsignals__ = {
+        "selection-changed" : (gobject.SIGNAL_RUN_LAST,
+                               gobject.TYPE_NONE,
+                               (gobject.TYPE_PYOBJECT,)),
+    }
     
     def __init__(self):
         gtk.TreeView.__init__(self)
@@ -263,6 +278,22 @@ class Grid(gtk.TreeView):
         col = self.get_model_index(column)-1
         return (row, col) in self.get_model().selected_cells
     
+    def get_cell_data(self, cell, repr=False):
+        """Returns the content of a cell
+        
+        :Parameter:
+            cell
+                A row-cell tuple
+            repr
+                If ``True`` the content of the cell is returned as text (default: ``False``)
+        :Returns: Cell content
+        """
+        model = self.get_model()
+        data = model.on_get_value(cell[0], cell[1]+len(self.description))
+        if repr:
+            data = model._get_markup_for_value(data, strip_length=False, markup=False)
+        return data
+    
     def get_grid_data(self):
         """Returns all data"""
         return self.get_model().rows
@@ -281,6 +312,10 @@ class Grid(gtk.TreeView):
         for i in range(len(columns)):
             if columns[i] == treeview_column:
                 return i
+            
+    def get_selected_cells(self):
+        """Returns selected cells"""
+        return self.get_model().selected_cells
     
     def get_selected_columns(self):
         """Returns selected columns"""
@@ -332,7 +367,7 @@ class Grid(gtk.TreeView):
             model.selected_cells.append(path)
         elif not selected and path in model.selected_cells:
             model.selected_cells.remove(path)
-        
+        self.emit("selection-changed", model.selected_cells)
             
     def select_column(self, column, selected):
         """Selects a column
@@ -360,7 +395,15 @@ class Grid(gtk.TreeView):
         for renderer in column.get_cell_renderers():
             renderer.set_property("cell-background-gdk", style)
             renderer.set_property("cell-background-set", background_set)
+        # rebuild selected_cells
+        self.unselect_cells()
+        model = self.get_model()
+        for i in range(len(model.rows)):
+            for column in self.get_selected_columns():
+                j = self.get_model_index(column)-1
+                model.selected_cells.append((i, j))
         self.queue_draw()
+        self.emit("selection-changed", model.selected_cells)
         
     def select_row(self, row, selected):
         """Selects a row
@@ -390,6 +433,7 @@ class Grid(gtk.TreeView):
         else:
             return
         self.queue_draw()
+        self.emit("selection-changed", model.selected_cells)
     
     def set_result(self, rows, description):
         """Sets the result and updates the grid
@@ -454,12 +498,18 @@ class GridModel(gtk.GenericTreeModel):
         self.style = style
         self.selected_cells = list()
         
-    def _get_markup_for_value(self, value):
+    def _get_markup_for_value(self, value, strip_length=True, markup=True):
         style = self.style
         if value == None: 
-            value = '<span foreground="%s">&lt;NULL&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
+            if markup:
+                value = '<span foreground="%s">&lt;NULL&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
+            else:
+                value = 'null'
         elif isinstance(value, buffer):
-            value = '<span foreground="%s">&lt;LOB&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
+            if markup:
+                value = '<span foreground="%s">&lt;LOB&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
+            else:
+                value = str(buffer)
         else:
             if isinstance(value, str):
                 value = unicode(value, "utf-8")
@@ -469,7 +519,10 @@ class GridModel(gtk.GenericTreeModel):
                 value = unicode(value)
             value = value.splitlines()
             if value:
-                value = value[0][:GRID_LABEL_MAX_LENGTH]
+                if strip_length:
+                    value = value[0][:GRID_LABEL_MAX_LENGTH]
+                else:
+                    value = "\n".join(value)
             else:
                 value = ""
             value = gobject.markup_escape_text(value)
