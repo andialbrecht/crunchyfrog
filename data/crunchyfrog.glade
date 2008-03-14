@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.0 on Fri Mar 14 06:31:02 2008 -->
+<!--Generated with glade3 3.4.0 on Fri Mar 14 12:32:38 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="mainwindow">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -152,7 +152,7 @@
               </widget>
             </child>
             <child>
-              <widget class="GtkMenuItem" id="menuitem2">
+              <widget class="GtkMenuItem" id="mn_edit">
                 <property name="visible">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label" translatable="yes">_Edit</property>
@@ -1629,21 +1629,44 @@
                 <property name="border_width">5</property>
                 <property name="spacing">5</property>
                 <child>
-                  <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                  <widget class="GtkVBox" id="vbox9">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                    <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                    <property name="spacing">5</property>
                     <child>
-                      <widget class="GtkTreeView" id="plugin_list">
+                      <widget class="GtkScrolledWindow" id="scrolledwindow1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="headers_visible">False</property>
-                        <property name="rules_hint">True</property>
+                        <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                        <child>
+                          <widget class="GtkTreeView" id="plugin_list">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="headers_visible">False</property>
+                            <property name="rules_hint">True</property>
+                          </widget>
+                        </child>
                       </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="plugin_enable_repo">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="label" translatable="yes">_Enable repository</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="on_editor_option_changed"/>
+                      </widget>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="position">1</property>
+                      </packing>
                     </child>
                   </widget>
                 </child>
@@ -1863,12 +1886,13 @@
                     </child>
                     <child>
                       <widget class="GtkButton" id="button9">
-                        <property name="sensitive">False</property>
+                        <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip" translatable="yes">Synchronize with plugin repository</property>
                         <property name="response_id">0</property>
+                        <signal name="clicked" handler="on_plugin_sync_repo"/>
                         <child>
                           <widget class="GtkHBox" id="hbox8">
                             <property name="visible">True</property>

@@ -27,7 +27,7 @@ copyright = "Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>"
 description = "Simple GNOME database tool"
 author = "Andi Albrecht"
 author_email = "albrecht.andi@gmail.com"
-url = "http://crunchyfrog.googlecode.com"
+url = "http://cf.andialbrecht.de"
 long_description = """CrunchyFrog is a SQL editor and database schema browser for the GNOME desktop.
 
 Supported databases

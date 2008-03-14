@@ -37,7 +37,7 @@ class CFShell(GenericPlugin):
     icon = "gnome-terminal"
     author = "Andi Albrecht"
     license = "GPL"
-    homepage = "http://crunchyfrog.googlecode.com"
+    homepage = "http://cf.andialbrecht.de"
     version = "0.1"
     
     def __init__(self, app):

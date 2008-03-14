@@ -47,7 +47,7 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
     icon = "stock_book_green"
     author = "Andi Albrecht"
     license = "GPL"
-    homepage = "http://crunchyfrog.googlecode.com"
+    homepage = "http://cf.andialbrecht.de"
     version = "0.1"
     
     def __init__(self, app):
@@ -125,6 +125,8 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
         del self._mn_add[instance]
             
     def set_editor(self, editor, instance):
+        if not self._mn_add.has_key(instance):
+            return
         self._mn_add[instance].set_sensitive(bool(editor))
         
     def userdb_init(self):

@@ -44,6 +44,8 @@ cf/ui/statusbar.py
 cf/ui/toolbar.py
 cf/ui/pdock/__init__.py
 cf/ui/widgets/__init__.py
+cf/ui/widgets/grid.py
+cf/ui/widgets/sqlview/__init__.py
 crunchyfrog.egg-info/PKG-INFO
 crunchyfrog.egg-info/SOURCES.txt
 crunchyfrog.egg-info/dependency_links.txt
@@ -82,6 +84,7 @@ debian/crunchyfrog.xpm
 debian/pycompat
 debian/rules
 docs/CHANGES
+docs/plugin_example/README
 docs/plugin_example/example.py
 docs/plugin_example/setup.py
 extras/README
@@ -89,6 +92,9 @@ extras/apydia_exclude_gcallbacks.patch
 extras/apydia_find_subclasses.patch
 extras/apydia_get_parents.patch
 extras/apydia_skip_firstline.patch
+extras/plugins/sqlformat/setup.py
+extras/plugins/sqlformat/sqlformat/__init__.py
+extras/plugins/sqlformat/sqlformat/printsql.py
 po/crunchyfrog.pot
 po/de/LC_MESSAGES/crunchyfrog.mo
 po/de/LC_MESSAGES/crunchyfrog.po

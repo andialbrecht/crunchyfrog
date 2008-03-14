@@ -28,7 +28,7 @@ class.
 Other Resources
 ===============
     Development pages
-        http://crunchyfrog.googlecode.com
+        http://cf.andialbrecht.de
     Additional documentation
         http://code.google.com/p/crunchyfrog/wiki/Documentation?tm=6
     Discussions
@@ -84,6 +84,8 @@ USER_PLUGIN_DIR = join(USER_DIR, "plugins/")
 if not isdir(USER_PLUGIN_DIR):
     makedirs(USER_PLUGIN_DIR)
 USER_PLUGIN_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_DIR)
+USER_PLUGIN_REPO = join(USER_DIR, "repo.xml")
+USER_PLUGIN_REPO_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_REPO)
     
 gettext.bindtextdomain("crunchyfrog", LOCALE_DIR)
 gettext.textdomain("crunchyfrog")
@@ -140,7 +142,9 @@ def _parse_commandline():
     return options, args
 
 def main():
+    global FIRST_RUN
     options, args = _parse_commandline()
+    options.first_run = not isfile(options.config)
     if options.debug:
         log_level = logging.DEBUG
     else:
@@ -159,7 +163,7 @@ def main():
                    properties=props)
         app.connect("new-instance", new_instance_cb)
         app.set_data("instances", list())
-        app.new_instance(args)
+        gobject.idle_add(app.run, args)
         gobject.threads_init()
         gtk.gdk.threads_init()
         bonobo.main()

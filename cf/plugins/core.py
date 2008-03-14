@@ -100,6 +100,7 @@ class ExportPlugin(GenericPlugin):
     
     def show_options(self, description, rows):
         return dict()
+    
         
 class DBBackendPlugin(GenericPlugin):
     """Database backend base class"""
@@ -138,6 +139,7 @@ ENTRY_POINTS = {
     "crunchyfrog.plugin" : (_(u"Miscellaneous"), GenericPlugin),
     "crunchyfrog.backend" : (_(u"Database backends"), DBBackendPlugin),
     "crunchyfrog.export": (_(u"Export filter"), ExportPlugin),
+    "crunchyfrog.editor": (_(u"Editor"), GenericPlugin),
 } 
 
 class PluginManager(gobject.GObject):
@@ -201,6 +203,7 @@ class PluginManager(gobject.GObject):
         self.app.register_shutdown_task(self.on_app_shutdown, _(u"Closing plugins"))
         self.app.cb.connect("instance-created", self.on_instance_created)
         self.refresh()
+        self._first_run()
         
     def on_app_shutdown(self):
         for plugin in self.__active_plugins.values():
@@ -214,6 +217,13 @@ class PluginManager(gobject.GObject):
     def on_plugin_folder_changed(self, folder, path, change):
         if change in [gnomevfs.MONITOR_EVENT_DELETED, gnomevfs.MONITOR_EVENT_CREATED]:
             gobject.idle_add(self.refresh)
+            
+    def _first_run(self):
+        if not self.app.options.first_run:
+            return
+        log.info("Activating default backends...")
+        for plugin in self.get_plugins("crunchyfrog.backend"):
+            self.set_active(plugin, True)
         
     def get_plugins(self, entry_point_name, active_only=False):
         """Returns a list of plugins.

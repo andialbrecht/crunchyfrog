@@ -210,7 +210,7 @@ class CFInstance(GladeWidget):
         gobject.idle_add(self.open_website, "http://code.google.com/p/crunchyfrog/issues/list")
         
     def on_open_devpages(self, *args):
-        gobject.idle_add(self.open_website, "http://crunchyfrog.googlecode.com")
+        gobject.idle_add(self.open_website, "http://cf.andialbrecht.de")
         
     def on_open_helptranslate(self, *args):
         gobject.idle_add(self.open_website, "https://translations.launchpad.net/crunchyfrog/trunk/")

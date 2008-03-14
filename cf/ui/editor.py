@@ -288,6 +288,13 @@ class Editor(GladeWidget):
     
     def get_buffer(self):
         return self.textview.get_buffer()
+    
+    def get_text(self):
+        buffer = self.get_buffer()
+        return buffer.get_text(*buffer.get_bounds())
+    
+    def set_text(self, txt):
+        buffer = self.get_buffer().set_text(txt)
         
     def show_in_separate_window(self):
         win = EditorWindow(self.app, self.instance)

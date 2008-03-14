@@ -25,6 +25,7 @@ setup(
     author=release.author,
     author_email=release.author_email,
     long_description=release.long_description,
+    license="GPL",
     url=release.url,
     classifiers = [
         "Development Status :: 3 - Alpha",
@@ -43,7 +44,7 @@ setup(
     include_package_data=True,
     install_requires = [
         "ConfigObj >= 4.4.0",
-        "lxml >= 0.9", # pdock requirement
+        "lxml >= 0.9",
         "kiwi >= 1.9.16", 
     ],
     entry_points="""

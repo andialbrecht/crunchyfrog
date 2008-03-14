@@ -24,19 +24,31 @@ import gtk
 import gobject
 import gnome
 import gconf
+import gnomevfs
+
+import os
+import sys
 
 from gettext import gettext as _
 
+import logging
+log = logging.getLogger("PREFS")
+
 from inspect import isclass
+
+from lxml import etree
+from kiwi.ui import dialogs
 
 import cf
 from cf.ui import GladeWidget
+from cf.ui.widgets import ProgressDialog
 from cf.plugins.core import GenericPlugin
 
 class PreferencesDialog(GladeWidget):
     
     def __init__(self, app):
         GladeWidget.__init__(self, app, "crunchyfrog", "preferences_dialog")
+        self.sync_repo_file(silent=True)
         self.refresh()
         
     def _setup_widget(self):
@@ -146,6 +158,8 @@ class PreferencesDialog(GladeWidget):
             self.xml.get_widget("editor_right_margin_position_box").set_sensitive(widget.get_active())
         if option == "editor.default_font":
             self.xml.get_widget("editor_font_box").set_sensitive(not widget.get_active())
+        if option == "plugins.repo_enabled":
+            gobject.idle_add(self.refresh_plugins)
         
     def on_editor_selection_changed(self, iconview):
         model = iconview.get_model()
@@ -156,10 +170,44 @@ class PreferencesDialog(GladeWidget):
     
     def on_plugin_active_toggled(self, renderer, path):
         iter = self.plugin_model.get_iter(path)
-        self.plugin_model.set_value(iter, 1, not renderer.get_active())
         plugin = self.plugin_model.get_value(iter, 0)
-        gobject.idle_add(self.app.plugins.set_active, plugin, not renderer.get_active())
-        
+        if isinstance(plugin, etree._Element):
+            self._plugin_download_and_activate(plugin)
+        elif issubclass(plugin, GenericPlugin):
+            self.plugin_model.set_value(iter, 1, not renderer.get_active())
+            gobject.idle_add(self.app.plugins.set_active, plugin, not renderer.get_active())
+            
+    def _plugin_download_and_activate(self, plugin):
+        if not dialogs.yesno(_(u"Download plugin %r?") % plugin.xpath("//*/name")[0].text) == gtk.RESPONSE_YES:
+            return
+        def progress_cb(info, dlg):
+            if info.bytes_total:
+                fraction = info.total_bytes_copied/float(info.bytes_total)
+            else:
+                fraction = 0
+            dlg.set_progress(fraction)
+            return True
+        url = os.path.join(self.app.config.get("plugins.repo_url"), plugin.xpath("//*/egg")[0].text)
+        source = gnomevfs.URI(url)
+        dest = gnomevfs.URI(os.path.join(cf.USER_PLUGIN_URI, plugin.xpath("//*/egg")[0].text))
+        try:
+            dlg = ProgressDialog(self.app)
+            dlg.show_all()
+            dlg.set_info(_(u"Downloading plugin %r...") % plugin.xpath("//*/name")[0].text)
+            gnomevfs.xfer_uri(source, dest, gnomevfs.XFER_DEFAULT,
+                              gnomevfs.XFER_ERROR_MODE_QUERY,
+                              gnomevfs.XFER_OVERWRITE_MODE_QUERY,
+                              progress_cb, dlg)
+            dlg.set_info(_(u"Plugin downloaded."))
+            self.app.plugins.refresh()
+            self.refresh_plugins_repo()
+        except:
+            err = sys.exc_info()[1]
+            log.error("Plugin download failed: %s" % err)
+            log.error("URL: %s" % url)
+            dlg.set_error(_(u"Failed to install plugin %r") % plugin.xpath("//*/name")[0].text)
+        dlg.set_finished(True)
+            
     def on_plugin_added(self, manager, plugin):
         iter = self.plugin_model.get_iter_first()
         it = gtk.icon_theme_get_default()
@@ -182,6 +230,7 @@ class PreferencesDialog(GladeWidget):
                       2, lbl,
                       3, ico,
                       4, True)
+        self.refresh_plugins_repo()
             
     def on_plugin_install(self, *args):
         dlg = gtk.FileChooserDialog(_(u"Install plugin"), None,
@@ -208,6 +257,7 @@ class PreferencesDialog(GladeWidget):
                 while citer:
                     if self.plugin_model.get_value(citer, 0) == plugin:
                         self.plugin_model.remove(citer)
+                        self.refresh_plugins_repo()
                         return
                     citer = self.plugin_model.iter_next(citer)
             iter = self.plugin_model.iter_next(iter)
@@ -252,6 +302,9 @@ class PreferencesDialog(GladeWidget):
         else:
             self.xml.get_widget("plugin_about").set_sensitive(False)
             self.xml.get_widget("plugin_prefs").set_sensitive(False)
+            
+    def on_plugin_sync_repo(self, *args):
+        self.sync_repo_file()
                 
     def on_plugin_folder_show(self, *args):
         gnome.url_show(cf.USER_PLUGIN_URI)
@@ -298,6 +351,9 @@ class PreferencesDialog(GladeWidget):
         gw("editor_font").set_font_name(config.get("editor.font"))
         
     def refresh_plugins(self):
+        # Repo
+        self.xml.get_widget("plugin_enable_repo").set_data("config_option", "plugins.repo_enabled")
+        self.xml.get_widget("plugin_enable_repo").set_active(self.app.config.get("plugins.repo_enabled"))
         # Plugins
         model = self.plugin_model
         model.clear()
@@ -325,3 +381,110 @@ class PreferencesDialog(GladeWidget):
                           2, lbl,
                           3, ico,
                           4, True)
+        gobject.idle_add(self.refresh_plugins_repo)
+        
+    def _plugin_iter_for_ep(self, ep_name):
+        model = self.plugin_list.get_model()
+        iter = model.get_iter_first()
+        while iter:
+            if model.get_value(iter, 0) == ep_name:
+                return model, iter
+            iter = model.iter_next(iter)
+        return model, None
+            
+    def refresh_plugins_repo(self):
+        """Refresh repository plugins"""
+        model = self.plugin_list.get_model()
+        iter = model.get_iter_first()
+        while iter:
+            citer = model.iter_children(iter)
+            while citer:
+                obj = model.get_value(citer, 0)
+                if isinstance(obj, etree._Element):
+                    model.remove(citer)
+                citer = model.iter_next(citer)
+            iter = model.iter_next(iter)
+        if not self.app.config.get("plugins.repo_enabled"):
+            return
+        if not os.path.isfile(cf.USER_PLUGIN_REPO):
+            if not self.sync_repo_file():
+                return
+        dom = etree.parse(cf.USER_PLUGIN_REPO)
+        for plugin in dom.xpath("//*/plugin"):
+            ep_name = plugin.get("entrypoint")
+            model, iter = self._plugin_iter_for_ep(ep_name)
+            if not iter:
+                log.error("Invalid entry point %r" % ep_name)
+                continue
+            citer = model.iter_children(iter)
+            skip = False
+            while citer:
+                x = model.get_value(citer, 0)
+                if isclass(x) and issubclass(x, GenericPlugin) \
+                and x.id == "%s.%s" % (plugin.get("entrypoint"),
+                                       plugin.get("id")):
+                    skip = True
+                    break
+                elif isinstance(x, etree._Element) \
+                and x.get("id") == plugin.get("id") \
+                and x.get("entrypoint") == plugin.get("entrypoint"):
+                    skip = True
+                    break
+                citer = model.iter_next(citer)
+            if skip:
+                continue
+            lbl = '<b>[REPO] %s</b>' % plugin.xpath("//*/name")[0].text or _(u"Unknown")
+            if plugin.xpath("//*/description"):
+                lbl += "\n"+plugin.xpath("//*/description")[0].text
+            it = gtk.icon_theme_get_default()
+            ico = it.load_icon("stock_internet", gtk.ICON_SIZE_LARGE_TOOLBAR, gtk.ICON_LOOKUP_FORCE_SVG)
+            citer = model.append(iter)
+            model.set(citer,
+                      0, plugin,
+                      1, False,
+                      2, lbl,
+                      3, ico,
+                      4, True)
+            
+    def sync_repo_file(self, silent=False):
+        """Synchronize plugin repo.xml"""
+        def progress_cb(info, dlg):
+            if info.bytes_total:
+                fraction = info.total_bytes_copied/float(info.bytes_total)
+            else:
+                fraction = 0
+            dlg.set_progress(fraction)
+            return True
+        url = os.path.join(self.app.config.get("plugins.repo_url"), "repo.xml")
+        source = gnomevfs.URI(url)
+        dest = gnomevfs.URI(cf.USER_PLUGIN_REPO_URI)
+        try:
+            if not silent:
+                dlg = ProgressDialog(self.app)
+                dlg.show_all()
+                dlg.set_info(_(u"Downloading repository data..."))
+                gnomevfs.xfer_uri(source, dest, gnomevfs.XFER_DEFAULT,
+                                  gnomevfs.XFER_ERROR_MODE_QUERY,
+                                  gnomevfs.XFER_OVERWRITE_MODE_QUERY,
+                                  progress_cb, dlg)
+                dlg.set_info(_(u"Repository data synchronized."))
+                self.refresh_plugins_repo()
+            else:
+                def fake_cb(*args):
+                    return True
+                gnomevfs.xfer_uri(source, dest, gnomevfs.XFER_DEFAULT,
+                                  gnomevfs.XFER_ERROR_MODE_QUERY,
+                                  gnomevfs.XFER_OVERWRITE_MODE_QUERY,
+                                  fake_cb)
+            retval = True
+        except:
+            err = sys.exc_info()[1]
+            log.error("Plugin synchro failed: %s" % err)
+            log.error("URL: %s" % url)
+            if not silent:
+                dlg.set_error(_(u"Failed to load repository data"))
+            self.xml.get_widget("plugin_enable_repo").set_active(False)
+            retval = False
+        if not silent:
+            dlg.set_finished(True)
+        return retval

@@ -28,7 +28,7 @@ class CSVExportFilter(ExportPlugin):
     description = _(u"Export query results as CSV files")
     author = "Andi Albrecht"
     license = "GPL"
-    homepage = "http://crunchyfrog.googlecode.com"
+    homepage = "http://cf.andialbrecht.de"
     version = "0.1"
     has_options = False
     
@@ -50,7 +50,7 @@ class OOCalcExportFilter(ExportPlugin):
     description = _(u"Export query results as OpenDocument Spreadsheets")
     author = "Andi Albrecht"
     license = "GPL"
-    homepage = "http://crunchyfrog.googlecode.com"
+    homepage = "http://cf.andialbrecht.de"
     version = "0.1"
     
     file_filter_name = _(u"OpenDocument Spreadsheet (.ods)")

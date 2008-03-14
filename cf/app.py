@@ -76,12 +76,15 @@ class CFApplication(bonobo.Application):
         """
         bonobo.Application.__init__(self, release.name)
         self.options = options
+        
+    def run(self, args):
         self.cb = CFAppCallbacks()
         self.__shutdown_tasks = []
-        self.config = Config(self, options.config)
+        self.config = Config(self, self.options.config)
         self.userdb = UserDB(self)
         self.plugins = PluginManager(self)
         self.datasources = DatasourceManager(self)
+        self.new_instance(args)
         
     def get_instances(self):
         """Returns a list of active instances
