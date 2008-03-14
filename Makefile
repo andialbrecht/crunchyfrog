@@ -1,5 +1,6 @@
 PO=de
 RELEASENAME=snapshot
+PYTHON=`which python`
 
 clean: po-clean
 	find . -name "*.pyc" -delete
@@ -29,19 +30,19 @@ snapshot: dist-prepare
 dist-release: dist-prepare sdist-release bdist-release
 
 sdist-release:
-	python setup.py egg_info -b-$(RELEASENAME) sdist
+	$(PYTHON) setup.py egg_info -b-$(RELEASENAME) sdist
 
 sdist-upload:
-	python setup.py egg_info -b-$(RELEASENAME) sdist upload
+	$(PYTHON) setup.py egg_info -b-$(RELEASENAME) sdist upload
 
 bdist-release:
-	python setup.py egg_info -b-$(RELEASENAME) bdist_egg
+	$(PYTHON) setup.py egg_info -b-$(RELEASENAME) bdist_egg
 	
 source-release: dist-prepare
-	python setup.py egg_info -rbdev sdist upload
+	$(PYTHON) setup.py egg_info -rbdev sdist upload
 	
 sdist: dist-prepare
-	python setup.py sdist
+	$(PYTHON) setup.py sdist
 	
 po-clean:
 	find data -type f -name *.h -print | xargs --no-run-if-empty rm -rf
