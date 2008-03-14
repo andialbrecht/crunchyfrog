@@ -1,7 +1,7 @@
 Metadata-Version: 1.0
 Name: crunchyfrog
-Version: 0.2
-Summary: Simple GNOME database tool
+Version: 0.2.0
+Summary: Database navigator and query tool for GNOME
 Home-page: http://cf.andialbrecht.de
 Author: Andi Albrecht
 Author-email: albrecht.andi@gmail.com
@@ -13,8 +13,9 @@ Description: CrunchyFrog is a SQL editor and database schema browser for the GNO
         
         * PostgreSQL (requires psycopg2)
         * MySQL (requires MySQLdb)
-        * SQLite (requires python-sqlite3)
+        * SQLite3 (requires python-sqlite3)
         * Oracle (requires cx_Oracle)
+        * LDAP (requires python-ldap)
         
         It is written in Python (PyGTK) and provides a setuptools based plugin system, which is completely undocumented for now (read the source ;-)
         
