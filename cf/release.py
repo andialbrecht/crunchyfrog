@@ -24,7 +24,7 @@ name = "CrunchyFrog"
 appname = name.lower()
 version = "0.2"
 copyright = "Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>"
-description = "Simple GNOME database tool"
+description = "Database navigator and query tool for GNOME"
 author = "Andi Albrecht"
 author_email = "albrecht.andi@gmail.com"
 url = "http://cf.andialbrecht.de"
@@ -35,8 +35,9 @@ Supported databases
 
  * PostgreSQL (requires psycopg2)
  * MySQL (requires MySQLdb)
- * SQLite (requires python-sqlite3)
+ * SQLite3 (requires python-sqlite3)
  * Oracle (requires cx_Oracle)
+ * LDAP (requires python-ldap)
 
 It is written in Python (PyGTK) and provides a setuptools based plugin system, which is completely undocumented for now (read the source ;-)
 
