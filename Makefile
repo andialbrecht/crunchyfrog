@@ -13,7 +13,7 @@ ChangeLog:
 dist-prepare: clean ChangeLog
 	
 egg: dist-prepare
-	python setup.py bdist_egg
+	$(PYTHON) setup.py bdist_egg
 	
 deb: dist-prepare
 	rm -rf /tmp/crunchyfrog-build
@@ -25,7 +25,7 @@ deb: dist-prepare
 	rm -rf /tmp/crunchyfrog-build
 	
 snapshot: dist-prepare
-	python setup.py egg_info -rbdev bdist_egg rotate -m.egg -k3
+	$(PYTHON) setup.py egg_info -rbdev bdist_egg rotate -m.egg -k3
 
 dist-release: dist-prepare sdist-release bdist-release
 
