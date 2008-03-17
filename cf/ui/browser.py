@@ -27,6 +27,7 @@ from kiwi.ui import dialogs
 
 from cf.datasources import DatasourceInfo
 from cf.backends import DBConnectError
+from cf.backends.schema import Collection
 from cf.ui import pdock
 from cf.ui.editor import SQLView
 
@@ -134,6 +135,11 @@ class Browser(gtk.ScrolledWindow):
                 model = treeview.get_model()
                 iter = model.get_iter(path)
                 obj = model.get_value(iter, 0)
+                if model.iter_children(iter):
+                    item = gtk.ImageMenuItem("gtk-refresh")
+                    item.connect("activate", self.on_refresh_node, model, iter)
+                    popup.append(item)
+                    popup.append(gtk.SeparatorMenuItem())
                 if obj.has_details:
                     item = gtk.MenuItem(_(u"Details"))
                     item.connect("activate", self.on_show_details, obj, model, iter)
@@ -185,6 +191,14 @@ class Browser(gtk.ScrolledWindow):
             comm = model.get_value(iter, 5) or ""
             self.instance.statusbar.set_message(comm)
             
+    def on_refresh_node(self, menuitem, model, iter):
+        citer = model.iter_children(iter)
+        while citer:
+            model.remove(citer)
+            citer = model.iter_children(iter)
+        citer = model.append(iter)
+        model.set_value(citer, 0, DummyNode())
+        self.object_tree.emit("row-expanded", iter, model.get_path(iter))
         
     def on_row_expanded(self, treeview, iter, path):
         model = treeview.get_model()
