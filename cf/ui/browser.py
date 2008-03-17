@@ -139,7 +139,6 @@ class Browser(gtk.ScrolledWindow):
                     item = gtk.ImageMenuItem("gtk-refresh")
                     item.connect("activate", self.on_refresh_node, model, iter)
                     popup.append(item)
-                    popup.append(gtk.SeparatorMenuItem())
                 if obj.has_details:
                     item = gtk.MenuItem(_(u"Details"))
                     item.connect("activate", self.on_show_details, obj, model, iter)
