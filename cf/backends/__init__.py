@@ -37,6 +37,11 @@ TRANSACTION_ROLLBACK_ENABLED = 1 << 3
 
 class DBError(StandardError):
     """Base class for database errors"""
+    
+    def __init__(self, msg):
+        self._msg = msg
+    def __str__(self):
+        return self._msg
 
 class DBConnectError(DBError):
     """Errors on opening a connection"""

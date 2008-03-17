@@ -80,8 +80,8 @@ class MySQLBackend(DBBackendPlugin):
             raise DBConnectError(_(u"Python module MySQLdb is not installed."))
         try:
             real_conn = MySQLdb.connect(**opts)
-        except MySQLdb.OperationalError, err:
-            raise DBConnectError(err.message)
+        except StandardError, err:
+            raise DBConnectError(str(err))
         conn = MySQLConnection(self, self.app, real_conn)
         conn.threadsafety = MySQLdb.threadsafety
         return conn
@@ -91,7 +91,7 @@ class MySQLBackend(DBBackendPlugin):
             conn = self.dbconnect(data)
             conn.close()
         except DBConnectError, err:
-            return err.message
+            return str(err)
         return None
     
 class MySQLConnection(DbAPI2Connection):

@@ -133,7 +133,7 @@ class LDAPBackend(DBBackendPlugin):
             conn = self.dbconnect(data)
             conn.close()
         except DBConnectError, err:
-            return err.message
+            return str(err)
         return None
     
 class LDAPConnection(DBConnection):

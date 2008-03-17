@@ -77,8 +77,8 @@ class OracleBackend(DBBackendPlugin):
             raise DBConnectError(_(u"Python module cx_Oracle is not installed."))
         try:
             real_conn = cx_Oracle.connect(**opts)
-        except cx_Oracle.OperationalError, err:
-            raise DBConnectError(err.message)
+        except StandardError, err:
+            raise DBConnectError(str(err))
         conn = OracleConnection(self, self.app, real_conn)
         conn.threadsafety = cx_Oracle.threadsafety
         return conn
@@ -88,7 +88,7 @@ class OracleBackend(DBBackendPlugin):
             conn = self.dbconnect(data)
             conn.close()
         except DBConnectError, err:
-            return err.message
+            return str(err)
         return None
     
 class OracleCursor(DbAPI2Cursor):

@@ -434,7 +434,7 @@ class PluginManager(gobject.GObject):
             dlg.set_info(_(u"Plugin installed."))
         except:
             err = sys.exc_info()[1]
-            dlg.set_error(err.message)
+            dlg.set_error(str(err))
         dlg.set_finished(True)
             
             

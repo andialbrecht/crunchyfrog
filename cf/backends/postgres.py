@@ -97,8 +97,8 @@ class PostgresBackend(DBBackendPlugin):
         try:
             real_conn = psycopg2.connect(**opts)
             real_conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
-        except psycopg2.OperationalError, err:
-            raise DBConnectError(err.message)
+        except StandardError, err:
+            raise DBConnectError(str(err))
         conn = PgConnection(self, self.app, real_conn)
         conn.threadsafety = psycopg2.threadsafety
         return conn
@@ -108,7 +108,7 @@ class PostgresBackend(DBBackendPlugin):
             conn = self.dbconnect(data)
             conn.close()
         except DBConnectError, err:
-            return err.message
+            return str(err)
         return None
     
 class PgCursor(DbAPI2Cursor):

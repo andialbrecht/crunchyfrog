@@ -102,7 +102,7 @@ class Browser(gtk.ScrolledWindow):
                 datasource_info.dbconnect()
                 self.on_object_tree_selection_changed(self.object_tree.get_selection())
             except DBConnectError, err:
-                dialogs.error(_(u"Connection failed"), err.message)
+                dialogs.error(_(u"Connection failed"), str(err))
         def disconnect(item, datasource_info):
             datasource_info.dbdisconnect()
             iter = self.get_iter_for_datasource(datasource_info)

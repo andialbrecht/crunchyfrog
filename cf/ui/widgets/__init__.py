@@ -77,7 +77,7 @@ class ConnectionButton(gdl.ComboButton):
             self._editor.set_connection(conn)
             self.set_editor(self._editor)
         except DBConnectError, err:
-            dialogs.error(_(u"Connection failed"), err.message)
+            dialogs.error(_(u"Connection failed"), str(err))
         
     def on_set_connection(self, item, connection):
         self._editor.set_connection(connection)

@@ -72,8 +72,8 @@ class SQLiteBackend(DBBackendPlugin):
             raise DBConnectError(_(u"Python module sqlite3 is not installed."))
         try:
             real_conn = sqlite3.connect(data["filename"])
-        except sqlite3.OperationalError, err:
-            raise DBConnectError(err.message)
+        except StandardError, err:
+            raise DBConnectError(str(err))
         return SQLite3Connection(self, self.app, real_conn)
     
     def test_connection(self, data):
@@ -81,7 +81,7 @@ class SQLiteBackend(DBBackendPlugin):
             conn = self.dbconnect(data)
             conn.close()
         except DBConnectError, err:
-            return err.message
+            return str(err)
         return None
     
 class SQLite3Connection(DbAPI2Connection):
