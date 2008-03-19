@@ -439,6 +439,8 @@ class ConnectionsWidget(GladeWidget):
     
     def on_datasource_modified(self, manager, datasource_info):
         model = self.list_conn.get_model()
+        if not model:
+            return
         iter = model.get_iter_first()
         while iter:
             if model.get_value(iter, 0) == datasource_info:

@@ -122,7 +122,28 @@ class Browser(gtk.ScrolledWindow):
         return popup
         
     def on_button_press_event(self, treeview, event):
-        if event.button == 3:
+        if event.type == gtk.gdk._2BUTTON_PRESS \
+        and event.button == 1:
+            x = int(event.x)
+            y = int(event.y)
+            time = event.time
+            pthinfo = treeview.get_path_at_pos(x, y)
+            if pthinfo is not None:
+                path, col, cellx, celly = pthinfo
+                treeview.grab_focus()
+                treeview.set_cursor( path, col, 0)
+                model = treeview.get_model()
+                iter = model.get_iter(path)
+                obj = model.get_value(iter, 0)
+                if isinstance(obj, DatasourceInfo):
+                    self.instance.statusbar.set_message(_(u"Connecting..."))
+                    try:
+                        obj.dbconnect()
+                        self.on_object_tree_selection_changed(self.object_tree.get_selection())
+                    except DBConnectError, err:
+                        dialogs.error(_(u"Connection failed"), str(err))
+                        self.instance.statusbar.set_message("")
+        elif event.button == 3:
             x = int(event.x)
             y = int(event.y)
             time = event.time

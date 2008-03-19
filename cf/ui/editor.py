@@ -528,6 +528,9 @@ class ResultsView(GladeWidget):
         gtk.gdk.threads_leave()
         
     def reset(self):
+        # Explain
+        self.explain_model.clear()
+        # Messages
         buffer = self.messages.get_buffer()
         buffer.set_text("")
         self.set_current_page(2)
