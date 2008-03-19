@@ -3,6 +3,7 @@ Maintainer: Andi Albrecht <albrecht.andi@gmail.com>
 Section: gnome
 Priority: optional
 Build-Depends: debhelper (>= 5.0.37.2),
+	       quilt,
                python-dev,
                python,
                python-setuptools
