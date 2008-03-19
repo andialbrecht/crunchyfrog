@@ -598,8 +598,13 @@ class StatementVariablesDialog(gtk.Dialog):
         
     def _setup_widget(self):
         vars = []
+        found = []
         for match in self.template.pattern.finditer(self.template.template):
-            vars.append(match.groupdict().get("named")) 
+            name = match.groupdict().get("named")
+            if name.lower() in found:
+                continue
+            vars.append(name)
+            found.append(name.lower()) 
         table = gtk.Table(len(vars), 2)
         table.set_row_spacings(5)
         table.set_col_spacings(7)
