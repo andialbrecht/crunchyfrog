@@ -25,12 +25,20 @@ import gnomevfs
 import pkg_resources
 import sys
 import os
+from inspect import isclass
+import imp
+import zipimport
 from kiwi.ui import dialogs
 
 import logging
 log = logging.getLogger("PLUGINS")
 
 from gettext import gettext as _
+
+PLUGIN_TYPE_GENERIC = 0
+PLUGIN_TYPE_BACKEND = 1
+PLUGIN_TYPE_EXPORT = 2
+PLUGIN_TYPE_EDITOR = 3
 
 from cf import USER_PLUGIN_DIR, PLUGIN_DIR, USER_PLUGIN_URI
 
@@ -41,6 +49,7 @@ from cf.ui.widgets import ProgressDialog
 class GenericPlugin(gobject.GObject):
     """Plugin base class"""
     
+    id = None
     name = None
     description = None
     long_description = None
@@ -50,6 +59,7 @@ class GenericPlugin(gobject.GObject):
     homepage = None
     version = None
     has_custom_options = False
+    plugin_type = PLUGIN_TYPE_GENERIC
     
     def __init__(self, app):
         """
@@ -91,6 +101,7 @@ class ExportPlugin(GenericPlugin):
     file_filter_mime = []
     file_filter_pattern = []
     has_options = False
+    plugin_type = PLUGIN_TYPE_EXPORT
     
     def __init__(self, app):
         GenericPlugin.__init__(self, app)
@@ -106,6 +117,7 @@ class DBBackendPlugin(GenericPlugin):
     """Database backend base class"""
     icon = "stock_database"
     context_help_pattern = None
+    plugin_type = PLUGIN_TYPE_BACKEND
     
     def __init__(self, app):
         GenericPlugin.__init__(self, app)
@@ -131,15 +143,14 @@ class DBBackendPlugin(GenericPlugin):
     
     def password_prompt(self):
         return dialogs.password(_(u"Password required"), _(u"Enter the password to connect to this database."))
-        
-# Available entry points
-# Key: entry point name
+
+# Key: plugin type
 # Value: 2-tuple (label, expected class)
-ENTRY_POINTS = {
-    "crunchyfrog.plugin" : (_(u"Miscellaneous"), GenericPlugin),
-    "crunchyfrog.backend" : (_(u"Database backends"), DBBackendPlugin),
-    "crunchyfrog.export": (_(u"Export filter"), ExportPlugin),
-    "crunchyfrog.editor": (_(u"Editor"), GenericPlugin),
+PLUGIN_TYPES_MAP = {
+    PLUGIN_TYPE_GENERIC : (_(u"Miscellaneous"), GenericPlugin),
+    PLUGIN_TYPE_BACKEND : (_(u"Database backends"), DBBackendPlugin),
+    PLUGIN_TYPE_EXPORT : (_(u"Export filter"), ExportPlugin),
+    PLUGIN_TYPE_EDITOR : (_(u"Editor"), GenericPlugin),
 } 
 
 class PluginManager(gobject.GObject):
@@ -170,7 +181,7 @@ class PluginManager(gobject.GObject):
     .. _CFApplication: cf.app.CFApplication.html
     """
     
-    entry_points = ENTRY_POINTS
+    plugin_types = PLUGIN_TYPES_MAP
     
     __gsignals__ = {
         "plugin-added" : (gobject.SIGNAL_RUN_LAST,
@@ -222,16 +233,16 @@ class PluginManager(gobject.GObject):
         if not self.app.options.first_run:
             return
         log.info("Activating default backends...")
-        for plugin in self.get_plugins("crunchyfrog.backend"):
+        from cf.plugins.core import PLUGIN_TYPE_BACKEND
+        for plugin in self.get_plugins(PLUGIN_TYPE_BACKEND):
             self.set_active(plugin, True)
         
-    def get_plugins(self, entry_point_name, active_only=False):
+    def get_plugins(self, plugin_type, active_only=False):
         """Returns a list of plugins.
         
         :Parameter:
-            entry_point_name
-                The name of an entry point. Must be a key of the ``ENTRY_POINTS``
-                dictionary.
+            plugin_type
+                a ``PLUGIN_TYPE_*`` constant
             
             active_only
                 If set to ``True`` only activated plugins are returned.
@@ -247,9 +258,51 @@ class PluginManager(gobject.GObject):
         else:
             plugins = self.__plugins.values()
         for item in plugins:
-            if item._entry_point_group == entry_point_name:
+            if item.plugin_type == plugin_type:
                 ret.append(item)
         return ret
+    
+    def _get_modules(self, path):
+        modules = []
+        if path not in sys.path:
+            sys.path.insert(0, path)
+        for item in os.listdir(path):
+            if item.startswith(".") or item.startswith("_"):
+                continue
+            name, ext = os.path.splitext(item)
+            if ext and ext not in [".zip", ".py"]:
+                continue
+            if ext == ".zip":
+                sys.path.insert(0, os.path.join(path, item))
+                importer = zipimport.zipimporter(os.path.join(path, item))
+                importer = importer.find_module(name)
+                if not importer:
+                    continue
+                mod = importer.load_module(name)
+                modules.append(mod)
+            else:
+                try:
+                    modinfo = imp.find_module(name)
+                except ImportError:
+                    continue
+                try:
+                    mod = imp.load_module(name, *modinfo)
+                except Exception:
+                    print str(sys.exc_info()[1])
+                    try: del sys.modules[name]
+                    except KeyError: pass
+                    continue
+                modules.append(mod)
+        return modules
+    
+    def _get_plugins(self, module):
+        plugins = []
+        for name in dir(module):
+            obj = getattr(module, name)
+            if isclass(obj) and issubclass(obj, GenericPlugin) \
+            and obj not in [GenericPlugin, ExportPlugin, DBBackendPlugin]:
+                plugins.append(obj)
+        return plugins
     
     def refresh(self):
         """Refreshs the plugin registry.
@@ -257,48 +310,23 @@ class PluginManager(gobject.GObject):
         This method is called when the contents of a plugin folder
         changes.
         """
-        # cleanup sys.path to remove deleted eggs
-        for path in sys.path:
-            if path.endswith(".egg") and not os.path.isfile(path):
-                sys.path.remove(path)
-        working_set = pkg_resources.WorkingSet()
-        working_set.add_entry(PLUGIN_DIR)
-        working_set.add_entry(USER_PLUGIN_DIR)
-        env = pkg_resources.Environment([PLUGIN_DIR, USER_PLUGIN_DIR])
-        dists, errors = working_set.find_plugins(env)
-        # TODO: Handle errors
-        map(working_set.add, dists)
-        for path in working_set.entries:
-            if path not in sys.path:
-                sys.path.append(path)
-        dist = pkg_resources.get_distribution("crunchyfrog")
-        ids_found = list()
-        for entry_point_name in self.entry_points.keys():
-            for entry_point in working_set.iter_entry_points(entry_point_name):
-                id = ".".join([entry_point_name, entry_point.name])
-                try:
-                    plugin = entry_point.load()
-                except:
-                    import traceback; traceback.print_exc()
-                    continue
-                if not self.__plugins.has_key(id):
-                    added = True
-                else:
-                    added = False
-                plugin._entry_point = entry_point
-                plugin._entry_point_group = entry_point_name
-                plugin.id = ".".join([entry_point_name, entry_point.name])
-                self.__plugins[id] = plugin
-                ids_found.append(id)
-                if added:
-                    l = self.app.config.get("plugins.active", [])
-                    if id in l:
-                        self.set_active(plugin, True)
-                    self.emit("plugin-added", plugin)
-        for module_name, plugin in self.__plugins.items():
-            entry_point = plugin._entry_point
-            group = plugin._entry_point_group
-            id = ".".join([group, entry_point.name])
+        from cf.plugins import builtin
+        modules = [builtin]
+        for path in [PLUGIN_DIR, USER_PLUGIN_DIR]:
+            modules += self._get_modules(path)
+        plugins = []
+        for module in modules:
+            plugins += self._get_plugins(module)
+        ids_found = []
+        for plugin in plugins:
+            if not self.__plugins.has_key(plugin.id):
+                self.__plugins[plugin.id] = plugin
+                l = self.app.config.get("plugins.active", [])
+                if plugin.id in l:
+                    self.set_active(plugin, True)
+                self.emit("plugin-added", plugin)
+            ids_found.append(plugin.id)
+        for id, plugin in self.__plugins.items():
             if id not in ids_found:
                 l = self.app.config.get("plugins.active", [])
                 if id in l:

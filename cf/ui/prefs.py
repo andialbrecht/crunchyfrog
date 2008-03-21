@@ -212,7 +212,7 @@ class PreferencesDialog(GladeWidget):
         iter = self.plugin_model.get_iter_first()
         it = gtk.icon_theme_get_default()
         while iter:
-            if self.plugin_model.get_value(iter, 0) == plugin._entry_point_group:
+            if self.plugin_model.get_value(iter, 0) == plugin.plugin_type:
                 break
             iter = self.plugin_model.iter_next(iter)
         if iter:
@@ -238,8 +238,9 @@ class PreferencesDialog(GladeWidget):
                                     (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                      gtk.STOCK_OPEN, gtk.RESPONSE_OK))
         filter = gtk.FileFilter()
-        filter.set_name(_(u"CrunchyFrog plugins (*.egg)"))
-        filter.add_pattern("*.egg")
+        filter.set_name(_(u"CrunchyFrog plugins (*.zip, *.py)"))
+        filter.add_pattern("*.zip")
+        filter.add_pattern("*.py")
         dlg.add_filter(filter)
         dlg.set_filter(filter)
         if dlg.run() == gtk.RESPONSE_OK:
@@ -252,7 +253,7 @@ class PreferencesDialog(GladeWidget):
     def on_plugin_removed(self, manager, plugin):
         iter = self.plugin_model.get_iter_first()
         while iter:
-            if self.plugin_model.get_value(iter, 0) == plugin._entry_point_group:
+            if self.plugin_model.get_value(iter, 0) == plugin.plugin_type:
                 citer = self.plugin_model.iter_children(iter)
                 while citer:
                     if self.plugin_model.get_value(citer, 0) == plugin:
@@ -358,7 +359,7 @@ class PreferencesDialog(GladeWidget):
         model = self.plugin_model
         model.clear()
         it = gtk.icon_theme_get_default()
-        for key, value in self.app.plugins.entry_points.items():
+        for key, value in self.app.plugins.plugin_types.items():
             iter = model.append(None)
             model.set(iter,
                       0, key, 
@@ -411,23 +412,21 @@ class PreferencesDialog(GladeWidget):
                 return
         dom = etree.parse(cf.USER_PLUGIN_REPO)
         for plugin in dom.xpath("//*/plugin"):
-            ep_name = plugin.get("entrypoint")
-            model, iter = self._plugin_iter_for_ep(ep_name)
+            ptype = plugin.get("type")
+            model, iter = self._plugin_iter_for_ep(int(ptype))
             if not iter:
-                log.error("Invalid entry point %r" % ep_name)
+                log.error("Invalid plugin type %r" % ptype)
                 continue
             citer = model.iter_children(iter)
             skip = False
             while citer:
                 x = model.get_value(citer, 0)
                 if isclass(x) and issubclass(x, GenericPlugin) \
-                and x.id == "%s.%s" % (plugin.get("entrypoint"),
-                                       plugin.get("id")):
+                and x.id == plugin.get("id"):
                     skip = True
                     break
                 elif isinstance(x, etree._Element) \
-                and x.get("id") == plugin.get("id") \
-                and x.get("entrypoint") == plugin.get("entrypoint"):
+                and x.get("id") == plugin.get("id"):
                     skip = True
                     break
                 citer = model.iter_next(citer)

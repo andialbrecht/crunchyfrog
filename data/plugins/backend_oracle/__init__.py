@@ -16,9 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# $Id$
+# $Id: oracle.py 109 2008-03-17 19:29:34Z albrecht.andi $
 
 """Oracle backend"""
+
+import cx_Oracle
 
 from cf.backends import DBConnectError
 from cf.backends.dbapi2helper import DbAPI2Connection, DbAPI2Cursor
@@ -34,6 +36,7 @@ import logging
 log = logging.getLogger("ORACLE")
 
 class OracleBackend(DBBackendPlugin):
+    id = "cf.backends.oracle"
     name = _(u"Oracle Plugin")
     description = _(u"Provides access to Oracle databases")
     

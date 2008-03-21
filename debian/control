@@ -3,7 +3,9 @@ Maintainer: Andi Albrecht <albrecht.andi@gmail.com>
 Section: gnome
 Priority: optional
 Build-Depends: debhelper (>= 5.0.37.2),
-	       quilt,
+			   quilt,
+			   cdbs,
+			   imagemagick,
                python-dev,
                python,
                python-setuptools
@@ -27,7 +29,9 @@ Depends: ${misc:Depends},
          python-lxml (>= 0.9),
          python-kiwi,
          gnome-extra-icons,
-Recommends: python-psycopg2
+Recommends: python-psycopg2,
+			python-mysqldb,
+			python-ldap
 XB-Python-Version: ${python:Versions}
 Description: database schema browser and query tool
  CrunchyFrog is a database browser and query tool with support for

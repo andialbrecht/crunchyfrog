@@ -42,6 +42,7 @@ import logging
 log = logging.getLogger("LDAP")
 
 class LDAPBackend(DBBackendPlugin):
+    id = "cf.backends.ldap"
     name = _(u"LDAP Plugin")
     description = _(u"Provides access to LDAP/ActiveDirectory servers")
         

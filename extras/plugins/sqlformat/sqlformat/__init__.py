@@ -26,7 +26,7 @@ Visit his blog for details: http://www.peterbe.com/Pretty-print-SQL-script
 
 import gtk
 
-from cf.plugins.core import GenericPlugin
+from cf.plugins.core import GenericPlugin, PLUGIN_TYPE_EDITOR
 from cf.plugins.mixins import MenubarMixin, EditorMixin
 from cf.ui.widgets import CustomImageMenuItem
 
@@ -35,6 +35,8 @@ from gettext import gettext as _
 from printsql import printsql
 
 class SQLFormatterPlugin(GenericPlugin, MenubarMixin, EditorMixin):
+    id = "cf.editor.sqlformat"
+    plugin_type = PLUGIN_TYPE_EDITOR
     name = "SQL Formatter"
     description = "Formats the statement in current editor"
     icon = "stock_autoformat"

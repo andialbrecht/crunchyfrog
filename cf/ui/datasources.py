@@ -37,7 +37,8 @@ class DatasourceManager(GladeWidget):
     
     def __init__(self, app):
         GladeWidget.__init__(self, app, "crunchyfrog", "datasourcemanager")
-        if not self.app.plugins.get_plugins("crunchyfrog.backend", True):
+        from cf.plugins.core import PLUGIN_TYPE_BACKEND
+        if not self.app.plugins.get_plugins(PLUGIN_TYPE_BACKEND, True):
             self.run = self.run_warning
         self.set_data("be_widgets", dict())
         
@@ -82,7 +83,8 @@ class DatasourceManager(GladeWidget):
     def _init_backends(self, model):
         model.clear()
         nb = self.xml.get_widget("nb_options")
-        for be in self.app.plugins.get_plugins("crunchyfrog.backend", True):
+        from cf.plugins.core import PLUGIN_TYPE_BACKEND
+        for be in self.app.plugins.get_plugins(PLUGIN_TYPE_BACKEND, True):
             iter = model.append(None)
             model.set(iter, 0, be, 1, be.name)
             

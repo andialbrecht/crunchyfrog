@@ -1,43 +1,22 @@
 = Getting started =
 
-== Requirements ==
-
- * Python >= 2.4
- * PyGTK >= 2.10
- * python-setuptools
- * GNOME bindings, including extras (gdl, gtksourceview)
- * GConf bindings
- * python-pysqlite2 >= 2.0.5
- * python-configobj >= 4.4.0
- * python-lxml >= 0.9
- * python-kiwi
- * gnome-extra-icons
- * psycopg2 (optional, required to connect to PostgreSQL databases)
- * MySQLdb (optional, required to connect to MySQL databases)
- * sqlite3 bindings (optional, required to connect to SQLite3 databases)
- * cx_Oracle (optional, required to connecto to Oracle databases)
- * ldap bindings (optional, required to browse LDAP servers)
-
-
 == Running CrunchyFrog ==
 
 You can run CrunchyFrog from this directory without installing:
 
 	./crunchyfrog
 
-
-*Note:* No plugins are activated by default. So first open the preferences
-dialog and activate at least one database backend, some export filter and
-of course any other plugin you might be interested in.
-
 The next thing is to define some datasources by opening the Datasource manager.
 
+See http://code.google.com/p/crunchyfrog/wiki/Requirements for a complete
+list of requirements.
 
 == Installing CrunchyFrog ==
 
 For a system-wide installation run:
 
-	python setup.py install
+	make
+	make install
 
 Maybe you've already noticed the `debian/` folder... You're right, you can
 build a Debian package, but keep in mind that the build routine isn't verified

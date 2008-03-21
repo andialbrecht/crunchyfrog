@@ -52,6 +52,7 @@ class PgReferenceProvider(ReferenceProvider):
         return url
 
 class PostgresBackend(DBBackendPlugin):
+    id = "cf.backends.postgresql"
     name = _(u"PostgreSQL Plugin")
     description = _(u"Provides access to PostgreSQL databases")
     

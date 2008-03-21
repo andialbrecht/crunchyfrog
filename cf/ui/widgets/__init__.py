@@ -241,7 +241,8 @@ class DataExportDialog(gtk.FileChooserDialog):
     
     def _setup_filter(self):
         recent_filter = None
-        for plugin in self.app.plugins.get_plugins("crunchyfrog.export", True):
+        from cf.plugins.core import PLUGIN_TYPE_EXPORT
+        for plugin in self.app.plugins.get_plugins(PLUGIN_TYPE_EXPORT, True):
             filter = gtk.FileFilter()
             filter.set_name(plugin.file_filter_name)
             for pattern in plugin.file_filter_pattern:

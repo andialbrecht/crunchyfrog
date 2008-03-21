@@ -230,7 +230,8 @@ class DatasourceManager(gobject.GObject):
             ds.options = datasource_info.options
             
     def on_plugin_active(self, manager, plugin, active):
-        if not plugin._entry_point_group == "crunchyfrog.backend":
+        from cf.plugins.core import PLUGIN_TYPE_BACKEND
+        if not plugin.plugin_type == PLUGIN_TYPE_BACKEND:
             return
         for item in DatasourceInfo.load_all(self.app):
             if item.backend and active and item not in self._cache:

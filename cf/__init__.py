@@ -69,9 +69,7 @@ if isfile(abspath(join(dirname(__file__), "../setup.py"))):
     DATA_DIR = abspath(join(dirname(__file__), "../data"))
     LOCALE_DIR = abspath(join(dirname(__file__), "../po"))
 else:
-    root = abspath(join(dirname(sys.argv[0]), "../"))
-    DATA_DIR = join(root, "share", release.appname)
-    LOCALE_DIR = join(root, "share", "locale")
+    from dist import DATA_DIR, LOCALE_DIR
 PLUGIN_DIR = join(DATA_DIR, "plugins")
 USER_CONFIG_DIR = abspath(expanduser("~/.config/crunchyfrog"))
 USER_CONF = join(USER_CONFIG_DIR, "config")

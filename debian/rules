@@ -1,83 +1,25 @@
 #!/usr/bin/make -f
 
-STAMP_DIR := debian/stampdir
+DEB_PYTHON_SYSTEM=pycentral
 
-PATCH_DIR := debian/patches
+DEB_MAKE_BUILD_TARGET    := crunchyfrog CHECK_DEPENDS=0
+DEB_MAKE_INSTALL_TARGET  := install DESTDIR=$(CURDIR)/debian/crunchyfrog/
 
-# default Python version
-PYTHON := python
+PYVER=$(shell pyversions -vr)
 
-# how to call commands of setup.py
-SETUP_PY := $(PYTHON) setup.py
+include /usr/share/cdbs/1/rules/simple-patchsys.mk
+include /usr/share/cdbs/1/rules/debhelper.mk
+include /usr/share/cdbs/1/class/makefile.mk
 
-# how to call quilt
-QUILT := QUILT_PATCHES=$(PATCH_DIR) quilt --quiltrc /dev/null
+DEB_INSTALL_MANPAGES_crunchyfrog = data/crunchyfrog.1
 
-$(STAMP_DIR)/patch-stamp:
-	dh_testdir
-	mkdir $(STAMP_DIR)
-	# apply patches
-	$(QUILT) push -a || test $$? = 2
-	touch $@
+build/crunchyfrog::
+	convert -resize 32x32 $(CURDIR)/data/crunchyfrog.png $(CURDIR)/debian/crunchyfrog.xpm
 
-patch: $(STAMP_DIR)/patch-stamp
-
-$(STAMP_DIR)/build-stamp: $(STAMP_DIR)/patch-stamp
-	dh_testdir
-	$(SETUP_PY) build
-	touch $@
-
-build: $(STAMP_DIR)/build-stamp
-
-$(STAMP_DIR)/check-stamp: $(STAMP_DIR)/build-stamp
-	dh_testdir
-	# testsuite failures are ignored
-	#-$(SETUP_PY) test
-	touch $@
-
-check: $(STAMP_DIR)/check-stamp
-
-$(STAMP_DIR)/install-stamp: $(STAMP_DIR)/build-stamp
-	$(SETUP_PY) install --single-version-externally-managed --root $(CURDIR)/debian/tmp
-	touch $@
-
-install: $(STAMP_DIR)/install-stamp
+binary-install/crunchyfrog::
+	dh_pycentral
+	dh_icons
+	dh_python usr/lib/crunchyfrog/cf
 
 clean::
-	dh_testdir
-	dh_testroot
-	-$(SETUP_PY) clean -a
-	-find . -name *\.py[co] -exec rm -fv {} \;
-	# unapply patches, if any
-	$(QUILT) pop -a -R || test $$? = 2
-	-rm -rf .pc
-	-rm -rf $(STAMP_DIR)
-	dh_clean
-
-maybe_check = $(if $(findstring nocheck,$(DEB_BUILD_OPTIONS)),,check)
-
-binary-indep: build $(maybe_check) install
-	dh_testdir
-	dh_testroot
-	dh_installchangelogs -i ChangeLog
-	dh_installdocs -i
-	dh_install -i --sourcedir=debian/tmp
-	install -d debian/crunchyfrog/usr/share/pixmaps
-	install -m644 data/crunchyfrog.svg debian/crunchyfrog/usr/share/pixmaps
-	install -m644 debian/crunchyfrog.xpm debian/crunchyfrog/usr/share/pixmaps
-	dh_desktop -i
-	dh_installmenu -i
-	dh_installman -i debian/crunchyfrog.1
-	dh_pycentral -i
-	dh_link -i
-	dh_compress -i
-	dh_fixperms -i
-	dh_installdeb -i
-	dh_gencontrol -i
-	dh_md5sums -i
-	dh_builddeb -i
-
-binary-arch:
-
-binary: binary-indep binary-arch
-.PHONY: patch build check install clean binary-indep binary-arch binary
+	rm -f debian/crunchyfrog.xpm

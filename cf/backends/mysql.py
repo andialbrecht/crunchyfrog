@@ -20,6 +20,8 @@
 
 """MySQL backend"""
 
+import MySQLdb
+
 from cf.backends import DBConnectError
 from cf.backends.dbapi2helper import DbAPI2Connection
 from cf.backends.schema import *
@@ -36,6 +38,7 @@ import logging
 log = logging.getLogger("MYSQL")
 
 class MySQLBackend(DBBackendPlugin):
+    id = "cf.backends.mysql"
     name = _(u"MySQL Plugin")
     description = _(u"Provides access to MySQL databases")
     

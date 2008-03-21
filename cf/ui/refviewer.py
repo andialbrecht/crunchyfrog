@@ -36,6 +36,7 @@ from cf.ui.pdock import DockItem
 from gettext import gettext as _
 
 class ReferenceViewer(GenericPlugin):
+    id = "cf.plugin.refviewer"
     name = _(u"Reference Browser")
     description = _(u"A tiny webbrowser to view references")
     icon = "stock_help-book"
@@ -107,7 +108,8 @@ class RefView(GladeWidget):
         self.list_bookmarks.set_model(model)
         col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=2)
         self.list_bookmarks.append_column(col)
-        for be in self.app.plugins.get_plugins("crunchyfrog.backend", True):
+        from cf.plugins.core import PLUGIN_TYPE_BACKEND
+        for be in self.app.plugins.get_plugins(PLUGIN_TYPE_BACKEND, True):
             if be.reference and be.reference.base_url:
                 iter = model.append(None)
                 model.set(iter, 0, be, 1, be.reference.base_url,

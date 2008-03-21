@@ -42,6 +42,7 @@ from gettext import gettext as _
 class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
                        UserDBMixin):
     """SQL library plugin"""
+    id = "cf.plugin.library"
     name = _(u"Library")
     description = _(u"A personal SQL library")
     icon = "stock_book_green"

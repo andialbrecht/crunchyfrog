@@ -22,6 +22,8 @@
 
 import gtk
 
+import sqlite3
+
 from cf.backends import DBConnectError
 from cf.backends.dbapi2helper import DbAPI2Connection, DbAPI2Cursor
 from cf.backends.schema import *
@@ -35,6 +37,7 @@ import logging
 log = logging.getLogger("SQLITE")
 
 class SQLiteBackend(DBBackendPlugin):
+    id = "cf.backends.sqlite3"
     name = _(u"SQLite3 Plugin")
     description = _(u"Provides access to SQLite3 databases")
         

@@ -1,24 +1,19 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 import os
+import sys
+
+if "install" in sys.argv or os.getuid() == 0:
+    print "To install CrunchyFrog run"
+    print 
+    print "\tmake"
+    print "\tmake install"
+    print
+    print "See README for additional information."
+    sys.exit(1)
 
 from cf import release
 
-data_files = [
-    ("share/pixmaps", [os.path.abspath("data/crunchyfrog.png")]),
-    ("man/man1", ["data/crunchyfrog.1"]),
-    ("share/applications", ["data/crunchyfrog.desktop"]),
-    ("share/crunchyfrog", [os.path.abspath("data/crunchyfrog.glade")]),
-    ("share/icons/hicolor/scalable/apps", [os.path.abspath("data/crunchyfrog.svg")])
-]
-for item in os.listdir("po/"):
-    if not os.path.isdir(os.path.join("po/", item)) \
-    or item == ".svn" \
-    or not os.path.isfile(os.path.join("po/", item, "LC_MESSAGES/crunchyfrog.mo")):
-        continue
-    data_files.append(("share/locale/%s/LC_MESSAGES" % item, ["po/%s/LC_MESSAGES/crunchyfrog.mo" % item]))
-
 setup(
-    data_files=data_files,
     name=release.appname,
     version=release.version,
     description=release.description,
@@ -39,32 +34,5 @@ setup(
         "Topic :: Database :: Front-Ends",
         "Topic :: Desktop Environment :: Gnome",
     ],
-    zip_safe=False,
-    packages=find_packages(),
     include_package_data=True,
-    install_requires = [
-        "ConfigObj >= 4.4.0",
-        "lxml >= 0.9",
-        "kiwi >= 1.9.16", 
-    ],
-    entry_points="""
-    [gui_scripts]
-    crunchyfrog = cf:main
-    
-    [crunchyfrog.backend]
-    postgres = cf.backends.postgres:PostgresBackend
-    sqlite = cf.backends.sqlite:SQLiteBackend
-    mysql = cf.backends.mysql:MySQLBackend
-    oracle = cf.backends.oracle:OracleBackend
-    ldap = cf.backends.ldapbe:LDAPBackend
-    
-    [crunchyfrog.plugin]
-    cfshell = cf.shell:CFShell
-    refbrowser = cf.ui.refviewer:ReferenceViewer
-    library = cf.library:SQLLibraryPlugin
-    
-    [crunchyfrog.export]
-    csv = cf.filter.exportfilter:CSVExportFilter
-    odc = cf.filter.exportfilter:OOCalcExportFilter
-    """
 )

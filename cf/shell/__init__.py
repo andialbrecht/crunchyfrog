@@ -32,6 +32,7 @@ from gettext import gettext as _
 from ipython_view import *
 
 class CFShell(GenericPlugin):
+    id = "cf.plugin.pyshell"
     name = _(u"Shell")
     description = _(u"Interactive shell (mainly for debugging)")
     icon = "gnome-terminal"
