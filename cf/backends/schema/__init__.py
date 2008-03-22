@@ -124,3 +124,4 @@ class IndexCollection(Collection):
 class Index(Node):
     name = _(u"Index")
     icon = "stock_navigator-indexes"
+    has_children = False
