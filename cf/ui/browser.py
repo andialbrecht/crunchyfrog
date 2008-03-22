@@ -135,7 +135,8 @@ class Browser(gtk.ScrolledWindow):
                 model = treeview.get_model()
                 iter = model.get_iter(path)
                 obj = model.get_value(iter, 0)
-                if isinstance(obj, DatasourceInfo):
+                if isinstance(obj, DatasourceInfo) \
+                and not obj.internal_connection:
                     self.instance.statusbar.set_message(_(u"Connecting..."))
                     try:
                         obj.dbconnect()
