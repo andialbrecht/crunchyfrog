@@ -24,7 +24,7 @@ from cf.plugins.core import ExportPlugin
 from gettext import gettext as _
 
 class CSVExportFilter(ExportPlugin):
-    id = "cf.filter.export.csv"
+    id = "crunchyfrog.export.csv"
     name = _(u"CSV Export")
     description = _(u"Export query results as CSV files")
     author = "Andi Albrecht"
@@ -47,7 +47,7 @@ class CSVExportFilter(ExportPlugin):
         fp.close()
         
 class OOCalcExportFilter(ExportPlugin):
-    id = "cf.filter.export.ooc"
+    id = "crunchyfrog.export.odc"
     name = _(u"OpenDocument Export")
     description = _(u"Export query results as OpenDocument Spreadsheets")
     author = "Andi Albrecht"

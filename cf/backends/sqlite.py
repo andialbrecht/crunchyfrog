@@ -37,7 +37,7 @@ import logging
 log = logging.getLogger("SQLITE")
 
 class SQLiteBackend(DBBackendPlugin):
-    id = "cf.backends.sqlite3"
+    id = "crunchyfrog.backend.sqlite"
     name = _(u"SQLite3 Plugin")
     description = _(u"Provides access to SQLite3 databases")
         

@@ -36,7 +36,7 @@ import logging
 log = logging.getLogger("ORACLE")
 
 class OracleBackend(DBBackendPlugin):
-    id = "cf.backends.oracle"
+    id = "crunchyfrog.backend.oracle"
     name = _(u"Oracle Plugin")
     description = _(u"Provides access to Oracle databases")
     

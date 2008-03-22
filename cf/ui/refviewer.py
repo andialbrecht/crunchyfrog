@@ -36,7 +36,7 @@ from cf.ui.pdock import DockItem
 from gettext import gettext as _
 
 class ReferenceViewer(GenericPlugin):
-    id = "cf.plugin.refviewer"
+    id = "crunchyfrog.plugin.refbrowser"
     name = _(u"Reference Browser")
     description = _(u"A tiny webbrowser to view references")
     icon = "stock_help-book"
