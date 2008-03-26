@@ -138,6 +138,7 @@ class Editor(GladeWidget):
         else:
             gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s affected rows)") % (query.execution_time, query.rowcount))
         self.connection.disconnect(tag_notice)
+        gobject.idle_add(self.textview.grab_focus)
         
     def on_show_context_help(self, menuitem, refviewer, url):
         refviewer.load_url(url)
