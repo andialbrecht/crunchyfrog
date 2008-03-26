@@ -28,7 +28,8 @@ description = "Database navigator and query tool for GNOME"
 author = "Andi Albrecht"
 author_email = "albrecht.andi@gmail.com"
 url = "http://cf.andialbrecht.de"
-long_description = """CrunchyFrog is a SQL editor and database schema browser for the GNOME desktop.
+long_description = """CrunchyFrog is a database navigator and SQL editor 
+for the GNOME desktop.
 
 Supported databases
 ===================
@@ -39,9 +40,9 @@ Supported databases
  * Oracle (requires cx_Oracle)
  * LDAP (requires python-ldap)
 
-It is written in Python (PyGTK) and provides a setuptools based plugin system, which is completely undocumented for now (read the source ;-)
+It is written in Python (PyGTK) and can be extended using plugins.
 
-Check out the Google pages for the most recent version."""
+Check out the homepage for the most recent version and details."""
 license = """This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
