@@ -65,7 +65,7 @@ sdist-upload:
 	$(PYTHON) setup.py egg_info -b-$(RELEASENAME) sdist upload
 	
 sdist: dist-prepare
-	$(PYTHON) setup.py sdist
+	$(PYTHON) setup.py egg_info -b-$(RELEASENAME) sdist
 	
 po-clean:
 	find data -type f -name *.h -print | xargs --no-run-if-empty rm -rf
