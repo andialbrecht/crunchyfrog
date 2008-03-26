@@ -17,7 +17,6 @@ build/crunchyfrog::
 	convert -resize 32x32 $(CURDIR)/data/crunchyfrog.png $(CURDIR)/debian/crunchyfrog.xpm
 
 binary-install/crunchyfrog::
-	dh_pycentral
 	dh_icons
 	dh_python usr/lib/crunchyfrog/cf
 

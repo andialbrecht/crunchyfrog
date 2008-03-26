@@ -72,7 +72,6 @@ data/cftheme/img/dialog-warning.png
 data/gnome/help/crunchyfrog/C/crunchyfrog.xml
 data/gnome/help/crunchyfrog/de/crunchyfrog.xml
 data/plugins/backend_oracle/__init__.py
-data/plugins/backend_oracle/__init__.pyc
 debian/changelog
 debian/compat
 debian/control
@@ -92,7 +91,7 @@ extras/apydia_exclude_gcallbacks.patch
 extras/apydia_find_subclasses.patch
 extras/apydia_get_parents.patch
 extras/apydia_skip_firstline.patch
-extras/plugins/sqlformat/setup.py
+extras/plugins/sqlformat/Makefile
 extras/plugins/sqlformat/sqlformat/__init__.py
 extras/plugins/sqlformat/sqlformat/printsql.py
 po/crunchyfrog.pot

@@ -1,12 +1,13 @@
 Metadata-Version: 1.0
 Name: crunchyfrog
-Version: 0.2.0
+Version: 0.2.0-snapshot
 Summary: Database navigator and query tool for GNOME
 Home-page: http://cf.andialbrecht.de
 Author: Andi Albrecht
 Author-email: albrecht.andi@gmail.com
 License: GPL
-Description: CrunchyFrog is a SQL editor and database schema browser for the GNOME desktop.
+Description: CrunchyFrog is a database navigator and SQL editor
+        for the GNOME desktop.
         
         Supported databases
         ===================
@@ -17,9 +18,9 @@ Description: CrunchyFrog is a SQL editor and database schema browser for the GNO
         * Oracle (requires cx_Oracle)
         * LDAP (requires python-ldap)
         
-        It is written in Python (PyGTK) and provides a setuptools based plugin system, which is completely undocumented for now (read the source ;-)
+        It is written in Python (PyGTK) and can be extended using plugins.
         
-        Check out the Google pages for the most recent version.
+        Check out the homepage for the most recent version and details.
 Platform: UNKNOWN
 Classifier: Development Status :: 3 - Alpha
 Classifier: Environment :: X11 Applications :: Gnome

@@ -55,6 +55,7 @@ class CFInstance(GladeWidget):
         """
         GladeWidget.__init__(self, app, "crunchyfrog", "mainwindow")
         self._editor = None
+        self._editor_conn_tag = None
         
     def _setup_widget(self):
         # Window state
@@ -158,6 +159,12 @@ class CFInstance(GladeWidget):
         dlg.run()
         dlg.destroy()
         
+    def on_editor_connection_changed(self, editor, connection):
+        if connection:
+            self.set_title(connection.get_label()+" - CrunchyFrog")
+        else:
+            self.set_title("CrunchyFrog")
+        
     def on_execute_query(self, *args):
         gobject.idle_add(self._editor.execute_query)
         
@@ -257,7 +264,15 @@ class CFInstance(GladeWidget):
     def set_editor_active(self, editor, active):
         if not active:
             editor = None
+        if self._editor_conn_tag and self._editor:
+            self._editor.disconnect(self._editor_conn_tag)
+            self._editor_conn_tag = None
         self._editor = editor
+        if self._editor:
+            self._editor_conn_tag = self._editor.connect("connection-changed", self.on_editor_connection_changed)
+            self.on_editor_connection_changed(self._editor, self._editor.connection)
+        else:
+            self.set_title("CrunchyFrog")
         self.toolbar.set_editor(editor)
         self.app.plugins.editor_notify(editor, self)
         
@@ -270,3 +285,50 @@ class CFInstance(GladeWidget):
         
     def show_help(self, topic=None):
         gnome.help_display(release.appname, topic)
+        
+        
+class InstanceSelector(GladeWidget):
+    
+    def __init__(self, client):
+        self.client = client
+        GladeWidget.__init__(self, None, "crunchyfrog", "instanceselector")
+        
+    def _setup_widget(self):
+        model = gtk.ListStore(int, str)
+        self.list = self.xml.get_widget("list_instances")
+        self.list.set_model(model)
+        col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=1)
+        self.list.append_column(col)
+        for id, title in self.client.get_instances():
+            model.append([id, title])
+            
+    def _setup_connections(self):
+        sel = self.list.get_selection()
+        sel.connect("changed", self.on_isel_changed)
+        self.xml.get_widget("btn_newinstance").connect("toggled", self.on_newi_toggled)
+        
+    def on_newi_toggled(self, btn):
+        sel = self.list.get_selection()
+        model = self.list.get_model()
+        if btn.get_active():
+            sel.unselect_all()
+        else:
+            sel.select_iter(model.get_iter_first())
+        self.list.set_sensitive(not btn.get_active())
+        
+    def on_isel_changed(self, selection):
+        model, iter = selection.get_selected()
+        if not iter:
+            self.xml.get_widget("btn_newinstance").set_active(True)
+        else:
+            self.xml.get_widget("btn_activeinstance").set_active(True)
+        
+    def get_instance_id(self):
+        if self.xml.get_widget("btn_newinstance").get_active():
+            return None
+        else:
+            sel = self.list.get_selection()
+            model, iter = sel.get_selected()
+            if iter:
+                return model.get_value(iter, 0)
+            return None

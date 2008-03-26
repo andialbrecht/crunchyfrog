@@ -22,22 +22,23 @@
 
 """
 
-import bonobo
 import gobject
+import gtk
 
 import sys
 
 from cf import release
-from config import Config # IGNORE:E0611
+from config import Config 
 from datasources import DatasourceManager
 from plugins.core import PluginManager
 from ui.prefs import PreferencesDialog
 from userdb import UserDB
+from dbus_manager import CFService
 
 import logging
 log = logging.getLogger("APP")
 
-class CFApplication(bonobo.Application):
+class CFApplication(gobject.GObject):
     """Main application object
     
     An instance of this class is accessible in almost every class in
@@ -74,17 +75,49 @@ class CFApplication(bonobo.Application):
                 
         .. _optparse: http://docs.python.org/lib/module-optparse.html
         """
-        bonobo.Application.__init__(self, release.name)
+        self.__gobject_init__()
+        self.set_data("instances", {})
+        self.__icount = 0L
         self.options = options
         
-    def run(self, args):
+    def init(self):
+        """Initializes the application"""
         self.cb = CFAppCallbacks()
         self.__shutdown_tasks = []
         self.config = Config(self, self.options.config)
         self.userdb = UserDB(self)
         self.plugins = PluginManager(self)
         self.datasources = DatasourceManager(self)
-        self.new_instance(args)
+        self.dbus_service = CFService(self)
+        
+    def new_instance(self, args=None):
+        """Creates a new instances.
+        
+        ``args`` is an optional list of file names to open
+        """
+        from cf.instance import CFInstance
+        instance = CFInstance(self)
+        instances = self.get_data("instances")
+        self.__icount += 1
+        instances[self.__icount] = instance
+        self.set_data("instances", instances)
+        instance.set_data("instance-id", self.__icount)
+        instance.widget.connect("destroy", self.on_instance_destroyed, self.__icount)
+        instance.widget.show()
+        self.cb.emit("instance-created", instance)
+        return instance
+    
+    def on_instance_destroyed(self, instance, instance_id):
+        instances = self.get_data("instances")
+        if instances.has_key(instance_id):
+            del instances[instance_id]
+        self.set_data("instances", instances)
+        if not instances:
+            self.shutdown()
+            
+    def get_instance(self, instance_id):
+        """Returns an instances identified by ID"""
+        return self.get_data("instances").get(instance_id)
         
     def get_instances(self):
         """Returns a list of active instances
@@ -93,10 +126,7 @@ class CFApplication(bonobo.Application):
         
         .. _CFInstance: cf.instance.CFInstance.html
         """
-        ret = self.get_data("instances")
-        if not ret:
-            ret = []
-        return ret
+        return self.get_data("instances").values()
         
     def preferences_show(self):
         """Displays the preferences dialog"""
@@ -133,7 +163,8 @@ class CFApplication(bonobo.Application):
                 func(*args, **kwargs)
             except:
                 import traceback; traceback.print_exc()
-                log.error("Task failed: %s" % str(sys.exc_info()[1])) 
+                log.error("Task failed: %s" % str(sys.exc_info()[1]))
+        gtk.main_quit()
         
 class CFAppCallbacks(gobject.GObject):
     """Container for application specific signals.

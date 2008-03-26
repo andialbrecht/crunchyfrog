@@ -60,22 +60,50 @@ class QueriesNotebook(gtk.Notebook):
         self.popup_disable()
         self.set_property("enable-popup", False)
         
-class TabLabel(gtk.EventBox):
+class TabLabel(gtk.HBox):
     
     def __init__(self, editor):
-        gtk.EventBox.__init__(self)
+        gtk.HBox.__init__(self)
         self.label = gtk.Label(_(u"Query"))
         self.label.set_ellipsize(pango.ELLIPSIZE_END)
         self.label.set_width_chars(15)
         self.label.set_single_line_mode(True)
         self.label.set_alignment(0, 0.5)
-        self.add(self.label)
+        eb = gtk.EventBox()
+        eb.add(self.label)
         self.editor = editor
-        self.connect("button-press-event", self.on_button_press_event)
+        self.editor.connect("connection-changed", self.on_editor_connection_changed)
+        eb.connect("button-press-event", self.on_button_press_event)
         buffer = self.editor.textview.get_buffer()
         buffer.connect("changed", self.on_buffer_changed)
         self.update_label(buffer)
+        self.pack_start(eb, True, True)
+        self.eb = eb
+        btn_close = gtk.Button()
+        btn_close.connect("clicked", self.on_button_close_clicked)
+        self.add_icon_to_button(btn_close)
+        btn_close.set_relief(gtk.RELIEF_NONE)
+        self.pack_start(btn_close, False, False)
+        self.update_tooltip()
         self.show_all()
+        
+    def add_icon_to_button(self,button):
+        iconBox = gtk.HBox(False, 0)        
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_CLOSE,gtk.ICON_SIZE_MENU)
+        gtk.Button.set_relief(button,gtk.RELIEF_NONE)
+        #gtk.Button.set_focus_on_click(button,False)
+        settings = gtk.Widget.get_settings (button)
+        (w,h) = gtk.icon_size_lookup_for_settings(settings,gtk.ICON_SIZE_MENU)
+        gtk.Widget.set_size_request (button, w+4, h+4);
+        image.show()
+        iconBox.pack_start(image, True, False, 0)
+        button.add(iconBox)
+        iconBox.show()
+        return 
+    
+    def on_button_close_clicked(self, button):
+        self.editor.close()
         
     def on_buffer_changed(self, buffer):
         gobject.idle_add(self.update_label, buffer)
@@ -99,6 +127,9 @@ class TabLabel(gtk.EventBox):
             
     def on_close_editor(self, *args):
         self.editor.close()
+        
+    def on_editor_connection_changed(self, editor, connection):
+        self.update_tooltip()
             
     def on_show_in_separate_window(self, item):
         gobject.idle_add(self.editor.show_in_separate_window)
@@ -118,3 +149,14 @@ class TabLabel(gtk.EventBox):
         if not txt:
             txt = _(u"Query")
         self.label.set_text(txt)
+        self.update_tooltip()
+        
+    def update_tooltip(self):
+        markup = "<b>Connection:</b> "
+        if self.editor.connection:
+            markup += self.editor.connection.get_label()
+        else:
+            markup += "["+_(u"Not connected")+"]"
+        if self.editor.get_filename():
+            markup += "\n<b>File:</b> "+self.editor.get_filename()
+        self.label.set_tooltip_markup(markup)

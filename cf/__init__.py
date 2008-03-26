@@ -41,6 +41,8 @@ Other Resources
 
 __doc_all__ = ["main", "backends"]
 
+import pygtk; pygtk.require("2.0")
+
 import bonobo
 import gnome
 import gnomevfs
@@ -48,6 +50,11 @@ import gobject
 import gtk
 import gtk.glade
 import gettext
+import traceback
+import os
+import errno
+
+gobject.threads_init()
 
 from cf import release
 
@@ -84,6 +91,7 @@ if not isdir(USER_PLUGIN_DIR):
 USER_PLUGIN_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_DIR)
 USER_PLUGIN_REPO = join(USER_DIR, "repo.xml")
 USER_PLUGIN_REPO_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_REPO)
+PID_FILE = join(USER_DIR, "crunchyfrog.pid")
     
 gettext.bindtextdomain("crunchyfrog", LOCALE_DIR)
 gettext.textdomain("crunchyfrog")
@@ -91,29 +99,7 @@ gtk.glade.bindtextdomain("crunchyfrog", LOCALE_DIR)
 gtk.glade.textdomain("crunchyfrog")
 
 from cf.app import CFApplication
-
-def new_instance_cb(xapp, argc, argv):
-    from cf.instance import CFInstance
-    app = CFInstance(xapp)
-    app._init_ui(argv)
-    l = xapp.get_data("instances")
-    l.append(app)
-    xapp.set_data("instances", l)
-    for item in argv:
-        app.new_editor(item)
-    app.widget.show()
-    app.widget.connect("destroy", ui_destroy_cb, app, xapp)
-    xapp.cb.emit("instance-created", app)
-    return argc
-
-def ui_destroy_cb(widget, app, xapp):
-    l = xapp.get_data("instances")
-    if app in l:
-        l.remove(app)
-    xapp.set_data("instances", l)
-    if not l:
-        xapp.shutdown()
-        bonobo.main_quit()
+from cf import dbus_manager
 
 def _parse_commandline():
     """Parses command line arguments and handles all arguments
@@ -139,6 +125,47 @@ def _parse_commandline():
         sys.exit()
     return options, args
 
+# grabbed from listen / gajm
+def is_alive(pid_file):
+    try:
+        pf = open(pid_file)
+    except:
+        # probably file not found
+        return False
+
+    try:
+        pid = int(pf.read().strip())
+        pf.close()
+    except:
+        traceback.print_exc()
+        # PID file exists, but something happened trying to read PID
+        # Could be 0.10 style empty PID file, so assume Gajim is running
+        return False
+
+    try:
+        if not os.path.exists('/proc'):
+            print "missing /proc"
+            return True # no /proc, assume Listen is running
+        try:
+            f = open('/proc/%d/cmdline'% pid) 
+        except IOError, e:
+            if e.errno == errno.ENOENT:
+                return False # file/pid does not exist
+            raise 
+
+        n = f.read().lower()
+        f.close()
+        if n.find('cf/__init__.py') < 0:
+            return False
+        return True # Running Listen found at pid
+    except:
+        traceback.print_exc()
+
+    # If we are here, pidfile exists, but some unexpected error occured.
+    # Assume Listen is running.
+    return True
+
+
 def main():
     global FIRST_RUN
     options, args = _parse_commandline()
@@ -149,25 +176,33 @@ def main():
         log_level = logging.WARNING
     logger = logging.getLogger()
     logger.setLevel(log_level)
-    bonobo.activate()
-    app = CFApplication(options)
-    client = app.register_unique(app.create_serverinfo(("LANG",)))
-    if not client:
-        if isfile(abspath(join(dirname(__file__), "../setup.py"))):
-            props = {'app-datadir': abspath(join(dirname(__file__), '../data'))}
-        else:
-            props = dict()
-        gnome.init(release.name.lower(), release.version,
-                   properties=props)
-        app.connect("new-instance", new_instance_cb)
-        app.set_data("instances", list())
-        gobject.idle_add(app.run, args)
-        gobject.threads_init()
-        gtk.gdk.threads_init()
-        bonobo.main()
-        app.unref()
+    if not is_alive(PID_FILE):
+        app = CFApplication(options)
+        app.init()
+        instance = app.new_instance(args)
+        f = open(PID_FILE, "w")
+        f.write(str(os.getpid()))
+        f.close()
+        logger.debug("PID: %d [%s]" % (os.getpid(), PID_FILE))
+        for fname in args:
+            instance.new_editor(fname)
+        gtk.main()
+        os.remove(PID_FILE)
     else:
-        client.new_instance(args)
+        client = dbus_manager.get_client()
+        if args:
+            from cf.instance import InstanceSelector
+            sel = InstanceSelector(client)
+            if sel.run() == 1:
+                instance_id = sel.get_instance_id()
+                if not instance_id:
+                    instance_id = client.new_instance()
+                for fname in args:
+                    client.open_uri(instance_id, fname)
+            sel.destroy()
+        else:
+            client.new_instance()
+            
         
 if __name__ == "__main__":
     main()
