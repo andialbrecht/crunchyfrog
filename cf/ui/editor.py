@@ -602,7 +602,7 @@ class StatementVariablesDialog(gtk.Dialog):
         found = []
         for match in self.template.pattern.finditer(self.template.template):
             name = match.groupdict().get("named")
-            if name.lower() in found:
+            if not name or name.lower() in found:
                 continue
             vars.append(name)
             found.append(name.lower()) 
