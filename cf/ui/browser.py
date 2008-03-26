@@ -147,6 +147,10 @@ class Browser(gtk.ScrolledWindow):
                     except DBConnectError, err:
                         dialogs.error(_(u"Connection failed"), str(err))
                         self.instance.statusbar.set_message("")
+                elif isinstance(obj, DatasourceInfo):
+                    editor = self.instance.new_editor()
+                    editor.set_connection(obj.internal_connection)
+                    gobject.idle_add(editor.textview.grab_focus)
         elif event.button == 3:
             x = int(event.x)
             y = int(event.y)
