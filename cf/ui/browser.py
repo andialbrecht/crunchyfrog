@@ -139,7 +139,10 @@ class Browser(gtk.ScrolledWindow):
                 and not obj.internal_connection:
                     self.instance.statusbar.set_message(_(u"Connecting..."))
                     try:
-                        obj.dbconnect()
+                        conn = obj.dbconnect()
+                        editor = self.instance.new_editor()
+                        editor.set_connection(conn)
+                        gobject.idle_add(editor.textview.grab_focus)
                         self.on_object_tree_selection_changed(self.object_tree.get_selection())
                     except DBConnectError, err:
                         dialogs.error(_(u"Connection failed"), str(err))
