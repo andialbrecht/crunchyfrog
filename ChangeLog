@@ -1,5 +1,100 @@
+2008-03-26  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* Makefile, cf/__init__.py, cf/app.py, cf/dbus_manager.py,
+	  cf/instance.py, cf/ui/queries.py, crunchyfrog.egg-info/PKG-INFO,
+	  crunchyfrog.egg-info/SOURCES.txt, data/crunchyfrog.glade,
+	  data/org.gnome.crunchyfrog.service.in, debian/control,
+	  debian/rules: * DBus implementation
+	  * instance handling
+	  * UI improvements
+	* Makefile: sdist target
+	* cf/ui/editor.py:
+	* cf/ui/editor.py: Editor always grabs focus when a query is
+	  finished
+	* cf/ui/browser.py: Double-click on datasource always opens editor
+	* cf/ui/browser.py: Open editor on double-click
+	* cf/release.py: long description edited
+
+2008-03-22  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* cf/ui/browser.py: don't open multiple connections on double-click
+	* cf/backends/schema/__init__.py: no child nodes for indexes
+	* cf/config/default.cfg: default plugins fixed
+	* cf/backends/ldapbe.py, cf/backends/mysql.py,
+	  cf/backends/postgres.py, cf/backends/sqlite.py,
+	  cf/filter/exportfilter.py, cf/library.py, cf/shell/__init__.py,
+	  cf/ui/refviewer.py, data/plugins/backend_oracle/__init__.py:
+	  plugin IDs fixed
+
+2008-03-21  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* Makefile, README, cf/__init__.py, cf/backends/ldapbe.py,
+	  cf/backends/mysql.py, cf/backends/oracle.py,
+	  cf/backends/postgres.py, cf/backends/sqlite.py,
+	  cf/config/default.cfg, cf/datasources.py, cf/dist.py.in,
+	  cf/filter/exportfilter.py, cf/library.py, cf/plugins/builtin.py,
+	  cf/plugins/core.py, cf/shell/__init__.py, cf/ui/datasources.py,
+	  cf/ui/prefs.py, cf/ui/refviewer.py, cf/ui/widgets/__init__.py,
+	  crunchyfrog.egg-info/PKG-INFO, crunchyfrog.egg-info/SOURCES.txt,
+	  crunchyfrog.egg-info/entry_points.txt,
+	  crunchyfrog.egg-info/not-zip-safe,
+	  crunchyfrog.egg-info/requires.txt,
+	  crunchyfrog.egg-info/top_level.txt, data, data/crunchyfrog.in,
+	  data/plugins, data/plugins/backend_oracle,
+	  data/plugins/backend_oracle/__init__.py, debian/control,
+	  debian/crunchyfrog.install, debian/rules,
+	  extras/plugins/sqlformat, extras/plugins/sqlformat/Makefile,
+	  extras/plugins/sqlformat/setup.py,
+	  extras/plugins/sqlformat/sqlformat/__init__.py, setup.py: *
+	  install routine fixed (issue #4)
+	  * plugin management changed
+
+2008-03-19  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* debian/control: build requirements
+	* cf/ui/editor.py: unique patterns
+	* cf/ui/browser.py, cf/ui/editor.py, cf/ui/widgets/__init__.py: *
+	  navigator: double-click to open connection
+	  * editor: reset explain tab on new query
+	  * get_model() fixed
+
+2008-03-17  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* cf/ui/browser.py: duplicate separator removed
+	* cf/ui/browser.py: browser: refresh action
+	* cf/backends/__init__.py, cf/backends/ldapbe.py,
+	  cf/backends/mysql.py, cf/backends/oracle.py,
+	  cf/backends/postgres.py, cf/backends/sqlite.py,
+	  cf/plugins/core.py, cf/ui/browser.py, cf/ui/widgets/__init__.py:
+	  exception handling fixed (issue #3)
+
 2008-03-14  Andi Albrecht <albrecht.andi@gmail.com>
 
+	* cf/ui: svn externals fixed
+	* crunchyfrog.egg-info/PKG-INFO, crunchyfrog.egg-info/SOURCES.txt:
+	  egg-info updated
+	* Makefile: configurable PYTHON, once again
+	* Makefile: configurable PYTHON
+	* crunchyfrog.egg-info/PKG-INFO: PKG-INFO updated
+	* cf/release.py: version info updated
+	* crunchyfrog.egg-info/PKG-INFO, crunchyfrog.egg-info/SOURCES.txt:
+	  egg-info updated
+	* cf/release.py: release info
+	* ChangeLog, cf/__init__.py, cf/app.py, cf/config/default.cfg,
+	  cf/filter/exportfilter.py, cf/instance.py, cf/library.py,
+	  cf/plugins/core.py, cf/release.py, cf/shell/__init__.py,
+	  cf/ui/editor.py, cf/ui/prefs.py, cf/ui/refviewer.py,
+	  crunchyfrog.egg-info/SOURCES.txt, data/crunchyfrog.glade,
+	  setup.py: plugin repo, homepage url
+	* extras/plugins, extras/plugins/sqlformat,
+	  extras/plugins/sqlformat/setup.py,
+	  extras/plugins/sqlformat/sqlformat,
+	  extras/plugins/sqlformat/sqlformat/__init__.py,
+	  extras/plugins/sqlformat/sqlformat/printsql.py: SQL formatter
+	  plugin
+	* po/crunchyfrog.pot, po/de/LC_MESSAGES/crunchyfrog.mo,
+	  po/de/LC_MESSAGES/crunchyfrog.po: translation updates
+	* cf/__init__.py: logging fixed
 	* cf/ui/editor.py, cf/ui/widgets/grid.py, data/crunchyfrog.glade:
 	  copy grid selection to clipboard
 	* cf/datasources.py, cf/ui/browser.py: destroy reference when
@@ -15,12 +110,10 @@
 
 	* data/crunchyfrog.glade: Library: manage saved queries (Glade
 	  file)
-	* cf/library.py, wiki/CurrentIssues.wiki: Library: manage saved
-	  queries
+	* cf/library.py: Library: manage saved queries
 	* cf/ui/editor.py, cf/ui/widgets/grid.py,
-	  cf/ui/widgets/renderer.py, data/crunchyfrog.glade,
-	  wiki/CurrentIssues.wiki: data grid (TreeView performance on large
-	  datasets)
+	  cf/ui/widgets/renderer.py, data/crunchyfrog.glade: data grid
+	  (TreeView performance on large datasets)
 	* cf/ui/datasources.py, cf/ui/widgets/__init__.py,
 	  data/crunchyfrog.glade: Connection widget
 	* cf/ui/widgets/__init__.py, data/crunchyfrog.glade: Connection
@@ -97,7 +190,7 @@
 	* cf/__init__.py, cf/app.py, cf/config/__init__.py, cf/userdb.py,
 	  data/cftheme/class.html, data/cftheme/css/default.css,
 	  data/cftheme/css/styles.css, data/cftheme/master.html,
-	  data/cftheme/theme.ini, docs, wiki/CurrentIssues.wiki: API docs
+	  data/cftheme/theme.ini, docs: API docs
 	* Makefile, cf/__init__.py, data/cftheme/class.html,
 	  data/cftheme/css/default.css, data/cftheme/css/styles.css,
 	  data/cftheme/master.html, data/cftheme/module.html,
@@ -131,8 +224,7 @@
 	  * SQLite schema: columns
 	  * API documentation
 	* debian/control: requirements
-	* README, debian/control, wiki/GettingStarted.wiki: GNOME extra
-	  icons requirement
+	* README, debian/control: GNOME extra icons requirement
 	* INSTALL, Makefile, README, cf/instance.py,
 	  crunchyfrog.egg-info/PKG-INFO: README, gdl import
 
@@ -145,15 +237,14 @@
 
 2008-02-29  Andi Albrecht <albrecht.andi@gmail.com>
 
-	* .project, cf/backends/ldapbe.py, cf/ui/editor.py,
+	* cf/backends/ldapbe.py, cf/ui/editor.py,
 	  cf/ui/widgets/__init__.py: LDAP search result export
 	* cf/backends/ldapbe.py: Sortable LDAP results
 	* crunchyfrog.egg-info/SOURCES.txt,
 	  crunchyfrog.egg-info/entry_points.txt: updated egg_info
 	* cf/filter/exportfilter.py, cf/thirdparty,
 	  cf/thirdparty/__init__.py, cf/thirdparty/ooolib.py,
-	  cf/ui/editor.py, setup.py, wiki/CurrentIssues.wiki,
-	  wiki/Features.wiki: OpenDocument export
+	  cf/ui/editor.py, setup.py: OpenDocument export
 
 2008-02-28  Andi Albrecht <albrecht.andi@gmail.com>
 
@@ -185,15 +276,13 @@
 	  cf/shell/ipython_view.py, cf/ui/browser.py,
 	  crunchyfrog.egg-info/PKG-INFO, crunchyfrog.egg-info/SOURCES.txt,
 	  crunchyfrog.egg-info/entry_points.txt, data/crunchyfrog.glade,
-	  setup.py, wiki/PluginDevelopment.wiki: interactive shell plugin,
-	  experimental LDAP backend
+	  setup.py: interactive shell plugin, experimental LDAP backend
 
 2008-02-26  Andi Albrecht <albrecht.andi@gmail.com>
 
 	* Makefile, cf/release.py, crunchyfrog.egg-info/PKG-INFO,
 	  crunchyfrog.egg-info/SOURCES.txt: Release stuff
-	* .project, .pydevproject, cf/backends/__init__.py,
-	  cf/ui/editor.py, data/crunchyfrog.glade, wiki/CurrentIssues.wiki:
+	* cf/backends/__init__.py, cf/ui/editor.py, data/crunchyfrog.glade:
 	  Editor status message
 	* cf/config/default.cfg: config update
 	* cf/ui/statusbar.py: SVN keywords
@@ -205,8 +294,8 @@
 	  cf/ui/editor.py, cf/ui/statusbar.py, cf/ui/toolbar.py, data,
 	  data/crunchyfrog.glade, po/crunchyfrog.pot,
 	  po/de/LC_MESSAGES/crunchyfrog.mo,
-	  po/de/LC_MESSAGES/crunchyfrog.po, wiki/CurrentIssues.wiki: Major
-	  fixes: transactions, threading, backends
+	  po/de/LC_MESSAGES/crunchyfrog.po: Major fixes: transactions,
+	  threading, backends
 	* cf/utils.py: utils, Emit implementation
 	* ., cf/__init__.py, cf/app.py, cf/backends/__init__.py,
 	  cf/backends/dbapi2helper.py, cf/backends/mysql.py,
@@ -262,5 +351,5 @@
 
 2008-02-25  
 
-	* branches, tags, .: Initial directory structure.
+	* .: Initial directory structure.
 
