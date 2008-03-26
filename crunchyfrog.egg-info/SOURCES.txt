@@ -9,6 +9,7 @@ setup.py
 cf/__init__.py
 cf/app.py
 cf/datasources.py
+cf/dbus_manager.py
 cf/dist.py.in
 cf/instance.py
 cf/library.py
@@ -58,6 +59,7 @@ data/crunchyfrog.glade
 data/crunchyfrog.in
 data/crunchyfrog.png
 data/crunchyfrog.svg
+data/org.gnome.crunchyfrog.service.in
 data/cftheme/__init__.py
 data/cftheme/class.html
 data/cftheme/index.html
