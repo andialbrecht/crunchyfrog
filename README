@@ -30,6 +30,8 @@ for personal use! Anyway, to build a Debian package:
 After installing you should find a launcher in your _Applications_ menu.
 
 
-Homepage:      http://crunchyfrog.googlecode.com
-Documentation: http://code.google.com/p/crunchyfrog/wiki/Documentation?tm=6
-Bugs:          http://code.google.com/p/crunchyfrog/issues/list
+Homepage:    http://cf.andialbrecht.de/
+
+Development: http://crunchyfrog.googlecode.com/
+Discussions: http://groups.google.com/group/crunchyfrog
+Issues/Bugs: http://code.google.com/p/crunchyfrog/issues/list
