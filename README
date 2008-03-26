@@ -18,13 +18,13 @@ For a system-wide installation run:
 	make
 	make install
 
-Maybe you've already noticed the `debian/` folder... You're right, you can
-build a Debian package, but keep in mind that the build routine isn't verified
-by someone who knows how to build packages properly and it is only intended
-for personal use! Anyway, to build a Debian package:
+To build a Debian/Ubuntu package:
 
 	make deb
 	sudo dpkg -i dist/*.deb
+	
+	NOTE: Building a deb is experimental and should be reviewed by someone
+	with some more experiences.
 
 
 After installing you should find a launcher in your _Applications_ menu.
