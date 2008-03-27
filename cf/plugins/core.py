@@ -359,7 +359,7 @@ class PluginManager(gobject.GObject):
                 x.userdb_set(self.app.userdb)
                 x.userdb_init()
             if isinstance(x, InstanceMixin):
-                for instance in self.app.get_data("instances") or []:
+                for instance in self.app.get_instances():
                     self.init_instance_mixins(x, instance)
             if id not in l:
                 l.append(id)
@@ -367,7 +367,7 @@ class PluginManager(gobject.GObject):
             x = self.__active_plugins.get(plugin, None)
             if x:
                 if isinstance(x, InstanceMixin):
-                    for instance in self.app.get_data("instances") or []:
+                    for instance in self.app.get_instances():
                         self.unload_instance_mixins(x, instance)
                 x.shutdown()
                 del self.__active_plugins[plugin]
