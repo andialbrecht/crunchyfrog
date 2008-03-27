@@ -418,10 +418,12 @@ class ConnectionsWidget(GladeWidget):
         obj = model.get_value(iter, 0)
         if not isinstance(obj, DBConnection):
             return
+        model.remove(iter)
         obj.close()
     
     def on_connection_closed(self, connection):
         model = self.list_conn.get_model()
+        if not model: return
         iter = model.get_iter_first()
         while iter:
             if model.get_value(iter, 0) == connection.datasource_info:

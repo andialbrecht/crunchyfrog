@@ -83,7 +83,8 @@ class Editor(GladeWidget):
         self.close()
             
     def on_connection_closed(self, connection):
-        connection.disconnect(self.__conn_close_tag)
+        if connection == self.connection and self.__conn_close_tag:
+            connection.disconnect(self.__conn_close_tag)
         self.set_connection(None)
         
     def on_explain(self, *args):
@@ -227,9 +228,14 @@ class Editor(GladeWidget):
         self.results.set_explain(data)
         
     def set_connection(self, conn):
+        if self.connection and self.__conn_close_tag:
+            self.connection.disconnect(self.__conn_close_tag)
+            self.__conn_close_tag = None
         self.connection = conn
         if conn:
             self.__conn_close_tag = self.connection.connect("closed", self.on_connection_closed)
+        else:
+            self._conn_close_tag = None
         self.emit("connection-changed", conn)
         
     def set_filename(self, filename):
