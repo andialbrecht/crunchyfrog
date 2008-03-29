@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<chapter id="crunchyfrog-datasources" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<title>Datasources and Connections</title>
+	<section id="datasources_defining">
+  		<title>Defining Datasources</title>
+  		<para>TODO</para>
+  	</section>
+  	
+  	<section id="datasources_connecting">
+  		<title>Connecting to Datasources</title>
+  		<para>TODO</para>
+  	</section>
+  	
+  	<section id="datasources_connections">
+  		<title>Connection Handling</title>
+  		<para>TODO</para>
+  	</section>
+</chapter>

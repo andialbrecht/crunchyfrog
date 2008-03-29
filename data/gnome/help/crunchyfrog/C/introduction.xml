@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<chapter id="crunchyfrog-introduction" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<title>Introduction</title>
+	<para>
+		<application>CrunchyFrog</application> is a database navigator
+		and query tool for GNOME.
+		Currently the following databases are supported:
+	</para>
+	<itemizedlist>
+		<listitem><para>PostgreSQL</para></listitem>
+		<listitem><para>MySQL</para></listitem>
+		<listitem><para>SQLite3</para></listitem>
+		<listitem><para>Oracle</para></listitem>
+		<listitem><para>LDAP</para></listitem>
+	</itemizedlist>
+	<para>
+		<application>CrunchyFrog</application> can be extended using
+		plugins.
+	</para>
+</chapter>

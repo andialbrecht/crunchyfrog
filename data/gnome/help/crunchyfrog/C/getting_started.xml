@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<chapter id="crunchyfrog-getting-started" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<title>Getting Started</title>
+	<para>This section explains how 
+		<link linkend="crunchyfrog-start">start</link> and how the
+		<link linkend="crunchyfrog-mainwindow">main window</link> looks like.
+	</para>
+	<note>
+		<para>
+			If you have any troubles running <application>CrunchyFrog</application>,
+			make sure that all
+			<ulink url="http://code.google.com/p/crunchyfrog/wiki/Requirements">requirements</ulink>
+			are met.
+		</para>
+	</note>
+	<section id="crunchyfrog-start">
+		<title>To Start <application>CrunchyFrog</application></title>
+		<para>
+			You can start <application>CrunchyFrog</application> in the
+			following ways:
+		</para>
+		<variablelist>
+			<varlistentry>
+				<term>
+					<guimenu>Applications</guimenu> menu
+				</term>
+				<listitem>
+					<para>
+						Choose
+						<menuchoice>
+							<guisubmenu>Development</guisubmenu>
+							<guimenuitem>CrunchyFrog</guimenuitem>
+						</menuchoice>
+						.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Command line</term>
+				<listitem>
+					<para>
+						To start
+						<application>CrunchyFrog</application>
+						from a command line, type the following command, 
+						then press <keycap>Return</keycap>:
+					</para>
+					<para>
+						<command>crunchyfrog</command>
+						<replaceable>filename.sql</replaceable>
+					</para>
+					<para>
+						where
+						<replaceable>filename.sql</replaceable>
+						is the name of the file you want to open.
+					</para>
+					<para>
+						<application>CrunchyFrog</application>
+						opens each file that you specify in the same window.
+						If another instance of <application>CrunchyFrog</application>
+						is running, <application>CrunchyFrog</application> opens
+						a dialog where you can choose, if you want to open the
+						specified files in an existing or a new instance of
+						<application>CrunchyFrog</application>.
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</section>
+	
+	<section id="crunchyfrog-mainwindow">
+		<title>Main Window</title>
+		<para>TODO</para>
+	</section>
+</chapter>

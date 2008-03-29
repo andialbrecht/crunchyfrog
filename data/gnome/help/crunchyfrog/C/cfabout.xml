@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<chapter id="crunchyfrog-about" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<title>About <application>CrunchyFrog</application></title>
+	<para>
+		<application>CrunchyFrog</application>
+		was written by Andi Albrecht (<email>albrecht.andi@gmail.com</email>).
+		To find more information about
+		<application>CrunchyFrog</application>
+		, please visit the
+		<ulink url="http://cf.andialbrecht.de" type="http">CrunchyFrog Webpage</ulink>
+	</para>
+	<para>
+		To report a bug or make a suggestion regarding this application or 
+		this manual, follow the directions in this
+		<ulink url="ghelp:gnome-feedback" type="help">document</ulink>
+		.
+	</para>
+	<para>
+		This program is distributed under the terms of the GNU
+     		General Public license as published by the Free Software
+     		Foundation; either version 3 of the License, or (at your option)
+     		any later version. A copy of this license can be found at
+     		this
+     		<ulink url="ghelp:gpl" type="help">link</ulink>
+     		, or in the file COPYING included with the source code of this program.
+	</para>
+</chapter>

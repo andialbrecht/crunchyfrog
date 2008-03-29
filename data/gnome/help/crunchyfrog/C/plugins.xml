@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<chapter id="crunchyfrog-plugins" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<title>Plugins</title>
+	<section id="plugins_working">
+  		<title>Working with Plugins</title>
+  		 local, plugin folder, repo
+  		 activate, deactivate
+  		<para>TODO</para>
+  	</section>
+  	
+  	<section id="plugins_export">
+  		<title>Data Export Plugins</title>
+  		<para>TODO</para>
+  	</section>
+  	
+  	<section id="plugins_sqllibrary">
+  		<title>SQL Library Plugin</title>
+  		<para>TODO</para>
+  	</section>
+  	
+  	<section id="plugins_cfshell">
+  		<title>Python Console Plugin</title>
+  		<para>TODO</para>
+  	</section>
+  	
+  	<section id="plugins_dev">
+  		<title>Plugin Development</title>
+  		<para>TODO</para>
+  	</section>
+</chapter>

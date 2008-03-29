@@ -1,7 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
-<book id="index" label="" xmlns:xi="http://www.w3.org/2001/XInclude">
+<book id="index" label="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<bookinfo>
+		<title>
+			<application>CrunchyFrog</application> Manual V2.0
+		</title>
+		<copyright>
+			<year>2008</year>
+			<holder>Andi Albrecht</holder>
+		</copyright>
+		<publisher>
+			<publishername>Andi Albrecht</publishername>
+		</publisher>
+		<authorgroup>
+			<author>
+				<firstname>Andi</firstname>
+				<surname>Albrecht</surname>
+				<address>
+					<email>albrecht.andi@gmail.com</email>
+				</address>
+			</author>
+		</authorgroup>
+		<revhistory>
+			<revision>
+				<revnumber>CrunchyFrog Manual V2.0</revnumber>
+				<date>March 2008</date>
+				<revdescription>
+					<para role="author">
+						Andi Albrecht
+						<email>albrecht.andi@gmail.com</email>
+					</para>
+				</revdescription>
+			</revision>
+		</revhistory>
+		<releaseinfo>This manual describes version 0.2 of CrunchyFrog.</releaseinfo>
+		<legalnotice>
+			<title>Feedback</title>
+			<para>
+				To report a bug or make a suggestion regarding the
+				<application>CrunchyFrog</application>
+				application or this manual, follow the directions in the
+				<ulink url="ghelp:gnome-feedback" type="help">GNOME Feedback Page</ulink>
+				. 
+			</para> 
+		</legalnotice>
+		<legalnotice>
+			<title>License</title>
+			<para>
+		      Permission is granted to copy, distribute and/or modify this document
+		      under the terms of the GNU Free Documentation License, Version 1.2 or
+		      any later version published by the Free Software Foundation; with no
+		      Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A
+		      copy of the license is included in the section entitled 
+		      <xref linkend="gfdl">"GNU Free Documentation License"</xref>.
+			</para>
+		</legalnotice>
+	</bookinfo>
+	<indexterm zone="index">
+		<primary>CrunchyFrog</primary>
+	</indexterm>
+	<indexterm zone="index">
+		<primary>crunchyfrog</primary>
+	</indexterm>
+	
+	<xi:include href="introduction.xml" />
+	<xi:include href="getting_started.xml" />
+	<xi:include href="datasources.xml" />
+	<xi:include href="schema.xml" />
+	<xi:include href="queries.xml" />
+	<xi:include href="plugins.xml" />
+	<xi:include href="prefs.xml" />
+	<xi:include href="shortcuts.xml" />
+	<xi:include href="cfabout.xml" />
+	<xi:include href="fdl.xml" />
+</book>
+<!-- 
   <title>CrunchyFrog Users Manual</title>
 
   <bookinfo>
@@ -18,7 +92,7 @@
     </authorgroup>
 
     <copyright>
-      <year>2007</year>
+      <year>2008</year>
 
       <holder>Andi Albrecht</holder>
     </copyright>
@@ -27,16 +101,20 @@
     
     <revhistory>
       <revision>
-        <revnumber>0.2</revnumber>
-        <date>December 13, 2007</date>
+        <revnumber>0.1</revnumber>
+        <date>March 28, 2008</date>
         <authorinitials>aalbrecht</authorinitials>
-        <revdescription><remark>First release for CrunchyFrog 0.2.0</remark></revdescription>
+        <revdescription><remark>Initial release</remark></revdescription>
       </revision>
    </revhistory>
   </bookinfo>
 
   <chapter id="introduction">
     <title>Introduction</title>
+    <section id="intro_whatis">
+    	<title>What is CrunchyFrog?</title>
+    	<para>TODO</para>
+    </section>
     <section id="intro_getting_started">
     	<title>Getting started</title>
     	<para>TODO</para>
@@ -45,9 +123,67 @@
   
   <chapter id="datasources">
   	<title>Data Sources</title>
-  	<section id="datasources_connect">
-  		<title>Connecting to data sources</title>
+  	<section id="datasources_defining">
+  		<title>Defining Datasources</title>
+  		<para>TODO</para>
+  	</section>
+  	
+  	<section id="datasources_connecting">
+  		<title>Connecting to Datasources</title>
+  		<para>TODO</para>
+  	</section>
+  	
+  	<section id="datasources_connections">
+  		<title>Connection Handling</title>
   		<para>TODO</para>
   	</section>
   </chapter>
+  
+  <chapter id="schema">
+  	<title>Schema Browsing</title>
+  	<para>TODO</para>
+  </chapter>
+  
+  <chapter id="queries">
+  	<title>Queries</title>
+  	<section id="queries_execute">
+  		<title>Executing Queries</title>
+  		<para>TODO</para>
+  	</section>
+  	<section id="queries_export">
+  		<title>Export Results</title>
+  		<para>TODO</para>
+  	</section>
+  	<section id="queries_library">
+  		<title>SQL Library</title>
+  		<para>TODO</para>
+  	</section>
+  </chapter>
+  
+  <chapter id="plugins">
+  	<title>Plugins</title>
+  	<section id="plugins_install">
+  		<title>Installing Plugins</title>
+  		 local, plugin folder, repo
+  		 activate, deactivate
+  		<para>TODO</para>
+  	</section>
+  	
+  	<section id="plugins_dev">
+  		<title>Plugin Development</title>
+  		<para>TODO</para>
+  	</section>
+  </chapter>
+  
+  <appendix id="appendix">
+  	<section id="apdx_shortcuts">
+  		<title>Keyboard Shortcuts</title>
+  		<para>TODO</para>
+  	</section>
+  	<section id="apdx_onlineresources">
+  		<title>Online Resources</title>
+  		<para>TODO</para>
+  	</section>
+  </appendix>
 </book>
+-->
