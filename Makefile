@@ -17,6 +17,8 @@ CF_MODULES=$(shell find cf -type f ! -path "*/.svn*" ! -name "*.pyc")
 CF_PLUGIN_PKGS=$(shell find data/plugins/* -type d ! -path "*/.svn*")
 CF_PLUGIN_MODULES=$(shell find data/plugins/* -type f ! -path "*/.svn*" ! -name "*.pyc")
 
+MANUAL_LANG=$(shell find data/gnome/help/crunchyfrog/* -type d ! -path "*.svn*" -print | sed -e 's!data/gnome/help/crunchyfrog/!!g')
+
 #GTKMOZEMBED_PATH = $(shell pkg-config --libs-only-L mozilla-gtkmozembed 2>/dev/null || pkg-config --libs-only-L firefox-gtkmozembed 2>/dev/null | sed -e "s/-L//g" -e "s/[  ]//g" )
 GTKMOZEMBED_PATH=/usr/lib/firefox
 
@@ -36,6 +38,7 @@ clean: po-clean
 	find . -name "*.pyc" -print | xargs rm -rf
 	find . -name "*~" -print | xargs rm -rf
 	rm -rf build/
+	rm -rf manual/
 	
 ChangeLog:
 	svn2cl --authors=AUTHORS -o ChangeLog --group-by-day
@@ -113,3 +116,18 @@ po-gen:
 api:
 	PYTHONPATH=`pwd`/data/:`pwd` apydia -c data/apydia.ini
 	cp docs/api/cf.html docs/api/index.html
+	
+manual-html:
+	for lang in $(MANUAL_LANG); do \
+		gnome-doc-tool xhtml -c manual.css -e .html -o manual/$$lang/ --copy-graphics data/gnome/help/crunchyfrog/$$lang/crunchyfrog.xml; \
+		python extras/manual/patch_layout.py manual/$$lang/; \
+	done;
+	mv manual/C manual/en
+	
+manual-pdf:
+	for lang in $(MANUAL_LANG); do \
+		dblatex -o manual/CrunchyFrog_UserManual_$$lang.pdf data/gnome/help/crunchyfrog/$$lang/crunchyfrog.xml; \
+	done;
+	mv manual/CrunchyFrog_UserManual_C.pdf manual/CrunchyFrog_UserManual.pdf
+	
+manual: manual-html manual-pdf
