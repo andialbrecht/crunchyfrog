@@ -155,7 +155,7 @@ class CFInstance(GladeWidget):
         self._editor.textview.get_buffer().delete_selection(True, True)
             
     def on_datasource_manager(self, *args):
-        dlg = DatasourceManager(self.app)
+        dlg = DatasourceManager(self.app, self)
         dlg.run()
         dlg.destroy()
         

@@ -3,9 +3,19 @@
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 <chapter id="crunchyfrog-datasources" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
 	<title>Datasources and Connections</title>
+	<para>
+		Datasources are holding information on how
+		<application>CrunchyFrog</application> should connect to a database.
+	</para>
 	<section id="datasources_defining">
   		<title>Defining Datasources</title>
-  		<para>TODO</para>
+  		<para>
+  			To define or edit a new datasource, open the datasource manager:
+  			<menuchoice>
+  				<guimenu>File</guimenu>
+  				<guimenuitem>Datasource Manager</guimenuitem>
+  			</menuchoice>.
+  		</para>
   	</section>
   	
   	<section id="datasources_connecting">

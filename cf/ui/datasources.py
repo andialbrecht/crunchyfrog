@@ -35,7 +35,8 @@ COMMON_OPTIONS = ["dsn", "database", "host", "port", "user", "password"]
 
 class DatasourceManager(GladeWidget):
     
-    def __init__(self, app):
+    def __init__(self, app, instance):
+        self.instance = instance
         GladeWidget.__init__(self, app, "crunchyfrog", "datasourcemanager")
         from cf.plugins.core import PLUGIN_TYPE_BACKEND
         if not self.app.plugins.get_plugins(PLUGIN_TYPE_BACKEND, True):
@@ -180,6 +181,12 @@ class DatasourceManager(GladeWidget):
         sel = self.xml.get_widget("tv_stored_connections").get_selection()
         sel.unselect_all()
         self.clear_fields()
+        
+    def on_response(self, dialog, response_id):
+        if response_id == 0:
+            dialog.stop_emission("response")
+            self.instance.show_help("crunchyfrog-datasources")
+            return True
         
     def on_save_datasource(self, *args):
         conn = self.get_connection()
