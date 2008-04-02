@@ -8,11 +8,11 @@
   		<para>TODO</para>
   	</section>
   	<section id="queries_export">
-  		<title>Export Results</title>
+  		<title>Query Results</title>
   		<para>TODO</para>
   	</section>
-  	<section id="queries_library">
-  		<title>SQL Library</title>
+  	<section id="queries_transactions">
+  		<title>Transactions</title>
   		<para>TODO</para>
   	</section>
 </chapter>

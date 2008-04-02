@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<chapter id="crunchyfrog-getting-started" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<title>Erste Schritte</title>
+	<para>Dieser Abschnitt erläutert, wie die Anwendung
+		<link linkend="crunchyfrog-start">gestartet</link> wird und wie das
+		<link linkend="crunchyfrog-mainwindow">Hauptfenster</link> aussieht.
+	</para>
+	<note>
+		<para>
+			Wenn Sie Probleme haben, <application>CrunchyFrog</application> zu starten,
+			stellen Sie bitte sicher, dass alle 
+			<ulink url="http://code.google.com/p/crunchyfrog/wiki/Requirements">Systemvoraussetzungen</ulink>
+			erfüllt sind. 
+		</para>
+	</note>
+	<section id="crunchyfrog-start">
+		<title><application>CrunchyFrog</application> starten</title>
+		<para>
+			<application>CrunchyFrog</application> kann wie folgt gestartet werden:
+		</para>
+		<variablelist>
+			<varlistentry>
+				<term>
+					<guimenu>Anwendung</guimenu>smenu
+				</term>
+				<listitem>
+					<para>
+						Wählen Sie
+						<menuchoice>
+							<guisubmenu>Entwicklung</guisubmenu>
+							<guimenuitem>CrunchyFrog</guimenuitem>
+						</menuchoice>.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Kommandozeile</term>
+				<listitem>
+					<para>
+						Um
+						<application>CrunchyFrog</application>
+						aus einer Kommandozeile zu starten, geben Sie den 
+						folgenden Aufruf ein und drücken Sie <keycap>Return</keycap>:
+					</para>
+					<para>
+						<command>crunchyfrog</command>
+						<optional>filename.sql</optional>
+					</para>
+					<para>
+						<optional>filename.sql</optional> ist der Name
+						der Datei die geöffnet werden soll (optional).
+					</para>
+					<para>
+						<application>CrunchyFrog</application>
+						öffnet jede angegebene Datei im selben Fenster.
+						Falls bereits eine Instanz von <application>CrunchyFrog</application>
+						läuft, wird ein Dialog geöffnet, in dem Sie angeben können,
+						ob die Dateien in der bereits laufenden oder in 
+						einer neuen Instanz geöffnet werden sollen.
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</section>
+	
+	<section id="crunchyfrog-mainwindow">
+		<title>Das CrunchyFrog-Fenster</title>
+		<para>Wenn Sie <application>CrunchyFrog</application> starten,
+		wird das folgende Fenster geöffnet.</para>
+		<figure id="mainwindow-fig">
+			<title><application>CrunchyFrog</application>-Fenster</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="figures/cf-main.png" format="PNG" />
+					</imageobject>
+					<textobject>
+						<phrase>
+							Zeigt das <application>CrunchyFrog</application>-Fenster.
+						</phrase>
+					</textobject>
+				</mediaobject>
+			</screenshot>
+		</figure>
+		<para>Das <application>CrunchyFrog</application>-Fenster enthält folgende
+		Elemente:</para>
+		<variablelist>
+			<varlistentry>
+				<term>Menüleiste</term>
+				<listitem>
+					<para>Die Menüs in der Menüleiste enthalten alle Befehle,
+					die sie zum Arbeiten mit <application>CrunchyFrog</application>
+					benötigen.</para>
+					<para>Die tatsächlich angzeigten Menüs sind zum Teil abhängig
+					von den aktivierten Plugins.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Werkzeugleiste</term>
+				<listitem>
+					<para>Die Werkzeugleiste enthält einen Teil der Befehle, die
+					sie über die Menüleiste aufrufen können.</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Anzeigebereich</term>
+				<listitem>
+					<para>Der Anzeigebereich kann in Abhängigkeit von den 
+					aktivierten Plugins verschiedene Unterelemente
+					enthalten. Standardmäßig wird im linken Bereich der
+					Navigator und im rechten Bereich ein Platzhalter für
+					Abfragefenster angezeigt.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Statusleiste</term>
+				<listitem>
+					<para>
+						In der Statusleiste werden Informationen über die
+						aktuelle <application>CrunchyFrog</application>-Aktivität
+						und Kontextinformationen zu selektierten Elementen
+						angzeigt.
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
+	</section>
+</chapter>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<chapter id="crunchyfrog-datasources" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<title>Datenquellen und Verbindungen</title>
+	<para>
+		Über die Konfiguration von Datenquellen wird 
+		<application>CrunchyFrog</application> mitgeteilt, wie eine 
+		Verbindung zu einer Datenbank hergestellt werden soll.
+		In Abhängigkeit vom gewählten Datenbanksystem sind für eine Datenquelle
+		unterschiedliche verbindungsspezifische Angaben erforderlich.
+	</para>
+	<section id="datasources_defining">
+  		<title>Konfiguration von Datenquellen</title>
+  		<para>
+  			Datenquellen können mit Hilfe der Datenquellenverwaltung erstellt,
+  			bearbeitet und gelöscht werden. Um die Datenquellenverwaltung
+  			aufzurufen wählen Sie:
+  			<menuchoice>
+  				<guimenu>Datei</guimenu>
+  				<guimenuitem>Datenquellen</guimenuitem>
+  			</menuchoice>.
+  		</para>
+  		<para>
+  			Es öffnet sich ein Dialogfenster, dass in zwei Bereiche aufgeteilt
+  			ist, die über Reiter ausgewählt werden können:
+  		</para>
+  		<variablelist>
+  			<varlistentry>
+  				<term><guilabel>Datenquellen</guilabel></term>
+  				<listitem>
+  					<para>Verwaltung von Datenquellen</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term><guilabel>Verbindungen</guilabel></term>
+  				<listitem>
+  					<para>
+  						Verwaltung von Datenbankverbindungen (siehe
+  						<xref linkend="datasources_connections" />)
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  		</variablelist>
+  		<para>Die Konfiguration von Datenquellen erfolgt auf der 
+  		Registerkarte <guilabel>Datenquellen</guilabel>.</para>
+  		<section id="datasources-new">
+  			<title>Erstellen einer neuen Datenquelle</title>
+  			<para>
+  				Um eine neue Datenquelle einzurichten, klicken Sie
+  				auf die Schaltfläche <guibutton>Neu</guibutton>. Geben
+  				Sie der neuen Datenquelle einen Namen, optional eine 
+  				Beschreibung und wählen Sie aus der Auswahlliste das
+  				Datenbanksystem, mit dem eine Verbindung hergestellt werden
+  				soll. Nach Auswahl des Datenbanksystems werden weitere
+  				Felder für datenbankspezifische Angaben angezeigt.
+  			</para>
+  			<para>
+  				Um die Gültigkeit der datenbankspezifischen Angaben zu
+  				überprüfen, klicken Sie auf die Schaltfläche 
+  				<guibutton>Verbindung testen</guibutton>. Es wird daraufhin
+  				versucht eine Verbindung zur Datenbank aufzubauen und ggfs.
+  				eine Fehlermeldung ausgegeben.
+  			</para>
+  			<para>
+  				Sind alle Angaben vollständig, speichern Sie die neue Datenquelle
+  				indem Sie auf die Schaltfläche <guibutton>Speichern</guibutton>
+  				klicken. Die Datenquelle erscheint dann in der Liste der gespeicherten
+  				Datenquellen.
+  			</para>
+  		</section>
+  		<section id="datasources-edit">
+  			<title>Bearbeiten einer Datenquelle</title>
+  			<para>
+  				Um eine bestehende Datenquelle zu bearbeiten, wählen Sie die zu
+  				bearbeitende Datenquelle aus der List der gespeicherten Datenquellen
+  				aus. Die Angaben werden in die Eingabemaske übernommen und können
+  				bearbeitet werden. Zum Speichern der Änderungen klicken Sie auf
+  				die Schaltfläche <guibutton>Speichern</guibutton>.
+  			</para>
+  		</section>
+  		<section id="datasources-delete">
+  			<title>Löschen einer Datenquelle</title>
+  			<para>
+  				Um eine bestehende Datenquelle zu löschen, wähle Sie die zu 
+  				löschende Datenquelle aus der Liste der gespeicherten Datenquellen
+  				aus und klicken auf die Schaltfläche <guibutton>Löschen</guibutton>.
+  			</para>
+  		</section>
+  	</section>
+  	
+  	<section id="datasources_connecting">
+  		<title>Verbindung zu Datenbanken herstellen</title>
+  		<para>Eine Datenbankverbindung kann wie folgt hergestellt werden:</para>
+  		<variablelist>
+  			<varlistentry>
+  				<term>Datenquellenverwaltung</term>
+  				<listitem>
+  					<para>
+  						Öffnen Sie die Datenquellenverwaltung (<menuchoice><guimenu>Datei</guimenu><guimenuitem>Datenquellen</guimenuitem></menuchoice>),
+  						wählen Sie die Registerkarte <guilabel>Verbindungen</guilabel>, selektieren 
+  						Sie die Datenquelle zu der Sie eine Verbindung herstellen möchten 
+  						und klicken Sie auf die Schaltfläche <guibutton>Verbinden</guibutton>.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>Navigator</term>
+  				<listitem>
+  					<para>
+  						Mit einem Doppelklick auf eine Datenquelle im Navigator
+  						wird eine Verbindung zu dieser Datenquelle hergestellt
+  						und ein neuer SQL-Editor mit dieser Verbindung geöffnet.
+  						Besteht bereits eine Verbindung zu dieser Datenquelle,
+  						wird keine neue Verbindung geöffnet, sondern lediglich
+  						ein neuer SQL-Editor mit der bestehenden Verbindung
+  						geöffnet.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>Werkzeugleiste</term>
+  				<listitem>
+  					<para>
+  						In der Werkzeugleiste findet sich ein Element zur 
+  						schnellen Auswahl einer Verbindung. Dieses Element ist
+  						nur aktiv, wenn ein SQL-Editor aktiv ist und gilt auch
+  						nur für den jeweils aktiven SQL-Editor. Über den Pfeil
+  						öffnet sich ein Popup-Menü in dem Sie eine bestehende
+  						Datenbankverbindung auswählen oder eine neue Verbindung
+  						zu einer Datenquelle öffnen können. 
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  		</variablelist>
+  	</section>
+  	
+  	<section id="datasources_connections">
+  		<title>Umgang mit Datenbankverbindungen</title>
+  		<para>
+  			Für eine Datenquelle können gleichzeitig mehrere Datenbankverbindungen
+  			geöffnet sein. Der Navigator nutzt jedoch immer die erste geöffnete
+  			Datenbankverbindung. Die SQL-Editoren können einen beliebige 
+  			Datenbankverbindung verwenden. Welche Datenbankverbindung ein SQL-Editor
+  			benutzt kann über die Verbindungsauswahl in der Werkzeugleiste
+  			ausgewählt werden. 
+  		</para>
+  		<para>
+  			Die Verbindungsauswahl in der Werkzeugleiste stellt einen Menüpunkt
+  			<guimenuitem>Verbindungen anzeigen</guimenuitem> bereit. Wird dieser
+  			Menüeintrag ausgewählt, öffnet sich ein Dialog, mit dem neue Verbindungen
+  			geöffnet und offene Verbindungen wieder geschlossen werden können.
+  			Die Funktionen der Registerkarte <guilabel>Verbindungen</guilabel> der
+  			Datenquellenverwaltung sind analog zu den Funktionen in diesem
+  			Dialog.
+  		</para>
+  		<caution>
+  			<para>
+  				Verbindungen sind instanzübergreifend gültig!
+  			</para>
+  		</caution>
+  	</section>
+</chapter>

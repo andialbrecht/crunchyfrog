@@ -48,7 +48,7 @@
 					</para>
 					<para>
 						<command>crunchyfrog</command>
-						<replaceable>filename.sql</replaceable>
+						<optional>filename.sql</optional>
 					</para>
 					<para>
 						where
@@ -71,6 +71,28 @@
 	
 	<section id="crunchyfrog-mainwindow">
 		<title>Main Window</title>
-		<para>TODO</para>
+		<para>When you start <application>CrunchyFrog</application>,
+		the following window is displayed.</para>
+		<figure id="mainwindow-fig">
+			<title><application>CrunchyFrog</application> Start Up Window</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject>
+						<imagedata fileref="figures/cf-main.png" format="PNG" />
+					</imageobject>
+					<textobject>
+						<phrase>
+							Shows <application>CrunchyFrog</application>
+							main window. Contains titlebar, menubar, toolbar,
+							main view and statusbar.
+							The main view contains the navigator and a 
+							placeholder for SQL editors.
+							Menubar contains File, Edit, View, Library and Help
+							menus.
+						</phrase>
+					</textobject>
+				</mediaobject>
+			</screenshot>
+		</figure>
 	</section>
 </chapter>

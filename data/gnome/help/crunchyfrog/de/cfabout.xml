@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<chapter id="crunchyfrog-about" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<title>Über <application>CrunchyFrog</application></title>
+	<para>
+		<application>CrunchyFrog</application>
+		wurde geschrieben von Andi Albrecht (<email>albrecht.andi@gmail.com</email>).
+		Weitere Informationen über
+		<application>CrunchyFrog</application>
+		finden Sie auf der 
+		<ulink url="http://cf.andialbrecht.de">CrunchyFrog-Webseite</ulink>.
+	</para>
+	<para>
+		Wenn Sie Fehler finden oder Vorschläge zur Anwendung
+		<application>CrunchyFrog</application>
+		oder zu diesem Handbuch haben, folgen Sie den Anweisungen auf der
+		<xref linkend="feedback.xml">Feedback-Seite</xref>.
+	</para>
+	<para>
+		Dieses Programm ist freie Software. Sie können es unter den Bedingungen der GNU General Public License, wie von der Free Software Foundation veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß Version 3 der Lizenz oder (nach Ihrer Option) jeder späteren Version. 
+	</para>
+	<para>
+		Die Veröffentlichung dieses Programms erfolgt in der Hoffnung, daß es Ihnen von Nutzen sein wird, aber OHNE IRGENDEINE GARANTIE, sogar ohne die implizite Garantie der MARKTREIFE oder der VERWENDBARKEIT FÜR EINEN BESTIMMTEN ZWECK. Details finden Sie in der GNU General Public License. 
+	</para>
+	<para>
+		Sie sollten ein Exemplar der GNU General Public License zusammen mit diesem Programm erhalten haben. Falls nicht, siehe <ulink url="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</ulink>. 
+	</para>
+</chapter>

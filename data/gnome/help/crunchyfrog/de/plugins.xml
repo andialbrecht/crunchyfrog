@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<chapter id="crunchyfrog-plugins" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+	<title>Plugins</title>
+	<para>
+		<application>CrunchyFrog</application> kann durch Plugins erweitert werden.
+		<xref linkend="crunchyfrog-plugins-working" /> beschreibt die Installation
+		und Aktivierung von Plugins; <xref linkend="crunchyfrog-plugins-builtin" />
+		stelle Plugins vor, die zusammen mit <application>CrunchyFrog</application>
+		vertrieben werden; <xref linked="crunchyfrog-plugins-dev" /> gibt eine kurze
+		Übersicht über die Entwicklung eigener Plugins.
+	</para>
+	<section id="crunchyfrog-plugins-working">
+  		<title>Umgang mit Plugins</title>
+  		 local, plugin folder, repo
+  		 activate, deactivate
+  		<para>TODO</para>
+  	</section>
+  	
+  	<section id="crunchyfrog-plugins-builtin">
+  		<title>Standard-Plugins</title>
+  	
+	  	<section id="crunchyfrog-plugins_export">
+	  		<title>Plugins zum Datenexport</title>
+	  		<para>TODO</para>
+	  	</section>
+	  	
+	  	<section id="plugins_sqllibrary">
+	  		<title>SQL-Bibliothek</title>
+	  		<para>TODO</para>
+	  	</section>
+	  	
+	  	<section id="plugins_cfshell">
+	  		<title>Python-Konsole</title>
+	  		<para>TODO</para>
+	  	</section>
+	  	
+	</section>
+  	
+  	<section id="crunchyfrog-plugins-dev">
+  		<title>Plugin-Entwicklung</title>
+  		<para>TODO</para>
+  	</section>
+</chapter>
