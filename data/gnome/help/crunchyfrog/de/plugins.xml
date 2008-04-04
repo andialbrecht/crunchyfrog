@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
-<chapter id="crunchyfrog-plugins" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+<chapter id="crunchyfrog-plugins" lang="de" xmlns:xi="http://www.w3.org/2001/XInclude">
 	<title>Plugins</title>
 	<para>
 		<application>CrunchyFrog</application> kann durch Plugins erweitert werden.
@@ -13,9 +13,74 @@
 	</para>
 	<section id="crunchyfrog-plugins-working">
   		<title>Umgang mit Plugins</title>
-  		 local, plugin folder, repo
-  		 activate, deactivate
-  		<para>TODO</para>
+  		<para>
+  			Plugins werden im Einstellungsdialog verwaltet:
+  			<menuchoice>
+  				<guimenu>Datei</guimenu>
+  				<guimenuitem>Einstellungen</guimenuitem>
+  				<guilabel>Plugins</guilabel>
+  			</menuchoice>.
+  		</para>
+  		<para>
+  			Im linken Teil der Registerkarte werden alle verfügbaren Plugins
+  			gruppiert nach Kategorien in einer Liste angezeigt. 
+  			Standardmäßig werden nur lokal verfügbare Plugins angezeigt.
+  			Damit Plugins, die im Online-Repository verfügbar sind, ebenfalls
+  			in der Liste angezeigt werden, aktivieren Sie die Option
+  			<guilabel>Repository aktivieren</guilabel>.
+  			Mit den Schaltflächen können folgende Aktionen ausgeführt werden:
+  		</para>
+  		<variablelist>
+  			<varlistentry>
+  				<term>Plugin installieren</term>
+  				<listitem>
+  					<para>
+  						Lokale Installation von Plugins, die als
+  						<filename>*.zip</filename>-Datei vorliegen. 
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>Infos zu diesem Plugin</term>
+  				<listitem>
+  					<para>
+  						Zeigt weitere Informationen zu einem selektiertem
+  						Plugin an.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>Plugin konfigurieren</term>
+  				<listitem>
+  					<para>
+  						Öffnet einen Dialog zur Konfiguration eines Plugins.
+  						Diese Schaltfläche ist nur aktiv, wenn das selektierte
+  						Plugin weitere Einstellungen erfordert.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>Plugin-Verzeichnis öffnen</term>
+  				<listitem>
+  					<para>
+  						Öffnet die Standard-Dateiverwaltung und zeigt das
+  						Verzeichnis mit Plugins an, die vom Benutzer installiert
+  						wurden (<filename>~/.crunchyfrog/plugins</filename>).
+  						Änderungen in diesem Ordner werden ohne Neustart von
+  						<application>CrunchyFrog</application> wirksam.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>Synchronisieren</term>
+  				<listitem>
+  					<para>
+  						Synchronisiert die Liste der online verfügbaren
+  						Plugins.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  		</variablelist>
   	</section>
   	
   	<section id="crunchyfrog-plugins-builtin">
