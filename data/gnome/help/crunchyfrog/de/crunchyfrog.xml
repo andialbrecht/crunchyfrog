@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
-<book id="index" label="en" xmlns:xi="http://www.w3.org/2001/XInclude">
+<book id="index" label="de" xmlns:xi="http://www.w3.org/2001/XInclude">
 	<bookinfo>
 		<title>
 			<application>CrunchyFrog</application> Handbuch V2.0
@@ -69,7 +69,7 @@
 	<xi:include href="schema.xml" />
 	<xi:include href="queries.xml" />
 	<xi:include href="plugins.xml" />
-	<xi:include href="prefs.xml" />
+	<!-- <xi:include href="prefs.xml" /> -->
 	<xi:include href="shortcuts.xml" />
 	<xi:include href="cfabout.xml" />
 	<xi:include href="fdl.xml" />

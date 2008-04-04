@@ -28,6 +28,15 @@
   			Damit Plugins, die im Online-Repository verfügbar sind, ebenfalls
   			in der Liste angezeigt werden, aktivieren Sie die Option
   			<guilabel>Repository aktivieren</guilabel>.
+  		</para>
+  		<para>
+  			Sie aktivieren ein Plugin, indem Sie das Häkchen vor dem Namen
+  			des Plugins in der Pluginliste setzen. Falls Sie ein Plugin 
+  			aktivieren möchten, dass im Plugin-Repository verfügbar ist,
+  			werden Sie zuvor gefragt, ob Sie dieses Plugin herunterladen
+  			möchten.
+  		</para>
+  		<para>
   			Mit den Schaltflächen können folgende Aktionen ausgeführt werden:
   		</para>
   		<variablelist>
@@ -86,25 +95,116 @@
   	<section id="crunchyfrog-plugins-builtin">
   		<title>Standard-Plugins</title>
   	
+	  	<section id="crunchyfrog-plugins-backends">
+	  		<title>Datenbank-Anbindungen</title>
+	  		<variablelist>
+	  			<varlistentry>
+	  				<term>LDAP</term>
+	  				<listitem>
+	  					<para>Anbindung an LDAP-Server</para>
+	  				</listitem>
+	  			</varlistentry>
+	  			<varlistentry>
+	  				<term>MySQL</term>
+	  				<listitem>
+	  					<para>Anbindung an MySQL-Datenbanken (ab Version 5)</para>
+	  				</listitem>
+	  			</varlistentry>
+	  			<varlistentry>
+	  				<term>PostgreSQL</term>
+	  				<listitem>
+	  					<para>Anbindung an PostgreSQL-Datenbanken (ab Version 8.1)</para>
+	  				</listitem>
+	  			</varlistentry>
+	  			<varlistentry>
+	  				<term>SQLite3</term>
+	  				<listitem>
+	  					<para>Anbindung an SQLite3-Datenbanken</para>
+	  				</listitem>
+	  			</varlistentry>
+	  		</variablelist>
+	  	</section>
+	  	
 	  	<section id="crunchyfrog-plugins_export">
-	  		<title>Plugins zum Datenexport</title>
-	  		<para>TODO</para>
+	  		<title>Export</title>
+	  		<variablelist>
+	  			<varlistentry>
+	  				<term>CSV</term>
+	  				<listitem>
+	  					<para>Export von Daten als CSV-Datei</para>
+	  				</listitem>
+	  			</varlistentry>
+	  			<varlistentry>
+	  				<term>OpenDocument</term>
+	  				<listitem>
+	  					<para>Export von Daten als OpenDocument-Tabelle</para>
+	  				</listitem>
+	  			</varlistentry>
+	  		</variablelist>
 	  	</section>
 	  	
-	  	<section id="plugins_sqllibrary">
+	  	<section id="crunchyfrog-plugins_sqllibrary">
 	  		<title>SQL-Bibliothek</title>
-	  		<para>TODO</para>
+	  		<para>Dieses Plugin ergänzt die Menüleiste um den Eintrag
+	  		<guimenu>
+	  			Bibliothek</guimenu>. Wählen Sie aus diesem Menü
+	  			den Eintrag <guimenuitem>Zur Bibliothek hinzufügen</guimenuitem>,
+	  			um den Inhalt des aktuellen SQL-Editors in der Bibliothek
+	  			abzulegen. Einträge in der Bibliothek können Kategorien zugeordnert
+	  			werden.
+	  		</para>
+	  		<para>
+	  			Die SQL-Bibliothek dient als eine Art Ablage für häufig
+	  			benötigte Abfragen.
+	  		</para>
 	  	</section>
 	  	
-	  	<section id="plugins_cfshell">
+	  	<section id="crunchyfrog-plugins_cfshell">
 	  		<title>Python-Konsole</title>
-	  		<para>TODO</para>
+	  		<para>
+	  			Die Python-Konsole dient vor allem zum Debuggen von 
+	  			selbst entwickelten Plugins. Sie bietet Zugriff auf die 
+	  			interne Programmstruktur von <application>CrunchyFrog</application>.
+	  		</para>
+	  		<tip>
+	  			Weitere Informationen zur Python-Konsole finden Sie auf der
+	  			<ulink url="http://code.google.com/p/crunchyfrog/wiki/PythonShell">Wiki-Seite</ulink>.
+	  			Beachten Sie auch die <ulink url="http://cf.andialbrecht.de/api/index.html">API-Dokumentation</ulink>.
+	  		</tip>
 	  	</section>
 	  	
 	</section>
   	
   	<section id="crunchyfrog-plugins-dev">
   		<title>Plugin-Entwicklung</title>
-  		<para>TODO</para>
+  		<para>
+  			Wenn Sie den Funktionsumfang von <application>CrunchyFrog</application>
+  			durch eigene Plugins erweitern möchten, lesen Sie bitte die folgenden
+  			Dokumentationen:
+  		</para>
+  		<variablelist>
+  			<varlistentry>
+  				<term><ulink url="http://code.google.com/p/crunchyfrog/wiki/PluginDevelopment">Plugin Development</ulink></term>
+  				<listitem>
+  					<para>
+  						Zusammenstellung der wichtigsten Klassen und Funktionen zur
+  						Entwicklung von Plugins für <application>CrunchyFrog</application>.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term><ulink url="http://cf.andialbrecht.de/api/index.html">API-Dokumentation</ulink></term>
+  				<listitem>
+  					<para>
+  						Vollständige Dokumentation der <application>CrunchyFrog</application>-API.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  		</variablelist>
+  		<para>
+  			Wenn Sie die Source-Distribution von <application>CrunchyFrog</application>
+  			heruntergeladen haben, finden Sie im Verzeichnis <filename>docs</filename>
+  			ein einfaches Beispiel-Plugin.
+  		</para>
   	</section>
 </chapter>

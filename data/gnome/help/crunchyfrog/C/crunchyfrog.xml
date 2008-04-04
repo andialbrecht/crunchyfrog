@@ -70,7 +70,7 @@
 	<xi:include href="schema.xml" />
 	<xi:include href="queries.xml" />
 	<xi:include href="plugins.xml" />
-	<xi:include href="prefs.xml" />
+	<!-- <xi:include href="prefs.xml" /> -->
 	<xi:include href="shortcuts.xml" />
 	<xi:include href="cfabout.xml" />
 	<xi:include href="fdl.xml" />
