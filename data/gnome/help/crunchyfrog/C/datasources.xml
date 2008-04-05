@@ -4,27 +4,149 @@
 <chapter id="crunchyfrog-datasources" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
 	<title>Datasources and Connections</title>
 	<para>
-		Datasources are holding information on how
-		<application>CrunchyFrog</application> should connect to a database.
+		A datasource tells <application>CrunchyFrog</application>
+		how to connect to a database. 
+		Depending on the database a datasource needs provider specific
+		information.
 	</para>
 	<section id="datasources_defining">
-  		<title>Defining Datasources</title>
+  		<title>Datasource Configuration</title>
   		<para>
-  			To define or edit a new datasource, open the datasource manager:
+  			Datasource can be created, edited and deleted using the datasource
+  			manager. To open the datasource manager choose:
   			<menuchoice>
   				<guimenu>File</guimenu>
   				<guimenuitem>Datasource Manager</guimenuitem>
   			</menuchoice>.
   		</para>
+  		<para>
+  			A dialog with a notebook pops up. The notebook has two pages:
+  		</para>
+  		<variablelist>
+  			<varlistentry>
+  				<term><guilabel>Datasources</guilabel></term>
+  				<listitem>
+  					<para>Datasource configuration</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term><guilabel>Connections</guilabel></term>
+  				<listitem>
+  					<para>
+  						Database connection management (see 
+  						<xref linkend="datasources_connections" />)
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  		</variablelist>
+  		<para>
+  			To configure datasource select the 
+  			<guilabel>Datasources</guilabel> page.</para>
+  		<section id="datasources-new">
+  			<title>Create a New Datasource</title>
+  			<para>
+  				To create a new datasource, click on the 
+  				<guibutton>New</guibutton> button. A new datasources
+  				requires a name, the description is optional. Choose
+  				a database system from the drop down list. After choosing
+  				a database system additional database specific fields are
+  				displayed.
+  			</para>
+  			<para>
+  				To test if all values are correct, click on the 
+  				<guibutton>Test connection</guibutton> button. 
+  				<application>CrunchyFrog</application> tries to open a connection
+  				to the database with the given values. If an error occurs
+  				it will be displayed in a popup window.
+  			</para>
+  			<para>
+  				If everything is ok, save the new datasource using the
+  				<guibutton>Save</guibutton> button. The new datasource
+  				will be listed in the list on the left.
+  			</para>
+  		</section>
+  		<section id="datasources-edit">
+  			<title>Edit a Datasource</title>
+  			<para>
+  				To edit an existing datasource select the datasource in the
+  				list on the left. The values are displayed in the form and can
+  				be edited. Click <guibutton>Save</guibutton> to save your 
+  				changes.
+  			</para>
+  		</section>
+  		<section id="datasources-delete">
+  			<title>Delete a Datasource</title>
+  			<para>
+  				To delete a datasource select the datasource in the list on 
+  				the left and click <guibutton>Delete</guibutton>.
+  			</para>
+  		</section>
   	</section>
   	
   	<section id="datasources_connecting">
-  		<title>Connecting to Datasources</title>
-  		<para>TODO</para>
+  		<title>Connect to a Database</title>
+  		<para>To connect to a database use one of the following methods:</para>
+  		<variablelist>
+  			<varlistentry>
+  				<term>Datasource Manager</term>
+  				<listitem>
+  					<para>
+  						Open the datasource manager (
+  						<menuchoice><guimenu>File</guimenu><guimenuitem>Datasource Manager</guimenuitem></menuchoice>),
+  						choose the <guilabel>Connections</guilabel> page,
+  						select the datasource you want to connect to and click
+  						on the <guibutton>Connect</guibutton> button.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>Navigator</term>
+  				<listitem>
+  					<para>
+  						If you double-click a datasource in the navigator a 
+  						connection to the database will be established and 
+  						a new SQL editor opens with this connection assigned.
+  						If there's already an active connection to this datasource
+  						the existing connection will be reused for the new
+  						SQL editor.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>Toolbar</term>
+  				<listitem>
+  					<para>
+  						For an already opened SQL editor you can use the 
+  						connection chooser widget in the toolbar to quickly
+  						select a connection. The connection chooser is bound
+  						to the currently active SQL editor.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  		</variablelist>
   	</section>
   	
   	<section id="datasources_connections">
-  		<title>Connection Handling</title>
-  		<para>TODO</para>
+  		<title>About Database Connections</title>
+  		<para>
+  			A datasource can have multiple open database connections. But the
+  			navigator is always using the first opened connection. SQL editors
+  			can use any database connection. You can choose a connection for
+  			an SQL editor using the connection choooser widget in the toolbar.
+  		</para>
+  		<para>
+  			To keep track of the connections you have opened select
+  			<guimenuitem>Show connection</guimenuitem> from the connection
+  			chooser widget located at the toolbar. A handy dialog pops up where
+  			you can close and create connections. It has the same functionality
+  			as the <guilabel>Connections</guilabel> page on the datasource
+  			manager.
+  		</para>
+  		<caution>
+  			<para>
+  				Database connection are the same for all instances of
+  				<application>CrunchyFrog</application>!
+  			</para>
+  		</caution>
   	</section>
 </chapter>

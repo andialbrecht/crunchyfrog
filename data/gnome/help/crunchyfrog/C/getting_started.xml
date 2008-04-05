@@ -94,5 +94,52 @@
 				</mediaobject>
 			</screenshot>
 		</figure>
+		<para>The <application>CrunchyFrog</application> window has the
+		following elements:</para>
+		<variablelist>
+			<varlistentry>
+				<term>Menubar</term>
+				<listitem>
+					<para>
+						The menus on the menubar contain all of the commands 
+						you need to work with files in 
+						<application>CrunchyFrog</application>.
+					</para>
+					<para>
+						Plugins can add additionally menus to the menubar. 
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Toolbar</term>
+				<listitem>
+					<para>
+						The toolbar contains a subset of the commands that you 
+						can access from the menubar.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Display area</term>
+				<listitem>
+					<para>
+						The display area has different elements, depending
+						on the activated plugins. By default, the display 
+						area contains the database navigator on the left
+						and a placeholder for SQL editors on the right.
+					</para>
+				</listitem>
+			</varlistentry>
+			<varlistentry>
+				<term>Statusleiste</term>
+				<listitem>
+					<para>
+						The statusbar displays information about current 
+						<application>CrunchyFrog</application> activity and
+						contextual information about selected elements.
+					</para>
+				</listitem>
+			</varlistentry>
+		</variablelist>
 	</section>
 </chapter>
