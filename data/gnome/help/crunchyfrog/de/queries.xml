@@ -94,6 +94,22 @@
 				einzelne oder um mehrere aufeinander folgende Abfragen handelt.
 			</para>
 		</caution>
+		<tip>
+			<para>
+				Abfragen können Platzhalter entalten, die vor der Ausführung einer
+				Abfrage in einem Dialog durch konkrete Werte erstetzt werden.
+				Platzhalter beginnen mit einem Dollar-Zeichen.
+			</para>
+			<para>
+				Diese Funktion kann in den Einstellungen unter
+				<menuchoice>
+					<guilabel>Editor</guilabel>
+					<guilabel>Allgemein</guilabel>
+					<guilabel>Variablen ersetzen</guilabel>
+				</menuchoice>
+				deaktiviert werden.
+			</para>
+		</tip>
   	</section>
   	<section id="queries_results">
   		<title>Abfrageergebnisse</title>
