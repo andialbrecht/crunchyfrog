@@ -3,30 +3,203 @@
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 <chapter id="crunchyfrog-plugins" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
 	<title>Plugins</title>
-	<section id="plugins_working">
+	<para>
+		<application>CrunchyFrog</application> can be extended with plugins.
+		<xref linkend="crunchyfrog-plugins-working" /> describes how to install
+		and activate plugins; 
+		<xref linkend="crunchyfrog-plugins-builtin" /> presents some plugins 
+		distributed with <application>CrunchyFrog</application>;
+		<xref linked="crunchyfrog-plugins-dev" /> gives some short notes
+		about developing your own plugins.
+	</para>
+	<section id="crunchyfrog-plugins-working">
   		<title>Working with Plugins</title>
-  		 local, plugin folder, repo
-  		 activate, deactivate
-  		<para>TODO</para>
+  		<para>
+  			Plugins are managed within the preferences dialog:
+  			<menuchoice>
+  				<guimenu>File</guimenu>
+  				<guimenuitem>Preferences</guimenuitem>
+  				<guilabel>Plugins</guilabel>
+  			</menuchoice>.
+  		</para>
+  		<para>
+  			A list of all available plugins grouped by categories is shown
+  			on the left. Only plugins available locally are displayed by 
+  			default. Activate the <guilabel>Enable repository</guilabel> 
+  			checkbox to display plugins that are available online too.
+  		</para>
+  		<para>
+  			To activate a plugin, activate the checkbox in front of the
+  			plugin's name. If a plugin you are about to activate is 
+  			available online, you will be asked if you want to download
+  			this plugin now.
+  		</para>
+  		<para>
+  			With the buttons on the right you can perform the following
+  			actions:
+  		</para>
+  		<variablelist>
+  			<varlistentry>
+  				<term>Install plugin</term>
+  				<listitem>
+  					<para>
+  						Install plugins locally from a
+  						<filename>*.zip</filename> file. 
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>About this plugin</term>
+  				<listitem>
+  					<para>
+  						Shows additional information about a selected plugin.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>Configure plugin</term>
+  				<listitem>
+  					<para>
+  						Opens a dialog where you can configure a plugin.
+  						This button is active if a plugin provides it's own
+  						preferences.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>Open plugin folder</term>
+  				<listitem>
+  					<para>
+  						Opens your default file manager with the user's plugin
+  						directory (<filename>~/.crunchyfrog/plugins</filename>).
+  						Changes in this folder become active without restarting
+  						<application>CrunchyFrog</application>.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term>Synchronize</term>
+  				<listitem>
+  					<para>
+  						Synchronize the list of plugins available online.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  		</variablelist>
   	</section>
   	
-  	<section id="crunchyfrog-plugins_export">
-  		<title>Data Export Plugins</title>
-  		<para>TODO</para>
-  	</section>
+  	<section id="crunchyfrog-plugins-builtin">
+  		<title>Builtin Plugins</title>
   	
-  	<section id="plugins_sqllibrary">
-  		<title>SQL Library Plugin</title>
-  		<para>TODO</para>
-  	</section>
+	  	<section id="crunchyfrog-plugins-backends">
+	  		<title>Database backends</title>
+	  		<variablelist>
+	  			<varlistentry>
+	  				<term>LDAP</term>
+	  				<listitem>
+	  					<para>LDAP server backend</para>
+	  				</listitem>
+	  			</varlistentry>
+	  			<varlistentry>
+	  				<term>MySQL</term>
+	  				<listitem>
+	  					<para>MySQL backend (version 5 and higher)</para>
+	  				</listitem>
+	  			</varlistentry>
+	  			<varlistentry>
+	  				<term>PostgreSQL</term>
+	  				<listitem>
+	  					<para>PostgreSQL backend (version 8.1 and higher)</para>
+	  				</listitem>
+	  			</varlistentry>
+	  			<varlistentry>
+	  				<term>SQLite3</term>
+	  				<listitem>
+	  					<para>SQLite3 backend</para>
+	  				</listitem>
+	  			</varlistentry>
+	  		</variablelist>
+	  	</section>
+	  	
+	  	<section id="crunchyfrog-plugins_export">
+	  		<title>Export</title>
+	  		<variablelist>
+	  			<varlistentry>
+	  				<term>CSV</term>
+	  				<listitem>
+	  					<para>Export results as CSV files</para>
+	  				</listitem>
+	  			</varlistentry>
+	  			<varlistentry>
+	  				<term>OpenDocument</term>
+	  				<listitem>
+	  					<para>Export results as OpenDocument sheets</para>
+	  				</listitem>
+	  			</varlistentry>
+	  		</variablelist>
+	  	</section>
+	  	
+	  	<section id="crunchyfrog-plugins_sqllibrary">
+	  		<title>SQL Library</title>
+	  		<para>
+	  			This plugins extends the menubar with an <guimenu>Library</guimenu>
+	  			menu. Choose <guimenuitem>Add to library</guimenuitem> from
+	  			this menu to add the content of the current SQL editor
+	  			to your SQL library. Statements in your SQL library can be
+	  			categorized.
+	  		</para>
+	  		<para>
+	  			The SQL library is intended as some kind of clipboard for
+	  			commonly used statements.
+	  		</para>
+	  	</section>
+	  	
+	  	<section id="crunchyfrog-plugins_cfshell">
+	  		<title>Python Shell</title>
+	  		<para>
+	  			The Python shell is mainly identend for plugin developers. It
+	  			can be used to debug plugins and access
+	  			<application>CrunchyFrog</application> internals.
+	  		</para>
+	  		<tip>
+	  			For further information about the Python shell read the
+	  			<ulink url="http://code.google.com/p/crunchyfrog/wiki/PythonShell">Wiki</ulink>
+	  			and the <ulink url="http://cf.andialbrecht.de/api/index.html">API documentation</ulink>.
+	  		</tip>
+	  	</section>
+	  	
+	</section>
   	
-  	<section id="plugins_cfshell">
-  		<title>Python Console Plugin</title>
-  		<para>TODO</para>
-  	</section>
-  	
-  	<section id="plugins_dev">
+  	<section id="crunchyfrog-plugins-dev">
   		<title>Plugin Development</title>
-  		<para>TODO</para>
+  		<para>
+  			If you want to extend <application>CrunchyFrog</application>'s 
+  			functions please read the following documentations:
+  		</para>
+  		<variablelist>
+  			<varlistentry>
+  				<term><ulink url="http://code.google.com/p/crunchyfrog/wiki/PluginDevelopment">Plugin Development</ulink></term>
+  				<listitem>
+  					<para>
+  						Some notes about the most important classes and functions
+  						to develop your own plugin.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  			<varlistentry>
+  				<term><ulink url="http://cf.andialbrecht.de/api/index.html">API Documentation</ulink></term>
+  				<listitem>
+  					<para>
+  						Complete documentation of <application>CrunchyFrog</application>'s
+  						API.
+  					</para>
+  				</listitem>
+  			</varlistentry>
+  		</variablelist>
+  		<para>
+  			If you have downloaded the source distribution of
+  			<application>CrunchyFrog</application> you will find a simple 
+  			example plugin in the <filename>docs</filename> folder.
+  		</para>
   	</section>
 </chapter>
