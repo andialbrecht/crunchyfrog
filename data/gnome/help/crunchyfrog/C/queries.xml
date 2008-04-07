@@ -2,187 +2,201 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
 "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 <chapter id="crunchyfrog-queries" lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
-	<title>Datenbankabfragen</title>
+	<title>Database Queries</title>
 	<section id="sqleditor">
-		<title>SQL-Editor</title>
+		<title>SQL Editor</title>
 		<para>
-			Ein SQL-Editor kann wie folgt geöffnet werden:
+			A SQL editor can be opened in the following ways:
 		</para>
 		<variablelist>
 			<varlistentry>
-				<term>Menüleiste</term>
-				<listitem><para>Wählen Sie
+				<term>Menubar</term>
+				<listitem><para>Choose
 					<menuchoice>
-						<guimenu>Datei</guimenu>
-						<guisubmenu>Neu</guisubmenu>
-						<guimenuitem>Abfrage</guimenuitem>
+						<guimenu>File</guimenu>
+						<guisubmenu>New</guisubmenu>
+						<guimenuitem>Query</guimenuitem>
 					</menuchoice></para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Werkzeugleiste</term>
+				<term>Toolbar</term>
 				<listitem>
-					<para>Wählen Sie die erste Schaltfläche</para>
+					<para>Click on the first button</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Tastaturkürzel</term>
+				<term>Shortcut Key</term>
 				<listitem>
 					<para>
-						Drücken Sie <keycombo><keycap>Strg</keycap><keycap>N</keycap></keycombo>
+						Press <keycombo><keycap>Ctrl</keycap><keycap>N</keycap></keycombo>
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
 				<term>Navigator</term>
 				<listitem>
-					<para>Doppelklick auf eine Datenquelle</para>
+					<para>Double click on any datasource</para>
 				</listitem>
 			</varlistentry>
 		</variablelist>
 		<tip>
-			Außer beim Öffnen über den Navigator wird einem neuen SQL-Editor keine
-			Datenbankverbindung automatisch zugewiesen.
+			Except when opening an editor by double-clicking on a datasource
+			in the navigator, a new SQL editor is not bound to a connection.
 		</tip>
 		<para>
-			Ein SQL-Editor ist in drei Teile unterteilt:
+			A SQL editor has three parts:
 		</para>
 		<variablelist>
 			<varlistentry>
-				<term>Abfrage</term>
+				<term>Query</term>
 				<listitem>
-					<para>Textfeld zur Eingabe der Abfragen</para>
+					<para>Textarea to enter queries</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Ergebnisbereich</term>
+				<term>Results Panel</term>
 				<listitem>
 					<para>
-						Der Ergebnisbereich unterhalb des Textfeldes hat die
-						drei Reiter <guilabel>Ergebnisse</guilabel>, 
-						<guilabel>Explain</guilabel> und <guilabel>Meldungen</guilabel>.
+						The results panel below the textarea has the three
+						tabs <guilabel>Results</guilabel>, <guilabel>Explain</guilabel>
+						and <guilabel>Messages</guilabel>.
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>Statuszeile</term>
+				<term>Statusbar</term>
 				<listitem>
 					<para>
-						Unterhalb des Ergebnisbereichs findet sich eine Statuszeile,
-						die über die momentane Aktivität des SQL-Editors informiert.
+						Each SQL editor has a statusbar below the results panel.
+						It informs you about the current activities of an 
+						SQL editor.
 					</para>
 				</listitem>
 			</varlistentry>
 		</variablelist>
 	</section>
 	<section id="queries_execute">
-  		<title>Abfragen ausführen</title>
+  		<title>Execute Queries</title>
   		<para>
-  			Eine Abfrage kann mit <keycode>F5</keycode> oder über
-  			die Schaltfläche in der Werkzeugleiste ausgeführt werden. Das Ergebnis
-  			der Abfrage wird nach Beendigung der Abfrage im Ergebnisbereich angezeigt.
+  			To execute a query press <keycode>F5</keycode> or
+  			click on the execute button in the toolbar. The result of
+  			a query will be displayed in the results panel, when the
+  			query has finished.
   		</para>
   		<caution>
 			<para>
-				Im SQL-Editor ist derzeit kein SQL-Parser integriert.
-				Enthält der SQL-Editor, bzw. der selektierte Text,
-				mehrere Abfragen, werden bei der Ausführung die Abfragen
-				als Ganzes der Datenbankverbindung übergeben. Als Rückgabewert
-				oder Ergebnis des Vorgangs kann jedoch nur das Ergebnis der
-				letzten Abfrage ermittelt werden, da aufgrund der fehlenden
-				SQL-Analyse nicht ermittelt werden kann, ob es sich um eine 
-				einzelne oder um mehrere aufeinander folgende Abfragen handelt.
+				Unfortunately the SQL editor has no integrated SQL parser
+				for now. If the SQL editor or the selected text has more
+				then one statement, all statements are executed by the
+				current connection at once.
+				But only the return value or the result of the last query
+				will be displayed in the results pane.
 			</para>
 		</caution>
 		<tip>
 			<para>
-				Abfragen können Platzhalter entalten, die vor der Ausführung einer
-				Abfrage in einem Dialog durch konkrete Werte erstetzt werden.
-				Platzhalter beginnen mit einem Dollar-Zeichen.
+				Statements can contain placholders. Placeholders begin with
+				a dollar sign followed by one or more letters and numbers.
+				If you user placeholders a dialog pops up before the query is
+				executed where you can replace the placeholders with concrete
+				values.
 			</para>
 			<para>
-				Diese Funktion kann in den Einstellungen unter
+				To disable this function open the preferences dialog:
 				<menuchoice>
 					<guilabel>Editor</guilabel>
-					<guilabel>Allgemein</guilabel>
-					<guilabel>Variablen ersetzen</guilabel>
+					<guilabel>General</guilabel>
+					<guilabel>Replace variables</guilabel>
 				</menuchoice>
-				deaktiviert werden.
 			</para>
 		</tip>
   	</section>
   	<section id="queries_results">
-  		<title>Abfrageergebnisse</title>
+  		<title>Query Results</title>
   		<para>
-  			Liefert eine Abfrage Ergebnisse zurück, werden diese im
-  			Ergebnisbereich im Reiter <guilabel>Ergebnisse</guilabel>
-  			angezeigt.
+  			If a query returns data from your database, they are displayed
+  			in the results panel within the <guilabel>Results</guilabel>
+  			tab.
   		</para>
   		<caution>
   			<para>
-  				Es werden immer <emphasis role="bold">alle</emphasis> zurückgelieferten Zeilen einer Abfrage
-  				angezeigt. Unter Umständen kann dies zu Performanceproblemen
-  				führen.
+  				<application>CrunchyFrog</application> displays alwas
+  				<emphasis role="bold">all</emphasis> returned rows.
+  				This can result in perfomance issues under some circumstances.
   			</para>
   			<para>
-  				Ob es zu Performanceeinbußen kommt ist sowohl von der Anzahl der
-  				Zeilen, als auch von der Anzahl der Spalten abhängig. Eine Abfrage,
-  				die über 350.000 Zeilen mit je 12 Spalten zurückliefert kann
-  				in der Darstellung performanter sein, als eine Abfrage, die nur
-  				knapp 10.000 Zeilen mit sehr vielen Spalten liefert.
+  				If displaying a huge dataset results in performance issues
+  				depends on both the number of rows and the number of
+  				columns that are displayed in the data grid.
+  				A query that returns 350.000 rows with 12 columns could
+  				result in better performance of the result grid than a
+  				query that returns only 10.000 rows with a lot of 
+  				columns.
   			</para>
   		</caution>
   		<para>
-  			In der Ergebnisliste kann wie folgt selektiert werden:
+  			You can select parts of the data displayed in the data grid
+  			in the following ways:
   		</para>
   		<variablelist>
   			<varlistentry>
-  				<term>Zeilen</term>
+  				<term>Rows</term>
   				<listitem>
-  					<para>Zeilen können durch Klick auf die Zeilennummern in der ersten Spalte selektiert werden.</para>
+  					<para>
+  						Click on the row number in the first column to select
+  						a whole row.
+  					</para>
   				</listitem>
   			</varlistentry>
   			<varlistentry>
-  				<term>Spalten</term>
+  				<term>Columns</term>
   				<listitem>
-  					<para>Spalten können durch Klick auf die Spaltenüberschriften selektiert werden.</para>
+  					<para>
+  						Click on the column header to select a whole column.
+  					</para>
   				</listitem>
   			</varlistentry>
   			<varlistentry>
-  				<term>Zellen</term>
+  				<term>Cells</term>
   				<listitem>
-  					<para>Einzelne oder mehrere Zellen werden duch Anklicken der jeweiligen Zellen selektiert.</para>
+  					<para>
+  						Click on a cell to select individual cells.
+  					</para>
   				</listitem>
   			</varlistentry>
   			<varlistentry>
-  				<term>Alles selektieren/deselektieren</term>
+  				<term>Select/Unselect All</term>
   				<listitem>
-  					<para>Durch Klick auf die erste Zelle (links oben) werden alle Zellen selektiert oder deselektiert.</para>
+  					<para>
+  						To select or unselect all cells click on the first (top left)
+  						cell.
+  					</para>
   				</listitem>
   			</varlistentry>
   		</variablelist>
   		<para>
-  			Selektierte Zellen, Spalten oder Zeilen können durch Klick auf die
-  			<guibutton>Kopieren</guibutton>-Schaltfläche der Ergebnisliste in 
-  			den Zwischenspeicher kopiert werden. Klicken Sie auf die
-  			<guibutton>Exportieren</guibutton>-Schaltfläche, um Abfrageerbebnisse
-  			in eine Datei zu exportieren. Falls zuvor Zellen, Spalten oder Zeilen
-  			selektiert wurden, kann im Export-Dialog ausgewählt werden, ob alle
-  			Ergebnisse oder nur die selektierten exportiert werden sollen.
+  			Click on the <guibutton>Copy</guibutton> button in the toolbar
+  			in an editor to copy selected cells, columns or rows to the
+  			clipboard.
+  			To export the dataset click on the <guibutton>Export</guibutton>
+  			button in the toolbar. If you have made a selection before,
+  			the export dialog gives you an option to export only the selected
+  			data.
   		</para>
   		<tip>
-  			<para>In <xref linkend="crunchyfrog-plugins_export" /> finden Sie weitere Informationen
-  			zu den verfügbaren Exportformaten.</para>
+  			<para>
+  				See <xref linkend="crunchyfrog-plugins_export" /> for all available
+  				export formats.
+  			</para>
   		</tip>
   	</section>
   	<section id="queries_transactions">
-  		<title>Transaktionen</title>
+  		<title>Transactions</title>
   		<para>
-  			Sofern ein Datenbank-Backend Transaktionen unterstützt, können über
-  			die Werkzeugleiste die Aktionen <guibutton>Transaktion beginnen</guibutton>,
-  			<guibutton>Commit</guibutton> und <guibutton>Rollback</guibutton>
-  			ausgelöst werden. Der Transaktionsstatus kann natürlich auch über
-  			das Ausführen einer entsprechenden Abfrage geändert werden.
+  			If it's supported by the database backend, transactions can be
+  			used using the buttons in the toolbar. The transaction state
+  			can be changed by statements executed in the editor, too.
   		</para>
   	</section>
 </chapter>
