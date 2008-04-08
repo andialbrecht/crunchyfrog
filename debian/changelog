@@ -1,3 +1,9 @@
+crunchyfrog (0.2.0-1ubuntu) experimental; urgency=low
+
+  * First official public release.
+
+ -- Andi Albrecht <albrecht.andi@gmail>  Tue, 08 Apr 2008 06:27:11 +0200
+ 
 crunchyfrog (0.2.0~beta2-1ubuntu) experimental; urgency=low
 
   * Many bug fixes and improvements.

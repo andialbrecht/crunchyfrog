@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: crunchyfrog
-Version: 0.2.0-beta2
+Version: 0.2.0
 Summary: Database navigator and query tool for GNOME
 Home-page: http://cf.andialbrecht.de
 Author: Andi Albrecht
@@ -22,7 +22,7 @@ Description: CrunchyFrog is a database navigator and SQL editor
         
         Check out the homepage for the most recent version and details.
 Platform: UNKNOWN
-Classifier: Development Status :: 3 - Alpha
+Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: X11 Applications :: Gnome
 Classifier: Environment :: X11 Applications :: GTK
 Classifier: Intended Audience :: Developers

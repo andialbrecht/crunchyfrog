@@ -23,7 +23,7 @@ setup(
     license="GPL",
     url=release.url,
     classifiers = [
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 4 - Beta",
         "Environment :: X11 Applications :: Gnome",
         "Environment :: X11 Applications :: GTK",
         "Intended Audience :: Developers",

@@ -1,5 +1,118 @@
+2008-04-07  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* data/gnome/help/crunchyfrog/C/queries.xml: user manual: queries
+	  (en)
+	* data/gnome/help/crunchyfrog/C/queries.xml: user manual: queries
+	  (en)
+
+2008-04-05  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* data/gnome/help/crunchyfrog/C/schema.xml: user manual: navigator
+	  (en)
+	* data/gnome/help/crunchyfrog/C/shortcuts.xml,
+	  data/gnome/help/crunchyfrog/de/shortcuts.xml: user manual:
+	  shortcuts (en, de: typo)
+	* data/gnome/help/crunchyfrog/de/queries.xml: user manual: query
+	  variables (de)
+	* data/gnome/help/crunchyfrog/C/plugins.xml: user manual: plugins
+	  (en)
+	* data/gnome/help/crunchyfrog/C/datasources.xml,
+	  data/gnome/help/crunchyfrog/C/getting_started.xml: user manual:
+	  datasources, getting started (en(
+
+2008-04-04  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* data/gnome/help/crunchyfrog/C/crunchyfrog.xml,
+	  data/gnome/help/crunchyfrog/C/figures,
+	  data/gnome/help/crunchyfrog/C/figures/cf-main.png,
+	  data/gnome/help/crunchyfrog/de/cfabout.xml,
+	  data/gnome/help/crunchyfrog/de/crunchyfrog.xml,
+	  data/gnome/help/crunchyfrog/de/datasources.xml,
+	  data/gnome/help/crunchyfrog/de/figures/cf-main_orig.png,
+	  data/gnome/help/crunchyfrog/de/getting_started.xml,
+	  data/gnome/help/crunchyfrog/de/introduction.xml,
+	  data/gnome/help/crunchyfrog/de/plugins.xml,
+	  data/gnome/help/crunchyfrog/de/prefs.xml,
+	  data/gnome/help/crunchyfrog/de/queries.xml,
+	  data/gnome/help/crunchyfrog/de/schema.xml,
+	  data/gnome/help/crunchyfrog/de/shortcuts.xml,
+	  extras/plugins/django_backend,
+	  extras/plugins/django_backend/Makefile,
+	  extras/plugins/django_backend/django_backend,
+	  extras/plugins/django_backend/django_backend/__init__.py: *
+	  Django backend
+	  * Figures (C)
+	  * user manual: plugins (de)
+	* cf/ui/prefs.py: plugin prefs: activate checkbox moved to first
+	  position
+	* data/gnome/help/crunchyfrog/de/plugins.xml: user manual: plugins
+	  (de)
+
+2008-04-02  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* data/gnome/help/crunchyfrog/C/crunchyfrog.xml,
+	  data/gnome/help/crunchyfrog/C/getting_started.xml,
+	  data/gnome/help/crunchyfrog/C/plugins.xml,
+	  data/gnome/help/crunchyfrog/C/queries.xml,
+	  data/gnome/help/crunchyfrog/de,
+	  data/gnome/help/crunchyfrog/de/cfabout.xml,
+	  data/gnome/help/crunchyfrog/de/crunchyfrog.xml,
+	  data/gnome/help/crunchyfrog/de/datasources.xml,
+	  data/gnome/help/crunchyfrog/de/fdl.xml,
+	  data/gnome/help/crunchyfrog/de/figures,
+	  data/gnome/help/crunchyfrog/de/figures/cf-main.png,
+	  data/gnome/help/crunchyfrog/de/figures/cf-main_orig.png,
+	  data/gnome/help/crunchyfrog/de/getting_started.xml,
+	  data/gnome/help/crunchyfrog/de/introduction.xml,
+	  data/gnome/help/crunchyfrog/de/plugins.xml,
+	  data/gnome/help/crunchyfrog/de/prefs.xml,
+	  data/gnome/help/crunchyfrog/de/queries.xml,
+	  data/gnome/help/crunchyfrog/de/schema.xml,
+	  data/gnome/help/crunchyfrog/de/shortcuts.xml: some parts of the
+	  user manual (de)
+
+2008-03-31  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* cf/instance.py, cf/ui/datasources.py, data/crunchyfrog.glade,
+	  data/gnome/help/crunchyfrog/C/datasources.xml: user manual
+	  (datasources)
+
+2008-03-29  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* Makefile: user manual (genearation)
+	* data/gnome/help/crunchyfrog/C/cfabout.xml,
+	  data/gnome/help/crunchyfrog/C/crunchyfrog.xml,
+	  data/gnome/help/crunchyfrog/C/datasources.xml,
+	  data/gnome/help/crunchyfrog/C/fdl.xml,
+	  data/gnome/help/crunchyfrog/C/getting_started.xml,
+	  data/gnome/help/crunchyfrog/C/introduction.xml,
+	  data/gnome/help/crunchyfrog/C/plugins.xml,
+	  data/gnome/help/crunchyfrog/C/prefs.xml,
+	  data/gnome/help/crunchyfrog/C/queries.xml,
+	  data/gnome/help/crunchyfrog/C/schema.xml,
+	  data/gnome/help/crunchyfrog/C/shortcuts.xml,
+	  data/gnome/help/crunchyfrog/de: user manual (structure)
+
+2008-03-28  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* cf/__init__.py: missing gnome_init re-implemented
+
+2008-03-27  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* cf/plugins/core.py: app.get_instances() instead of
+	  app.get_data("instances") (issue #5)
+	* cf/ui/editor.py, cf/ui/widgets/__init__.py: connection handling
+	  fixes
+
 2008-03-26  Andi Albrecht <albrecht.andi@gmail.com>
 
+	* debian/changelog: changelog
+	* README: README updated
+	* ChangeLog: ChangeLog updated
+	* crunchyfrog.egg-info/PKG-INFO: PKG-INFO modified
+	* README: README updated
+	* crunchyfrog.egg-info/PKG-INFO, crunchyfrog.egg-info/SOURCES.txt:
+	  egg-info updated
 	* Makefile, cf/__init__.py, cf/app.py, cf/dbus_manager.py,
 	  cf/instance.py, cf/ui/queries.py, crunchyfrog.egg-info/PKG-INFO,
 	  crunchyfrog.egg-info/SOURCES.txt, data/crunchyfrog.glade,
