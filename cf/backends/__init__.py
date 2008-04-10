@@ -69,6 +69,7 @@ class DBConnection(gobject.GObject):
         self.datasource_info = None
         self.conn_number = None
         self.threadsafety = 0
+        self.coding_hint = "utf-8"
         self._transaction_state = TRANSACTION_IDLE
         self.__gobject_init__()
         
@@ -146,6 +147,7 @@ class Query(gobject.GObject):
         self.failed = False
         self.executed = False
         self.execution_time = None
+        self.coding_hint = "utf-8"
         self.errors = list()
         
     def execute(self, threaded=False):

@@ -179,6 +179,7 @@ class Editor(GladeWidget):
         def exec_threaded(statement):
             cur = self.connection.cursor() 
             query = Query(statement, cur)
+            query.coding_hint = self.connection.coding_hint
             gtk.gdk.threads_enter()
             query.connect("started", self.on_query_started)
             query.connect("finished", self.on_query_finished, tag_notice)
@@ -213,6 +214,7 @@ class Editor(GladeWidget):
         else:
             cur = self.connection.cursor()
             query = Query(statement, cur)
+            query.coding_hint = self.connection.coding_hint
             query.connect("finished", self.on_query_finished, tag_notice)
             query.execute()
             
@@ -587,7 +589,8 @@ class ResultList(GladeWidget):
         self.query = query
         self.grid.reset()
         if self.query.description:
-            self.grid.set_result(self.query.rows, self.query.description)
+            self.grid.set_result(self.query.rows, self.query.description,
+                                 self.query.coding_hint)
 
             
 

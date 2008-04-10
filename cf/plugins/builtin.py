@@ -31,6 +31,8 @@ try: from cf.backends.postgres import PostgresBackend
 except ImportError: pass
 try: from cf.backends.sqlite import SQLiteBackend
 except ImportError: pass
+try: from cf.backends.mssql import MsSQLBackend
+except ImportError: pass
 
 from cf.shell import CFShell
 from cf.library import SQLLibraryPlugin

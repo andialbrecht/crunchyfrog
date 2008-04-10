@@ -115,8 +115,9 @@ class Grid(gtk.TreeView):
         self.set_headers_clickable(True)
         self.set_fixed_height_mode(True)
         
-    def _setup_model(self, rows, description):
-        model = GridModel(rows, description, self.get_style())
+    def _setup_model(self, rows, description, coding_hint):
+        model = GridModel(rows, description, self.get_style(),
+                          coding_hint=coding_hint)
         old_model = self.get_model()
         if old_model:
             del old_model
@@ -435,7 +436,7 @@ class Grid(gtk.TreeView):
         self.queue_draw()
         self.emit("selection-changed", model.selected_cells)
     
-    def set_result(self, rows, description):
+    def set_result(self, rows, description, coding_hint="utf-8"):
         """Sets the result and updates the grid
         
         :Parameter:
@@ -446,7 +447,7 @@ class Grid(gtk.TreeView):
         """
         self.description = description
         self._setup_columns(rows)
-        self._setup_model(rows, description)
+        self._setup_model(rows, description, coding_hint)
         
     def unselect_cells(self):
         """Unselects all cells"""
@@ -480,7 +481,7 @@ class GridModel(gtk.GenericTreeModel):
     .. _FastListModel: http://www.google.com/codesearch?hl=de&q=+lang:python+GenericTreeModel+show:VRnMlwyOXFM:6NW9oRiVVfg:ANlgLtp-rX8&sa=N&cd=20&ct=rc&cs_p=http://ftp.tr.freebsd.org/pub/FreeBSD/distfiles/nicotine%2B-1.2.6.tar.bz2&cs_f=nicotine%2B-1.2.6/pynicotine/gtkgui/utils.py#first
     """
     
-    def __init__(self, rows, description, style):
+    def __init__(self, rows, description, style, coding_hint="utf-8"):
         """
         The constructor takes three arguments:
         
@@ -496,6 +497,7 @@ class GridModel(gtk.GenericTreeModel):
         self.rows = rows
         self.description = description
         self.style = style
+        self.coding_hint = coding_hint
         self.selected_cells = list()
         
     def _get_markup_for_value(self, value, strip_length=True, markup=True):
@@ -512,7 +514,7 @@ class GridModel(gtk.GenericTreeModel):
                 value = str(buffer)
         else:
             if isinstance(value, str):
-                value = unicode(value, "utf-8")
+                value = unicode(value, self.coding_hint)
             elif isinstance(value, unicode):
                 pass
             else:
