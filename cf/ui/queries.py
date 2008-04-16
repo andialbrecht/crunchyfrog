@@ -34,6 +34,7 @@ class QueriesNotebook(gtk.Notebook):
         self.app = app
         self.instance = instance
         gtk.Notebook.__init__(self)
+        self.set_scrollable(True)
         self.popup_disable()
         self.set_property("enable-popup", False)
         self.connect("switch-page", self.on_switch_page)
