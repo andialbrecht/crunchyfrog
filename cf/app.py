@@ -89,6 +89,7 @@ class CFApplication(gobject.GObject):
         self.plugins = PluginManager(self)
         self.datasources = DatasourceManager(self)
         self.dbus_service = CFService(self)
+        self.recent_manager = gtk.recent_manager_get_default()
         
     def new_instance(self, args=None):
         """Creates a new instances.

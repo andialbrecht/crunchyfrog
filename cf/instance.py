@@ -40,6 +40,7 @@ from cf.ui.queries import QueriesNotebook
 from cf.ui.statusbar import CFStatusbar
 from cf.ui.toolbar import CFToolbar
 from cf.ui.widgets import ConnectionButton
+from cf.ui.confirmsave import ConfirmSaveDialog
 
 class CFInstance(GladeWidget):
     
@@ -56,6 +57,7 @@ class CFInstance(GladeWidget):
         GladeWidget.__init__(self, app, "crunchyfrog", "mainwindow")
         self._editor = None
         self._editor_conn_tag = None
+        self._editors = list()
         
     def _setup_widget(self):
         # Window state
@@ -89,6 +91,17 @@ class CFInstance(GladeWidget):
         self.dock.add_item(item)
         self.browser.set_data("dock_item", item)
         gobject.idle_add(self.xml.get_widget("mn_navigator").set_active, self.app.config.get("navigator.visible", True))
+        # Menu bar
+        recent_menu = gtk.RecentChooserMenu(self.app.recent_manager)
+        filter = gtk.RecentFilter()
+        filter.add_mime_type("text/x-sql")
+        recent_menu.add_filter(filter)
+        recent_menu.set_filter(filter)
+        recent_menu.set_show_not_found(False)
+        recent_menu.set_sort_type(gtk.RECENT_SORT_MRU)
+        recent_menu.connect("item-activated", self.on_recent_item_activated)
+        recent_item = self.xml.get_widget("mn_recent")
+        recent_item.set_submenu(recent_menu)
     
     def _init_ui(self, argv):
         pass
@@ -149,6 +162,9 @@ class CFInstance(GladeWidget):
             return
         self._editor.textview.get_buffer().cut_clipboard(self._get_clipboard(), True)
         
+    def on_recent_item_activated(self, chooser):
+        self.new_editor(chooser.get_current_uri())
+        
     def on_delete(self, *args):
         if not self._editor:
             return
@@ -198,6 +214,26 @@ class CFInstance(GladeWidget):
         filter.add_pattern("*.sql")
         dlg.add_filter(filter)
         dlg.set_filter(filter)
+        recent_chooser = gtk.RecentChooserWidget(self.app.recent_manager)
+        filter = gtk.RecentFilter()
+        filter.add_mime_type("text/x-sql")
+        filter.set_name(_(u"SQL files (*.sql)"))
+        recent_chooser.add_filter(filter)
+        recent_chooser.set_filter(filter)
+        recent_chooser.set_show_not_found(False)
+        recent_chooser.set_sort_type(gtk.RECENT_SORT_MRU)
+        recent_chooser.set_show_icons(True)
+        recent_chooser.set_show_tips(True)
+        def dlg_set_uri(chooser, dlg):
+            if chooser.get_current_uri():
+                dlg.set_uri(chooser.get_current_uri())
+        recent_chooser.connect("selection-changed", dlg_set_uri, dlg)
+        recent_chooser.connect("item-activated", lambda chooser: dlg.response(gtk.RESPONSE_OK))
+        exp = gtk.Expander(_(u"_Recent files:"))
+        exp.add(recent_chooser)
+        exp.set_use_underline(True)
+        dlg.set_extra_widget(exp)
+        recent_chooser.show()
         if dlg.run() == gtk.RESPONSE_OK:
             self.new_editor(dlg.get_filename())
             self.app.config.set("editor.recent_folder", dlg.get_current_folder())
@@ -229,6 +265,8 @@ class CFInstance(GladeWidget):
         self.new_editor()
         
     def on_quit(self, *args):
+        if not self.check_unsaved_changes():
+            return
         self.widget.destroy()
         
     def on_window_state_event(self, win, event):
@@ -256,7 +294,27 @@ class CFInstance(GladeWidget):
         else:
             self.queries.attach(editor)
         editor.show_all()
+        self._editors.append(editor)
         return editor
+    
+    def check_unsaved_changes(self):
+        changed_editors = list()
+        for editor in self._editors:
+            if editor.contents_changed():
+                changed_editors.append(editor)
+        if changed_editors:
+            dlg = ConfirmSaveDialog(self, changed_editors)
+            resp = dlg.run()
+            if resp == 1:
+                ret = dlg.save_files()
+            elif resp == 2:
+                ret = True
+            else:
+                ret = False
+            dlg.destroy()
+        else:
+            ret = True
+        return ret
         
     def open_website(self, url):
         gnome.url_show(url)

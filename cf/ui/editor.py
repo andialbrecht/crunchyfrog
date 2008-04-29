@@ -34,6 +34,7 @@ import os
 import string
 
 from gettext import gettext as _
+from kiwi.ui import dialogs
 
 from cf.backends import Query
 from cf.ui import GladeWidget
@@ -41,6 +42,8 @@ from cf.ui.toolbar import CFToolbar
 from cf.ui.widgets import DataExportDialog
 from cf.ui.widgets.grid import Grid
 from cf.ui.widgets.sqlview import SQLView
+from cf.ui.confirmsave import ConfirmSaveDialog
+
     
 
 class Editor(GladeWidget):
@@ -151,10 +154,22 @@ class Editor(GladeWidget):
         gobject.idle_add(self.show_in_separate_window)
         
     def close(self):
-        if self.get_data("win"):
-            self.get_data("win").close()
+        dlg = ConfirmSaveDialog(self, [self])
+        resp = dlg.run()
+        if resp == 1:
+            ret = dlg.save_files()
+        elif resp == 2:
+            ret = True
         else:
-            self.destroy()
+            ret = False
+        dlg.destroy()
+        if ret:
+            if self.get_data("win"):
+                self.get_data("win").destroy()
+            else:
+                self.destroy()
+            self.instance._editors.remove(self)
+            return True
         
     def commit(self):
         if not self.connection: return
@@ -250,6 +265,7 @@ class Editor(GladeWidget):
             a = ""
         self._filecontent_read = a
         self.textview.get_buffer().set_text(a)
+        self.app.recent_manager.add_item(gnomevfs.get_uri_from_local_path(filename))
         
     def get_filename(self):
         return self._filename
@@ -260,9 +276,22 @@ class Editor(GladeWidget):
             return buffer.get_text(*buffer.get_bounds()) != self._filecontent_read
         return False
     
-    def save_file(self, parent=None):
+    def contents_changed(self):
+        if self._filename:
+            return self.file_contents_changed()
+        elif len(self.get_text()) == 0:
+            return False
+        return True
+    
+    def file_confirm_save(self):
+        dlg = dialogs.yesno(_(u"Save file %(name)s before closing the editor?") % {"name":os.path.basename(self._filename)})
+        if dlg == gtk.RESPONSE_YES:
+            return self.save_file_as()
+        return True
+    
+    def save_file(self, parent=None, default_name=None):
         if not self._filename:
-            return self.save_file_as(parent=parent)
+            return self.save_file_as(parent=parent, default_name=default_name)
         buffer = self.get_buffer()
         a = buffer.get_text(*buffer.get_bounds())
         f = open(self._filename, "w")
@@ -270,8 +299,9 @@ class Editor(GladeWidget):
         f.close()
         self._filecontent_read = a
         gobject.idle_add(buffer.emit, "changed")
+        return True
         
-    def save_file_as(self, parent=None):
+    def save_file_as(self, parent=None, default_name=None):
         if not parent:
             parent = self.instance.widget
         dlg = gtk.FileChooserDialog(_(u"Save file"),
@@ -279,7 +309,12 @@ class Editor(GladeWidget):
                             gtk.FILE_CHOOSER_ACTION_SAVE,
                             (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                              gtk.STOCK_SAVE, gtk.RESPONSE_OK))
-        dlg.set_current_folder(self.app.config.get("editor.recent_folder", ""))
+        if self._filename:
+            dlg.set_filename(self._filename)
+        else:
+            dlg.set_current_folder(self.app.config.get("editor.recent_folder", ""))
+            if default_name:
+                dlg.set_current_name(default_name)
         filter = gtk.FileFilter()
         filter.set_name(_(u"All files (*)"))
         filter.add_pattern("*")
@@ -293,7 +328,11 @@ class Editor(GladeWidget):
             self._filename = dlg.get_filename()
             gobject.idle_add(self.save_file)
             self.app.config.set("editor.recent_folder", dlg.get_current_folder())
+            ret = True
+        else:
+            ret = False
         dlg.destroy()
+        return ret
     
     def get_buffer(self):
         return self.textview.get_buffer()
@@ -452,7 +491,7 @@ class EditorWindow(GladeWidget):
         self.update_title()
         
     def close(self):
-        self.destroy()
+        self.editor.close()
         
     def restore_window_state(self):
         if self.app.config.get("querywin.width", -1) != -1:
