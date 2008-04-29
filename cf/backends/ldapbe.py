@@ -283,7 +283,7 @@ class LDAPSearch(GladeWidget):
                 att_set = False
                 for key, value in attrs.items():
                     if key.lower() == att and not att_set:
-                        row.append(value[0])
+                        row.append("\n".join(value))
                         att_set = True
                 if not att_set:
                     row.append("N/A") 
