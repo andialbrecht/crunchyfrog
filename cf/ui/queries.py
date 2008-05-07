@@ -53,8 +53,8 @@ class QueriesNotebook(gtk.Notebook):
             
     def attach(self, editor):
         if editor.get_parent():
-           editor.reparent(self)
-           self.set_tab_label(editor.widget, TabLabel(editor))
+            editor.reparent(self)
+            self.set_tab_label(editor.widget, TabLabel(editor))
         else: 
             self.append_page(editor.widget, TabLabel(editor))
         self.set_tab_reorderable(editor.widget, True)
@@ -70,18 +70,15 @@ class TabLabel(gtk.HBox):
         self.label.set_width_chars(15)
         self.label.set_single_line_mode(True)
         self.label.set_alignment(0, 0.5)
-        eb = gtk.EventBox()
-        eb.add(self.label)
         self.editor = editor
         self.editor.connect("connection-changed", self.on_editor_connection_changed)
-        eb.connect("button-press-event", self.on_button_press_event)
         buffer = self.editor.textview.get_buffer()
         buffer.connect("changed", self.on_buffer_changed)
         self.update_label(buffer)
-        self.pack_start(eb, True, True)
-        self.eb = eb
+        self.pack_start(self.label, True, True)
         btn_close = gtk.Button()
         btn_close.connect("clicked", self.on_button_close_clicked)
+        btn_close.connect("button-press-event", self.on_button_press_event)
         self.add_icon_to_button(btn_close)
         btn_close.set_relief(gtk.RELIEF_NONE)
         self.pack_start(btn_close, False, False)
