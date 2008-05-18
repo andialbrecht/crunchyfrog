@@ -45,18 +45,18 @@ class DatasourceManager(GladeWidget):
         
     def _setup_widget(self):
         # Fix help button
-        btn = self.xml.get_widget("btn_help")
+        btn = self.xml.get_widget("btn_help_ds")
         box = self.xml.get_widget("dialog-action_area8")
         box.set_child_secondary(btn, True)
         # Backends
         cmb = self.xml.get_widget("cmb_backends")
         model = gtk.ListStore(gobject.TYPE_PYOBJECT,
-                              str)
-        model.set_sort_column_id(1, gtk.SORT_ASCENDING)
+                              str, str)
+        model.set_sort_column_id(2, gtk.SORT_ASCENDING)
         cmb.set_model(model)
         cell = gtk.CellRendererText()
         cmb.pack_start(cell, True)
-        cmb.add_attribute(cell, "text", 1)
+        cmb.add_attribute(cell, "markup", 1)
         self._init_backends(model)
         # Saved connections
         tv = self.xml.get_widget("tv_stored_connections")
@@ -87,7 +87,9 @@ class DatasourceManager(GladeWidget):
         from cf.plugins.core import PLUGIN_TYPE_BACKEND
         for be in self.app.plugins.get_plugins(PLUGIN_TYPE_BACKEND, True):
             iter = model.append(None)
-            model.set(iter, 0, be, 1, be.name)
+            model.set(iter, 0, be, 1, be.name, 2, be.name)
+        iter = model.append(None)
+        model.set(iter, 0, -1, 1, "<i>%s</i>" % _(u"Other..."), 2, "Z"*10)
             
     def _on_ask_for_password(self, check):
         return check.get_active()
@@ -268,6 +270,11 @@ class DatasourceManager(GladeWidget):
             if active and item.db_id == active:
                 sel = self.xml.get_widget("tv_stored_connections").get_selection()
                 sel.select_iter(iter)
+                
+    def run_be_info_dialog(self):
+        dlg = BackendInfoDialog(self.app)
+        dlg.run()
+        dlg.destroy()
             
     def select_backend_by_id(self, be_id):
         combo = self.xml.get_widget("cmb_backends")
@@ -283,6 +290,11 @@ class DatasourceManager(GladeWidget):
     
     def set_backend_option_widgets(self, initial_data=None):
         be = self.get_selected_backend()
+        if be == -1:
+            self.run_be_info_dialog()
+            combo = self.xml.get_widget("cmb_backends")
+            combo.set_active(-1)
+            return
         data_widgets = dict()
         if be:
             data_widgets, widgets = be.get_datasource_options_widgets(data_widgets, initial_data)
@@ -306,3 +318,32 @@ class DatasourceManager(GladeWidget):
         vbox.show_all()
         self.set_data("be_widgets", data_widgets)
         self.xml.get_widget("btn_test_connection").set_sensitive(bool(be))
+    
+       
+class BackendInfoDialog(GladeWidget):
+    
+    def __init__(self, app):
+        GladeWidget.__init__(self, app, "crunchyfrog", "backend_info_dialog")
+        self.populate()
+        
+    def _setup_widget(self):
+        self.list = self.xml.get_widget("list_backends")
+        model = gtk.ListStore(str, str)
+        self.list.set_model(model)
+        col = gtk.TreeViewColumn("", gtk.CellRendererPixbuf(), stock_id=0)
+        self.list.append_column(col)
+        col = gtk.TreeViewColumn("", gtk.CellRendererText(), markup=1)
+        self.list.append_column(col)
+        
+    def populate(self):
+        model = self.list.get_model()
+        from cf.plugins.core import PLUGIN_TYPE_BACKEND
+        for be in self.app.plugins.get_plugins(PLUGIN_TYPE_BACKEND):
+            iter = model.append(None)
+            if  self.app.plugins.is_active(be):
+                ico = "gtk-apply"
+                lbl = be.name
+            else:
+                ico = "gtk-dialog-warning"
+                lbl = be.name+"\n"+_(u"Plugin not active")
+            model.set(iter, 0, ico, 1, lbl)
