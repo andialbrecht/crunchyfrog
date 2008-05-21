@@ -1,3 +1,43 @@
+2008-05-18  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* cf/ui/datasources.py, data/crunchyfrog.glade: Info dialog for
+	  installed/available backend plugins
+
+2008-05-07  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* cf/ui/queries.py: UI fix
+
+2008-04-29  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* cf/app.py, cf/instance.py, cf/ui/confirmsave.py, cf/ui/editor.py,
+	  data/crunchyfrog.glade: * recent files support
+	  * save confirm dialog
+	* extras/plugins/httplog_backend,
+	  extras/plugins/httplog_backend/Makefile,
+	  extras/plugins/httplog_backend/httplog_backend,
+	  extras/plugins/httplog_backend/httplog_backend/__init__.py,
+	  extras/plugins/httplog_backend/httplog_backend/apachelogs.py:
+	  HTTP log file backend
+	* cf/backends/ldapbe.py: small improvement to display multiple
+	  attributes
+	* Makefile: Makefile update
+
+2008-04-16  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* cf/ui/queries.py: scrollable flag (queries notebook)
+
+2008-04-10  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* cf/backends/__init__.py, cf/backends/mssql.py,
+	  cf/plugins/builtin.py, cf/ui/editor.py, cf/ui/widgets/grid.py:
+	  SQL Server backend
+
+2008-04-08  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* ChangeLog, crunchyfrog.egg-info/PKG-INFO,
+	  crunchyfrog.egg-info/SOURCES.txt, debian/changelog, setup.py:
+	  Release info
+
 2008-04-07  Andi Albrecht <albrecht.andi@gmail.com>
 
 	* data/gnome/help/crunchyfrog/C/queries.xml: user manual: queries
