@@ -25,13 +25,14 @@ import gobject
 
 from cf.backends.schema import Table
 from cf.plugins.core import GenericPlugin
+from cf.plugins.mixins import InstanceMixin
 from cf.ui.pdock import DockItem
 
 from gettext import gettext as _
 
 from ipython_view import *
 
-class CFShell(GenericPlugin):
+class CFShell(GenericPlugin, InstanceMixin):
     id = "crunchyfrog.plugin.cfshell"
     name = _(u"Shell")
     description = _(u"Interactive shell (mainly for debugging)")
@@ -44,16 +45,13 @@ class CFShell(GenericPlugin):
     def __init__(self, app):
         GenericPlugin.__init__(self, app)
         self._shells = dict()
-        self.app.cb.connect("instance-created", self.on_instance_created)
+        self._instances = dict()
         for instance in app.get_instances():
             self.init_instance(instance)
             
     def on_import_table_to_shell(self, menuitem, object, view):
         view.import_table(object)
-        
-    def on_instance_created(self, app, instance):
-        self.init_instance(instance)
-        
+               
     def on_object_menu_popup(self, browser, popup, object, view):
         if isinstance(object, Table):
             item = gtk.MenuItem(_(u"Import to shell"))
@@ -80,6 +78,8 @@ class CFShell(GenericPlugin):
         menuitem.set_active(False)
         
     def init_instance(self, instance):
+        if instance in self._instances.keys():
+            return
         mn_view = instance.xml.get_widget("mn_view")
         item = gtk.CheckMenuItem(_(u"Shell"))
         item.connect("activate", self.on_toggle_shell, instance)
@@ -87,12 +87,19 @@ class CFShell(GenericPlugin):
         if self.app.config.get("cfshell.visible"):
             item.set_active(True)
         mn_view.append(item)
+        self._instances[instance] = item
         
     def shutdown(self):
         if self._shells.keys():
             self.app.config.set("cfshell.visible", True)
         else:
             self.app.config.set("cfshell.visible", False)
+        while self._instances:
+            instance, mn_item = self._instances.popitem()
+            mn_item.destroy()
+        while self._shells:
+            instance, shell = self._shells.popitem()
+            shell.destroy()
         
 class CFShellView(gtk.ScrolledWindow):
     
