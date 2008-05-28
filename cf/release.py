@@ -55,3 +55,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>."""
+
+translators="""Launchpad Contributions:
+  Kari Argillander (https://launchpad.net/~kari-argillander)
+  Anthony Guéchoum (https://launchpad.net/~athael)
+  Luca Livraghi (https://launchpad.net/~luca91)
+  Nicola Piovesan (https://launchpad.net/~piovesannicola)
+  Xoan Sampaiño (https://launchpad.net/~xoan)
+"""

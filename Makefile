@@ -8,7 +8,7 @@ APPDATADIR=$(DATADIR)/crunchyfrog
 LOCALEDIR=$(PREFIX)/locale
 MANDIR=$(PREFIX)/man
 
-PO=de
+PO=de es fi fr it
 RELEASENAME=snapshot
 PYTHON=python
 

@@ -119,6 +119,7 @@ class CFInstance(GladeWidget):
         dlg.set_website_label(release.url)
         dlg.set_logo_icon_name(release.appname)
         dlg.set_program_name(release.appname)
+	dlg.set_translator_credits(release.translators)
         dlg.run()
         dlg.destroy()
         
