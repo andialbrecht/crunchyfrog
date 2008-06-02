@@ -19,6 +19,7 @@ cf/utils.py
 cf/backends/__init__.py
 cf/backends/dbapi2helper.py
 cf/backends/ldapbe.py
+cf/backends/mssql.py
 cf/backends/mysql.py
 cf/backends/postgres.py
 cf/backends/sqlite.py
@@ -37,6 +38,7 @@ cf/thirdparty/__init__.py
 cf/thirdparty/ooolib.py
 cf/ui/__init__.py
 cf/ui/browser.py
+cf/ui/confirmsave.py
 cf/ui/datasources.py
 cf/ui/editor.py
 cf/ui/prefs.py
@@ -117,9 +119,20 @@ extras/apydia_get_parents.patch
 extras/apydia_skip_firstline.patch
 extras/plugins/django_backend/Makefile
 extras/plugins/django_backend/django_backend/__init__.py
+extras/plugins/httplog_backend/Makefile
+extras/plugins/httplog_backend/httplog_backend/__init__.py
+extras/plugins/httplog_backend/httplog_backend/apachelogs.py
 extras/plugins/sqlformat/Makefile
 extras/plugins/sqlformat/sqlformat/__init__.py
 extras/plugins/sqlformat/sqlformat/printsql.py
 po/crunchyfrog.pot
 po/de/LC_MESSAGES/crunchyfrog.mo
 po/de/LC_MESSAGES/crunchyfrog.po
+po/es/LC_MESSAGES/crunchyfrog.mo
+po/es/LC_MESSAGES/crunchyfrog.po
+po/fi/LC_MESSAGES/crunchyfrog.mo
+po/fi/LC_MESSAGES/crunchyfrog.po
+po/fr/LC_MESSAGES/crunchyfrog.mo
+po/fr/LC_MESSAGES/crunchyfrog.po
+po/it/LC_MESSAGES/crunchyfrog.mo
+po/it/LC_MESSAGES/crunchyfrog.po
