@@ -36,7 +36,6 @@ from cf.ui.widgets import DataExportDialog
 
 from gettext import gettext as _
 
-import ldap
 
 import logging
 log = logging.getLogger("LDAP")
@@ -333,4 +332,9 @@ class LDAPSchema(SchemaProvider):
                 node.icon = "gtk-justify-fill"
             ret.append(node)
         return ret
-        
+
+
+try:
+    import ldap
+except ImportError:
+    LDAPBackend.INIT_ERROR = _(u"Python module ldap required.")

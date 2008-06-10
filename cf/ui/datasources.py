@@ -340,7 +340,10 @@ class BackendInfoDialog(GladeWidget):
         from cf.plugins.core import PLUGIN_TYPE_BACKEND
         for be in self.app.plugins.get_plugins(PLUGIN_TYPE_BACKEND):
             iter = model.append(None)
-            if  self.app.plugins.is_active(be):
+            if be.INIT_ERROR:
+                ico = "gtk-dialog-error"
+                lbl = be.name+"\n"+be.INIT_ERROR
+            elif  self.app.plugins.is_active(be):
                 ico = "gtk-apply"
                 lbl = be.name
             else:

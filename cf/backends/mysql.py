@@ -20,7 +20,6 @@
 
 """MySQL backend"""
 
-import MySQLdb
 
 from cf.backends import DBConnectError
 from cf.backends.dbapi2helper import DbAPI2Connection
@@ -164,3 +163,9 @@ class MySQLReferenceProvider(ReferenceProvider):
         url = "http://dev.mysql.com/doc/mysql/search.php?version=5.1&q="
         url += quote_plus(term.strip())
         return url
+
+
+try:
+    import MySQLdb
+except ImportError:
+    MySQLBackend.INIT_ERROR = _(u"Python module MySQLdb required.")

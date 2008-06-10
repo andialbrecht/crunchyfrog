@@ -371,6 +371,8 @@ class PreferencesDialog(GladeWidget):
                 lbl = '<b>%s</b>' % plugin.name or _(u"Unknown")
                 if plugin.description:
                     lbl += "\n"+plugin.description
+                if plugin.INIT_ERROR:
+                    lbl += '\n<span color="red">ERROR: '+plugin.INIT_ERROR+'</span>'
                 if plugin.icon:
                     ico = it.load_icon(plugin.icon, gtk.ICON_SIZE_LARGE_TOOLBAR, gtk.ICON_LOOKUP_FORCE_SVG)
                 else:
@@ -381,7 +383,7 @@ class PreferencesDialog(GladeWidget):
                           1, self.app.plugins.is_active(plugin),
                           2, lbl,
                           3, ico,
-                          4, True)
+                          4, not bool(plugin.INIT_ERROR))
         gobject.idle_add(self.refresh_plugins_repo)
         
     def _plugin_iter_for_ep(self, ep_name):

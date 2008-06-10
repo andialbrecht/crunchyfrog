@@ -60,6 +60,7 @@ class GenericPlugin(gobject.GObject):
     version = None
     has_custom_options = False
     plugin_type = PLUGIN_TYPE_GENERIC
+    INIT_ERROR = None
     
     def __init__(self, app):
         """
@@ -322,8 +323,10 @@ class PluginManager(gobject.GObject):
             if not self.__plugins.has_key(plugin.id):
                 self.__plugins[plugin.id] = plugin
                 l = self.app.config.get("plugins.active", [])
-                if plugin.id in l:
+                if plugin.id in l and not plugin.INIT_ERROR:
                     self.set_active(plugin, True)
+                elif plugin.id in l and plugin.INIT_ERROR:
+                    self.set_active(plugin, False)
                 self.emit("plugin-added", plugin)
             ids_found.append(plugin.id)
         for id, plugin in self.__plugins.items():

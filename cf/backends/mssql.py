@@ -20,8 +20,6 @@
 
 """MS-SQL backend"""
 
-import pymssql
-
 from cf.backends import DBConnectError
 from cf.backends.dbapi2helper import DbAPI2Connection
 from cf.backends.schema import *
@@ -34,6 +32,7 @@ from gettext import gettext as _
 
 import logging
 log = logging.getLogger("MS-SQL")
+
 
 class MsSQLBackend(DBBackendPlugin):
     id = "crunchyfrog.backend.mssql"
@@ -149,3 +148,10 @@ class MsSQLSchema(SchemaProvider):
             sql = sql % (schema.name, table.name)
             return [Column(item[0], table=table)
                     for item in self.q(connection, sql)]
+
+
+MsSQLBackend.INIT_ERROR = None
+try:
+    import pymssql
+except ImportError:
+    MsSQLBackend.INIT_ERROR = _(u"Python module pymssql not found.")

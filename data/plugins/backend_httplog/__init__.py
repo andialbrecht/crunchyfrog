@@ -48,7 +48,6 @@ import logging
 log = logging.getLogger("HTTP-LOG")
 
 import apachelogs
-import sqlite3
 
 class HttpLogBackendPlugin(DBBackendPlugin):
     id = "crunchyfrog.backend.http"
@@ -161,3 +160,9 @@ values ('%(http_method)s', %(http_response_code)d, %(http_response_size)d,
 '%(http_user)s', '%(http_vers)s', '%(referrer)s', '%(request_line)s', 
 '%(time)s', '%(url)s', '%(user_agent)s', '%(ident)s', '%(ip)s')
 """
+
+
+try:
+    import sqlite3
+except ImportError:
+    HttpLogBackendPlugin.INIT_ERROR = _(u"Python module sqlite3 required.")

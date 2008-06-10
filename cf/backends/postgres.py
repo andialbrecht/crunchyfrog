@@ -34,8 +34,6 @@ from cf.utils import Emit
 import time
 from urllib import quote_plus
 
-import psycopg2
-import psycopg2.extensions
 
 from gettext import gettext as _
 
@@ -301,3 +299,10 @@ class PgSchema(SchemaProvider):
         res = self.q(connection, sql)
         ret[_(u"Definition")] =  res[0][0]
         return ret
+
+
+try:
+    import psycopg2
+    import psycopg2.extensions
+except ImportError:
+    PostgresBackend.INIT_ERROR = _(u"Python module psycopg2 required.")

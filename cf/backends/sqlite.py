@@ -22,7 +22,6 @@
 
 import gtk
 
-import sqlite3
 
 from cf.backends import DBConnectError
 from cf.backends.dbapi2helper import DbAPI2Connection, DbAPI2Cursor
@@ -135,4 +134,9 @@ class SQLiteReferenceProvider(ReferenceProvider):
     
     def get_context_help_url(self, term):
         return "http://sqlite.org/lang.html"
-    
+
+
+try:
+    import sqlite3
+except ImportError:
+    SQLiteBackend.INIT_ERROR = _(u"Python module sqlite3 required.")

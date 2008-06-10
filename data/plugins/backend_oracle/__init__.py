@@ -20,7 +20,6 @@
 
 """Oracle backend"""
 
-import cx_Oracle
 
 from cf.backends import DBConnectError
 from cf.backends.dbapi2helper import DbAPI2Connection, DbAPI2Cursor
@@ -209,3 +208,9 @@ class OracleSchema(SchemaProvider):
             where object_name = '%(package)s'" % {"package": parent.name}
             [ret.append(Function(item[0])) for item in self.q(connection, sql)]
             return ret
+
+
+try:
+    import cx_Oracle
+except ImportError:
+    OracleBackend.INIT_ERROR = _(u"Python module cx_Oracle required.")
