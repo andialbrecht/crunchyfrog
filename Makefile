@@ -62,13 +62,13 @@ deb: dist-prepare
 dist-release: dist-prepare sdist-release
 
 sdist-release:
-	$(PYTHON) setup.py egg_info -b$(RELEASENAME) sdist
+	$(PYTHON) setup.py egg_info sdist
 
 sdist-upload:
-	$(PYTHON) setup.py egg_info -b$(RELEASENAME) sdist upload
+	$(PYTHON) setup.py egg_info sdist upload
 	
 sdist: dist-prepare
-	$(PYTHON) setup.py egg_info -b$(RELEASENAME) sdist
+	$(PYTHON) setup.py egg_info sdist
 	
 po-clean:
 	find data -type f -name *.h -print | xargs --no-run-if-empty rm -rf
