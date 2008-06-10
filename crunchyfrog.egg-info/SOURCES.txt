@@ -97,6 +97,8 @@ data/gnome/help/crunchyfrog/de/queries.xml
 data/gnome/help/crunchyfrog/de/schema.xml
 data/gnome/help/crunchyfrog/de/shortcuts.xml
 data/gnome/help/crunchyfrog/de/figures/cf-main.png
+data/plugins/backend_httplog/__init__.py
+data/plugins/backend_httplog/apachelogs.py
 data/plugins/backend_oracle/__init__.py
 debian/changelog
 debian/compat
@@ -119,9 +121,6 @@ extras/apydia_get_parents.patch
 extras/apydia_skip_firstline.patch
 extras/plugins/django_backend/Makefile
 extras/plugins/django_backend/django_backend/__init__.py
-extras/plugins/httplog_backend/Makefile
-extras/plugins/httplog_backend/httplog_backend/__init__.py
-extras/plugins/httplog_backend/httplog_backend/apachelogs.py
 extras/plugins/sqlformat/Makefile
 extras/plugins/sqlformat/sqlformat/__init__.py
 extras/plugins/sqlformat/sqlformat/printsql.py

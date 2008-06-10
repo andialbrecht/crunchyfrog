@@ -1,3 +1,37 @@
+2008-06-02  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* po/crunchyfrog.pot, po/de/LC_MESSAGES/crunchyfrog.mo,
+	  po/de/LC_MESSAGES/crunchyfrog.po,
+	  po/es/LC_MESSAGES/crunchyfrog.mo,
+	  po/es/LC_MESSAGES/crunchyfrog.po,
+	  po/fi/LC_MESSAGES/crunchyfrog.mo,
+	  po/fi/LC_MESSAGES/crunchyfrog.po,
+	  po/fr/LC_MESSAGES/crunchyfrog.mo,
+	  po/fr/LC_MESSAGES/crunchyfrog.po,
+	  po/it/LC_MESSAGES/crunchyfrog.mo,
+	  po/it/LC_MESSAGES/crunchyfrog.po: Translation update
+	* crunchyfrog.egg-info/PKG-INFO, crunchyfrog.egg-info/SOURCES.txt,
+	  data/crunchyfrog.glade: UI refinements (issue8)
+
+2008-05-28  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* Makefile, cf/instance.py, cf/release.py, po/crunchyfrog.pot,
+	  po/de/LC_MESSAGES/crunchyfrog.mo,
+	  po/de/LC_MESSAGES/crunchyfrog.po, po/es, po/es/LC_MESSAGES,
+	  po/es/LC_MESSAGES/crunchyfrog.mo,
+	  po/es/LC_MESSAGES/crunchyfrog.po, po/fi, po/fi/LC_MESSAGES,
+	  po/fi/LC_MESSAGES/crunchyfrog.mo,
+	  po/fi/LC_MESSAGES/crunchyfrog.po, po/fr, po/fr/LC_MESSAGES,
+	  po/fr/LC_MESSAGES/crunchyfrog.mo,
+	  po/fr/LC_MESSAGES/crunchyfrog.po, po/it, po/it/LC_MESSAGES,
+	  po/it/LC_MESSAGES/crunchyfrog.mo,
+	  po/it/LC_MESSAGES/crunchyfrog.po: New and updated translations
+
+2008-05-21  Andi Albrecht <albrecht.andi@gmail.com>
+
+	* ChangeLog: ChangeLog updated
+	* cf/shell/__init__.py: Unloading of shell plugin fixed (issue7)
+
 2008-05-18  Andi Albrecht <albrecht.andi@gmail.com>
 
 	* cf/ui/datasources.py, data/crunchyfrog.glade: Info dialog for
