@@ -36,7 +36,10 @@ log = logging.getLogger("PREFS")
 
 from inspect import isclass
 
-from lxml import etree
+try:
+  from xml.etree import ElementTree as etree
+except ImportError:
+  from lxml import etree
 from kiwi.ui import dialogs
 
 import cf
