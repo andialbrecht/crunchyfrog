@@ -26,6 +26,7 @@ import gtk
 import gobject
 
 from kiwi.ui import dialogs
+import sexy
 
 from cf.datasources import DatasourceInfo
 from cf.backends import DBConnectError
@@ -36,6 +37,7 @@ from cf.ui.editor import SQLView
 class DummyNode(object):
     pass
 
+
 class Browser(gtk.ScrolledWindow):
     
     __gsignals__ = {
@@ -44,14 +46,15 @@ class Browser(gtk.ScrolledWindow):
                                (gobject.TYPE_PYOBJECT,
                                 gobject.TYPE_PYOBJECT)),
     }
-    
+
     def __init__(self, app, instance):
         self.app = app
         self.instance = instance
         self._setup_widget()
         self._setup_connections()
         self.reset_tree()
-        
+        self.guess_hint()
+
     def _setup_widget(self):
         gtk.ScrolledWindow.__init__(self)
         self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
@@ -87,7 +90,18 @@ class Browser(gtk.ScrolledWindow):
             return
         self.object_tree.connect("drag_data_get", drag_data_get)
         self.set_shadow_type(gtk.SHADOW_ETCHED_IN)
-        
+        # Hint
+        style = self.object_tree.get_style()
+        lbl = sexy.UrlLabel(_(u'<b>No active data sources</b>\n\n'
+                               '<a href="#">Click</a> to open the data '
+                               'source manager.'))
+        lbl.set_alignment(0.5, 0)
+        lbl.set_padding(15, 15)
+        lbl.connect("url-activated", self.instance.on_datasource_manager)
+        self._hint = gtk.EventBox()
+        self._hint.add(lbl)
+        self._hint.modify_bg(gtk.STATE_NORMAL, style.white)
+
     def _setup_connections(self):
         self.app.datasources.connect("datasource-added", self.on_datasource_added)
         self.app.datasources.connect("datasource-deleted", self.on_datasource_deleted)
@@ -96,7 +110,7 @@ class Browser(gtk.ScrolledWindow):
         self.object_tree.connect("row-expanded", self.on_row_expanded)
         sel = self.object_tree.get_selection()
         sel.connect("changed", self.on_object_tree_selection_changed)
-        
+
     def _create_dsinfo_menu(self, model, iter, popup):
         def connect(item, datasource_info):
             try:
@@ -120,6 +134,17 @@ class Browser(gtk.ScrolledWindow):
         item.connect("activate", cb, datasource_info)
         popup.append(item)
         return popup
+
+    def guess_hint(self):
+        if self.object_tree.get_model().get_iter_first():
+            if not self.get_child() == self.object_tree:
+                self.remove(self._hint)
+                self.add(self.object_tree)
+        else:
+            if not self.get_child() == self._hint:
+                self.remove(self.object_tree)
+                self.add(self._hint)
+        self.show_all()
 
     def _show_popup_menu(self, treeview, event):
         """Build and show the popup menu on RMB."""
@@ -197,23 +222,25 @@ class Browser(gtk.ScrolledWindow):
         elif event.button == 3:
             self._show_popup_menu(treeview, event)
             return 1
-        
+
     def on_datasource_added(self, manager, datasource_info):
         iter = self.model.append(None)
         self.set_datasource_info(iter, datasource_info)
-    
+        self.guess_hint()
+
     def on_datasource_deleted(self, manager, datasource_info):
         iter = self.get_iter_for_datasource(datasource_info)
         if not iter:
             return
         self.model.remove(iter)
-    
+        self.guess_hint()
+
     def on_datasource_modified(self, manager, datasource_info):
         iter = self.get_iter_for_datasource(datasource_info)
         if not iter:
             return
         self.set_datasource_info(iter, datasource_info)
-        
+
     def on_object_tree_selection_changed(self, selection):
         model, iter = selection.get_selected()
         if not iter: return
@@ -230,7 +257,7 @@ class Browser(gtk.ScrolledWindow):
         else:
             comm = model.get_value(iter, 5) or ""
             self.instance.statusbar.set_message(comm)
-            
+
     def on_refresh_node(self, menuitem, model, iter):
         citer = model.iter_children(iter)
         while citer:
@@ -239,7 +266,7 @@ class Browser(gtk.ScrolledWindow):
         citer = model.append(iter)
         model.set_value(citer, 0, DummyNode())
         self.object_tree.emit("row-expanded", iter, model.get_path(iter))
-        
+
     def on_row_expanded(self, treeview, iter, path):
         model = treeview.get_model()
         obj = model.get_value(iter, 0)
@@ -267,7 +294,7 @@ class Browser(gtk.ScrolledWindow):
                     citer = model.iter_children(iter)
                     if citer:
                         treeview.expand_row(model.get_path(iter), False)
-                        
+
     def on_show_details(self, menuitem, object, model, iter):
         datasource_info = self.find_datasource_info(model, iter)
         if datasource_info.backend.schema:
@@ -289,14 +316,14 @@ class Browser(gtk.ScrolledWindow):
                               "gtk-edit", None)
             self.instance.dock.add_item(item)
             item.show_all()
-                    
+
     def find_datasource_info(self, model, iter):
         while iter:
             obj = model.get_value(iter, 0)
             if isinstance(obj, DatasourceInfo):
                 return obj
             iter = model.iter_parent(iter)
-    
+
     def get_iter_for_datasource(self, datasource_info):
         iter = self.model.get_iter_first()
         while iter:
@@ -304,7 +331,7 @@ class Browser(gtk.ScrolledWindow):
                 return iter
             iter = self.model.iter_next(iter)
         return None
-    
+
     def get_object_by_id(self, id_, iter=None, model=None):
         if not iter:
             model = self.object_tree.get_model()
@@ -320,13 +347,13 @@ class Browser(gtk.ScrolledWindow):
                     return ret
                 citer = model.iter_next(citer)
             iter = model.iter_next(iter)
-    
+
     def reset_tree(self):
         self.model.clear()
         for datasource_info in self.app.datasources.get_all():
             iter = self.model.append(None)
             self.set_datasource_info(iter, datasource_info)
-    
+
     def set_datasource_info(self, iter, datasource_info):
         if datasource_info.get_connections():
             ico = gtk.icon_theme_get_default().load_icon("stock_connect", gtk.ICON_SIZE_MENU, gtk.ICON_LOOKUP_FORCE_SVG)

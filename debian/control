@@ -30,6 +30,7 @@ Depends: ${misc:Depends},
          python-lxml (>= 0.9),
          python-kiwi,
          gnome-extra-icons,
+         python-sexy,
 Recommends: python-psycopg2,
 			python-mysqldb,
 			python-ldap

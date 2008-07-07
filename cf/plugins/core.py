@@ -405,10 +405,9 @@ class PluginManager(gobject.GObject):
         
         .. _Plugin: cf.plugins.core.GenricPlugin.html
         """
-        if active_only:
-            plugins = self.__active_plugins.values()
-        else:
-            plugins = self.__plugins.values()
+        plugins = self.__active_plugins.values()
+        if not active_only:
+            plugins += self.__plugins.values()
         for plugin in plugins:
             if plugin.id == id:
                 return plugin

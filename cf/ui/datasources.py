@@ -200,6 +200,11 @@ class DatasourceManager(GladeWidget):
         
     def on_selected_datasource_changed(self, *args):
         conn = self.get_selected_saved_connection()
+        if not self.app.plugins.is_active(conn.backend):
+            dialogs.error(_(u'Plugin not active'),
+                          _(u'Please activate the following plugin '
+                            'to use this data source: ')+conn.backend.name+'.')
+            return
         self.xml.get_widget("btn_delete").set_sensitive(bool(conn))
         self.clear_fields()
         if not conn:
@@ -264,6 +269,8 @@ class DatasourceManager(GladeWidget):
             lbl = item.get_label()
             if item.description and item.description.strip():
                 lbl += '\n<span size="small">'+item.description+'</span>'
+            if not self.app.plugins.is_active(item.backend):
+                lbl += '\n<span foreground="red">'+_(u'Plugin not active.')+'</span>'
             model.set(iter,
                       0, item,
                       1, lbl)
