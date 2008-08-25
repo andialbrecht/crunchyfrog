@@ -1,0 +1,10 @@
+TODOS
+
+* Implement Gnome Keyring
+* Implement sqlparse
+
+
+KNOWN BUGS
+
+* Connection chooser sometimes becomes insensitive when closing a tab.
+
