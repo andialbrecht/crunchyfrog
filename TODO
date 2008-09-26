@@ -1,12 +1,23 @@
 TODO
-====
+----
 
-* Implement Gnome Keyring
-* Implement sqlparse
-* Add support for Capuchin?
+- Implement Gnome Keyring
+- Implement sqlparse
+- Add support for Capuchin?
 
-KNOWN BUGS
-==========
+Known Bugs
+----------
 
-* Connection chooser sometimes becomes insensitive when closing a tab.
+- Connection chooser sometimes becomes insensitive when closing a tab.
 
+Library
+-------
+
+- Improve save to library function.
+- Improve refresh of library tree when modifying entries.
+- Export/import library.
+
+Documentation
+-------------
+
+- Switch to Sphinx/ReSt, it's easier to maintain.
