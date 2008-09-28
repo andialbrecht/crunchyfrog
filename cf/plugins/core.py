@@ -22,7 +22,6 @@
 
 import gobject
 import gnomevfs
-import pkg_resources
 import sys
 import os
 from inspect import isclass

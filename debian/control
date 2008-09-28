@@ -7,8 +7,7 @@ Build-Depends: debhelper (>= 5.0.37.2),
 			   cdbs,
 			   imagemagick,
                python-dev,
-               python,
-               python-setuptools
+               python
 Build-Depends-Indep: python-central (>= 0.5.4)
 Standards-Version: 3.7.2
 XS-Python-Version: >= 2.4
@@ -24,7 +23,6 @@ Depends: ${misc:Depends},
          python-gobject,
          python-gconf,
          python-dbus,
-         python-setuptools,
          python-pysqlite2 (>= 2.0.5),
          python-configobj (>= 4.4.0),
          python-lxml (>= 0.9),
