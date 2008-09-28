@@ -4,6 +4,7 @@ TODO
 - Implement Gnome Keyring
 - Implement sqlparse
 - Add support for Capuchin?
+- Remove ReferenceProvider
 
 Known Bugs
 ----------
