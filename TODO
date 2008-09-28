@@ -11,6 +11,15 @@ Known Bugs
 
 - Connection chooser sometimes becomes insensitive when closing a tab.
 
+User Interface
+--------------
+
+- Add separate plugin dialog.
+- Move datasource manager to Edit menu.
+- Messages: Use monospaced font and color scheme (info, output,
+  error...). Maybe some more informative output.
+
+
 Library
 -------
 
@@ -22,3 +31,8 @@ Documentation
 -------------
 
 - Switch to Sphinx/ReSt, it's easier to maintain.
+
+Software Engineering
+--------------------
+
+- Code cleanup
