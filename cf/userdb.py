@@ -43,15 +43,15 @@ log = logging.getLogger("USERDB")
 
 class UserDB(gobject.GObject):
     """User database class.
-    
+
     An instance of this class is accessible through the ``userdb``
     attribute of an `CFApplication`_ instance.
-    
+
     Usage example
     =============
-    
+
         .. sourcecode:: python
-        
+
             >>> app.userdb.get_table_version("foo")
             None
             >>> app.userdb.create_table("foo", "0.1", create_statement)
@@ -63,26 +63,26 @@ class UserDB(gobject.GObject):
             >>> app.userdb.cursor.fetchone()
             ('bar',)
             >>> app.userdb.drop_table("foo")
-    
-    
+
+
     Instance attributes
     ===================
-    
+
         :conn: Database connection (sqlite connection)
         :cursor: Database cursor (sqlite cursor)
-    
-    
+
+
     .. _CFApplication: cf.app.CFApplication.html
     """
-    
+
     def __init__(self, app):
         """
         The constructor of this class takes one argument:
-        
+
         :Parameters:
             app
                 `CFApplication`_ instance
-                
+
         .. _CFApplication: cf.app.CFApplication.html
         """
         self.app = app
@@ -90,14 +90,14 @@ class UserDB(gobject.GObject):
         self._user_db = self.app.config.get("userdb.file", USER_DB)
         self.__gobject_init__()
         self.__init_userdb()
-        
+
     def _get_connection(self):
         return self.conn
     connection = property(fget=_get_connection)
-        
+
     def __init_userdb(self):
         """Initializes the connection and cursor.
-        
+
         This method creates the database if necessary.
         """
         log.debug("Initializing user database")
@@ -106,7 +106,7 @@ class UserDB(gobject.GObject):
         self.cursor = self.conn.cursor()
         if create:
             self.__create_userdb()
-        
+
     def __create_userdb(self):
         """Creates the sqlite3 file and some core tables."""
         sql = "create table sy_table_version (id integer primary key, \
@@ -114,25 +114,25 @@ class UserDB(gobject.GObject):
         self.cursor.execute(sql)
         from cf import datasources
         datasources.check_userdb(self)
-        
+
     def get_cursor(self):
         """Returns a new DB-API compliant cursor.
-        
+
         :Returns: DB-API compliant cursor
         """
         return self.conn.cursor()
-    
+
     def get_table_version(self, table_name):
         """Returns the version of a table or ``None``.
-        
+
         ``None`` is returned, if the table isn't registered
         with the `create_table` method, that means, if it's not
         found in ``sy_table_version``.
-        
+
         :Parameter:
             table_name
                 Name of the table
-        
+
         :Returns: Version of the table, or ``None``
         """
         sql = "select version from sy_table_version \
@@ -147,10 +147,10 @@ class UserDB(gobject.GObject):
             return result[0]
         else:
             return None
-    
+
     def create_table(self, name, version, statement):
         """Creates and registers a table.
-        
+
         :Parameter:
             name
                 Table name
@@ -158,7 +158,7 @@ class UserDB(gobject.GObject):
                 Table version
             statement
                 ``CREATE`` statement to create the table
-                
+
         :Returns: ``True`` if the table was successfully created, otherwise ``False``
         """
         if self.get_table_version(name):
@@ -174,14 +174,14 @@ class UserDB(gobject.GObject):
         self.cursor.execute(sql, (name, version))
         self.conn.commit()
         return True
-    
+
     def drop_table(self, name):
         """Deletes and unregisters a table.
-        
+
         :Parameter:
             name
                 Table name
-                
+
         :Returns: ``True`` if the table was successfully dropped, otherwise ``False``
         """
         sql = "delete from sy_table_version where tablename=?"
@@ -194,5 +194,3 @@ class UserDB(gobject.GObject):
             log.error("Failed to delete table: %s", str(e))
             return False
         return True
-        
-        

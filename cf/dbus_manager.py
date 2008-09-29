@@ -32,26 +32,26 @@ DBUS_PATH = "/org/gnome/crunchyfrog"
 
 class CFService(dbus.service.Object):
     """DBus service"""
-    
+
     def __init__(self, app):
         global bus
         bus_name = dbus.service.BusName(DBUS_NAME, bus=bus)
         dbus.service.Object.__init__(self, bus_name, DBUS_PATH)
         self.app = app
-        
+
     @dbus.service.method(DBUS_NAME)
     def new_instance(self):
         """Creates a new instance.
-        
+
         :Returns: Instance ID
         """
         instance = self.app.new_instance()
         return instance.get_data("instance-id")
-    
+
     @dbus.service.method(DBUS_NAME)
     def open_uri(self, instance_id, uri):
-        """Opens an URI 
-        
+        """Opens an URI
+
         :Parameter:
             instance_id
                 An instance ID
@@ -60,18 +60,18 @@ class CFService(dbus.service.Object):
         """
         instance = self.app.get_instance(instance_id)
         editor = instance.new_editor(uri)
-        
+
     @dbus.service.method(DBUS_NAME)
     def get_instances(self):
         """Returns running instances.
-        
+
         The return value is a list of 2-tuples instance_id, window title.
         """
         ret = []
         for key, value in self.app.get_data("instances").items():
             ret.append((key, value.widget.get_title()))
         return ret
-        
+
 
 def get_client():
     """Returns a DBus client"""

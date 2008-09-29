@@ -41,29 +41,29 @@ class CFShell(GenericPlugin, InstanceMixin):
     license = "GPL"
     homepage = "http://cf.andialbrecht.de"
     version = "0.1"
-    
+
     def __init__(self, app):
         GenericPlugin.__init__(self, app)
         self._shells = dict()
         self._instances = dict()
         for instance in app.get_instances():
             self.init_instance(instance)
-            
+
     def on_import_table_to_shell(self, menuitem, object, view):
         view.import_table(object)
-               
+
     def on_object_menu_popup(self, browser, popup, object, view):
         if isinstance(object, Table):
             item = gtk.MenuItem(_(u"Import to shell"))
             item.connect("activate", self.on_import_table_to_shell, object, view)
             item.show()
             popup.append(item)
-        
+
     def on_toggle_shell(self, menuitem, instance):
         if menuitem.get_active():
             view = CFShellView(self.app, instance)
             self._shells[instance] = view
-            item = DockItem(instance.dock, "cfshell", view, _(u"Shell"), 
+            item = DockItem(instance.dock, "cfshell", view, _(u"Shell"),
                               "gnome-terminal", gtk.POS_BOTTOM)
             instance.dock.add_item(item)
             view.connect("destroy", self.on_view_destroyed, menuitem, instance)
@@ -73,10 +73,10 @@ class CFShell(GenericPlugin, InstanceMixin):
             instance.browser.disconnect(self._shells[instance].get_data("object-menu-tag"))
             self._shells[instance].destroy()
             del self._shells[instance]
-    
+
     def on_view_destroyed(self, view, menuitem, instance):
         menuitem.set_active(False)
-        
+
     def init_instance(self, instance):
         if instance in self._instances.keys():
             return
@@ -88,7 +88,7 @@ class CFShell(GenericPlugin, InstanceMixin):
             item.set_active(True)
         mn_view.append(item)
         self._instances[instance] = item
-        
+
     def shutdown(self):
         if self._shells.keys():
             self.app.config.set("cfshell.visible", True)
@@ -100,9 +100,9 @@ class CFShell(GenericPlugin, InstanceMixin):
         while self._shells:
             instance, shell = self._shells.popitem()
             shell.destroy()
-        
+
 class CFShellView(gtk.ScrolledWindow):
-    
+
     def __init__(self, app, instance):
         gtk.ScrolledWindow.__init__(self)
         self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
@@ -113,12 +113,12 @@ class CFShellView(gtk.ScrolledWindow):
         self.iview.connect("drag_data_received", self.on_drag_data_received)
         self.iview.drag_dest_set(gtk.DEST_DEFAULT_MOTION|gtk.DEST_DEFAULT_HIGHLIGHT|gtk.DEST_DEFAULT_DROP,
                                  [("text/plain", 0, 80)], gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_COPY)
-        self.iview.updateNamespace({"app" : self.app, 
+        self.iview.updateNamespace({"app" : self.app,
                                     "instance" : self.instance})
         self.add(self.iview)
         self.set_size_request(-1, 100)
         self.show_all()
-        
+
     def on_drag_data_received(self, widget, context, x, y, selection, target_type, timestamp):
         object = self.instance.browser.get_object_by_id(int(selection.data))
         if isinstance(object, Table):
@@ -128,7 +128,7 @@ class CFShellView(gtk.ScrolledWindow):
             context.drop_finish(False, timestamp)
         widget.stop_emission("drag-data-received")
         return False
-        
+
     def import_table(self, table):
         # TODO: Create some nice ORM and some usable models.
         #       Maybe we can fix this, when DDL operations are implemented...

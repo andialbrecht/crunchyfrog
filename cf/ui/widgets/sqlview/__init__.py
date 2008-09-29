@@ -31,7 +31,7 @@ Example usage
 =============
 
     .. sourcecode:: python
-    
+
         >>> from cf.ui.widgets.sqlview import SQLView
         >>> import gtk
         >>> w = gtk.Window()
@@ -41,35 +41,35 @@ Example usage
         >>> sw.add(view)
         >>> w.add(sw)
         >>> w.show_all()
-        
+
 """
 
 import gconf
 import gtk
 import gobject
 import pango
-   
+
 class SQLViewBase(object):
     """Base class for SQLView implementations"""
-    
+
     def __init__(self, app):
         """
         This constructor takes one argument:
-        
+
         :Parameter:
             app
                 `CFApplication`_ instance
-                
+
         .. _CFApplication: cf.app.CFApplication.html
         """
         self.app = app
         self.app.config.connect("changed", self.on_config_changed)
         self.update_textview_options()
-        
+
     def on_config_changed(self, config, option, value):
         if option.startswith("editor."):
             gobject.idle_add(self.update_textview_options)
-            
+
     def update_textview_options(self):
         """Updates the textview settings"""
         conf = self.app.config
@@ -91,7 +91,7 @@ class SQLViewBase(object):
         else:
             font = conf.get("editor.font")
         self.modify_font(pango.FontDescription(font))
-        
+
 try:
     import gtksourceview2
     USE_GTKSOURCEVIEW2 = True
@@ -104,7 +104,7 @@ try:
             lm = gtksourceview2.language_manager_get_default()
             buffer.set_language(lm.get_language("sql"))
             SQLViewBase.__init__(self, app)
-            
+
         def update_textview_options(self):
             SQLViewBase.update_textview_options(self)
             conf = self.app.config
@@ -117,7 +117,7 @@ try:
             sm = gtksourceview2.style_scheme_manager_get_default()
             scheme = sm.get_scheme(conf.get("editor.scheme"))
             buffer.set_style_scheme(scheme)
-            
+
 except ImportError:
     USE_GTKSOURCEVIEW2 = False
     import gtksourceview
@@ -134,7 +134,7 @@ except ImportError:
                     buffer.set_language(lang)
                     break
             SQLViewBase.__init__(self, app)
-                
+
         def update_textview_options(self):
             SQLViewBase.update_textview_options(self)
             conf = self.app.config

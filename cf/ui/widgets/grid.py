@@ -37,40 +37,40 @@ GRID_LABEL_MAX_LENGTH = 100
 
 class Grid(gtk.TreeView):
     """Data grid
-    
+
     The view component of the grid.
-    
+
     Signals
     =======
-    
+
         selection-changed
             ``def callback(grid, selected_cells, user_param1, ...)``
-            
+
             Emitted when selected cells have changed
-            
-    
+
+
     Selection
     =========
-    
+
     This grid allows three different selections which exclude each
     other:
-    
+
         * one or more columns (select all means all columns are selected)
         * a single cell
         * one or more rows
-        
+
     Columns can be selected by clicking on the column header. A click on the
     header of the first column selects or de-selects all data. Rows can be
     selected by clicking on the first column of a row. Individual cells can
     be selected by clicking on that cell.
     """
-    
+
     __gsignals__ = {
         "selection-changed" : (gobject.SIGNAL_RUN_LAST,
                                gobject.TYPE_NONE,
                                (gobject.TYPE_PYOBJECT,)),
     }
-    
+
     def __init__(self):
         gtk.TreeView.__init__(self)
         self.description = None
@@ -79,7 +79,7 @@ class Grid(gtk.TreeView):
         self.selected_columns = list()
         self.selected_rows = list()
         self.connect("button-press-event", self.on_button_pressed)
-        
+
     def _setup_columns(self, rows):
         renderer = gtk.CellRendererText()
         renderer.set_property("background", self.get_style().dark[gtk.STATE_ACTIVE].to_string())
@@ -104,7 +104,7 @@ class Grid(gtk.TreeView):
             renderer.set_property("ellipsize", pango.ELLIPSIZE_END)
             lbl = "%s" % (item[0].replace("_", "__"),)
             col = gtk.TreeViewColumn(lbl, renderer,
-                                     markup=i, 
+                                     markup=i,
                                      foreground_gdk=offset_fg+i,
                                      background_gdk=offset_bg+i)
             col.connect("clicked", self.on_column_header_clicked)
@@ -114,7 +114,7 @@ class Grid(gtk.TreeView):
             self.append_column(col)
         self.set_headers_clickable(True)
         self.set_fixed_height_mode(True)
-        
+
     def _setup_model(self, rows, description, coding_hint):
         model = GridModel(rows, description, self.get_style(),
                           coding_hint=coding_hint)
@@ -122,7 +122,7 @@ class Grid(gtk.TreeView):
         if old_model:
             del old_model
         self.set_model(model)
-        
+
     def _get_popup_for_cell(self, row, col):
         col = self.get_model_index(col)
         model = self.get_model()
@@ -167,7 +167,7 @@ class Grid(gtk.TreeView):
             item.show()
             popup.append(item)
         return popup
-        
+
     def on_button_pressed(self, treeview, event):
         if event.type == gtk.gdk._2BUTTON_PRESS:
             x = int(event.x)
@@ -185,7 +185,7 @@ class Grid(gtk.TreeView):
                     return
                 if not isinstance(data, buffer):
                     self.on_view_data(None, data)
-        
+
         elif event.button == 3:
             x = int(event.x)
             y = int(event.y)
@@ -202,7 +202,7 @@ class Grid(gtk.TreeView):
                 if not popup:
                     return
                 popup.popup( None, None, None, event.button, time)
-        
+
         elif event.button == 1:
             x = int(event.x)
             y = int(event.y)
@@ -214,24 +214,24 @@ class Grid(gtk.TreeView):
                 self.select_row(path[0], not self.row_is_selected(path[0]))
             else:
                 self.select_cell(path[0], col, not self.cell_is_selected(path[0], col))
-                
-        
-            
+
+
+
     def on_column_header_clicked(self, column):
         selected = not column in self.get_selected_columns()
         self.select_column(column, selected)
-        
+
     def on_copy_value_to_clipboard(self, menuitem, value):
         display = gtk.gdk.display_manager_get().get_default_display()
         clipboard = gtk.Clipboard(display, "CLIPBOARD")
         clipboard.set_text(str(value))
-        
+
     def on_first_header_clicked(self, column):
         selected = not column.get_data("pressed")
         for xcolumn in self.get_columns()[1:]:
             self.select_column(xcolumn, selected)
         column.set_data("pressed", selected)
-        
+
     def on_open_blob(self, menuitem, data, app_info):
         fname = os.path.expanduser("~/cf-blob.file")
         cmd = "%s %s" % (app_info[2], fname)
@@ -239,7 +239,7 @@ class Grid(gtk.TreeView):
         f.write(str(data))
         f.close()
         os.system(cmd)
-        
+
     def on_save_blob(self, menuitem, data, mime):
         dlg = gtk.FileChooserDialog(_(u"Save as..."),
                                     None,
@@ -261,15 +261,15 @@ class Grid(gtk.TreeView):
             f.write(str(data))
             f.close()
         dlg.destroy()
-        
+
     def on_view_data(self, menuitem, data):
         dlg = DataViewer(data)
         dlg.run()
         dlg.destroy()
-        
+
     def cell_is_selected(self, row, column):
         """Returns ``True`` is a cell is selected
-        
+
         :Parameter:
             row
                 Row number
@@ -278,10 +278,10 @@ class Grid(gtk.TreeView):
         """
         col = self.get_model_index(column)-1
         return (row, col) in self.get_model().selected_cells
-    
+
     def get_cell_data(self, cell, repr=False):
         """Returns the content of a cell
-        
+
         :Parameter:
             cell
                 A row-cell tuple
@@ -294,38 +294,38 @@ class Grid(gtk.TreeView):
         if repr:
             data = model._get_markup_for_value(data, strip_length=False, markup=False)
         return data
-    
+
     def get_grid_data(self):
         """Returns all data"""
         return self.get_model().rows
-    
+
     def get_model_index(self, treeview_column):
         """Returns the model index for a column
-        
+
         :Parameter:
             treeview_column
                 ``gtk.TreeViewColumn`
-        
-        .. Note:: 
+
+        .. Note::
             This method returns the label column.
         """
         columns = self.get_columns()
         for i in range(len(columns)):
             if columns[i] == treeview_column:
                 return i
-            
+
     def get_selected_cells(self):
         """Returns selected cells"""
         return self.get_model().selected_cells
-    
+
     def get_selected_columns(self):
         """Returns selected columns"""
         return self.selected_columns
-    
+
     def get_selected_rows(self):
         """Returns selected rows"""
         return self.selected_rows
-        
+
     def reset(self):
         """Resets the grid"""
         old_model = self.get_model()
@@ -336,19 +336,19 @@ class Grid(gtk.TreeView):
         while self.get_columns():
             col = self.get_column(0)
             self.remove_column(col)
-            
+
     def row_is_selected(self, row):
         """Returns ``True`` if the row is selected
-        
+
         :Parameter:
             row
                 Row number
         """
         return row in self.selected_rows
-    
+
     def select_cell(self, row, column, selected):
         """Selects a cell
-        
+
         :Parameter:
             row
                 A row index
@@ -369,10 +369,10 @@ class Grid(gtk.TreeView):
         elif not selected and path in model.selected_cells:
             model.selected_cells.remove(path)
         self.emit("selection-changed", model.selected_cells)
-            
+
     def select_column(self, column, selected):
         """Selects a column
-        
+
         :Parameter:
             column
                 a ``gtk.TreeViewColumn``
@@ -405,10 +405,10 @@ class Grid(gtk.TreeView):
                 model.selected_cells.append((i, j))
         self.queue_draw()
         self.emit("selection-changed", model.selected_cells)
-        
+
     def select_row(self, row, selected):
         """Selects a row
-        
+
         :Parameter:
             row
                 the row number
@@ -435,10 +435,10 @@ class Grid(gtk.TreeView):
             return
         self.queue_draw()
         self.emit("selection-changed", model.selected_cells)
-    
+
     def set_result(self, rows, description, coding_hint="utf-8"):
         """Sets the result and updates the grid
-        
+
         :Parameter:
             rows
                 Sequence of rows
@@ -448,43 +448,43 @@ class Grid(gtk.TreeView):
         self.description = description
         self._setup_columns(rows)
         self._setup_model(rows, description, coding_hint)
-        
+
     def unselect_cells(self):
         """Unselects all cells"""
         model = self.get_model()
         model.selected_cells = []
-        
+
     def unselect_columns(self):
         """Unselects all columns"""
         while self.get_selected_columns():
             column = self.get_selected_columns()[0]
             self.select_column(column, False)
-            
+
     def unselect_rows(self):
         """Unselect all rows"""
         while self.get_selected_rows():
             row = self.get_selected_rows()[0]
             self.select_row(row, False)
-        
+
 class GridModel(gtk.GenericTreeModel):
     """Data grid model
-    
+
     The model stores it's data in a plain Python list. It provides
     three virtual columns for a displayed version of a value (limited
     to ``GRID_LABEL_MAX_LENGTH`` characters to increase perfomance),
     a foreground and a background color for selected cells.
-    
+
     This class re-uses some code of the `Nicotine`_ project (`FastListModel`_)
     found via Google's Code Search.
-    
+
     .. _Nicotine: http://nicotine-plus.sourceforge.net/
     .. _FastListModel: http://www.google.com/codesearch?hl=de&q=+lang:python+GenericTreeModel+show:VRnMlwyOXFM:6NW9oRiVVfg:ANlgLtp-rX8&sa=N&cd=20&ct=rc&cs_p=http://ftp.tr.freebsd.org/pub/FreeBSD/distfiles/nicotine%2B-1.2.6.tar.bz2&cs_f=nicotine%2B-1.2.6/pynicotine/gtkgui/utils.py#first
     """
-    
+
     def __init__(self, rows, description, style, coding_hint="utf-8"):
         """
         The constructor takes three arguments:
-        
+
         :Parameter:
             rows
                 Data as a plain python list of rows
@@ -499,10 +499,10 @@ class GridModel(gtk.GenericTreeModel):
         self.style = style
         self.coding_hint = coding_hint
         self.selected_cells = list()
-        
+
     def _get_markup_for_value(self, value, strip_length=True, markup=True):
         style = self.style
-        if value == None: 
+        if value == None:
             if markup:
                 value = '<span foreground="%s">&lt;NULL&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
             else:
@@ -597,7 +597,7 @@ class GridModel(gtk.GenericTreeModel):
             else:
                 return None
         else:
-            raise RuntimeError, "Unexpected index %r" % column 
+            raise RuntimeError, "Unexpected index %r" % column
 
     def on_iter_next(self, iter):
         '''returns the next node at this level of the tree'''
@@ -625,15 +625,15 @@ class GridModel(gtk.GenericTreeModel):
     def on_iter_parent(self, iter):
         '''returns the parent of this node'''
         return None
-    
-    
+
+
 class DataViewer(gtk.Dialog):
     """Dialog to display a value"""
-    
+
     def __init__(self, data):
         """
         The constructor of this class takes 1 argument:
-        
+
         :Parameter:
             data
                 A Python value to display
@@ -652,4 +652,3 @@ class DataViewer(gtk.Dialog):
         sw.add(tv)
         sw.show_all()
         self.resize(650, 550)
-        

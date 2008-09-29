@@ -47,7 +47,7 @@ from cf.ui.widgets import ProgressDialog
 
 class GenericPlugin(gobject.GObject):
     """Plugin base class"""
-    
+
     id = None
     name = None
     description = None
@@ -60,40 +60,40 @@ class GenericPlugin(gobject.GObject):
     has_custom_options = False
     plugin_type = PLUGIN_TYPE_GENERIC
     INIT_ERROR = None
-    
+
     def __init__(self, app):
         """
         The constructor of this class takes one argument:
-        
+
         :Parameter:
             app
                 `CFApplication`_ instance
-                
+
         .. _CFApplication: cf.app.CFApplication.html
         """
         self.app = app
         self.__gobject_init__()
-        
+
     @classmethod
     def run_custom_options_dialog(cls, app):
         """Runs a preferences dialog
-        
+
         If ``has_custom_options`` is ``True`` this method will
         be called if the user clicks on the *Configure plugin* button
         in the preferences dialog.
-        
+
         :Parameter:
             app
                 `CFApplication`_ instance
-                
+
         .. _CFApplication: cf.app.CFApplication.html
         """
         pass
-        
+
     def shutdown(self):
         """Called when the plugin is deactivated."""
         pass
-    
+
 class ExportPlugin(GenericPlugin):
     """Export filter base class"""
     icon = "gtk-save-as"
@@ -102,33 +102,33 @@ class ExportPlugin(GenericPlugin):
     file_filter_pattern = []
     has_options = False
     plugin_type = PLUGIN_TYPE_EXPORT
-    
+
     def __init__(self, app):
         GenericPlugin.__init__(self, app)
-        
+
     def export(self, description, rows, options=dict()):
         raise NotImplementedError
-    
+
     def show_options(self, description, rows):
         return dict()
-    
-        
+
+
 class DBBackendPlugin(GenericPlugin):
     """Database backend base class"""
     icon = "stock_database"
     context_help_pattern = None
     plugin_type = PLUGIN_TYPE_BACKEND
-    
+
     def __init__(self, app):
         GenericPlugin.__init__(self, app)
         self.schema = None
         self.reference = None
-    
+
     @classmethod
     def get_datasource_options_widgets(cls, data_widgets, initial_data=None):
         return data_widgets, []
     # TODO: Documentation
-    
+
     @classmethod
     def get_label(cls, datasource_info):
         s = "%s@%s on %s" % (datasource_info.options.get("user", None) or "??",
@@ -137,10 +137,10 @@ class DBBackendPlugin(GenericPlugin):
         if datasource_info.name:
             s = '%s (%s)' % (datasource_info.name, s)
         return s
-    
+
     def test_connection(self, data):
         raise NotImplementedError
-    
+
     def password_prompt(self):
         return dialogs.password(_(u"Password required"), _(u"Enter the password to connect to this database."))
 
@@ -151,38 +151,38 @@ PLUGIN_TYPES_MAP = {
     PLUGIN_TYPE_BACKEND : (_(u"Database backends"), DBBackendPlugin),
     PLUGIN_TYPE_EXPORT : (_(u"Export filter"), ExportPlugin),
     PLUGIN_TYPE_EDITOR : (_(u"Editor"), GenericPlugin),
-} 
+}
 
 class PluginManager(gobject.GObject):
     """Plugin manager
-    
+
     An instance of this class is accessible through the ``plugins``
     attribute of an `CFApplication`_ instance.
-    
+
     Signals
     =======
-        
+
         plugin-added
             ``def callback(manager, plugin, user_param1, ...)``
-            
+
             Emitted when a plugin was added to the registry.
-            
+
         plugin-removed
             ``def callback(manager, plugin, user_param1, ...)``
-            
+
             Emitted when a plugin is removed from the registry.
-            
+
         plugin-active
             ``def callback(manager, plugin, active, user_param1, ...)``
-            
+
             Emitted when a plugin is activated or deactivated. `active`
             is either ``True`` or ``False``.
-    
+
     .. _CFApplication: cf.app.CFApplication.html
     """
-    
+
     plugin_types = PLUGIN_TYPES_MAP
-    
+
     __gsignals__ = {
         "plugin-added" : (gobject.SIGNAL_RUN_LAST,
                           gobject.TYPE_NONE,
@@ -194,15 +194,15 @@ class PluginManager(gobject.GObject):
                            gobject.TYPE_NONE,
                            (gobject.TYPE_PYOBJECT, bool)),
     }
-    
+
     def __init__(self, app):
         """
         The constructor of this class takes one argument:
-        
+
         :Parameter:
             app
                 `CFApplication`_ instance
-                
+
         .. _CFApplication: cf.app.CFApplication.html
         """
         self.app = app
@@ -215,20 +215,20 @@ class PluginManager(gobject.GObject):
         self.app.cb.connect("instance-created", self.on_instance_created)
         self.refresh()
         self._first_run()
-        
+
     def on_app_shutdown(self):
         for plugin in self.__active_plugins.values():
             plugin.shutdown()
-            
+
     def on_instance_created(self, cb, instance):
         for plugin in self.__active_plugins.values():
             if isinstance(plugin, InstanceMixin):
                 self.init_instance_mixins(plugin, instance)
-        
+
     def on_plugin_folder_changed(self, folder, path, change):
         if change in [gnomevfs.MONITOR_EVENT_DELETED, gnomevfs.MONITOR_EVENT_CREATED]:
             gobject.idle_add(self.refresh)
-            
+
     def _first_run(self):
         if not self.app.options.first_run:
             return
@@ -236,20 +236,20 @@ class PluginManager(gobject.GObject):
         from cf.plugins.core import PLUGIN_TYPE_BACKEND
         for plugin in self.get_plugins(PLUGIN_TYPE_BACKEND):
             self.set_active(plugin, True)
-        
+
     def get_plugins(self, plugin_type, active_only=False):
         """Returns a list of plugins.
-        
+
         :Parameter:
             plugin_type
                 a ``PLUGIN_TYPE_*`` constant
-            
+
             active_only
                 If set to ``True`` only activated plugins are returned.
-                
-        :Returns: 
+
+        :Returns:
             List of `plugins`_
-        
+
         .. _plugins: cf.plugins.core.GenericPlugin.html
         """
         ret = list()
@@ -261,7 +261,7 @@ class PluginManager(gobject.GObject):
             if item.plugin_type == plugin_type:
                 ret.append(item)
         return ret
-    
+
     def _get_modules(self, path):
         modules = []
         if path not in sys.path:
@@ -294,7 +294,7 @@ class PluginManager(gobject.GObject):
                     continue
                 modules.append(mod)
         return modules
-    
+
     def _get_plugins(self, module):
         plugins = []
         for name in dir(module):
@@ -303,10 +303,10 @@ class PluginManager(gobject.GObject):
             and obj not in [GenericPlugin, ExportPlugin, DBBackendPlugin]:
                 plugins.append(obj)
         return plugins
-    
+
     def refresh(self):
         """Refreshs the plugin registry.
-        
+
         This method is called when the contents of a plugin folder
         changes.
         """
@@ -335,10 +335,10 @@ class PluginManager(gobject.GObject):
                     self.set_active(plugin, False)
                 del self.__plugins[id]
                 self.emit("plugin-removed", plugin)
-    
+
     def set_active(self, plugin, active, instance=None):
         """Activates / deactivates a plugin
-        
+
         :Parameter:
             plugin
                 Plugin to activate / deactivate
@@ -351,7 +351,7 @@ class PluginManager(gobject.GObject):
             if value == plugin:
                 id = key
                 break
-        if not id: 
+        if not id:
             return
         l = self.app.config.get("plugins.active", [])
         if active:
@@ -377,31 +377,31 @@ class PluginManager(gobject.GObject):
                 l.remove(id)
         self.app.config.set("plugins.active", l)
         self.emit("plugin-active", plugin, active)
-        
+
     def is_active(self, plugin):
         """Returns ``True`` if the plugin is active
-        
+
         :Parameter:
             plugin
                 A plugin
-                
+
         :Returns: ``True`` if the plugin is active.
         """
         if isinstance(plugin, GenericPlugin):
             plugin = plugin.__class__
         return self.__active_plugins.has_key(plugin)
-    
+
     def by_id(self, id, active_only=True):
         """Returns a plugin by its id
-        
+
         :Parameter:
             id
                 Plugin ID
             active_only
                 If ``True`` only active plugins are returned.
-        
+
         :Returns: `Plugin`_ or ``None``
-        
+
         .. _Plugin: cf.plugins.core.GenricPlugin.html
         """
         plugins = self.__active_plugins.values()
@@ -411,21 +411,21 @@ class PluginManager(gobject.GObject):
             if plugin.id == id:
                 return plugin
         return None
-    
+
     def init_instance_mixins(self, plugin, instance):
         plugin.init_instance(instance)
         if isinstance(plugin, MenubarMixin):
             plugin.menubar_load(instance.xml.get_widget("menubar"), instance)
         if isinstance(plugin, EditorMixin):
             self.editor_notify(instance._editor, instance)
-            
+
     def unload_instance_mixins(self, plugin, instance):
         if isinstance(plugin, MenubarMixin):
             plugin.menubar_unload(instance.xml.get_widget("menubar"), instance)
-            
+
     def editor_notify(self, editor, instance):
         """Called by an instance when the current editor has changed
-        
+
         :Parameter:
             editor
                 an editor or ``None``
@@ -435,10 +435,10 @@ class PluginManager(gobject.GObject):
         for plugin in self.__active_plugins.values():
             if isinstance(plugin, EditorMixin):
                 plugin.set_editor(editor, instance)
-                
+
     def install_plugin(self, uri):
         """Installs a plugin from URI
-        
+
         :Parameter:
             uri
                 URI pointing to .egg file
@@ -465,5 +465,3 @@ class PluginManager(gobject.GObject):
             err = sys.exc_info()[1]
             dlg.set_error(str(err))
         dlg.set_finished(True)
-            
-            

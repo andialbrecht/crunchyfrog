@@ -38,15 +38,15 @@ from cf.ui import GladeWidget
 
 class ConnectionButton(gdl.ComboButton):
     """Connection chooser used in toolbars
-    
+
     This widget is a ``gdl.ComboButton`` subclass and can be used to let
     the user choose a database connection.
-    
+
     It is always bound to an `SQL Editor`_.
-    
+
     .. _SQL Editor: cf.ui.editor.Editor.html
     """
-    
+
     def __init__(self, app):
         gdl.ComboButton.__init__(self)
         self.app = app
@@ -55,7 +55,7 @@ class ConnectionButton(gdl.ComboButton):
         self.app.datasources.connect("datasource-modified", self.on_datasources_changed)
         self.app.datasources.connect("datasource-added", self.on_datasources_changed)
         self.app.datasources.connect("datasource-deleted", self.on_datasources_changed)
-        
+
     def _setup_widget(self):
         lbl = self.get_children()[0].get_children()[0].get_children()[0].get_children()[1]
         lbl.set_max_width_chars(25)
@@ -64,13 +64,13 @@ class ConnectionButton(gdl.ComboButton):
         self.label = lbl
         self._menu = gtk.Menu()
         self.set_menu(self._menu)
-        
+
     def on_datasources_changed(self, *args):
         self.rebuild_menu()
-        
+
     def on_manage_connections(self, *args):
         self.manage_connections()
-        
+
     def on_new_connection(self, item, datasource_info):
         try:
             conn = datasource_info.dbconnect()
@@ -78,17 +78,17 @@ class ConnectionButton(gdl.ComboButton):
             self.set_editor(self._editor)
         except DBConnectError, err:
             dialogs.error(_(u"Connection failed"), str(err))
-        
+
     def on_set_connection(self, item, connection):
         self._editor.set_connection(connection)
         self.set_editor(self._editor)
-        
+
     def manage_connections(self):
         """Displays a dialog to manage connections"""
         dlg = ConnectionsDialog(self.app)
         dlg.run()
         dlg.destroy()
-        
+
     def rebuild_menu(self):
         """Rebuilds the drop-down menu"""
         while self._menu.get_children():
@@ -127,15 +127,15 @@ class ConnectionButton(gdl.ComboButton):
         item = gtk.MenuItem(_(u"Show connections"))
         item.connect("activate", self.on_manage_connections)
         item.show()
-        self._menu.append(item)    
-        
+        self._menu.append(item)
+
     def set_editor(self, editor):
         """Associates an editor
-        
+
         :Parameter:
             editor
                 `SQL editor`_
-                
+
         .. _SQL editor: cf.ui.editor.Editor.html
         """
         self._editor = editor
@@ -150,17 +150,17 @@ class ConnectionButton(gdl.ComboButton):
             else:
                 self.set_label("<"+_(u"Not connected")+">")
                 self.set_tooltip_markup(_(u"Click to open a connection"))
-                 
+
 class DataExportDialog(gtk.FileChooserDialog):
     """Export dialog
-    
+
     A modified ``gtk.FileChooserDialog`` for exporting data.
-    
+
     Usage example
     =============
-    
+
         .. sourcecode:: python
-        
+
             >>> from cf.ui.widgets import DataExportDialog
             >>> import gtk
             >>> data = [["foo", 1, True], ["bar", 2, False], ["anything else", 7, None]]
@@ -169,20 +169,20 @@ class DataExportDialog(gtk.FileChooserDialog):
             >>> description = (("name", str, None, None, None, None, None),
             ...            ("anumber", int, None, None, None, None, None),
             ...            ("anotherfield", bool, None, None, None, None, None))
-            >>> dlg = DataExportDialog(app, instance.widget, 
+            >>> dlg = DataExportDialog(app, instance.widget,
             ...                        data, selected, statement, description)
             >>> if dlg.run() == gtk.RESPONSE_OK:
             ...     dlg.hide()
             ...     dlg.export_data()
-            ... 
+            ...
             >>> dlg.destroy()
-    
+
     """
-    
+
     def __init__(self, app, parent, data, selected, statement, description):
         """
         The constructor of this class takes 6 arguments:
-        
+
         :Parameter:
             app
                 `CFApplication`_ instance
@@ -200,13 +200,13 @@ class DataExportDialog(gtk.FileChooserDialog):
                 A DB-API2-like description.
                 Read the comments on the ``description`` attribute of cursor
                 objects in `PEP 249`_ for details.
-                
-                
+
+
         .. Note:: Usually there's no need to define ``data`` and ``description``
             by hand. If it's a DB-API2-based backend, these parameters are
-            retrieved from the cursor object (``cursor.fetchall()`` and 
+            retrieved from the cursor object (``cursor.fetchall()`` and
             ``cursor.description``).
-                
+
         .. _CFApplication: cf.app.CFApplication.html
         .. _PEP 249: http://www.python.org/dev/peps/pep-0249/
         """
@@ -222,7 +222,7 @@ class DataExportDialog(gtk.FileChooserDialog):
         self.app = app
         self._setup_widget()
         self._setup_connections()
-        
+
     def _setup_widget(self):
         vbox = gtk.VBox()
         vbox.set_spacing(5)
@@ -238,7 +238,7 @@ class DataExportDialog(gtk.FileChooserDialog):
         if self.app.config.get("editor.export.recent_folder"):
             self.set_current_folder(self.app.config.get("editor.export.recent_folder"))
         self._setup_filter()
-    
+
     def _setup_filter(self):
         recent_filter = None
         from cf.plugins.core import PLUGIN_TYPE_EXPORT
@@ -257,23 +257,23 @@ class DataExportDialog(gtk.FileChooserDialog):
             self._filter_changed(recent_filter)
         else:
             self._filter_changed(self.get_filter())
-    
+
     def _setup_connections(self):
         self.connect("notify::filter", self.on_filter_changed)
-        
+
     def on_filter_changed(self, dialog, param):
         gobject.idle_add(self._filter_changed, self.get_filter())
-        
+
     def _filter_changed(self, filter):
         plugin = filter.get_data("plugin")
         self.edit_export_options.set_sensitive(plugin.has_options)
-        
+
     def export_data(self):
         """Exports the data
-        
+
         This method handles the export options given in the dialog and
         calls the ``export`` method of the choosen `export filter`_.
-        
+
         .. _export filter: cf.plugins.core.ExportPlugin.html
         """
         self.app.config.set("editor.export.recent_folder", self.get_current_folder())
@@ -298,17 +298,17 @@ class DataExportDialog(gtk.FileChooserDialog):
             app_desc = gnomevfs.mime_get_default_application(mime)
             cmd = app_desc[2].split(" ")
             os.spawnvp(os.P_NOWAIT, cmd[0], cmd+[opts["uri"]])
-            
+
 class ProgressDialog(GladeWidget):
     """Progress dialog with a message
-    
+
     A simple window with a message, an icon and a progress bar.
-    
+
     Usage example
     =============
-    
+
         .. sourcecode:: python
-        
+
             >>> from cf.ui.widgets import ProgressDialog
             >>> dlg = ProgressDialog(app)
             >>> dlg.show_all()
@@ -319,29 +319,29 @@ class ProgressDialog(GladeWidget):
             >>> dlg.set_error("Uuups... an error occured")
             >>> dlg.set_progress(0.75)
             >>> dlg.set_finished(True)
-            
+
     """
-    
+
     def __init__(self, app, parent=None):
         GladeWidget.__init__(self, app, "crunchyfrog", "progressdialog")
         if parent:
             self.reparent(parent)
-        
+
     def on_close(self, *args):
         self.destroy()
-        
+
     def set_progress(self, fraction):
         """Sets fraction for progress bar
-        
+
         :Parameter:
             fraction
                 The fraction (``float``)
         """
         self.xml.get_widget("progress_progress").set_fraction(fraction)
-        
+
     def set_error(self, message):
         """Displays an error
-        
+
         :Parameter:
             message
                 Error message
@@ -349,10 +349,10 @@ class ProgressDialog(GladeWidget):
         message = gobject.markup_escape_text(message)
         self.xml.get_widget("progress_label").set_markup("<b>"+message+"</b>")
         self.xml.get_widget("progress_image").set_from_stock("gtk-dialog-error", gtk.ICON_SIZE_DIALOG)
-        
+
     def set_info(self, message):
         """Displays an information
-        
+
         :Parameter:
             message
                 A message
@@ -360,23 +360,23 @@ class ProgressDialog(GladeWidget):
         message = gobject.markup_escape_text(message)
         self.xml.get_widget("progress_label").set_markup("<b>"+message+"</b>")
         self.xml.get_widget("progress_image").set_from_stock("gtk-dialog-info", gtk.ICON_SIZE_DIALOG)
-    
+
     def set_finished(self, finished):
         """Activates/deactivates close button
-        
+
         :Parameter:
             finished
                 If ``True`` the close button gets sensitive.
         """
         self.xml.get_widget("progress_btn_close").set_sensitive(finished)
-        
+
 class ConnectionsWidget(GladeWidget):
     """Lists datasources and active connections"""
-    
+
     def __init__(self, app, xml="crunchyfrog"):
         GladeWidget.__init__(self, app, xml, "connections_widget")
         self.refresh()
-        
+
     def _setup_widget(self):
         self.list_conn = self.xml.get_widget("list_connections")
         model = gtk.TreeStore(gobject.TYPE_PYOBJECT, str)
@@ -384,14 +384,14 @@ class ConnectionsWidget(GladeWidget):
         self.list_conn.set_model(model)
         col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=1)
         self.list_conn.append_column(col)
-        
+
     def _setup_connections(self):
         sel = self.list_conn.get_selection()
         sel.connect("changed", self.on_selection_changed)
         self.app.datasources.connect("datasource-added", self.on_datasource_added)
         self.app.datasources.connect("datasource-deleted", self.on_datasource_deleted)
         self.app.datasources.connect("datasource-modified", self.on_datasource_modified)
-        
+
     def on_connect(self, *args):
         sel = self.list_conn.get_selection()
         model, iter = sel.get_selected()
@@ -409,7 +409,7 @@ class ConnectionsWidget(GladeWidget):
                 model.set(citer, 0, conn, 1, conn.get_label())
                 break
             iter = model.iter_next(iter)
-        
+
     def on_disconnect(self, *args):
         sel = self.list_conn.get_selection()
         model, iter = sel.get_selected()
@@ -420,7 +420,7 @@ class ConnectionsWidget(GladeWidget):
             return
         model.remove(iter)
         obj.close()
-    
+
     def on_connection_closed(self, connection):
         model = self.list_conn.get_model()
         if not model: return
@@ -434,12 +434,12 @@ class ConnectionsWidget(GladeWidget):
                         break
                     citer = model.iter_next(citer)
             iter = model.iter_next(iter)
-            
+
     def on_datasource_added(self, manager, datasource_info):
         model = self.list_conn.get_model()
         iter = model.append(None)
         model.set(iter, 0, datasource_info, 1, datasource_info.get_label())
-    
+
     def on_datasource_modified(self, manager, datasource_info):
         model = self.list_conn.get_model()
         if not model:
@@ -450,7 +450,7 @@ class ConnectionsWidget(GladeWidget):
                 model.set(iter, 0, datasource_info, 1, datasource_info.get_label())
                 return
             iter = model.iter_next(iter)
-    
+
     def on_datasource_deleted(self, manager, datasource_info):
         model = self.list_conn.get_model()
         iter = model.get_iter_first()
@@ -459,7 +459,7 @@ class ConnectionsWidget(GladeWidget):
                 model.remove(iter)
                 return
             iter = model.iter_next(iter)
-        
+
     def on_selection_changed(self, selection):
         model, iter = selection.get_selected()
         is_connection = False
@@ -470,7 +470,7 @@ class ConnectionsWidget(GladeWidget):
             is_connection = isinstance(obj, DBConnection)
         self.xml.get_widget("btn_disconnect").set_sensitive(is_connection)
         self.xml.get_widget("btn_connect").set_sensitive(is_ds)
-        
+
     def refresh(self):
         """Initializes the data model"""
         model = self.list_conn.get_model()
@@ -480,32 +480,32 @@ class ConnectionsWidget(GladeWidget):
             for conn in datasource_info.get_connections():
                 citer = model.append(iter)
                 model.set(citer, 0, conn, 1, conn.get_label())
-        
+
 class ConnectionsDialog(GladeWidget):
     """Dialog displaying connections"""
-    
+
     def __init__(self, app):
         GladeWidget.__init__(self, app, "crunchyfrog", "connectionsdialog")
-        
+
     def _setup_widget(self):
         self.connections = ConnectionsWidget(self.app, self.xml)
-        
+
 class CustomImageMenuItem(gtk.ImageMenuItem):
     """Menu item with custom image
-    
-    This widget simplifies the creation of an ``gtk.ImageMenuItem`` with an 
+
+    This widget simplifies the creation of an ``gtk.ImageMenuItem`` with an
     custom image. ``icon_name`` is used to lookup an icon in the default GTK
     icon theme and so it is not restricted to stock id's. The additional method
     ``set_markup()`` can be used to set a markup string as the menu items label.
-    
+
     .. Note:: It is not recommended to use ``set_markup()`` because it is very
         unusual to have formatted text in menu items.
     """
-    
+
     def __init__(self, icon_name, label, is_markup=False):
         """
         The constructor of this class takes up to 3 arguments:
-        
+
         :Parameter:
             icon_name
                 Name of the icon or stock id
@@ -520,10 +520,10 @@ class CustomImageMenuItem(gtk.ImageMenuItem):
             self.set_markup(label)
         else:
             self.set_label(label)
-        
+
     def set_icon_name(self, icon_name):
         """Sets the image
-        
+
         :Parameter:
             icon_name
                 Icon name of the image
@@ -531,22 +531,21 @@ class CustomImageMenuItem(gtk.ImageMenuItem):
         it = gtk.icon_theme_get_default()
         pb = it.load_icon(icon_name, gtk.ICON_SIZE_MENU, gtk.ICON_LOOKUP_FORCE_SVG)
         self.get_children()[1].set_from_pixbuf(pb)
-        
+
     def set_label(self, label):
         """Sets the label
-        
+
         :Parameter:
             label
                 Menu item label
         """
         self.get_children()[0].set_label(label)
-        
+
     def set_markup(self, markup):
         """Sets the label as markup
-        
+
         :Parameter:
             markup
                 Menu item markup
         """
         self.get_children()[0].set_markup(markup)
-    

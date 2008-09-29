@@ -26,13 +26,13 @@ import gobject
 from cf.ui import GladeWidget
 
 class CFStatusbar(GladeWidget):
-    
+
     def __init__(self, app, xml):
         GladeWidget.__init__(self, app, xml, "statusbar")
         self._editor = None
-        
+
     def set_editor(self, editor):
         self._editor = editor
-        
+
     def set_message(self, msg):
         self.push(0, msg)

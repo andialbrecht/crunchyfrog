@@ -39,7 +39,7 @@ class DummyNode(object):
 
 
 class Browser(gtk.ScrolledWindow):
-    
+
     __gsignals__ = {
         "object-menu-popup" : (gobject.SIGNAL_RUN_LAST,
                                gobject.TYPE_NONE,
@@ -283,7 +283,7 @@ class Browser(gtk.ScrolledWindow):
                             icon = gtk.icon_theme_get_default().load_icon(child.icon, gtk.ICON_SIZE_MENU, gtk.ICON_LOOKUP_FORCE_SVG)
                         else:
                             icon = None
-                        model.set(citer, 
+                        model.set(citer,
                                   0, child,
                                   1, child.name,
                                   2, icon,

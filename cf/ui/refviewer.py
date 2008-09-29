@@ -23,7 +23,7 @@
 Todo
 ====
 
- * SEGFAULT when closing an re-opening RefView 
+ * SEGFAULT when closing an re-opening RefView
 """
 
 import gtk
@@ -44,35 +44,35 @@ class ReferenceViewer(GenericPlugin):
     license = "GPL"
     homepage = "http://cf.andialbrecht.de"
     version = "0.1"
-    
+
     def __init__(self, app):
         GenericPlugin.__init__(self, app)
         self._viewer = dict()
         self.app.cb.connect("instance-created", self.on_instance_created)
         for instance in app.get_instances():
             self.init_instance(instance)
-            
+
     def on_instance_created(self, app, instance):
         self.init_instance(instance)
-        
+
     def on_toggle_viewer(self, menuitem, instance):
         if menuitem.get_active():
             gobject.idle_add(self.create_view, menuitem, instance)
         else:
             gobject.idle_add(self.remove_view, instance)
-            
+
     def on_view_destroyed(self, view, menuitem, instance):
         menuitem.set_active(False)
-        
+
     def create_view(self, menuitem, instance):
         view = RefView(self.app, instance)
         self._viewer[instance] = view
-        item = DockItem(instance.dock, "refview", view.widget, _(u"Reference"), 
+        item = DockItem(instance.dock, "refview", view.widget, _(u"Reference"),
                           self.icon, gtk.POS_BOTTOM)
         instance.dock.add_item(item)
         instance.set_data("refviewer", view)
         view.widget.connect("destroy", self.on_view_destroyed, menuitem, instance)
-        
+
     def init_instance(self, instance):
         mn_view = instance.xml.get_widget("mn_view")
         item = gtk.CheckMenuItem(_(u"Reference Viewer"))
@@ -81,24 +81,24 @@ class ReferenceViewer(GenericPlugin):
         if self.app.config.get("refviewer.visible"):
             item.set_active(True)
         mn_view.append(item)
-        
+
     def remove_view(self, instance):
         view = self._viewer.pop(instance)
         instance.set_data("refviewer", None)
         view.destroy()
-        
+
     def shutdown(self):
         if self._viewer.keys():
             self.app.config.set("refviewer.visible", True)
         else:
             self.app.config.set("refviewer.visible", False)
-            
+
 class RefView(GladeWidget):
-    
+
     def __init__(self, app, instance):
         GladeWidget.__init__(self, app, "crunchyfrog", "reference_viewer")
         self.instance = instance
-        
+
     def _setup_widget(self):
         import gtkmozembed
         self.browser = gtkmozembed.MozEmbed()
@@ -114,28 +114,27 @@ class RefView(GladeWidget):
                 iter = model.append(None)
                 model.set(iter, 0, be, 1, be.reference.base_url,
                           2, be.reference.name)
-                
+
     def on_bookmarks_row_activated(self, treeview, path, column):
         model = treeview.get_model()
         iter = model.get_iter(path)
         self.load_url(model.get_value(iter, 1))
-        
+
     def on_load_url(self, *args):
         self.load_url(self.xml.get_widget("refviewer_entry_url").get_text())
-        
+
     def on_toggle_favorites(self, btn):
         if btn.get_active():
             self.xml.get_widget("refviewer_sw_favorites").show_all()
         else:
             self.xml.get_widget("refviewer_sw_favorites").hide()
-            
+
     def on_toggle_navigationbar(self, btn):
         if btn.get_active():
             self.xml.get_widget("refviewer_box_navigator").show_all()
         else:
             self.xml.get_widget("refviewer_box_navigator").hide()
-            
+
     def load_url(self, url):
         self.xml.get_widget("refviewer_entry_url").set_text(url)
         self.browser.load_url(url)
-        

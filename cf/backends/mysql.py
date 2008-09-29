@@ -40,13 +40,13 @@ class MySQLBackend(DBBackendPlugin):
     id = "crunchyfrog.backend.mysql"
     name = _(u"MySQL Plugin")
     description = _(u"Provides access to MySQL databases")
-    
+
     def __init__(self, app):
         DBBackendPlugin.__init__(self, app)
         log.info("Activating MySQL backend")
         self.schema = MySQLSchema()
         self.reference = MySQLReferenceProvider()
-        
+
     def _get_conn_opts_from_opts(self, opts):
         conn_opts = dict()
         if opts["database"]: conn_opts["db"] = opts["database"]
@@ -55,20 +55,20 @@ class MySQLBackend(DBBackendPlugin):
         if opts["user"]: conn_opts["user"] = opts["user"]
         if opts["password"]: conn_opts["passwd"] = opts["password"]
         return conn_opts
-        
+
     def shutdown(self):
         log.info("Shutting down MySQL backend")
-    
+
     @classmethod
     def get_datasource_options_widgets(cls, data_widgets, initial_data=None):
         return data_widgets, ["database", "host", "port", "user", "password"]
-    
+
     @classmethod
     def get_label(cls, datasource_info):
         if not datasource_info.options.get("host", None):
             datasource_info.options["host"] = "localhost"
         return DBBackendPlugin.get_label(datasource_info)
-    
+
     def dbconnect(self, data):
         opts = self._get_conn_opts_from_opts(data)
         if data.get("ask_for_password", False):
@@ -87,7 +87,7 @@ class MySQLBackend(DBBackendPlugin):
         conn = MySQLConnection(self, self.app, real_conn)
         conn.threadsafety = MySQLdb.threadsafety
         return conn
-    
+
     def test_connection(self, data):
         try:
             conn = self.dbconnect(data)
@@ -95,35 +95,35 @@ class MySQLBackend(DBBackendPlugin):
         except DBConnectError, err:
             return str(err)
         return None
-    
+
 class MySQLConnection(DbAPI2Connection):
-    
+
     def get_server_info(self):
         return "MySQL %s" % self._conn.get_server_info()
-    
+
 class MySQLSchema(SchemaProvider):
-    
+
     def q(self, connection, sql):
         cur = connection.cursor()._cur
         cur.execute("use information_schema;")
         cur.execute(sql)
         return cur.fetchall()
-    
+
     def fetch_children(self, connection, parent):
         if isinstance(parent, DatasourceInfo):
             return [SchemaCollection()]
-        
+
         elif isinstance(parent, SchemaCollection):
             ret = []
             sql = "select schema_name from schemata"
             for item in self.q(connection, sql):
                 ret.append(Schema(item[0]))
             return ret
-        
+
         elif isinstance(parent, Schema):
             return [TableCollection(schema=parent),
                     ViewCollection(schema=parent)]
-            
+
         elif isinstance(parent, TableCollection) \
         or isinstance(parent, ViewCollection):
             if isinstance(parent, TableCollection):
@@ -139,13 +139,13 @@ class MySQLSchema(SchemaProvider):
             for item in self.q(connection, sql):
                 ret.append(obj(item[0], item[1], schema=schema))
             return ret
-        
+
         elif isinstance(parent, Table):
             return [ColumnCollection(table=parent)]
-        
+
         elif isinstance(parent, View):
             return [ColumnCollection(table=parent)]
-        
+
         elif isinstance(parent, ColumnCollection):
             ret = []
             table = parent.get_data("table")
@@ -154,11 +154,11 @@ class MySQLSchema(SchemaProvider):
             for item in self.q(connection, sql):
                 ret.append(Column(item[0], item[1], table=table))
             return ret
-        
+
 class MySQLReferenceProvider(ReferenceProvider):
     name = _(u"MySQL Reference")
     base_url = "http://dev.mysql.com/doc/refman/5.1/en/index.html"
-    
+
     def get_context_help_url(self, term):
         url = "http://dev.mysql.com/doc/mysql/search.php?version=5.1&q="
         url += quote_plus(term.strip())

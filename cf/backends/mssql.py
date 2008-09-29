@@ -38,12 +38,12 @@ class MsSQLBackend(DBBackendPlugin):
     id = "crunchyfrog.backend.mssql"
     name = _(u"MS-SQL Plugin")
     description = _(u"Provides access to MS-SQL databases")
-    
+
     def __init__(self, app):
         DBBackendPlugin.__init__(self, app)
         log.info("Activating MS-SQL backend")
         self.schema = MsSQLSchema()
-        
+
     def _get_conn_opts_from_opts(self, opts):
         conn_opts = dict()
         if opts["database"]: conn_opts["database"] = opts["database"]
@@ -51,20 +51,20 @@ class MsSQLBackend(DBBackendPlugin):
         if opts["user"]: conn_opts["user"] = opts["user"]
         if opts["password"]: conn_opts["password"] = opts["password"]
         return conn_opts
-        
+
     def shutdown(self):
         log.info("Shutting down MS-SQL backend")
-    
+
     @classmethod
     def get_datasource_options_widgets(cls, data_widgets, initial_data=None):
         return data_widgets, ["database", "host", "user", "password"]
-    
+
     @classmethod
     def get_label(cls, datasource_info):
         if not datasource_info.options.get("host", None):
             datasource_info.options["host"] = "localhost"
         return DBBackendPlugin.get_label(datasource_info)
-    
+
     def dbconnect(self, data):
         opts = self._get_conn_opts_from_opts(data)
         if data.get("ask_for_password", False):
@@ -79,7 +79,7 @@ class MsSQLBackend(DBBackendPlugin):
         conn = MsSQLConnection(self, self.app, real_conn)
         conn.threadsafety = pymssql.threadsafety
         return conn
-    
+
     def test_connection(self, data):
         try:
             conn = self.dbconnect(data)
@@ -87,13 +87,13 @@ class MsSQLBackend(DBBackendPlugin):
         except DBConnectError, err:
             return str(err)
         return None
-    
+
 class MsSQLConnection(DbAPI2Connection):
-    
+
     def __init__(self, *args, **kw):
         DbAPI2Connection.__init__(self, *args, **kw)
         self.coding_hint = "latin-1"
-    
+
     def get_server_info(self):
         cur = self.cursor()
         cur.execute("SELECT @@VERSION")
@@ -101,26 +101,26 @@ class MsSQLConnection(DbAPI2Connection):
         ver = ver.splitlines()[0].strip()+" - "+ver.splitlines()[-1].strip()
         cur.close()
         return ver
-    
+
 class MsSQLSchema(SchemaProvider):
-    
+
     def q(self, connection, sql):
         cur = connection.cursor()._cur
         cur.execute(sql)
         return cur.fetchall()
-    
+
     def fetch_children(self, connection, parent):
         if isinstance(parent, DatasourceInfo):
             return [SchemaCollection()]
-        
+
         elif isinstance(parent, SchemaCollection):
             sql = "select catalog_name from information_schema.schemata"
             return [Schema(item[0]) for item in self.q(connection, sql)]
-        
+
         elif isinstance(parent, Schema):
             return [TableCollection(schema=parent),
                     ViewCollection(schema=parent)]
-        
+
         elif isinstance(parent, TableCollection):
             schema = parent.get_data("schema")
             sql = "select table_name from information_schema.tables \
@@ -128,7 +128,7 @@ class MsSQLSchema(SchemaProvider):
             and table_catalog = '%s'" % schema.name
             return[Table(item[0], schema=schema)
                    for item in self.q(connection, sql)]
-            
+
         elif isinstance(parent, ViewCollection):
             schema = parent.get_data("schema")
             sql = "select table_name from information_schema.tables \
@@ -136,10 +136,10 @@ class MsSQLSchema(SchemaProvider):
             and table_catalog = '%s'" % schema.name
             return[View(item[0], schema=schema)
                    for item in self.q(connection, sql)]
-            
+
         elif isinstance(parent, (Table, View)):
             return [ColumnCollection(table=parent)]
-        
+
         elif isinstance(parent, ColumnCollection):
             table = parent.get_data("table")
             schema = table.get_data("schema")

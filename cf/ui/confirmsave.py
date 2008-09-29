@@ -31,7 +31,7 @@ MODE_SINGLE = 1
 MODE_MULTIPLE = 2
 
 class ConfirmSaveDialog(GladeWidget):
-    
+
     def __init__(self, instance, changed_editors):
         GladeWidget.__init__(self, instance.app, "crunchyfrog",
                              "saveconfirm_dialog")
@@ -41,7 +41,7 @@ class ConfirmSaveDialog(GladeWidget):
         else:
             self.set_dialog_mode(MODE_MULTIPLE)
         self.fill_filelist()
-        
+
     def _setup_widget(self):
         model = gtk.ListStore(gobject.TYPE_PYOBJECT, str, bool, str)
         self.filelist = self.xml.get_widget("filelist")
@@ -56,12 +56,12 @@ class ConfirmSaveDialog(GladeWidget):
         col.pack_start(renderer, expand=True)
         col.add_attribute(renderer, 'text', 1)
         self.filelist.append_column(col)
-        
+
     def on_entry_toggled(self, renderer, path):
         model = self.filelist.get_model()
         iter = model.get_iter(path)
         model.set_value(iter, 2, not model.get_value(iter, 2))
-        
+
     def fill_filelist(self):
         model = self.filelist.get_model()
         for i in range(len(self.changed_editors)):
@@ -84,7 +84,7 @@ class ConfirmSaveDialog(GladeWidget):
                         break
                 tip = "\n".join(content)
             model.append([editor, lbl, True, tip])
-        
+
     def set_dialog_mode(self, mode):
         if mode == MODE_SINGLE:
             self.xml.get_widget("lbl_filelist").hide()
@@ -94,7 +94,7 @@ class ConfirmSaveDialog(GladeWidget):
             if editor.get_filename():
                 filename = os.path.basename(editor.get_filename())
             else:
-                filename = _(u"Unsaved Query %(num)s") % {"num" : 1} 
+                filename = _(u"Unsaved Query %(num)s") % {"num" : 1}
             msg_header = _(u'Save the changes to document "%(filename)s" before closing?') % {"filename":filename}
         else:
             self.xml.get_widget("lbl_filelist").show()
@@ -103,7 +103,7 @@ class ConfirmSaveDialog(GladeWidget):
             msg_header = msg_header % {"num" : len(self.changed_editors)}
         lbl = self.xml.get_widget("lbl_header").get_label()
         self.xml.get_widget("lbl_header").set_markup(lbl % msg_header)
-        
+
     def save_files(self):
         model = self.filelist.get_model()
         iter = model.get_iter_first()

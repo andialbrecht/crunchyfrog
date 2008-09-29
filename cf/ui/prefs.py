@@ -37,9 +37,9 @@ log = logging.getLogger("PREFS")
 from inspect import isclass
 
 try:
-  from xml.etree import ElementTree as etree
+    from xml.etree import ElementTree as etree
 except ImportError:
-  from lxml import etree
+    from lxml import etree
 from kiwi.ui import dialogs
 
 import cf
@@ -48,12 +48,12 @@ from cf.ui.widgets import ProgressDialog
 from cf.plugins.core import GenericPlugin
 
 class PreferencesDialog(GladeWidget):
-    
+
     def __init__(self, app):
         GladeWidget.__init__(self, app, "crunchyfrog", "preferences_dialog")
         self.sync_repo_file(silent=True)
         self.refresh()
-        
+
     def _setup_widget(self):
         self._setup_plugins()
         self._setup_editor()
@@ -61,7 +61,7 @@ class PreferencesDialog(GladeWidget):
         btn = self.xml.get_widget("btn_help")
         box = self.xml.get_widget("dialog-action_area1")
         box.set_child_secondary(btn, True)
-        
+
     def _setup_editor(self):
         model = gtk.ListStore(int, str, gtk.gdk.Pixbuf)
         iconview = self.xml.get_widget("editor_iconview")
@@ -106,8 +106,8 @@ class PreferencesDialog(GladeWidget):
             sel.select_iter(selected)
             sel.connect("changed", self.on_editor_option_changed)
             sel.set_data("config_option", "editor.scheme")
-                
-        
+
+
     def _setup_plugins(self):
         """Set up the plugins view"""
         self.plugin_model = gtk.TreeStore(gobject.TYPE_PYOBJECT, # 0 Plugin class
@@ -135,14 +135,14 @@ class PreferencesDialog(GladeWidget):
         self.plugin_list.append_column(col)
         sel = self.plugin_list.get_selection()
         sel.connect("changed", self.on_plugin_selection_changed)
-        
+
     def _setup_connections(self):
         self.app.plugins.connect("plugin-added", self.on_plugin_added)
         self.app.plugins.connect("plugin-removed", self.on_plugin_removed)
-        
+
     def on_editor_open_in_window_toggled(self, toggle):
         self.app.config.set("editor.open_in_window", toggle.get_active())
-        
+
     def on_editor_option_changed(self, widget, *args):
         option = widget.get_data("config_option")
         conf = self.app.config
@@ -163,14 +163,14 @@ class PreferencesDialog(GladeWidget):
             self.xml.get_widget("editor_font_box").set_sensitive(not widget.get_active())
         if option == "plugins.repo_enabled":
             gobject.idle_add(self.refresh_plugins)
-        
+
     def on_editor_selection_changed(self, iconview):
         model = iconview.get_model()
         for path in iconview.get_selected_items():
             iter = model.get_iter(path)
             nb = self.xml.get_widget("editor_notebook")
             nb.set_current_page(model.get_value(iter, 0))
-    
+
     def on_plugin_active_toggled(self, renderer, path):
         iter = self.plugin_model.get_iter(path)
         plugin = self.plugin_model.get_value(iter, 0)
@@ -179,7 +179,7 @@ class PreferencesDialog(GladeWidget):
         elif issubclass(plugin, GenericPlugin):
             self.plugin_model.set_value(iter, 1, not renderer.get_active())
             gobject.idle_add(self.app.plugins.set_active, plugin, not renderer.get_active())
-            
+
     def _plugin_download_and_activate(self, plugin):
         if not dialogs.yesno(_(u"Download plugin %r?") % plugin.xpath("//*/name")[0].text) == gtk.RESPONSE_YES:
             return
@@ -210,7 +210,7 @@ class PreferencesDialog(GladeWidget):
             log.error("URL: %s" % url)
             dlg.set_error(_(u"Failed to install plugin %r") % plugin.xpath("//*/name")[0].text)
         dlg.set_finished(True)
-            
+
     def on_plugin_added(self, manager, plugin):
         iter = self.plugin_model.get_iter_first()
         it = gtk.icon_theme_get_default()
@@ -234,7 +234,7 @@ class PreferencesDialog(GladeWidget):
                       3, ico,
                       4, True)
         self.refresh_plugins_repo()
-            
+
     def on_plugin_install(self, *args):
         dlg = gtk.FileChooserDialog(_(u"Install plugin"), None,
                                     gtk.FILE_CHOOSER_ACTION_OPEN,
@@ -252,7 +252,7 @@ class PreferencesDialog(GladeWidget):
             uri = None
         dlg.destroy()
         gobject.idle_add(self.app.plugins.install_plugin, uri)
-            
+
     def on_plugin_removed(self, manager, plugin):
         iter = self.plugin_model.get_iter_first()
         while iter:
@@ -265,7 +265,7 @@ class PreferencesDialog(GladeWidget):
                         return
                     citer = self.plugin_model.iter_next(citer)
             iter = self.plugin_model.iter_next(iter)
-            
+
     def on_plugin_prefs_show(self, *args):
         sel = self.plugin_list.get_selection()
         model, iter = sel.get_selected()
@@ -276,7 +276,7 @@ class PreferencesDialog(GladeWidget):
         if not obj.has_custom_options:
             return
         obj.run_custom_options_dialog(self.app)
-            
+
     def on_plugin_show_about(self, *args):
         sel = self.plugin_list.get_selection()
         model, iter = sel.get_selected()
@@ -294,7 +294,7 @@ class PreferencesDialog(GladeWidget):
         if obj.version: dlg.set_version(obj.version)
         dlg.run()
         dlg.destroy()
-            
+
     def on_plugin_selection_changed(self, selection, *args):
         model, iter = selection.get_selected()
         if not iter:
@@ -306,17 +306,17 @@ class PreferencesDialog(GladeWidget):
         else:
             self.xml.get_widget("plugin_about").set_sensitive(False)
             self.xml.get_widget("plugin_prefs").set_sensitive(False)
-            
+
     def on_plugin_sync_repo(self, *args):
         self.sync_repo_file()
-                
+
     def on_plugin_folder_show(self, *args):
         gnome.url_show(cf.USER_PLUGIN_URI)
-        
+
     def refresh(self):
         self.refresh_editor()
         self.refresh_plugins()
-        
+
     def refresh_editor(self):
         config = self.app.config
         gw = self.xml.get_widget
@@ -353,7 +353,7 @@ class PreferencesDialog(GladeWidget):
         gw("editor_font_box").set_sensitive(not config.get("editor.default_font"))
         gw("editor_font").set_data("config_option", "editor.font")
         gw("editor_font").set_font_name(config.get("editor.font"))
-        
+
     def refresh_plugins(self):
         # Repo
         self.xml.get_widget("plugin_enable_repo").set_data("config_option", "plugins.repo_enabled")
@@ -365,7 +365,7 @@ class PreferencesDialog(GladeWidget):
         for key, value in self.app.plugins.plugin_types.items():
             iter = model.append(None)
             model.set(iter,
-                      0, key, 
+                      0, key,
                       1, False,
                       2, '<b>%s</b>' % value[0],
                       3, None,
@@ -388,7 +388,7 @@ class PreferencesDialog(GladeWidget):
                           3, ico,
                           4, not bool(plugin.INIT_ERROR))
         gobject.idle_add(self.refresh_plugins_repo)
-        
+
     def _plugin_iter_for_ep(self, ep_name):
         model = self.plugin_list.get_model()
         iter = model.get_iter_first()
@@ -397,7 +397,7 @@ class PreferencesDialog(GladeWidget):
                 return model, iter
             iter = model.iter_next(iter)
         return model, None
-            
+
     def refresh_plugins_repo(self):
         """Refresh repository plugins"""
         model = self.plugin_list.get_model()
@@ -449,7 +449,7 @@ class PreferencesDialog(GladeWidget):
                       2, lbl,
                       3, ico,
                       4, True)
-            
+
     def sync_repo_file(self, silent=False):
         """Synchronize plugin repo.xml"""
         def progress_cb(info, dlg):

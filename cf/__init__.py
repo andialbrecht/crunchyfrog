@@ -92,7 +92,7 @@ USER_PLUGIN_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_DIR)
 USER_PLUGIN_REPO = join(USER_DIR, "repo.xml")
 USER_PLUGIN_REPO_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_REPO)
 PID_FILE = join(USER_DIR, "crunchyfrog.pid")
-    
+
 gettext.bindtextdomain("crunchyfrog", LOCALE_DIR)
 gettext.textdomain("crunchyfrog")
 gtk.glade.bindtextdomain("crunchyfrog", LOCALE_DIR)
@@ -147,11 +147,11 @@ def is_alive(pid_file):
             print "missing /proc"
             return True # no /proc, assume Listen is running
         try:
-            f = open('/proc/%d/cmdline'% pid) 
+            f = open('/proc/%d/cmdline'% pid)
         except IOError, e:
             if e.errno == errno.ENOENT:
                 return False # file/pid does not exist
-            raise 
+            raise
 
         n = f.read().lower()
         f.close()
@@ -182,7 +182,7 @@ def main():
         else:
             props = dict()
         gnome.init(release.name.lower(), release.version,
-                   properties=props)       
+                   properties=props)
         app = CFApplication(options)
         app.init()
         instance = app.new_instance(args)
@@ -208,7 +208,7 @@ def main():
             sel.destroy()
         else:
             client.new_instance()
-            
-        
+
+
 if __name__ == "__main__":
     main()

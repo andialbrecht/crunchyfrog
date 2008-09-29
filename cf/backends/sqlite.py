@@ -39,7 +39,7 @@ class SQLiteBackend(DBBackendPlugin):
     id = "crunchyfrog.backend.sqlite"
     name = _(u"SQLite3 Plugin")
     description = _(u"Provides access to SQLite3 databases")
-        
+
     def __init__(self, app):
         DBBackendPlugin.__init__(self, app)
         log.info("Activating SQLite3 backend")
@@ -49,10 +49,10 @@ class SQLiteBackend(DBBackendPlugin):
     @classmethod
     def _get_filename(cls, chooser):
         return chooser.get_filename()
-        
+
     def shutdown(self):
         log.info("Shutting down SQLite3 backend")
-    
+
     @classmethod
     def get_datasource_options_widgets(cls, data_widgets, initial_data=None):
         lbl = gtk.Label(_(u"Database file:"))
@@ -62,11 +62,11 @@ class SQLiteBackend(DBBackendPlugin):
             file_chooser.select_filename(initial_data.options.get("filename"))
         data_widgets["filename"] = (cls._get_filename, file_chooser)
         return data_widgets, [lbl, file_chooser]
-    
+
     @classmethod
     def get_label(cls, datasource_info):
         return "%s (sqlite://%s)" % (datasource_info.name, datasource_info.options.get("filename"))
-    
+
     def dbconnect(self, data):
         try:
             import sqlite3
@@ -77,7 +77,7 @@ class SQLiteBackend(DBBackendPlugin):
         except StandardError, err:
             raise DBConnectError(str(err))
         return SQLite3Connection(self, self.app, real_conn)
-    
+
     def test_connection(self, data):
         try:
             conn = self.dbconnect(data)
@@ -85,53 +85,53 @@ class SQLiteBackend(DBBackendPlugin):
         except DBConnectError, err:
             return str(err)
         return None
-    
+
 class SQLite3Connection(DbAPI2Connection):
-    
+
     def get_server_info(self):
         cur = self._conn.cursor()
         cur.execute("select sqlite_version()")
         ret = cur.fetchone()[0]
         cur.close()
         return "SQLite %s" % ret
-    
+
 class SQLiteSchema(SchemaProvider):
-    
+
     def q(self, connection, sql):
         cur = connection.cursor()._cur
         cur.execute(sql)
         return cur.fetchall()
-    
+
     def fetch_children(self, connection, parent):
         if isinstance(parent, DatasourceInfo):
             return [TableCollection(), ViewCollection()]
-        
+
         elif isinstance(parent, TableCollection):
             ret = []
             sql = "select name from sqlite_master where type = 'table'"
             for item in self.q(connection, sql):
                 ret.append(Table(item[0]))
             return ret
-        
+
         elif isinstance(parent, ViewCollection):
             ret = []
             sql = "select name from sqlite_master where type = 'view'"
             for item in self.q(connection, sql):
                 ret.append(View(item[0]))
             return ret
-        
+
         elif isinstance(parent, Table) or isinstance(parent, View):
             return [ColumnCollection(table=parent)]
-        
+
         elif isinstance(parent, ColumnCollection):
             ret = []
             sql = "pragma table_info('%s')" % parent.get_data("table").name
             return [Column(item[1]) for item in self.q(connection, sql)]
-        
+
 class SQLiteReferenceProvider(ReferenceProvider):
     name = _(u"SQLite Reference")
     base_url = "http://sqlite.org/docs.html"
-    
+
     def get_context_help_url(self, term):
         return "http://sqlite.org/lang.html"
 

@@ -37,7 +37,7 @@ TRANSACTION_ROLLBACK_ENABLED = 1 << 3
 
 class DBError(StandardError):
     """Base class for database errors"""
-    
+
     def __init__(self, msg):
         self._msg = msg
     def __str__(self):
@@ -45,9 +45,9 @@ class DBError(StandardError):
 
 class DBConnectError(DBError):
     """Errors on opening a connection"""
-    
+
 class DBConnection(gobject.GObject):
-    
+
     __gsignals__ = {
         "closed" : (gobject.SIGNAL_RUN_LAST,
                     gobject.TYPE_NONE,
@@ -56,13 +56,13 @@ class DBConnection(gobject.GObject):
                     gobject.TYPE_NONE,
                     (str,)),
     }
-    
+
     __gproperties__ = {
         "transaction-state" : (gobject.TYPE_PYOBJECT,
                             "Transaction flag", "Transaction flag",
                             gobject.PARAM_READWRITE),
     }
-    
+
     def __init__(self, provider, app):
         self.app = app
         self.provider = provider
@@ -72,61 +72,61 @@ class DBConnection(gobject.GObject):
         self.coding_hint = "utf-8"
         self._transaction_state = TRANSACTION_IDLE
         self.__gobject_init__()
-        
+
     def do_set_property(self, property, value):
         if property.name == "transaction-state":
             self._transaction_state = value
         else:
             raise AttributeError, "unknown property %r" % property.name
-        
+
     def do_get_property(self, property):
         if property.name == "transaction-state":
             return self._transaction_state
         else:
             raise AttributeError, "unknown property %r" % property.name
-        
+
     def get_label(self):
         return self.datasource_info.get_label() + " #%s" % self.conn_number
-        
+
     def close(self):
         self.emit("closed")
-        
+
     def cursor(self):
         raise NotImplementedError
-    
+
     def update_transaction_status(self):
         pass
-    
+
     def get_server_info(self):
         return None
-    
+
     def commit(self):
         raise NotImplementedError
-    
+
     def rollback(self):
         raise NotImplementedError
-    
+
     def explain(self, statement):
         return []
-    
+
 class DBCursor(gobject.GObject):
-    
+
     def __init__(self, connection):
         self.connection = connection
         self.__gobject_init__()
-        
+
     def execute(self, query):
         raise NotImplementedError
-    
+
     def get_messages(self):
         return []
-    
+
     def close(self):
         raise NotImplementedError
-    
-    
+
+
 class Query(gobject.GObject):
-    
+
     __gsignals__ = {
         "started" : (gobject.SIGNAL_RUN_LAST,
                      gobject.TYPE_NONE,
@@ -135,7 +135,7 @@ class Query(gobject.GObject):
                       gobject.TYPE_NONE,
                       tuple())
     }
-    
+
     def __init__(self, statement, cursor):
         self.__gobject_init__()
         self.statement = statement
@@ -149,7 +149,7 @@ class Query(gobject.GObject):
         self.execution_time = None
         self.coding_hint = "utf-8"
         self.errors = list()
-        
+
     def execute(self, threaded=False):
         if threaded:
             Emit(self, "started")
@@ -173,13 +173,13 @@ class Query(gobject.GObject):
             Emit(self, "finished")
         else:
             self.emit("finished")
-            
+
 class ReferenceProvider(gobject.GObject):
     name = None
     base_url = None
-    
+
     def __init__(self):
         self.__gobject_init__()
-        
+
     def get_context_help_url(self, term):
         return None

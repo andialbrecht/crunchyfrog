@@ -28,7 +28,7 @@ description = "Database navigator and query tool for GNOME"
 author = "Andi Albrecht"
 author_email = "albrecht.andi@gmail.com"
 url = "http://cf.andialbrecht.de"
-long_description = """CrunchyFrog is a database navigator and SQL editor 
+long_description = """CrunchyFrog is a database navigator and SQL editor
 for the GNOME desktop.
 
 Supported databases

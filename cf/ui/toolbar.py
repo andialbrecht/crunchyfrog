@@ -30,7 +30,7 @@ from cf.ui import GladeWidget
 from cf.ui.widgets import ConnectionButton
 
 class CFToolbar(GladeWidget):
-    
+
     def __init__(self, app, xml, cb_provider=None):
         GladeWidget.__init__(self, app, xml, "toolbar", cb_provider=cb_provider)
         item = self.xml.get_widget("tb_connection")
@@ -41,7 +41,7 @@ class CFToolbar(GladeWidget):
         self.__buffer_signals = list()
         self.__conn_signals = list()
         self.set_editor(None)
-        
+
     def on_buffer_changed(self, buffer, editor):
         btn_save = self.xml.get_widget("tb_save")
         btn_saveas = self.xml.get_widget("tb_saveas")
@@ -51,13 +51,13 @@ class CFToolbar(GladeWidget):
             return
         btn_save.set_sensitive(editor.file_contents_changed())
         btn_saveas.set_sensitive(True)
-        
-        
+
+
     def on_connection_notify(self, connection, property):
         if property.name == "transaction-state":
             value = connection.get_property(property.name)
             gobject.idle_add(self.set_transaction_state, value)
-        
+
     def on_editor_connection_changed(self, editor, conn):
         if editor != self._editor: return
         self.xml.get_widget("tb_execute").set_sensitive(bool(conn))
@@ -67,16 +67,16 @@ class CFToolbar(GladeWidget):
         else:
             self.set_transaction_state(None)
         self.tb_connection.set_editor(editor)
-            
+
     def set_transaction_state(self, value):
-        if value == None: 
+        if value == None:
             for item in ("tb_commit", "tb_rollback", "tb_begin"):
                 self.xml.get_widget(item).set_sensitive(False)
                 return
         self.xml.get_widget("tb_commit").set_sensitive((value & TRANSACTION_COMMIT_ENABLED) != 0)
         self.xml.get_widget("tb_rollback").set_sensitive((value & TRANSACTION_ROLLBACK_ENABLED) != 0)
         self.xml.get_widget("tb_begin").set_sensitive((value & TRANSACTION_IDLE) != 0)
-        
+
     def set_editor(self, editor):
         while self.__editor_signals:
             self._editor.disconnect(self.__editor_signals.pop())

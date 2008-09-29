@@ -32,20 +32,20 @@ class CSVExportFilter(ExportPlugin):
     homepage = "http://cf.andialbrecht.de"
     version = "0.1"
     has_options = False
-    
+
     file_filter_name = _(u"Text CSV (.csv)")
     file_filter_pattern = ["*.csv"]
-    
+
     def __init__(self, app):
         ExportPlugin.__init__(self, app)
-        
+
     def export(self, description, rows, options):
         import csv
         fp = open(options["filename"], "w")
         w = csv.writer(fp)
         w.writerows(rows)
         fp.close()
-        
+
 class OOCalcExportFilter(ExportPlugin):
     id = "crunchyfrog.export.odc"
     name = _(u"OpenDocument Export")
@@ -54,13 +54,13 @@ class OOCalcExportFilter(ExportPlugin):
     license = "GPL"
     homepage = "http://cf.andialbrecht.de"
     version = "0.1"
-    
+
     file_filter_name = _(u"OpenDocument Spreadsheet (.ods)")
     file_filter_pattern = ["*.ods"]
-    
+
     def __init__(self, app):
         ExportPlugin.__init__(self, app)
-        
+
     def export(self, description, rows, options):
         from cf.thirdparty import ooolib
         import pwd
@@ -80,7 +80,7 @@ class OOCalcExportFilter(ExportPlugin):
                 if value == None:
                     continue
                 if type(value) == types.FloatType:
-                    otype = "float" 
+                    otype = "float"
                 elif type(value) == types.IntType:
                     otype = "int"
                 elif type(value) == types.BooleanType:
@@ -89,4 +89,3 @@ class OOCalcExportFilter(ExportPlugin):
                     otype = "string"
                 doc.set_cell_value(j+1, i+2, otype, value)
         doc.save(options["filename"])
-            

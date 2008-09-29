@@ -27,11 +27,11 @@ import logging
 log = logging.getLogger("DS")
 
 class DatasourceInfo(gobject.GObject):
-    
+
     def __init__(self, app, backend, name=None, description=None, options={}):
         """
         The constructor of this class takes up to five arguments:
-        
+
         :Parameter:
             app
                 `CFApplication`_ instance
@@ -43,7 +43,7 @@ class DatasourceInfo(gobject.GObject):
                 Datasource description (optional)
             options
                 Backend specific options (optional)
-        
+
         .. _CFApplication: cf.app.CFApplication.html
         .. _DBBackendPlugin: cf.plugins.core.DBBackendPlugin.html
         """
@@ -58,13 +58,13 @@ class DatasourceInfo(gobject.GObject):
         self.__conncount = 1L
         self.__connections = list()
         self.internal_connection = None
-        
+
     def __cmp__(self, other):
         return cmp(self.db_id, other.db_id)
-        
+
     def get_label(self):
         return self.backend.get_label(self)
-    
+
     def save(self):
         cur = self.app.userdb.cursor
         conn = self.app.userdb.conn
@@ -83,7 +83,7 @@ class DatasourceInfo(gobject.GObject):
                               self.serialize_options(), self.db_id))
             conn.commit()
             self.app.datasources.emit("datasource-modified", self)
-            
+
     def delete(self):
         cur = self.app.userdb.cursor
         conn = self.app.userdb.conn
@@ -91,13 +91,13 @@ class DatasourceInfo(gobject.GObject):
         cur.execute(sql, (self.db_id,))
         conn.commit()
         self.app.datasources.emit("datasource-deleted", self)
-            
+
     def serialize_options(self):
         return cPickle.dumps(self.options)
-    
+
     def deserialize_options(self, data):
         return cPickle.loads(data)
-    
+
     @classmethod
     def load(cls, app, db_id):
         cur = app.userdb.cursor
@@ -110,7 +110,7 @@ class DatasourceInfo(gobject.GObject):
         i = cls(app, backend, res[0], res[1], opts)
         i.db_id = db_id
         return i
-    
+
     @classmethod
     def load_all(cls, app):
         cur = app.userdb.cursor
@@ -120,22 +120,22 @@ class DatasourceInfo(gobject.GObject):
         for item in cur.fetchall():
             r.append(cls.load(app, item[0]))
         return r
-    
+
     def get_connections(self):
         return self.__connections
-    
+
     def add_connection(self, connection):
         connection.connect("closed", self.on_connection_closed)
         self.__connections.append(connection)
         self.app.datasources.emit("datasource-modified", self)
-        
+
     def on_connection_closed(self, connection):
         if connection in self.__connections:
             self.__connections.remove(connection)
         if connection == self.internal_connection:
             self.internal_connection = None
         gobject.idle_add(self.app.datasources.emit, "datasource-modified", self)
-            
+
     def dbconnect(self):
         conn = self.backend.dbconnect(self.options)
         conn.datasource_info = self
@@ -145,40 +145,40 @@ class DatasourceInfo(gobject.GObject):
             self.internal_connection = conn
         self.add_connection(conn)
         return conn
-    
+
     def dbdisconnect(self):
         while self.__connections:
             conn = self.__connections[0]
             log.info("Closing connection %s" % conn)
             conn.close()
-    
+
 class DatasourceManager(gobject.GObject):
     """Datasource manager
-    
+
     An instance of this class is accessible through the ``datasources``
     attribute of an `CFApplication`_ instance.
-    
+
     Signals
     =======
         datasource-added
             ``def callback(manager, datasource_info, user_param1, ...)``
-            
+
             Emitted when a datsource was added
-            
+
         datasource-deleted
             ``def callback(manager, datasource_info, user_param1, ...)``
-            
+
             Emitted when a datasource was removed
-            
+
         datasource-modified
             ``def callback(manager, datasource_info, user_param1, ...)``
-            
+
             Emitted when a datasource was modified
-            
+
     .. _CFApplication: cf.app.CFApplication.html
-            
+
     """
-    
+
     __gsignals__ = {
         "datasource-added" : (gobject.SIGNAL_RUN_LAST,
                               gobject.TYPE_NONE,
@@ -190,15 +190,15 @@ class DatasourceManager(gobject.GObject):
                               gobject.TYPE_NONE,
                               (gobject.TYPE_PYOBJECT,)),
     }
-    
+
     def __init__(self, app):
         """
         The constructor of this class takes one argument:
-        
+
         :Parameter:
             app
                 `CFApplication`_ instance
-        
+
         .. _CFApplication: cf.app.CFApplication.html
         """
         self.app = app
@@ -212,14 +212,14 @@ class DatasourceManager(gobject.GObject):
             if not item.backend or not self.app.plugins.is_active(item.backend):
                 continue
             self._cache.append(item)
-        
+
     def on_datasource_added(self, manager, datasource_info):
         self._cache.append(datasource_info)
-    
+
     def on_datasource_deleted(self, manager, datasource_info):
         if datasource_info in self._cache:
             self._cache.remove(datasource_info)
-    
+
     def on_datasource_modified(self, manager, datasource_info):
         for ds in self._cache:
             if ds != datasource_info:
@@ -228,7 +228,7 @@ class DatasourceManager(gobject.GObject):
             ds.description = datasource_info.description
             ds.name = datasource_info.name
             ds.options = datasource_info.options
-            
+
     def on_plugin_active(self, manager, plugin, active):
         from cf.plugins.core import PLUGIN_TYPE_BACKEND
         if not plugin.plugin_type == PLUGIN_TYPE_BACKEND:
@@ -239,17 +239,17 @@ class DatasourceManager(gobject.GObject):
             elif not active and item in self._cache:
                 item.dbdisconnect()
                 self.emit("datasource-deleted", item)
-        
+
     def get_all(self):
         """Returns all datasources
-        
+
         :Returns: List of `DatasourceInfo`_ instances
-        
+
         .. _DatasourceInfo: cf.datasources.DatasourceInfo.html
         """
         return self._cache
-        
-    
+
+
 def check_userdb(userdb):
     if not userdb.get_table_version("datasource"):
         sql = "create table datasource (id integer primary key, \

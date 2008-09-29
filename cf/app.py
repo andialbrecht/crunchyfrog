@@ -28,7 +28,7 @@ import gtk
 import sys
 
 from cf import release
-from config import Config 
+from config import Config
 from datasources import DatasourceManager
 from plugins.core import PluginManager
 from ui.prefs import PreferencesDialog
@@ -40,46 +40,46 @@ log = logging.getLogger("APP")
 
 class CFApplication(gobject.GObject):
     """Main application object
-    
+
     An instance of this class is accessible in almost every class in
     CrunchyFrog through the ``app`` attribute. It provides access
     to application internals.
-    
+
     The easiest way to learn more about this object is to activate the
     Python shell plugin. The shell has two local variables: ``app``
     is the CFApplication instance and ``instance`` is the `CFInstance`_
     object for the GUI the shell runs in.
-        
+
     Attributes
     ==========
-    
+
         :config: Configuration (see `Config`_ class)
         :userdb: User database (see `UserDB`_ class)
         :plugins: Plugin registry (see `PluginManager`_ class)
         :datasources: Datasource information (see `DatasourceManager`_ class)
-            
+
     .. _Config: cf.config.Config.html
     .. _UserDB: cf.userdb.UserDB.html
     .. _PluginManager: cf.plugins.core.PluginManager.html
     .. _DatasourceManager: cf.datasources.DatasourceManager.html
     .. _CFInstance: cf.instance.CFInstance.html
     """
-    
+
     def __init__(self, options):
         """
         The constructor of this class takes one argument:
-        
+
         :Parameter:
             options
                 Commandline options as returned by `optparse`_
-                
+
         .. _optparse: http://docs.python.org/lib/module-optparse.html
         """
         self.__gobject_init__()
         self.set_data("instances", {})
         self.__icount = 0L
         self.options = options
-        
+
     def init(self):
         """Initializes the application"""
         self.cb = CFAppCallbacks()
@@ -90,10 +90,10 @@ class CFApplication(gobject.GObject):
         self.datasources = DatasourceManager(self)
         self.dbus_service = CFService(self)
         self.recent_manager = gtk.recent_manager_get_default()
-        
+
     def new_instance(self, args=None):
         """Creates a new instances.
-        
+
         ``args`` is an optional list of file names to open
         """
         from cf.instance import CFInstance
@@ -107,7 +107,7 @@ class CFApplication(gobject.GObject):
         instance.widget.show()
         self.cb.emit("instance-created", instance)
         return instance
-    
+
     def on_instance_destroyed(self, instance, instance_id):
         instances = self.get_data("instances")
         if instances.has_key(instance_id):
@@ -115,32 +115,32 @@ class CFApplication(gobject.GObject):
         self.set_data("instances", instances)
         if not instances:
             self.shutdown()
-            
+
     def get_instance(self, instance_id):
         """Returns an instances identified by ID"""
         return self.get_data("instances").get(instance_id)
-        
+
     def get_instances(self):
         """Returns a list of active instances
-        
+
         :Returns: List of `CFInstance`_ instances
-        
+
         .. _CFInstance: cf.instance.CFInstance.html
         """
         return self.get_data("instances").values()
-        
+
     def preferences_show(self):
         """Displays the preferences dialog"""
         dlg = PreferencesDialog(self)
         dlg.run() # IGNORE:E1101 - Generic method
         dlg.destroy() # IGNORE:E1101 - Generic method
-        
+
     def register_shutdown_task(self, func, msg, *args, **kwargs):
         """Registers a new shutdown task.
-        
+
         Shutdown tasks are executed when the ``shutdown`` method is
         called.
-        
+
         :Parameter:
             func
                 A callable
@@ -150,10 +150,10 @@ class CFApplication(gobject.GObject):
                 arguments and keyword arguments for ``func`` (optional)
         """
         self.__shutdown_tasks.append((func, msg, args, kwargs))
-        
+
     def shutdown(self):
         """Execute all shutdown tasks and quit application
-        
+
         Shutdown tasks are called within a try-except-block. If an
         exception is raised it will be printed to stdout.
         """
@@ -166,19 +166,19 @@ class CFApplication(gobject.GObject):
                 import traceback; traceback.print_exc()
                 log.error("Task failed: %s" % str(sys.exc_info()[1]))
         gtk.main_quit()
-        
+
 class CFAppCallbacks(gobject.GObject):
     """Container for application specific signals.
-    
+
     Signals
     =======
-    
+
         instance-created
             ``def callback(application, instance, user_data1, ...)``
-            
+
             Called when a new instance was created
     """
-    
+
     __gsignals__ = {
         "instance-created" : (gobject.SIGNAL_RUN_LAST,
                               gobject.TYPE_NONE,

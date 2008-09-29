@@ -50,12 +50,12 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
     license = "GPL"
     homepage = "http://cf.andialbrecht.de"
     version = "0.1"
-    
+
     def __init__(self, app):
         GenericPlugin.__init__(self, app)
         self._mn_add = dict()
         self._menu_items = dict()
-        
+
     def on_add_to_library(self, menuitem, instance):
         editor = instance.get_editor()
         if not editor:
@@ -63,7 +63,7 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
         buffer = editor.textview.get_buffer()
         txt = buffer.get_text(*buffer.get_bounds())
         self.add_to_library(txt)
-        
+
     def on_load_from_library(self, menuitem, id_, instance):
         editor = instance.get_editor()
         if not editor:
@@ -71,10 +71,10 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
         sql = "select statement from sqllib_sql where id = %s" % id_
         self.userdb.cursor.execute(sql)
         editor.textview.get_buffer().set_text(self.userdb.cursor.fetchone()[0])
-        
+
     def on_show_library(self, *args):
         self.show_library()
-        
+
     def add_to_library(self, txt):
         dlg = LibSaveDialog(self.app)
         dlg.set_statement(txt)
@@ -87,7 +87,7 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
             self.userdb.conn.commit()
             gobject.idle_add(self.rebuild_menues)
         dlg.destroy()
-        
+
     def menubar_load(self, menubar, instance):
         children = menubar.get_children()
         pos = -1
@@ -116,7 +116,7 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
         item.connect("activate", self.on_add_to_library, instance)
         self._mn_add[instance] = item
         self.rebuild_menues()
-        
+
     def menubar_unload(self, menubar, instance):
         for item in menubar.get_children():
             if item.get_name() == "library":
@@ -124,18 +124,18 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
                 return
         del self._menu_items[instance]
         del self._mn_add[instance]
-            
+
     def set_editor(self, editor, instance):
         if not self._mn_add.has_key(instance):
             return
         self._mn_add[instance].set_sensitive(bool(editor))
-        
+
     def userdb_init(self):
         if self.userdb.get_table_version("sqllib_cat") == None:
             self.userdb.create_table("sqllib_cat", "0.1", TABLE_LIB_CAT)
         if self.userdb.get_table_version("sqllib_sql") == None:
             self.userdb.create_table("sqllib_sql", "0.1", TABLE_LIB_SQL)
-            
+
     def rebuild_menues(self):
         def add_items(mitem, parent, instance):
             sql = "select id, name from sqllib_cat where "
@@ -175,19 +175,19 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
                     break
                 menuitem.remove(child)
             add_items(menuitem, None, instance)
-            
+
     def show_library(self):
         dlg = SQLLibraryDialog(self.app, self)
         dlg.run()
         dlg.destroy()
-            
+
 class LibSaveDialog(GladeWidget):
     """Save statement to library dialog"""
-    
+
     def __init__(self, app):
         GladeWidget.__init__(self, app, "crunchyfrog", "sqllib_save")
         self.init_categories()
-        
+
     def _setup_widget(self):
         model = gtk.TreeStore(int, str)
         treeview = self.xml.get_widget("libsave_category")
@@ -199,7 +199,7 @@ class LibSaveDialog(GladeWidget):
         col = gtk.TreeViewColumn("", renderer, text=1)
         treeview.append_column(col)
         treeview.connect("button-press-event", self.on_button_press_event)
-        
+
     def on_add_category(self, menuitem, parent):
         iter = self.cat_model.append(parent)
         sql = "insert into sqllib_cat (name, parent) values (?, ?)"
@@ -212,7 +212,7 @@ class LibSaveDialog(GladeWidget):
         id = self.app.userdb.cursor.lastrowid
         self.app.userdb.connection.commit()
         self.cat_model.set(iter, 0, id, 1, name)
-        
+
     def on_button_press_event(self, treeview, event):
         if event.button == 3:
             x = int(event.x)
@@ -234,18 +234,18 @@ class LibSaveDialog(GladeWidget):
             popup.show_all()
             popup.popup( None, None, None, event.button, time)
             return 1
-        
+
     def on_cat_edited(self, renderer, path, value):
         iter = self.cat_model.get_iter(path)
         self.cat_model.set_value(iter, 1, value)
         sql = "update sqllib_cat set name = ? where id = ?"
         self.app.userdb.cursor.execute(sql, (value, self.cat_model.get_value(iter, 0)))
         self.app.userdb.connection.commit()
-        
+
     def on_name_changed(self, *args):
         txt = self.xml.get_widget("libsave_name").get_text().strip()
         self.xml.get_widget("libsave_btn_save").set_sensitive(bool(txt))
-        
+
     def init_categories(self, parent=None):
         sql = "select id, name from sqllib_cat"
         if parent:
@@ -262,11 +262,11 @@ class LibSaveDialog(GladeWidget):
             self.app.userdb.cursor.execute(sql)
             if self.app.userdb.cursor.fetchone()[0]:
                 self.init_categories(iter)
-        
+
     def set_statement(self, statement):
         buffer = self.xml.get_widget("libsave_statement").get_buffer()
         buffer.set_text(statement)
-        
+
     def get_category(self):
         sel = self.xml.get_widget("libsave_category").get_selection()
         model, iter = sel.get_selected()
@@ -274,20 +274,20 @@ class LibSaveDialog(GladeWidget):
             return model.get_value(iter, 0)
         else:
             return None
-        
+
 class SQLLibraryDialog(GladeWidget):
-    
+
     def __init__(self, app, plugin):
         GladeWidget.__init__(self, app, "crunchyfrog", "sqllib_manage")
         self.plugin = plugin
         self.refresh()
-        
+
     def _setup_widget(self):
         # treeview
         self.list = self.xml.get_widget("sqlmanage_list")
         self.list.set_reorderable(True)
         model = gtk.TreeStore(gobject.TYPE_PYOBJECT,
-                              str, 
+                              str,
                               str,
                               bool,
                               str)
@@ -305,11 +305,11 @@ class SQLLibraryDialog(GladeWidget):
         self.statement = SQLView(self.app)
         self.xml.get_widget("sqlmanage_sw_statement").add(self.statement)
         self.statement.show_all()
-        
+
     def _setup_connections(self):
         sel = self.list.get_selection()
         sel.connect("changed", self.on_selection_changed)
-        
+
     def on_button_pressed(self, treeview, event):
         if event.button == 3:
             x = int(event.x)
@@ -338,14 +338,14 @@ class SQLLibraryDialog(GladeWidget):
             if popup.get_children():
                 popup.show_all()
                 popup.popup( None, None, None, event.button, time)
-                
+
     def on_category_new(self, menuitem, parent):
         sql = "insert into sqllib_cat (name, parent) values (?, ?)"
         self.app.userdb.cursor.execute(sql, (_(u"New category"), parent))
         self.app.userdb.connection.commit()
         self.plugin.rebuild_menues()
         self.refresh()
-        
+
     def on_delete(self, *args):
         selection = self.list.get_selection()
         model, iter = selection.get_selected()
@@ -371,7 +371,7 @@ class SQLLibraryDialog(GladeWidget):
                 self.app.userdb.connection.commit()
                 self.refresh()
                 self.plugin.rebuild_menues()
-            
+
     def on_save(self, *args):
         selection = self.list.get_selection()
         model, iter = selection.get_selected()
@@ -392,13 +392,13 @@ class SQLLibraryDialog(GladeWidget):
         else:
             id_ = model.get_value(iter, 0)
             sql = "update sqllib_cat set name = ? where id = ?"
-            self.app.userdb.cursor.execute(sql, 
+            self.app.userdb.cursor.execute(sql,
                                            (self.xml.get_widget("sqllib_name").get_text(),
                                             id_))
             self.app.userdb.connection.commit()
             self.refresh()
             self.plugin.rebuild_menues()
-        
+
     def on_selection_changed(self, selection):
         model, iter = selection.get_selected()
         if iter and model.get_value(iter, 3):
@@ -429,7 +429,7 @@ class SQLLibraryDialog(GladeWidget):
             self.xml.get_widget("sqllib_description").set_text("")
             self.statement.get_buffer().set_text("")
             self.xml.get_widget("sqllib_details_table").set_sensitive(False)
-        
+
     def on_statement_new(self, menuitem, parent):
         sql = "insert into sqllib_sql (title, category, statement) \
         values (?, ?, 'SELECT * FROM table;')"
@@ -438,12 +438,12 @@ class SQLLibraryDialog(GladeWidget):
         self.app.userdb.connection.commit()
         self.plugin.rebuild_menues()
         self.refresh()
-        
+
     def refresh(self):
         model = self.list.get_model()
         model.clear()
         self.init_items(model)
-        
+
     def init_items(self, model, parent=None):
         sql = "select id, name from sqllib_cat where parent "
         if parent:
@@ -453,14 +453,14 @@ class SQLLibraryDialog(GladeWidget):
         self.app.userdb.cursor.execute(sql)
         for item in self.app.userdb.cursor.fetchall():
             iter = model.append(parent)
-            model.set(iter, 0, item[0], 1, item[1], 
+            model.set(iter, 0, item[0], 1, item[1],
                       2, "gtk-open", 3, False,
                       4, item[0])
             sql = "select id, title from sqllib_sql where category = %s" % item[0]
             self.app.userdb.cursor.execute(sql)
             for citem in self.app.userdb.cursor.fetchall():
                 citer = model.append(iter)
-                model.set(citer, 0, citem[0], 1, citem[1], 
+                model.set(citer, 0, citem[0], 1, citem[1],
                           2, "gtk-edit", 3, True,
                           4, "ZZZZZZZZZZZZZZZZZZZZ%s" % citem[1])
             sql = "select count(*) from sqllib_cat where parent = %s" % item[0]
@@ -472,11 +472,11 @@ class SQLLibraryDialog(GladeWidget):
             self.app.userdb.cursor.execute(sql)
             for citem in self.app.userdb.cursor.fetchall():
                 citer = model.append(None)
-                model.set(citer, 0, citem[0], 1, citem[1], 
+                model.set(citer, 0, citem[0], 1, citem[1],
                           2, "gtk-edit", 3, True,
                           4, "ZZZZZZZZZZZZZZZZZZZZ%s" % citem[1])
-            
-            
+
+
 TABLE_LIB_CAT = """create table sqllib_cat (
     id integer primary key not null,
     name text,
