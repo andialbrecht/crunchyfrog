@@ -76,36 +76,28 @@ class PreferencesDialog(GladeWidget):
         model.append([2, _(u"Editor"), get_pb("gtk-edit")])
         model.append([3, _(u"Fonts & Colors"), get_pb("gtk-font")])
         iconview.connect("selection-changed", self.on_editor_selection_changed)
-        from cf.ui.widgets.sqlview import USE_GTKSOURCEVIEW2
-        if not USE_GTKSOURCEVIEW2:
-            self.xml.get_widget("editor_schemes_box").set_sensitive(False)
-            self.xml.get_widget("editor_schemes_box").hide()
-            # FIXME: Is there really no way to set right margin position on SourceView?
-            self.xml.get_widget("editor_right_margin_position_box").set_sensitive(False)
-            self.xml.get_widget("editor_right_margin_position_box").hide()
-        else:
-            schemes = self.xml.get_widget("editor_schemes")
-            model = gtk.ListStore(str, str)
-            model.set_sort_column_id(1, gtk.SORT_ASCENDING)
-            schemes.set_model(model)
-            col = gtk.TreeViewColumn("", gtk.CellRendererText(), markup=1)
-            schemes.append_column(col)
-            import gtksourceview2
-            sm = gtksourceview2.style_scheme_manager_get_default()
-            selected = None
-            for id in sm.get_scheme_ids():
-                scheme = sm.get_scheme(id)
-                lbl = "<b>%s</b>" % scheme.get_name()
-                if scheme.get_description():
-                    lbl += "\n"+scheme.get_description()
-                iter = model.append(None)
-                model.set(iter, 0, id, 1, lbl)
-                if id == self.app.config.get("editor.scheme"):
-                    selected = iter
-            sel = schemes.get_selection()
-            sel.select_iter(selected)
-            sel.connect("changed", self.on_editor_option_changed)
-            sel.set_data("config_option", "editor.scheme")
+        schemes = self.xml.get_widget("editor_schemes")
+        model = gtk.ListStore(str, str)
+        model.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        schemes.set_model(model)
+        col = gtk.TreeViewColumn("", gtk.CellRendererText(), markup=1)
+        schemes.append_column(col)
+        import gtksourceview2
+        sm = gtksourceview2.style_scheme_manager_get_default()
+        selected = None
+        for id in sm.get_scheme_ids():
+            scheme = sm.get_scheme(id)
+            lbl = "<b>%s</b>" % scheme.get_name()
+            if scheme.get_description():
+                lbl += "\n"+scheme.get_description()
+            iter = model.append(None)
+            model.set(iter, 0, id, 1, lbl)
+            if id == self.app.config.get("editor.scheme"):
+                selected = iter
+        sel = schemes.get_selection()
+        sel.select_iter(selected)
+        sel.connect("changed", self.on_editor_option_changed)
+        sel.set_data("config_option", "editor.scheme")
 
 
     def _setup_plugins(self):
@@ -323,6 +315,8 @@ class PreferencesDialog(GladeWidget):
         gw("editor_open_separate").set_active(config.get("editor.open_in_window"))
         gw("editor_replace_variables").set_data("config_option", "editor.replace_variables")
         gw("editor_replace_variables").set_active(config.get("editor.replace_variables"))
+        gw("sqlparse_enabled").set_data("config_option", "sqlparse.enabled")
+        gw("sqlparse_enabled").set_active(config.get("sqlparse.enabled"))
         gw("editor_wrap_text").set_data("config_option", "editor.wrap_text")
         gw("editor_wrap_text").set_active(config.get("editor.wrap_text"))
         gw("editor_wrap_split").set_data("config_option", "editor.wrap_split")

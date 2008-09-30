@@ -46,101 +46,115 @@ Example usage
 
 import gconf
 import gtk
+import gtksourceview2
 import gobject
 import pango
 
-class SQLViewBase(object):
-    """Base class for SQLView implementations"""
+from cf import sqlparse
 
-    def __init__(self, app):
-        """
-        This constructor takes one argument:
 
-        :Parameter:
-            app
-                `CFApplication`_ instance
+class SQLView(gtksourceview2.View):
+    """SQLViewBase implementation"""
 
-        .. _CFApplication: cf.app.CFApplication.html
-        """
+    def __init__(self, app, editor=None):
+        gtksourceview2.View.__init__(self)
+        self.editor = editor
+        self.buffer = gtksourceview2.Buffer()
+        self.set_buffer(self.buffer)
+        self.set_show_line_marks(True)
+        pixbuf = self.render_icon(gtk.STOCK_GO_FORWARD,
+                                  gtk.ICON_SIZE_MENU)
+        width = pixbuf.get_width()
+        height = pixbuf.get_height()
+        pixbuf = pixbuf.scale_simple(width/2, height/2,
+                                     gtk.gdk.INTERP_BILINEAR)
+        self.set_mark_category_pixbuf('sql', pixbuf)
+        lang_manager = gtksourceview2.language_manager_get_default()
+        self.buffer.set_language(lang_manager.get_language('sql'))
         self.app = app
-        self.app.config.connect("changed", self.on_config_changed)
+        self.app.config.connect('changed', self.on_config_changed)
         self.update_textview_options()
+        self._buffer_changed_cb = None
+        self.buffer.connect('changed', self.on_buffer_changed)
+        if self.editor is not None:
+            self.editor.connect('connection-changed', lambda e, c:
+                                self.on_buffer_changed(self.buffer))
+        self._sql_marks = []
+
+    def on_buffer_changed(self, buffer):
+        """Installs timeout callback to self.buffer_changed_cb()."""
+        if self._buffer_changed_cb:
+            gobject.source_remove(self._buffer_changed_cb)
+            self._buffer_changed_cb = None
+        self._buffer_changed_cb = gobject.timeout_add(500,
+                                                      self.buffer_changed_cb,
+                                                      buffer)
 
     def on_config_changed(self, config, option, value):
-        if option.startswith("editor."):
+        """Updates view and buffer on configuration change."""
+        if option.startswith('editor.'):
             gobject.idle_add(self.update_textview_options)
+        if option == "sqlparse.enabled":
+            gobject.idle_add(self.buffer_changed_cb, self.buffer)
+
+    def buffer_changed_cb(self, buffer):
+        """Update marks."""
+        while self._sql_marks:
+            mark = self._sql_marks.pop()
+            self.buffer.delete_mark(mark)
+        if self.app.config.get("sqlparse.enabled", True):
+            for iter_start, iter_end in self.get_statements():
+                mark = buffer.create_source_mark(None, 'sql', iter_start)
+                mark.set_visible(True)
+                self._sql_marks.append(mark)
+        self._buffer_changed_cb = None
+        return False
 
     def update_textview_options(self):
-        """Updates the textview settings"""
-        conf = self.app.config
-        buffer = self.get_buffer()
-        if conf.get("editor.wrap_text"):
-            if conf.get("editor.wrap_split"):
+        c = self.app.config
+        buf = self.get_buffer()
+        if c.get('editor.wrap_text'):
+            if c.get('editor.wrap_split'):
                 self.set_wrap_mode(gtk.WRAP_CHAR)
             else:
                 self.set_wrap_mode(gtk.WRAP_WORD)
         else:
             self.set_wrap_mode(gtk.WRAP_NONE)
-        self.set_show_line_numbers(conf.get("editor.display_line_numbers"))
-        self.set_highlight_current_line(conf.get("editor.highlight_current_line"))
-        self.set_insert_spaces_instead_of_tabs(conf.get("editor.insert_spaces"))
-        self.set_auto_indent(conf.get("editor.auto_indent"))
-        if conf.get("editor.default_font"):
+        self.set_show_line_numbers(c.get('editor.display_line_numbers'))
+        self.set_highlight_current_line(c.get('editor.highlight_current_line'))
+        self.set_insert_spaces_instead_of_tabs(c.get('editor.insert_spaces'))
+        self.set_auto_indent(c.get('editor.auto_indent'))
+        if c.get('editor.default_font'):
             client = gconf.client_get_default()
-            font = client.get_string("/desktop/gnome/interface/monospace_font_name")
+            default_font = '/desktop/gnome/interface/monospace_font_name'
+            font = client.get_string(default_font)
         else:
-            font = conf.get("editor.font")
+            font = c.get('editor.font')
         self.modify_font(pango.FontDescription(font))
+        self.set_show_right_margin(c.get('editor.right_margin'))
+        self.set_right_margin_position(c.get('editor.right_margin_position'))
+        buf.set_highlight_matching_brackets(c.get('editor.bracket_matching'))
+        self.set_tab_width(c.get('editor.tabs_width'))
+        sm = gtksourceview2.style_scheme_manager_get_default()
+        scheme = sm.get_scheme(c.get('editor.scheme'))
+        buf.set_style_scheme(scheme)
 
-try:
-    import gtksourceview2
-    USE_GTKSOURCEVIEW2 = True
-    class SQLView(gtksourceview2.View, SQLViewBase):
-        """SQLViewBase implementation"""
-        def __init__(self, app):
-            gtksourceview2.View.__init__(self)
-            buffer = gtksourceview2.Buffer()
-            self.set_buffer(buffer)
-            lm = gtksourceview2.language_manager_get_default()
-            buffer.set_language(lm.get_language("sql"))
-            SQLViewBase.__init__(self, app)
+    def get_statements(self):
+        """Finds statements in current buffer.
 
-        def update_textview_options(self):
-            SQLViewBase.update_textview_options(self)
-            conf = self.app.config
-            buffer = self.get_buffer()
-            # gtksourceview2 specific
-            self.set_show_right_margin(conf.get("editor.right_margin"))
-            self.set_right_margin_position(conf.get("editor.right_margin_position"))
-            buffer.set_highlight_matching_brackets(conf.get("editor.bracket_matching"))
-            self.set_tab_width(conf.get("editor.tabs_width"))
-            sm = gtksourceview2.style_scheme_manager_get_default()
-            scheme = sm.get_scheme(conf.get("editor.scheme"))
-            buffer.set_style_scheme(scheme)
-
-except ImportError:
-    USE_GTKSOURCEVIEW2 = False
-    import gtksourceview
-    class SQLView(gtksourceview.SourceView, SQLViewBase):
-        """SQLViewBase implementation"""
-        def __init__(self, app):
-            gtksourceview.SourceView.__init__(self)
-            buffer = gtksourceview.SourceBuffer()
-            self.set_buffer(buffer)
-            buffer.set_highlight(True)
-            lm = gtksourceview.SourceLanguagesManager()
-            for lang in lm.get_available_languages():
-                if lang.get_id() == "SQL":
-                    buffer.set_language(lang)
-                    break
-            SQLViewBase.__init__(self, app)
-
-        def update_textview_options(self):
-            SQLViewBase.update_textview_options(self)
-            conf = self.app.config
-            buffer = self.get_buffer()
-            # gtksourceview specific
-            self.set_show_margin(conf.get("editor.right_margin"))
-            #self.set_right_margin(conf.get("editor.right_margin_position"))
-            buffer.set_check_brackets(conf.get("editor.bracket_matching"))
-            self.set_tabs_width(conf.get("editor.tabs_width"))
+        Returns:
+            List of 3-tuples (start iter, end iter, statement as string).
+        """
+        content = self.buffer.get_text(*self.buffer.get_bounds())
+        iter = self.buffer.get_start_iter()
+        if self.editor and self.editor.connection:
+            dialect = self.editor.connection.get_dialect()
+        else:
+            dialect = None
+        for stmt in sqlparse.sqlsplit(content, dialect=dialect):
+            start, end = iter.forward_search(stmt,
+                                             gtk.TEXT_SEARCH_TEXT_ONLY)
+            yield start, end
+            iter = end
+            if not iter:
+                return

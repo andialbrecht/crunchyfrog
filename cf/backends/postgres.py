@@ -29,6 +29,7 @@ from cf.backends.schema import *
 from cf.backends import ReferenceProvider
 from cf.datasources import DatasourceInfo
 from cf.plugins.core import DBBackendPlugin
+from cf import sqlparse
 from cf.utils import Emit
 
 import time
@@ -140,6 +141,7 @@ class PgCursor(DbAPI2Cursor):
 
 class PgConnection(DbAPI2Connection):
     cursor_class = PgCursor
+    sqlparse_dialect = sqlparse.DialectPSQL()
 
     def update_transaction_status(self):
         stat = self._conn.get_transaction_status()

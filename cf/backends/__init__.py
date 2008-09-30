@@ -20,15 +20,15 @@
 
 """Database backends"""
 
-__doc_all__ = ["schema",]
+import sys
+import time
 
 import gobject
 import gtk
 
-import sys
-import time
-
+import cf.sqlparse
 from cf.utils import Emit
+
 
 TRANSACTION_IDLE = 1 << 1
 TRANSACTION_COMMIT_ENABLED = 1 << 2
@@ -40,11 +40,14 @@ class DBError(StandardError):
 
     def __init__(self, msg):
         self._msg = msg
+
     def __str__(self):
         return self._msg
 
+
 class DBConnectError(DBError):
     """Errors on opening a connection"""
+
 
 class DBConnection(gobject.GObject):
 
@@ -62,6 +65,8 @@ class DBConnection(gobject.GObject):
                             "Transaction flag", "Transaction flag",
                             gobject.PARAM_READWRITE),
     }
+
+    sqlparse_dialect = cf.sqlparse.DialectDefault()
 
     def __init__(self, provider, app):
         self.app = app
@@ -108,6 +113,15 @@ class DBConnection(gobject.GObject):
 
     def explain(self, statement):
         return []
+
+    def get_dialect(self):
+        """Get the sqlparse dialect.
+
+        Returns:
+          A sqlparse dialect (sqlparse.Dialect*, default: DialectDefault).
+        """
+        return self.sqlparse_dialect
+
 
 class DBCursor(gobject.GObject):
 

@@ -36,6 +36,7 @@ import string
 from gettext import gettext as _
 from kiwi.ui import dialogs
 
+from cf import sqlparse
 from cf.backends import Query
 from cf.ui import GladeWidget
 from cf.ui.toolbar import CFToolbar
@@ -43,7 +44,6 @@ from cf.ui.widgets import DataExportDialog
 from cf.ui.widgets.grid import Grid
 from cf.ui.widgets.sqlview import SQLView
 from cf.ui.confirmsave import ConfirmSaveDialog
-
 
 
 class Editor(GladeWidget):
@@ -72,7 +72,7 @@ class Editor(GladeWidget):
         self.lbl_status = self.xml.get_widget("editor_label_status")
 
     def _setup_textview(self):
-        self.textview = SQLView(self.app)
+        self.textview = SQLView(self.app, self)
         sw = self.xml.get_widget("sw_editor_textview")
         sw.add(self.textview)
 
@@ -131,16 +131,27 @@ class Editor(GladeWidget):
         #    50 is a reasonable value anyway.
         #    The start time is for the UI only. The real execution time
         #    is calculated in the Query class.
+        if self._query_timer is not None:
+            gobject.source_remove(self._query_timer)
         self._query_timer = gobject.timeout_add(50, self.update_exectime, start, query)
+        self.results.add_separator()
+        self.results.add_message(query.statement, type_='query')
 
     def on_query_finished(self, query, tag_notice):
         self.results.set_query(query)
         if query.failed:
-            gobject.idle_add(self.lbl_status.set_text, _(u"Query failed (%.3f seconds)") % query.execution_time)
+            msg = _(u'Query failed (%.3f seconds)') % query.execution_time
+            type_ = 'error'
         elif query.description:
-            gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s rows)") % (query.execution_time, query.rowcount))
+            msg = (_(u"Query finished (%.3f seconds, %s rows)")
+                   % (query.execution_time, query.rowcount))
+            type_ = 'info'
         else:
-            gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s affected rows)") % (query.execution_time, query.rowcount))
+            msg = _(u"Query finished (%.3f seconds, %s affected rows)")
+            msg = msg % (query.execution_time, query.rowcount)
+            type_ = 'info'
+        gobject.idle_add(self.lbl_status.set_text, msg)
+        self.results.add_message(msg, type_)
         self.connection.disconnect(tag_notice)
         gobject.idle_add(self.textview.grab_focus)
 
@@ -193,13 +204,40 @@ class Editor(GladeWidget):
         self.lbl_status.set_text(_(u"Executing query..."))
         def exec_threaded(statement):
             cur = self.connection.cursor()
-            query = Query(statement, cur)
-            query.coding_hint = self.connection.coding_hint
-            gtk.gdk.threads_enter()
-            query.connect("started", self.on_query_started)
-            query.connect("finished", self.on_query_finished, tag_notice)
-            gtk.gdk.threads_leave()
-            query.execute(True)
+            if self.app.config.get("sqlparse.enabled", True):
+                if self.connection:
+                    dialect = self.connection.sqlparse_dialect
+                else:
+                    dialect = None
+                stmts = sqlparse.sqlsplit(statement, dialect=dialect)
+            else:
+                stmts = [statement]
+            for stmt in stmts:
+                query = Query(stmt, cur)
+                query.coding_hint = self.connection.coding_hint
+                gtk.gdk.threads_enter()
+                query.connect("started", self.on_query_started)
+                query.connect("finished", self.on_query_finished, tag_notice)
+                gtk.gdk.threads_leave()
+                query.execute(True)
+                if query.failed:
+                    # hmpf, doesn't work that way... so just return here...
+                    return
+#                    gtk.gdk.threads_enter()
+#                    dlg = gtk.MessageDialog(None,
+#                                            gtk.DIALOG_MODAL|
+#                                            gtk.DIALOG_DESTROY_WITH_PARENT,
+#                                            gtk.MESSAGE_ERROR,
+#                                            gtk.BUTTONS_YES_NO,
+#                                            _(u"An error occurred. Continue?"))
+#                    if dlg.run() == gtk.RESPONSE_NO:
+#                        leave = True
+#                    else:
+#                        leave = False
+#                    dlg.destroy()
+#                    gtk.gdk.threads_leave()
+#                    if leave:
+#                        return
         buffer = self.textview.get_buffer()
         bounds = buffer.get_selection_bounds()
         self.results.reset()
@@ -228,10 +266,19 @@ class Editor(GladeWidget):
             thread.start_new_thread(exec_threaded, (statement,))
         else:
             cur = self.connection.cursor()
-            query = Query(statement, cur)
-            query.coding_hint = self.connection.coding_hint
-            query.connect("finished", self.on_query_finished, tag_notice)
-            query.execute()
+            if self.app.config.get("sqlparse.enabled", True):
+                if self.connection:
+                    dialect = self.connection.sqlparse_dialect
+                else:
+                    dialect = None
+                stmts = sqlparse.sqlsplit(statement, dialect=dialect)
+            else:
+                stms = [statement]
+            for stmt in stmts:
+                query = Query(stmt, cur)
+                query.coding_hint = self.connection.coding_hint
+                query.connect("finished", self.on_query_finished, tag_notice)
+                query.execute()
 
     def explain(self):
         buffer = self.textview.get_buffer()
@@ -239,6 +286,13 @@ class Editor(GladeWidget):
         if not bounds:
             bounds = buffer.get_bounds()
         statement = buffer.get_text(*bounds)
+        if self.connection:
+            dialect = self.connection.sqlparse_dialect
+        else:
+            dialect = None
+        if len(sqlparse.sqlsplit(statement, dialect=dialect)) > 1:
+            dialogs.error(_(u"Select a single statement to explain."))
+            return
         data = []
         if self.connection:
             data = self.connection.explain(statement)
@@ -360,14 +414,9 @@ class Editor(GladeWidget):
     def update_exectime(self, start, query):
         self.lbl_status.set_text("Query running... (%.3f seconds)" % (time.time()-start))
         if query.executed:
-            gobject.source_remove(self._query_timer)
+            if self._query_timer is not None:
+                gobject.source_remove(self._query_timer)
             self._query_timer = None
-            if query.failed:
-                gobject.idle_add(self.lbl_status.set_text, _(u"Query failed (%.3f seconds)") % query.execution_time)
-            elif query.description:
-                gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s rows)") % (query.execution_time, query.rowcount))
-            else:
-                gobject.idle_add(self.lbl_status.set_text, _(u"Query finished (%.3f seconds, %s affected rows)") % (query.execution_time, query.rowcount))
             return False
         else:
             return True
@@ -523,22 +572,69 @@ class ResultsView(GladeWidget):
     def _setup_widget(self):
         self.grid = ResultList(self.app, self.instance, self.xml)
         self.messages = self.xml.get_widget("editor_results_messages")
-        buffer = self.messages.get_buffer()
-        buffer.create_tag("error", foreground="#a40000", weight=pango.WEIGHT_BOLD)
+        model = gtk.ListStore(str,  # 0 stock id
+                              str,  # 1 message
+                              str,  # 2 foreground color
+                              int,  # 3 font weight
+                              bool, # 4 is separator row
+                              )
+        model.connect("row-inserted", self._msg_model_changed)
+        model.connect("row-deleted", self._msg_model_changed)
+        self.messages.set_model(model)
+        col = gtk.TreeViewColumn()
+        renderer = gtk.CellRendererPixbuf()
+        col.pack_start(renderer, expand=False)
+        col.add_attribute(renderer, 'stock-id', 0)
+        renderer = gtk.CellRendererText()
+        col.pack_start(renderer, expand=True)
+        col.add_attribute(renderer, 'text', 1)
+        col.add_attribute(renderer, 'foreground', 2)
+        col.add_attribute(renderer, 'weight', 3)
+        self.messages.append_column(col)
+        self.messages.set_row_separator_func(self._set_row_separator)
         self.explain_model = gtk.ListStore(str)
         treeview = self.xml.get_widget("editor_explain")
         treeview.set_model(self.explain_model)
         col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=0)
         treeview.append_column(col)
 
+    def _msg_model_changed(self, model, *args):
+        tb_clear = self.xml.get_widget("tb_messages_clear")
+        tb_copy = self.xml.get_widget("tb_messages_copy")
+        sensitive = model.get_iter_first() is not None
+        tb_clear.set_sensitive(sensitive)
+        tb_copy.set_sensitive(sensitive)
+
     def _setup_connections(self):
-        self.grid.grid.connect("selection-changed", self.on_grid_selection_changed)
+        self.grid.grid.connect("selection-changed",
+                               self.on_grid_selection_changed)
+
+    def _set_row_separator(self, model, iter):
+        return model.get_value(iter, 4)
 
     def on_copy_data(self, *args):
         gobject.idle_add(self.copy_data)
 
     def on_export_data(self, *args):
         gobject.idle_add(self.export_data)
+
+    def on_messages_clear(self, *args):
+        self.messages.get_model().clear()
+
+    def on_messages_copy(self, *args):
+        model = self.messages.get_model()
+        iter_ = model.get_iter_first()
+        plain = []
+        while iter_ is not None:
+            if model.get_value(iter_, 4): # Is it a separator?
+                plain.append('-'*20)
+            else:
+                value = model.get_value(iter_, 1)
+                if value is not None:
+                    plain.append(value)
+            iter_ = model.iter_next(iter_)
+        clipboard = gtk.clipboard_get()
+        clipboard.set_text('\n'.join(plain))
 
     def on_grid_selection_changed(self, grid, selected_cells):
         self.xml.get_widget("editor_copy_data").set_sensitive(bool(selected_cells))
@@ -579,8 +675,7 @@ class ResultsView(GladeWidget):
         # Explain
         self.explain_model.clear()
         # Messages
-        buffer = self.messages.get_buffer()
-        buffer.set_text("")
+        self.messages.get_model().clear()
         self.set_current_page(2)
 
     def set_explain(self, data):
@@ -591,12 +686,11 @@ class ResultsView(GladeWidget):
 
     def set_query(self, query):
         self.grid.set_query(query)
-        buffer = self.messages.get_buffer()
+        model = self.messages.get_model()
         for err in query.errors:
-            iter = buffer.get_end_iter()
-            buffer.insert_with_tags_by_name(iter, err.strip()+"\n", "error")
+            self.add_error(err.strip())
         for msg in query.messages:
-            buffer.insert_at_cursor(msg.strip()+"\n")
+            self.add_output(msg.strip())
         if query.errors:
             curr_page = 2
         elif query.description:
@@ -606,10 +700,55 @@ class ResultsView(GladeWidget):
         self.xml.get_widget("editor_export_data").set_sensitive(bool(query.rows))
         gobject.idle_add(self.set_current_page, curr_page)
 
-    def add_message(self, msg):
-        buffer = self.messages.get_buffer()
-        buffer.insert_at_cursor(msg.strip()+"\n")
+    def add_message(self, msg, type_=None):
+        """Add a message.
 
+        Args:
+          msg: The message to add.
+          type_: Message type ('info', 'output',
+                 'error', 'warning', 'query', None).
+        """
+        assert type_ in (None, 'info', 'output', 'error', 'warning', 'query')
+        stock_id = None
+        foreground = None
+        weight = pango.WEIGHT_NORMAL
+        if type_ == 'info':
+            stock_id = 'gtk-info'
+            foreground = '#336699'
+        elif type_ == 'error':
+            stock_id = 'gtk-dialog-error'
+            foreground = '#a40000'
+            weight = pango.WEIGHT_BOLD
+        elif type_ == 'warning':
+            stock_id = 'gtk-dialog-warning'
+            foreground = '#00a400'
+        elif type_ == 'query':
+            stock_id ='gtk-execute'
+            weight = pango.WEIGHT_BOLD
+        elif type_ == 'output':
+            stock_id = 'gtk-go-back'
+        model = self.messages.get_model()
+        msg = msg.strip()
+        itr = model.append([stock_id, msg, foreground, weight, False])
+        self.messages.scroll_to_cell(model.get_path(itr))
+
+    def add_error(self, msg):
+        return self.add_message(msg, 'error')
+
+    def add_info(self, msg):
+        return self.add_message(msg, 'info')
+
+    def add_warning(self, msg):
+        return self.add_message(msg, 'warning')
+
+    def add_output(self, msg):
+        return self.add_message(msg, 'output')
+
+    def add_separator(self):
+        model = self.messages.get_model()
+        if not model.get_iter_first():
+            return
+        model.append([None, None, None, pango.WEIGHT_NORMAL, True])
 
 
 class ResultList(GladeWidget):
