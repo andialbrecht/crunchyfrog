@@ -5,18 +5,11 @@ TODO
 - Add support for Capuchin?
 - Remove ReferenceProvider
 
-Known Bugs
-----------
-
-- Connection chooser sometimes becomes insensitive when closing a tab.
-
 User Interface
 --------------
 
 - Add separate plugin dialog.
-- Move datasource manager to Edit menu.
 - Failed queries: Stop on error with continue/stop dialog.
-
 
 Library
 -------

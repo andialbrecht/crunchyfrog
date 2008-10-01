@@ -45,7 +45,7 @@ class QueriesNotebook(gtk.Notebook):
         gobject.idle_add(self.set_current_page, page_num)
 
     def on_page_removed(self, notebook, child, page_num):
-        gobject.idle_add(self.instance.set_editor_active, child, False)
+        self.instance.set_editor_active(child, False)
 
     def on_switch_page(self, notebook, page, page_num):
         editor = self.get_nth_page(page_num).get_data("glade-widget")
