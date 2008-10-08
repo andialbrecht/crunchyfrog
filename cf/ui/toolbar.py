@@ -87,7 +87,10 @@ class CFToolbar(GladeWidget):
         self._editor = editor
         self.tb_connection.set_editor(editor)
         for item in ["tb_cut", "tb_copy", "tb_paste"]:
-            self.xml.get_widget(item).set_sensitive(bool(editor))
+            widget = self.xml.get_widget(item)
+            if not widget:
+                continue
+            widget.set_sensitive(bool(editor))
         if self._editor:
             self.__editor_signals.append(self._editor.connect("connection-changed", self.on_editor_connection_changed))
             self.on_editor_connection_changed(self._editor, self._editor.connection)
