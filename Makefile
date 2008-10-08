@@ -39,9 +39,7 @@ clean: po-clean
 	find . -name "*~" -print | xargs rm -rf
 	rm -rf build/
 	rm -rf manual/
-	
-ChangeLog:
-	svn2cl --authors=AUTHORS -o ChangeLog --group-by-day
+
 	
 dist-prepare: clean ChangeLog
 
