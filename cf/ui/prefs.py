@@ -460,6 +460,8 @@ class PreferencesDialog(GladeWidget):
                 fraction = 0
             dlg.set_progress(fraction)
             return True
+        # XXX currently disabled, should be replaced by a Capuchin backend
+        return
         url = os.path.join(self.app.config.get("plugins.repo_url"), "repo.xml")
         source = gnomevfs.URI(url)
         dest = gnomevfs.URI(cf.USER_PLUGIN_REPO_URI)

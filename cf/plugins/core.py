@@ -452,6 +452,8 @@ class PluginManager(gobject.GObject):
                 fraction = 0
             dlg.set_progress(fraction)
             return True
+        if uri is None:
+            return
         source = gnomevfs.URI(uri)
         dest = gnomevfs.URI(USER_PLUGIN_URI).append_file_name(source.short_name)
         try:
