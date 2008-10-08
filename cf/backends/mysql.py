@@ -37,9 +37,11 @@ import logging
 log = logging.getLogger("MYSQL")
 
 class MySQLBackend(DBBackendPlugin):
+
     id = "crunchyfrog.backend.mysql"
     name = _(u"MySQL Plugin")
     description = _(u"Provides access to MySQL databases")
+    password_option = "password"
 
     def __init__(self, app):
         DBBackendPlugin.__init__(self, app)

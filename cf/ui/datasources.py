@@ -192,15 +192,12 @@ class DatasourceManager(GladeWidget):
 
     def on_save_datasource(self, *args):
         conn = self.get_connection()
-        conn_info = self.get_selected_saved_connection()
-        if conn_info:
-            conn.db_id = conn_info.db_id
         conn.save()
         self.refresh_saved_connections(conn.db_id)
 
     def on_selected_datasource_changed(self, *args):
         conn = self.get_selected_saved_connection()
-        if not self.app.plugins.is_active(conn.backend):
+        if conn and not self.app.plugins.is_active(conn.backend):
             dialogs.error(_(u'Plugin not active'),
                           _(u'Please activate the following plugin '
                             'to use this data source: ')+conn.backend.name+'.')
@@ -238,10 +235,15 @@ class DatasourceManager(GladeWidget):
         return data
 
     def get_connection(self):
+        db_id = None
+        conn_info = self.get_selected_saved_connection()
+        if conn_info:
+            db_id = conn_info.db_id
         conn = DatasourceInfo(self.app, self.get_selected_backend(),
                           self.xml.get_widget("entry_name").get_text().strip() or None,
                           self.xml.get_widget("entry_description").get_text().strip() or None,
-                          self.get_backend_options())
+                          self.get_backend_options(),
+                              db_id)
         return conn
 
     def get_selected_backend(self):

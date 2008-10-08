@@ -20,16 +20,22 @@
 
 """Datasource handling"""
 
-import gobject
 import cPickle
-
 import logging
+
+import gobject
+import gnomekeyring
+
+
 log = logging.getLogger("DS")
+
 
 class DatasourceInfo(gobject.GObject):
 
-    def __init__(self, app, backend, name=None, description=None, options={}):
-        """
+    def __init__(self, app, backend, name=None, description=None,
+                 options={}, db_id=None):
+        """Constructor.
+
         The constructor of this class takes up to five arguments:
 
         :Parameter:
@@ -43,17 +49,19 @@ class DatasourceInfo(gobject.GObject):
                 Datasource description (optional)
             options
                 Backend specific options (optional)
+            db_id
+                Databse ID (optional)
 
         .. _CFApplication: cf.app.CFApplication.html
         .. _DBBackendPlugin: cf.plugins.core.DBBackendPlugin.html
         """
         self.__gobject_init__()
         self.app = app
-        self.db_id = None
+        self.db_id = db_id
         self.backend = backend
         self.name = name
         self.description = description
-        self.options = options
+        self.options = self._init_options(options)
         self.has_details = False
         self.__conncount = 1L
         self.__connections = list()
@@ -62,27 +70,50 @@ class DatasourceInfo(gobject.GObject):
     def __cmp__(self, other):
         return cmp(self.db_id, other.db_id)
 
+    def _init_options(self, options):
+        """Initialize and return options."""
+        if self.backend.password_option not in options:
+            pwd = self.get_password(self.db_id)
+            options[self.backend.password_option] = pwd
+        elif self.backend.password_option \
+        and self.backend.password_option in options:
+            # upgrade from 0.2 -> 0.3: store password in keyring
+            gobject.idle_add(self.save, options)
+        return options
+
     def get_label(self):
         return self.backend.get_label(self)
 
-    def save(self):
+    def save(self, options=None, emit_signal=True):
         cur = self.app.userdb.cursor
         conn = self.app.userdb.conn
+        if options is None:
+            options = self.options
+        if self.backend.password_option \
+        and self.backend.password_option in options:
+            passwd = options.pop(self.backend.password_option)
+        else:
+            passwd = None
         if not self.db_id:
-            sql = "insert into datasource (name, description, backend, options) \
-            values (?,?,?,?)"
+            sql = ("insert into datasource (name, description, "
+                   "backend, options) values (?,?,?,?)")
             cur.execute(sql, (self.name, self.description, self.backend.id,
-                              self.serialize_options()))
+                              self.serialize_options(options)))
             self.db_id = cur.lastrowid
             conn.commit()
-            self.app.datasources.emit("datasource-added", self)
+            signal = "datasource-added"
         else:
-            sql = "update datasource set name=?, description=?, backend=?, \
-            options=? where id=?"
+            sql = ("update datasource set name=?, description=?, "
+                   "backend=?, options=? where id=?")
             cur.execute(sql, (self.name, self.description, self.backend.id,
-                              self.serialize_options(), self.db_id))
+                              self.serialize_options(options), self.db_id))
             conn.commit()
-            self.app.datasources.emit("datasource-modified", self)
+            signal = "datasource-modified"
+        self.store_password(passwd, self.db_id)
+        if self.backend.password_option:
+            self.options[self.backend.password_option] = passwd
+        if emit_signal:
+            self.app.datasources.emit(signal, self)
 
     def delete(self):
         cur = self.app.userdb.cursor
@@ -90,25 +121,64 @@ class DatasourceInfo(gobject.GObject):
         sql = "delete from datasource where id=?"
         cur.execute(sql, (self.db_id,))
         conn.commit()
+        self.store_password(None, self.db_id)
         self.app.datasources.emit("datasource-deleted", self)
 
-    def serialize_options(self):
-        return cPickle.dumps(self.options)
+    def serialize_options(self, options):
+        return cPickle.dumps(options)
 
     def deserialize_options(self, data):
         return cPickle.loads(data)
 
+    def store_password(self, pwd, db_id):
+        """Update password in keyring.
+
+        Args:
+          pwd: Password (delete existing if None)
+          db_id: Datasource ID
+        """
+        item_type = gnomekeyring.ITEM_GENERIC_SECRET
+        attrs = {"crunchyfrog": db_id}
+        try:
+            entry = gnomekeyring.find_items_sync(item_type, attrs)
+            entry = entry[0]
+        except gnomekeyring.NoMatchError:
+            entry = None
+        if pwd is not None:
+            gnomekeyring.item_create_sync(None, item_type,
+                                          ("Password for %s"
+                                           % self.get_label()),
+                                          attrs, pwd, True)
+        elif entry is not None:
+            gnomekeyring.item_delete_sync(None, entry.item_id)
+
+    def get_password(self, db_id):
+        """Get password from keyring.
+
+        Args:
+          db_id: Datasource ID
+
+        Returns:
+          Password as string or None.
+        """
+        item_type = gnomekeyring.ITEM_GENERIC_SECRET
+        attrs = {"crunchyfrog": db_id}
+        try:
+            entry = gnomekeyring.find_items_sync(item_type, attrs)
+            return entry[0].secret
+        except gnomekeyring.NoMatchError:
+            return None
+
     @classmethod
     def load(cls, app, db_id):
         cur = app.userdb.cursor
-        sql = "select name, description, backend, options from datasource \
-        where id=?"
+        sql = ("select name, description, backend, options "
+               "from datasource where id=?")
         cur.execute(sql, (db_id,))
         res = cur.fetchone()
         backend = app.plugins.by_id(res[2], False)
         opts = cPickle.loads(str(res[3]))
-        i = cls(app, backend, res[0], res[1], opts)
-        i.db_id = db_id
+        i = cls(app, backend, res[0], res[1], opts, db_id=db_id)
         return i
 
     @classmethod
@@ -134,7 +204,8 @@ class DatasourceInfo(gobject.GObject):
             self.__connections.remove(connection)
         if connection == self.internal_connection:
             self.internal_connection = None
-        gobject.idle_add(self.app.datasources.emit, "datasource-modified", self)
+        gobject.idle_add(self.app.datasources.emit,
+                         "datasource-modified", self)
 
     def dbconnect(self):
         conn = self.backend.dbconnect(self.options)
@@ -151,6 +222,7 @@ class DatasourceInfo(gobject.GObject):
             conn = self.__connections[0]
             log.info("Closing connection %s" % conn)
             conn.close()
+
 
 class DatasourceManager(gobject.GObject):
     """Datasource manager
@@ -209,7 +281,8 @@ class DatasourceManager(gobject.GObject):
         self.connect("datasource-modified", self.on_datasource_modified)
         self.app.plugins.connect("plugin-active", self.on_plugin_active)
         for item in DatasourceInfo.load_all(self.app):
-            if not item.backend or not self.app.plugins.is_active(item.backend):
+            if not item.backend \
+            or not self.app.plugins.is_active(item.backend):
                 continue
             self._cache.append(item)
 
@@ -252,7 +325,7 @@ class DatasourceManager(gobject.GObject):
 
 def check_userdb(userdb):
     if not userdb.get_table_version("datasource"):
-        sql = "create table datasource (id integer primary key, \
-        name text, description text, backend text, options text, \
-        last_accessed real, num_accessed integer)"
+        sql = ("create table datasource (id integer primary key, "
+               "name text, description text, backend text, options text, "
+               "last_accessed real, num_accessed integer)")
         userdb.create_table("datasource", "0.1", sql)

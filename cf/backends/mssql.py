@@ -35,9 +35,11 @@ log = logging.getLogger("MS-SQL")
 
 
 class MsSQLBackend(DBBackendPlugin):
+
     id = "crunchyfrog.backend.mssql"
     name = _(u"MS-SQL Plugin")
     description = _(u"Provides access to MS-SQL databases")
+    password_option = "password"
 
     def __init__(self, app):
         DBBackendPlugin.__init__(self, app)

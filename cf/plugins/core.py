@@ -115,9 +115,11 @@ class ExportPlugin(GenericPlugin):
 
 class DBBackendPlugin(GenericPlugin):
     """Database backend base class"""
+
     icon = "stock_database"
     context_help_pattern = None
     plugin_type = PLUGIN_TYPE_BACKEND
+    password_option = None # key for options which holds the password
 
     def __init__(self, app):
         GenericPlugin.__init__(self, app)

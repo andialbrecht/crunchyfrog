@@ -3,7 +3,8 @@ TODO
 
 - Implement Gnome Keyring
 - Add support for Capuchin?
-- Remove ReferenceProvider
+- Remove ReferenceProvider?
+- Add g_set_application_name() when PyGTK 2.13 has landed.
 
 User Interface
 --------------

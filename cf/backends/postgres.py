@@ -51,9 +51,11 @@ class PgReferenceProvider(ReferenceProvider):
         return url
 
 class PostgresBackend(DBBackendPlugin):
+
     id = "crunchyfrog.backend.postgres"
     name = _(u"PostgreSQL Plugin")
     description = _(u"Provides access to PostgreSQL databases")
+    password_option = "password"
 
     def __init__(self, app):
         DBBackendPlugin.__init__(self, app)

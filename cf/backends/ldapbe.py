@@ -41,9 +41,11 @@ import logging
 log = logging.getLogger("LDAP")
 
 class LDAPBackend(DBBackendPlugin):
+
     id = "crunchyfrog.backend.ldap"
     name = _(u"LDAP Plugin")
     description = _(u"Provides access to LDAP/ActiveDirectory servers")
+    password_option = "password"
 
     def __init__(self, app):
         DBBackendPlugin.__init__(self, app)

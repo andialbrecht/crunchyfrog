@@ -178,9 +178,11 @@ def main():
     logger.setLevel(log_level)
     if not is_alive(PID_FILE):
         if isfile(abspath(join(dirname(__file__), "../setup.py"))):
-            props = {'app-datadir': abspath(join(dirname(__file__), '../data'))}
+            props = {'app-datadir':
+                     abspath(join(dirname(__file__), '../data'))}
         else:
             props = dict()
+        props['human-readable-name'] = release.name
         gnome.init(release.name.lower(), release.version,
                    properties=props)
         app = CFApplication(options)
