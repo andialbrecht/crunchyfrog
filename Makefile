@@ -41,7 +41,7 @@ clean: po-clean
 	rm -rf manual/
 
 	
-dist-prepare: clean ChangeLog
+dist-prepare: clean
 
 dist-clean: dist-prepare
 	find . -path "*.svn*" -print | xargs rm -rf
