@@ -262,6 +262,9 @@ class CFInstance(GladeWidget):
     def on_preferences(self, *args):
         self.app.preferences_show()
 
+    def on_plugins_configure(self, *args):
+        self.app.preferences_show("plugins")
+
     def on_query_new(self, *args):
         self.new_editor()
 

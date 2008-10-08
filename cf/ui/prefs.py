@@ -49,10 +49,17 @@ from cf.plugins.core import GenericPlugin
 
 class PreferencesDialog(GladeWidget):
 
-    def __init__(self, app):
+    def __init__(self, app, mode="editor"):
         GladeWidget.__init__(self, app, "crunchyfrog", "preferences_dialog")
         self.sync_repo_file(silent=True)
         self.refresh()
+        if mode == "editor":
+            curr_page = 1
+        elif mode == "plugins":
+            curr_page = 2
+        else:
+            curr_page = 0
+        self.xml.get_widget("notebook1").set_current_page(curr_page)
 
     def _setup_widget(self):
         self._setup_plugins()

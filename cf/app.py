@@ -129,9 +129,9 @@ class CFApplication(gobject.GObject):
         """
         return self.get_data("instances").values()
 
-    def preferences_show(self):
+    def preferences_show(self, mode="editor"):
         """Displays the preferences dialog"""
-        dlg = PreferencesDialog(self)
+        dlg = PreferencesDialog(self, mode=mode)
         dlg.run() # IGNORE:E1101 - Generic method
         dlg.destroy() # IGNORE:E1101 - Generic method
 
