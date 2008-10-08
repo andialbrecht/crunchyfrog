@@ -22,7 +22,7 @@ To build a Debian/Ubuntu package:
 
 	make deb
 	sudo dpkg -i dist/*.deb
-	
+
 	NOTE: Building a deb is experimental and should be reviewed by someone
 	with some more experiences.
 
