@@ -93,6 +93,7 @@ class Editor(GladeWidget):
         gobject.idle_add(self.explain)
 
     def on_populate_popup(self, textview, popup):
+        cfg = self.app.config
         sep = gtk.SeparatorMenuItem()
         sep.show()
         popup.append(sep)
@@ -106,9 +107,16 @@ class Editor(GladeWidget):
                 url = None
             if url and refviewer:
                 item = gtk.ImageMenuItem("gtk-help")
-                item.connect("activate", self.on_show_context_help, refviewer, url)
+                item.connect("activate", self.on_show_context_help,
+                             refviewer, url)
                 item.show()
                 popup.append(item)
+        item = gtk.CheckMenuItem(_(u"Split statements"))
+        item.set_active(cfg.get("sqlparse.enabled"))
+        item.connect("toggled", lambda x: cfg.set("sqlparse.enabled",
+                                                  x.get_active()))
+        item.show()
+        popup.append(item)
         if self.get_data("win"):
             lbl = _(u"Show in main window")
             cb = self.on_show_in_main_window

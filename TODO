@@ -1,28 +1,37 @@
 TODO
 ----
-
 - Add support for Capuchin?
+  See: http://capuchin.k-d-w.org/
 - Remove ReferenceProvider?
 - Add g_set_application_name() when PyGTK 2.13 has landed.
 
 User Interface
 --------------
-
 - Failed queries: Stop on error with continue/stop dialog.
+- Explain view: Enhance explain view with respect to backend specific
+  options and return values.
 
 Library
 -------
-
 - Improve save to library function.
 - Improve refresh of library tree when modifying entries.
 - Export/import library.
+- Optionally save current connection with statement?
 
 Documentation
 -------------
-
 - Switch to Sphinx/ReSt, it's easier to maintain.
+- Some more Plugin examples.
+
+Misc.
+-----
+- Add options for CSV export.
+  See: http://docs.python.org/lib/csv-fmt-params.html
+- Export filter should emit a progress signal (and of course the dialog
+  should have a callback).
+- LDAP connections make no sense in editor, should be suppressed somehow.
+
 
 Software Engineering
 --------------------
-
-- Code cleanup
+- Code cleanup... ;-)
