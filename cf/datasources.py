@@ -161,6 +161,8 @@ class DatasourceInfo(gobject.GObject):
         Returns:
           Password as string or None.
         """
+        if db_id is None:
+            return None
         item_type = gnomekeyring.ITEM_GENERIC_SECRET
         attrs = {"crunchyfrog": db_id}
         try:

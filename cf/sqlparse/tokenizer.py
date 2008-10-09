@@ -99,11 +99,23 @@ class Token(object):
         self._raw = raw
         self._dialect = dialect
 
+    def __repr__(self):
+        if len(self._raw) > 7:
+            short = self.upper()[:6]+'...'
+        else:
+            short = self.upper()
+        return '<Token \'%s\' at 0x%07x>' % (short, id(self))
+
     def __str__(self):
         return str(self._raw)
 
     def __unicode__(self):
         return unicode(self._raw)
+
+    def __cmp__(self, other):
+        if isinstance(other, basestring):
+            return cmp(self.upper(), other.upper())
+        return cmp(self, other)
 
     @property
     def raw(self):

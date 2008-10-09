@@ -132,10 +132,11 @@ class Editor(GladeWidget):
         #    is calculated in the Query class.
         if self._query_timer is not None:
             gobject.source_remove(self._query_timer)
-        self._query_timer = gobject.timeout_add(50, self.update_exectime, start, query)
         self.results.add_separator()
         self.results.add_message(query.statement, type_='query')
         query.iter_status = self.results.add_message("")
+        self._query_timer = gobject.timeout_add(50, self.update_exectime,
+                                                start, query)
 
     def on_query_finished(self, query, tag_notice):
         self.results.set_query(query)
@@ -273,8 +274,11 @@ class Editor(GladeWidget):
             else:
                 stms = [statement]
             for stmt in stmts:
+                if not stmt.strip():
+                    continue
                 query = Query(stmt, cur)
                 query.coding_hint = self.connection.coding_hint
+                query.connect("started", self.on_query_started)
                 query.connect("finished", self.on_query_finished, tag_notice)
                 query.execute()
 
@@ -729,6 +733,8 @@ class ResultsView(GladeWidget):
         elif type_ == 'output':
             stock_id = 'gtk-go-back'
         model = self.messages.get_model()
+        if model is None:  # we are in shutdown phase
+            return
         msg = msg.strip()
         if iter is None:
             itr = model.append([stock_id, msg, foreground, weight, False])

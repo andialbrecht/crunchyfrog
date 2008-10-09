@@ -57,6 +57,7 @@ class DialectDefault(Dialect):
     def __init__(self):
         super(DialectDefault, self).__init__()
         self._in_declare = False
+        self._in_create = False
 
     def semicolon_split_level(self, token):
         """Returns a value to adjust the semicolon split level.
@@ -70,8 +71,11 @@ class DialectDefault(Dialect):
         if token == 'DECLARE':
             self._in_declare = True
             return 1
+        if token == 'CREATE':
+            self._in_create = True
+            return 1
         if token == 'BEGIN':
-            if self._in_declare:
+            if self._in_declare or not self._in_create:
                 return 0
             return 1
         if token == 'END':
