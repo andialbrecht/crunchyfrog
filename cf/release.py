@@ -22,9 +22,9 @@
 
 name = "CrunchyFrog"
 appname = name.lower()
-version = "0.2.1"
+version = "0.2.90"
 copyright = "Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>"
-description = "Database navigator and query tool for GNOME"
+description = "Database front-end for GNOME"
 author = "Andi Albrecht"
 author_email = "albrecht.andi@gmail.com"
 url = "http://cf.andialbrecht.de"
@@ -43,6 +43,7 @@ Supported databases
 It is written in Python (PyGTK) and can be extended using plugins.
 
 Check out the homepage for the most recent version and details."""
+
 license = """This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
