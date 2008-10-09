@@ -69,7 +69,7 @@ class CFInstance(GladeWidget):
         # Tooltips
         self.tt = gtk.Tooltips()
         # Toolbar
-        self.toolbar = CFToolbar(self.app, self.xml)
+        self.toolbar = CFToolbar(self)
         self.toolbar.show_all()
         # Statusbar
         self.statusbar = CFStatusbar(self.app, self.xml)

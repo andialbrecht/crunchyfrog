@@ -397,8 +397,8 @@ class Editor(GladeWidget):
         buffer = self.get_buffer().set_text(txt)
 
     def show_in_separate_window(self):
-        win = EditorWindow(self.app, self.instance)
-        win.attach(self)
+        win = EditorWindow(self.app, self.instance,
+                           editor=self)
         win.show_all()
         self.set_data("win", win)
 
@@ -411,7 +411,7 @@ class Editor(GladeWidget):
 
     def update_exectime(self, start, query):
         lbl = _("Query running... (%.3f seconds)" % (time.time()-start))
-        self.results.add_message(lbl, iter=query.iter_status
+        self.results.add_message(lbl, iter=query.iter_status)
         if query.executed:
             if self._query_timer is not None:
                 gobject.source_remove(self._query_timer)
@@ -423,11 +423,12 @@ class Editor(GladeWidget):
 
 class EditorWindow(GladeWidget):
 
-    def __init__(self, app, instance):
+    def __init__(self, app, instance, editor=None):
         GladeWidget.__init__(self, app, "crunchyfrog", "editorwindow")
         self.instance = instance
         self.editor = None
-        self.toolbar = CFToolbar(self.app, "crunchyfrog", cb_provider=self)
+        self.toolbar = CFToolbar(self.instance, xml="crunchyfrog",
+                                 cb_provider=self)
         box = self.xml.get_widget("mainbox_editor")
         box.pack_start(self.toolbar.widget, False, False)
         box.reorder_child(self.toolbar.widget, 1)
@@ -444,8 +445,9 @@ class EditorWindow(GladeWidget):
         item.connect("clicked", self.on_close)
         item.show()
         self.toolbar.insert(item, -1)
-        self.toolbar.set_icon_size(gtk.ICON_SIZE_MENU)
         self.restore_window_state()
+        if editor is not None:
+            self.attach(editor)
 
     def on_buffer_changed(self, buffer):
         gobject.idle_add(self.update_title)

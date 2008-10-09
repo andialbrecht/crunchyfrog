@@ -20,56 +20,50 @@
 
 """Common widgets"""
 
-import gtk
-import gobject
-import gdl
-import pango
-import gnomevfs
-
+from gettext import gettext as _
 import os
 
-from kiwi.ui import dialogs
+import gnomevfs
+import gobject
+import gtk
+import pango
 
-from gettext import gettext as _
+from kiwi.ui import dialogs
 
 from cf.backends import DBConnectError, DBConnection
 from cf.datasources import DatasourceInfo
 from cf.ui import GladeWidget
 
-class ConnectionButton(gdl.ComboButton):
-    """Connection chooser used in toolbars
 
-    This widget is a ``gdl.ComboButton`` subclass and can be used to let
-    the user choose a database connection.
+class ConnectionButton(GladeWidget):
+    """Connection chooser used in toolbars.
 
     It is always bound to an `SQL Editor`_.
 
     .. _SQL Editor: cf.ui.editor.Editor.html
     """
 
-    def __init__(self, app):
-        gdl.ComboButton.__init__(self)
-        self.app = app
+    def __init__(self, app, xml):
+        GladeWidget.__init__(self, app, xml, "tb_connection")
         self._setup_widget()
         self.set_editor(None)
-        self.app.datasources.connect("datasource-modified", self.on_datasources_changed)
-        self.app.datasources.connect("datasource-added", self.on_datasources_changed)
-        self.app.datasources.connect("datasource-deleted", self.on_datasources_changed)
+        self.app.datasources.connect("datasource-modified",
+                                     lambda *a: self.rebuild_menu())
+        self.app.datasources.connect("datasource-added",
+                                     lambda *a: self.rebuild_menu())
+        self.app.datasources.connect("datasource-deleted",
+                                     lambda *a: self.rebuild_menu())
 
     def _setup_widget(self):
-        lbl = self.get_children()[0].get_children()[0].get_children()[0].get_children()[1]
-        lbl.set_max_width_chars(25)
+        lbl = gtk.Label("Not connected")
+        lbl.set_max_width_chars(15)
         lbl.set_ellipsize(pango.ELLIPSIZE_END)
         lbl.set_use_markup(True)
-        self.label = lbl
+        lbl.show_all()
+        self.set_label_widget(lbl)
+        self._label = lbl
         self._menu = gtk.Menu()
         self.set_menu(self._menu)
-
-    def on_datasources_changed(self, *args):
-        self.rebuild_menu()
-
-    def on_manage_connections(self, *args):
-        self.manage_connections()
 
     def on_new_connection(self, item, datasource_info):
         try:
@@ -78,6 +72,9 @@ class ConnectionButton(gdl.ComboButton):
             self.set_editor(self._editor)
         except DBConnectError, err:
             dialogs.error(_(u"Connection failed"), str(err))
+
+    def on_manage_connections(self, *args):
+        self.manage_connections()
 
     def on_set_connection(self, item, connection):
         self._editor.set_connection(connection)
@@ -106,7 +103,8 @@ class ConnectionButton(gdl.ComboButton):
             menu = gtk.Menu()
             has_connections = False
             for conn in datasource_info.get_connections():
-                yitem = gtk.MenuItem(_(u"Connection")+" #%s" % conn.conn_number)
+                yitem = gtk.MenuItem((_(u"Connection")+" #%s"
+                                      % conn.conn_number))
                 yitem.connect("activate", self.on_set_connection, conn)
                 yitem.show()
                 menu.append(yitem)
@@ -125,7 +123,7 @@ class ConnectionButton(gdl.ComboButton):
         sep.show()
         self._menu.append(sep)
         item = gtk.MenuItem(_(u"Show connections"))
-        item.connect("activate", self.on_manage_connections)
+        item.connect("activate", lambda *a: self.manage_connections())
         item.show()
         self._menu.append(item)
 
@@ -141,15 +139,16 @@ class ConnectionButton(gdl.ComboButton):
         self._editor = editor
         self.set_sensitive(bool(editor))
         self.rebuild_menu()
-        if editor:
-            if editor.connection:
-                self.set_label(editor.connection.get_label())
-                markup = "<b>"+editor.connection.datasource_info.get_label()+"</b>\n"
-                markup += _(u"Connection")+" #%s" % editor.connection.conn_number
-                self.set_tooltip_markup(markup)
-            else:
-                self.set_label("<"+_(u"Not connected")+">")
-                self.set_tooltip_markup(_(u"Click to open a connection"))
+        if editor and editor.connection:
+            self._label.set_text(editor.connection.get_label())
+            markup = ("<b>%s</b>\n%s #%s"
+                      % (editor.connection.datasource_info.get_label(),
+                         _(u"Connection"), editor.connection.conn_number))
+            self.set_tooltip_markup(markup)
+        else:
+            self._label.set_text("<"+_(u"Not connected")+">")
+            self.set_tooltip_markup(_(u"Click to open a connection"))
+
 
 class DataExportDialog(gtk.FileChooserDialog):
     """Export dialog
@@ -163,12 +162,13 @@ class DataExportDialog(gtk.FileChooserDialog):
 
             >>> from cf.ui.widgets import DataExportDialog
             >>> import gtk
-            >>> data = [["foo", 1, True], ["bar", 2, False], ["anything else", 7, None]]
+            >>> data = [["foo", 1, True], ["bar", 2, False]]
             >>> selected = [2,]
-            >>> statement = "select name, anumber, anotherfield from foo limit 3;"
+            >>> statement = ("select name, anumber, anotherfield "
+                              from foo limit 3;"
             >>> description = (("name", str, None, None, None, None, None),
-            ...            ("anumber", int, None, None, None, None, None),
-            ...            ("anotherfield", bool, None, None, None, None, None))
+            ...          ("anumber", int, None, None, None, None, None),
+            ...          ("anotherfield", bool, None, None, None, None, None))
             >>> dlg = DataExportDialog(app, instance.widget,
             ...                        data, selected, statement, description)
             >>> if dlg.run() == gtk.RESPONSE_OK:
@@ -187,11 +187,13 @@ class DataExportDialog(gtk.FileChooserDialog):
             app
                 `CFApplication`_ instance
             parent
-                The parent widget, usualy something like ``self.instance.widget``
+                The parent widget, usualy something like
+                ``self.instance.widget``
             data
                 List of rows (``[ [col1, col2, col3], ...]``)
             selected
-                List of indices of selected rows (``None`` means that no rows are selected)
+                List of indices of selected rows (``None`` means that no
+                rows are selected)
             statement
                 The SQL statement that produced the data.
                 This parameter is only used by some filters to give additional
@@ -202,7 +204,8 @@ class DataExportDialog(gtk.FileChooserDialog):
                 objects in `PEP 249`_ for details.
 
 
-        .. Note:: Usually there's no need to define ``data`` and ``description``
+        .. Note:: Usually there's no need to define ``data`` and
+          ``description``
             by hand. If it's a DB-API2-based backend, these parameters are
             retrieved from the cursor object (``cursor.fetchall()`` and
             ``cursor.description``).
@@ -224,22 +227,25 @@ class DataExportDialog(gtk.FileChooserDialog):
         self._setup_connections()
 
     def _setup_widget(self):
+        cfg = self.app.config
         vbox = gtk.VBox()
         vbox.set_spacing(5)
         self.set_extra_widget(vbox)
         self.edit_export_options = gtk.CheckButton(_(u"_Edit export options"))
         vbox.pack_start(self.edit_export_options, False, False)
-        self.export_selection = gtk.CheckButton(_(u"_Only export selected rows"))
+        self.export_selection = gtk.CheckButton(_(u("_Only export "
+                                                    "selected rows")))
         self.export_selection.set_sensitive(bool(self.selected))
         vbox.pack_start(self.export_selection, False, False)
         self.open_file = gtk.CheckButton(_(u"_Open file when finished"))
         vbox.pack_start(self.open_file, False, False)
         vbox.show_all()
-        if self.app.config.get("editor.export.recent_folder"):
-            self.set_current_folder(self.app.config.get("editor.export.recent_folder"))
+        if cfg.get("editor.export.recent_folder"):
+            self.set_current_folder(cfg.get("editor.export.recent_folder"))
         self._setup_filter()
 
     def _setup_filter(self):
+        cfg = self.app.config
         recent_filter = None
         from cf.plugins.core import PLUGIN_TYPE_EXPORT
         for plugin in self.app.plugins.get_plugins(PLUGIN_TYPE_EXPORT, True):
@@ -251,7 +257,7 @@ class DataExportDialog(gtk.FileChooserDialog):
                 filter.add_mime_type(mime)
             self.add_filter(filter)
             filter.set_data("plugin", plugin)
-            if self.app.config.get("editor.export.recent_filter", None) == plugin.id:
+            if cfg.get("editor.export.recent_filter", None) == plugin.id:
                 recent_filter = filter
         if recent_filter:
             self._filter_changed(recent_filter)
@@ -276,7 +282,8 @@ class DataExportDialog(gtk.FileChooserDialog):
 
         .. _export filter: cf.plugins.core.ExportPlugin.html
         """
-        self.app.config.set("editor.export.recent_folder", self.get_current_folder())
+        self.app.config.set("editor.export.recent_folder",
+                            self.get_current_folder())
         plugin = self.get_filter().get_data("plugin")
         self.app.config.set("editor.export.recent_filter", plugin.id)
         if self.export_selection.get_property("sensitive") \
@@ -286,9 +293,9 @@ class DataExportDialog(gtk.FileChooserDialog):
                 rows.append(self.data[i])
         else:
             rows = self.data
-        opts = {"filename" : self.get_filename(),
-                "uri" : self.get_uri(),
-                "query" : self.statement}
+        opts = {"filename": self.get_filename(),
+                "uri": self.get_uri(),
+                "query": self.statement}
         if self.edit_export_options.get_property("sensitive") \
         and self.edit_export_options.get_active():
             opts.update(plugin.show_options(self.description, rows))
@@ -298,6 +305,7 @@ class DataExportDialog(gtk.FileChooserDialog):
             app_desc = gnomevfs.mime_get_default_application(mime)
             cmd = app_desc[2].split(" ")
             os.spawnvp(os.P_NOWAIT, cmd[0], cmd+[opts["uri"]])
+
 
 class ProgressDialog(GladeWidget):
     """Progress dialog with a message
@@ -313,7 +321,7 @@ class ProgressDialog(GladeWidget):
             >>> dlg = ProgressDialog(app)
             >>> dlg.show_all()
             >>> dlg = ProgressDialog(app)
-            >>> dlg.set_modal(False) # only needed to run this in CrunchyFrog's python shell
+            >>> dlg.set_modal(False) # only needed to run it in CF's shell
             >>> dlg.show_all()
             >>> dlg.set_info("This is an information")
             >>> dlg.set_error("Uuups... an error occured")
@@ -348,7 +356,8 @@ class ProgressDialog(GladeWidget):
         """
         message = gobject.markup_escape_text(message)
         self.xml.get_widget("progress_label").set_markup("<b>"+message+"</b>")
-        self.xml.get_widget("progress_image").set_from_stock("gtk-dialog-error", gtk.ICON_SIZE_DIALOG)
+        self.xml.get_widget("progress_image").set_from_stock(
+            "gtk-dialog-error", gtk.ICON_SIZE_DIALOG)
 
     def set_info(self, message):
         """Displays an information
@@ -359,7 +368,8 @@ class ProgressDialog(GladeWidget):
         """
         message = gobject.markup_escape_text(message)
         self.xml.get_widget("progress_label").set_markup("<b>"+message+"</b>")
-        self.xml.get_widget("progress_image").set_from_stock("gtk-dialog-info", gtk.ICON_SIZE_DIALOG)
+        self.xml.get_widget("progress_image").set_from_stock(
+            "gtk-dialog-info", gtk.ICON_SIZE_DIALOG)
 
     def set_finished(self, finished):
         """Activates/deactivates close button
@@ -369,6 +379,7 @@ class ProgressDialog(GladeWidget):
                 If ``True`` the close button gets sensitive.
         """
         self.xml.get_widget("progress_btn_close").set_sensitive(finished)
+
 
 class ConnectionsWidget(GladeWidget):
     """Lists datasources and active connections"""
@@ -388,9 +399,12 @@ class ConnectionsWidget(GladeWidget):
     def _setup_connections(self):
         sel = self.list_conn.get_selection()
         sel.connect("changed", self.on_selection_changed)
-        self.app.datasources.connect("datasource-added", self.on_datasource_added)
-        self.app.datasources.connect("datasource-deleted", self.on_datasource_deleted)
-        self.app.datasources.connect("datasource-modified", self.on_datasource_modified)
+        self.app.datasources.connect("datasource-added",
+                                     self.on_datasource_added)
+        self.app.datasources.connect("datasource-deleted",
+                                     self.on_datasource_deleted)
+        self.app.datasources.connect("datasource-modified",
+                                     self.on_datasource_modified)
 
     def on_connect(self, *args):
         sel = self.list_conn.get_selection()
@@ -423,7 +437,8 @@ class ConnectionsWidget(GladeWidget):
 
     def on_connection_closed(self, connection):
         model = self.list_conn.get_model()
-        if not model: return
+        if not model:
+            return
         iter = model.get_iter_first()
         while iter:
             if model.get_value(iter, 0) == connection.datasource_info:
@@ -447,7 +462,9 @@ class ConnectionsWidget(GladeWidget):
         iter = model.get_iter_first()
         while iter:
             if model.get_value(iter, 0) == datasource_info:
-                model.set(iter, 0, datasource_info, 1, datasource_info.get_label())
+                model.set(iter,
+                          0, datasource_info,
+                          1, datasource_info.get_label())
                 return
             iter = model.iter_next(iter)
 
@@ -481,6 +498,7 @@ class ConnectionsWidget(GladeWidget):
                 citer = model.append(iter)
                 model.set(citer, 0, conn, 1, conn.get_label())
 
+
 class ConnectionsDialog(GladeWidget):
     """Dialog displaying connections"""
 
@@ -490,13 +508,15 @@ class ConnectionsDialog(GladeWidget):
     def _setup_widget(self):
         self.connections = ConnectionsWidget(self.app, self.xml)
 
+
 class CustomImageMenuItem(gtk.ImageMenuItem):
     """Menu item with custom image
 
     This widget simplifies the creation of an ``gtk.ImageMenuItem`` with an
     custom image. ``icon_name`` is used to lookup an icon in the default GTK
     icon theme and so it is not restricted to stock id's. The additional method
-    ``set_markup()`` can be used to set a markup string as the menu items label.
+    ``set_markup()`` can be used to set a markup string as the menu items
+    label.
 
     .. Note:: It is not recommended to use ``set_markup()`` because it is very
         unusual to have formatted text in menu items.
@@ -529,7 +549,8 @@ class CustomImageMenuItem(gtk.ImageMenuItem):
                 Icon name of the image
         """
         it = gtk.icon_theme_get_default()
-        pb = it.load_icon(icon_name, gtk.ICON_SIZE_MENU, gtk.ICON_LOOKUP_FORCE_SVG)
+        pb = it.load_icon(icon_name, gtk.ICON_SIZE_MENU,
+                          gtk.ICON_LOOKUP_FORCE_SVG)
         self.get_children()[1].set_from_pixbuf(pb)
 
     def set_label(self, label):
