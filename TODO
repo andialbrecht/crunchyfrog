@@ -1,15 +1,9 @@
-TODO
-----
-- Add support for Capuchin?
-  See: http://capuchin.k-d-w.org/
-- Remove ReferenceProvider?
-- Add g_set_application_name() when PyGTK 2.13 has landed.
-
 User Interface
 --------------
 - Failed queries: Stop on error with continue/stop dialog.
 - Explain view: Enhance explain view with respect to backend specific
   options and return values.
+- Accelerators don't work in SQL window.
 
 Library
 -------
@@ -25,6 +19,10 @@ Documentation
 
 Misc.
 -----
+- Add support for Capuchin?
+  See: http://capuchin.k-d-w.org/
+- Remove ReferenceProvider?
+- Add g_set_application_name() when PyGTK 2.13 has landed.
 - Add options for CSV export.
   See: http://docs.python.org/lib/csv-fmt-params.html
 - Export filter should emit a progress signal (and of course the dialog

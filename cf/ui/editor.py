@@ -444,8 +444,6 @@ class EditorWindow(GladeWidget):
         box = self.xml.get_widget("mainbox_editor")
         box.pack_start(self.toolbar.widget, False, False)
         box.reorder_child(self.toolbar.widget, 1)
-        quit = self.toolbar.xml.get_widget("tb_quit")
-        self.toolbar.widget.remove(quit)
         item = gtk.ToolButton()
         item.set_label(_(u"Show in main window"))
         item.set_stock_id("gtk-dnd-multiple")
