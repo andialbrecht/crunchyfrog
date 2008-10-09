@@ -2,8 +2,12 @@ TODO
 ----
 
 - Add support for Capuchin?
+<<<<<<< HEAD:TODO
 - Remove ReferenceProvider?
 - Add g_set_application_name() when PyGTK 2.13 has landed.
+=======
+- Remove ReferenceProvider
+>>>>>>> TODO item added.:TODO
 
 User Interface
 --------------
