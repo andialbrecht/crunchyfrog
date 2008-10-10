@@ -10,7 +10,7 @@ Build-Depends: debhelper (>= 5.0.37.2),
                python
 Build-Depends-Indep: python-central (>= 0.5.4)
 Standards-Version: 3.7.2
-XS-Python-Version: >= 2.4
+XS-Python-Version: >= 2.5
 
 Package: crunchyfrog
 Architecture: all
@@ -21,13 +21,10 @@ Depends: ${misc:Depends},
          python-gnome2-desktop,
          python-gnome2-extras,
          python-gobject,
-         python-gconf,
          python-dbus,
-         python-pysqlite2 (>= 2.0.5),
          python-configobj (>= 4.4.0),
          python-lxml (>= 0.9),
          python-kiwi,
-         gnome-extra-icons,
          python-sexy,
 Recommends: python-psycopg2,
 			python-mysqldb,
