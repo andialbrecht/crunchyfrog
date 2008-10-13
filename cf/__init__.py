@@ -73,11 +73,12 @@ LOG_FORMAT_APP = '%(levelname)s\t%(name)s\t%(created)f\t%(message)s'
 import logging
 logging.basicConfig(format=LOG_FORMAT_APP)
 
-if isfile(abspath(join(dirname(__file__), "../setup.py"))):
+try:
+    from dist import DATA_DIR, LOCALE_DIR
+except ImportError:
     DATA_DIR = abspath(join(dirname(__file__), "../data"))
     LOCALE_DIR = abspath(join(dirname(__file__), "../po"))
-else:
-    from dist import DATA_DIR, LOCALE_DIR
+
 PLUGIN_DIR = join(DATA_DIR, "plugins")
 USER_CONFIG_DIR = abspath(expanduser("~/.config/crunchyfrog"))
 USER_CONF = join(USER_CONFIG_DIR, "config")

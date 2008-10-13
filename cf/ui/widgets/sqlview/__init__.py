@@ -83,7 +83,7 @@ class SQLView(gtksourceview2.View):
 
     def on_buffer_changed(self, buffer):
         """Installs timeout callback to self.buffer_changed_cb()."""
-        if self._buffer_changed_cb:
+        if self._buffer_changed_cb is not None:
             gobject.source_remove(self._buffer_changed_cb)
             self._buffer_changed_cb = None
         self._buffer_changed_cb = gobject.timeout_add(500,
@@ -99,6 +99,7 @@ class SQLView(gtksourceview2.View):
 
     def buffer_changed_cb(self, buffer):
         """Update marks."""
+        # TODO(andi): Needs optimizations.
         while self._sql_marks:
             mark = self._sql_marks.pop()
             self.buffer.delete_mark(mark)
@@ -152,7 +153,7 @@ class SQLView(gtksourceview2.View):
         else:
             dialect = None
         for stmt in sqlparse.sqlsplit(content, dialect=dialect):
-            start, end = iter.forward_search(stmt,
+            start, end = iter.forward_search(stmt.lstrip(),
                                              gtk.TEXT_SEARCH_TEXT_ONLY)
             yield start, end
             iter = end
