@@ -144,7 +144,7 @@ class SQLView(gtksourceview2.View):
         """Finds statements in current buffer.
 
         Returns:
-            List of 3-tuples (start iter, end iter, statement as string).
+            List of 2-tuples (start iter, end iter).
         """
         content = self.buffer.get_text(*self.buffer.get_bounds())
         iter = self.buffer.get_start_iter()
@@ -158,4 +158,4 @@ class SQLView(gtksourceview2.View):
             yield start, end
             iter = end
             if not iter:
-                return
+                raise StopIteration
