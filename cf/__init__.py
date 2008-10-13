@@ -50,6 +50,7 @@ import gobject
 import gtk
 import gtk.glade
 import gettext
+import hotshot
 import traceback
 import os
 import errno
@@ -213,4 +214,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    if "CF_PROFILE" in os.environ:
+        prof = hotshot.Profile("crunchyfrog.prof")
+        prof.runcall(main)
+        prof.close()
+    else:
+        main()
