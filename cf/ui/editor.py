@@ -588,6 +588,7 @@ class ResultsView(GladeWidget):
                               str,  # 2 foreground color
                               int,  # 3 font weight
                               bool, # 4 is separator row
+                              str,  # 5 font description
                               )
         model.connect("row-inserted", self._msg_model_changed)
         model.connect("row-deleted", self._msg_model_changed)
@@ -601,6 +602,7 @@ class ResultsView(GladeWidget):
         col.add_attribute(renderer, 'text', 1)
         col.add_attribute(renderer, 'foreground', 2)
         col.add_attribute(renderer, 'weight', 3)
+        col.add_attribute(renderer, 'font', 5)
         self.messages.append_column(col)
         self.messages.set_row_separator_func(self._set_row_separator)
         self.explain_model = gtk.ListStore(str)
@@ -699,7 +701,7 @@ class ResultsView(GladeWidget):
         self.grid.set_query(query)
         model = self.messages.get_model()
         for err in query.errors:
-            self.add_error(err.strip())
+            self.add_error(err.strip(), monospaced=True)
         for msg in query.messages:
             self.add_output(msg.strip())
         if query.errors:
@@ -711,7 +713,7 @@ class ResultsView(GladeWidget):
         self.xml.get_widget("editor_export_data").set_sensitive(bool(query.rows))
         gobject.idle_add(self.set_current_page, curr_page)
 
-    def add_message(self, msg, type_=None, iter=None):
+    def add_message(self, msg, type_=None, iter=None, monospaced=False):
         """Add a message.
 
         Args:
@@ -722,6 +724,10 @@ class ResultsView(GladeWidget):
         assert type_ in (None, 'info', 'output', 'error', 'warning', 'query')
         stock_id = None
         foreground = None
+        if monospaced:
+            font = 'Monospace 10'
+        else:
+            font = None
         weight = pango.WEIGHT_NORMAL
         if type_ == 'info':
             stock_id = 'gtk-info'
@@ -738,23 +744,26 @@ class ResultsView(GladeWidget):
             weight = pango.WEIGHT_BOLD
         elif type_ == 'output':
             stock_id = 'gtk-go-back'
+            font = 'Monospace'
         model = self.messages.get_model()
         if model is None:  # we are in shutdown phase
             return
         msg = msg.strip()
         if iter is None:
-            itr = model.append([stock_id, msg, foreground, weight, False])
+            itr = model.append([stock_id, msg, foreground, weight,
+                                False, font])
         else:
             model.set_value(iter, 0, stock_id)
             model.set_value(iter, 1, msg)
             model.set_value(iter, 2, foreground)
             model.set_value(iter, 3, weight)
+            model.set_value(iter, 5, font)
             itr = iter
         self.messages.scroll_to_cell(model.get_path(itr))
         return itr
 
-    def add_error(self, msg):
-        return self.add_message(msg, 'error')
+    def add_error(self, msg, monospaced=False):
+        return self.add_message(msg, 'error', monospaced=monospaced)
 
     def add_info(self, msg):
         return self.add_message(msg, 'info')
@@ -769,7 +778,7 @@ class ResultsView(GladeWidget):
         model = self.messages.get_model()
         if not model.get_iter_first():
             return
-        model.append([None, None, None, pango.WEIGHT_NORMAL, True])
+        model.append([None, None, None, pango.WEIGHT_NORMAL, True, None])
 
 
 class ResultList(GladeWidget):
