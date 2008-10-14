@@ -1,10 +1,10 @@
-from setuptools import setup
+from distutils.core import setup
 import os
 import sys
 
 if "install" in sys.argv or os.getuid() == 0:
     print "To install CrunchyFrog run"
-    print 
+    print
     print "\tmake"
     print "\tmake install"
     print

@@ -1,0 +1,15 @@
+include AUTHORS
+include COPYING
+include INSTALL
+include README
+include TODO
+include Makefile
+include setup.py
+include crunchyfrog
+recursive-include cf *
+recursive-include data *
+recursive-include debian *
+recursive-include docs *
+recursive-include extras *
+recursive-include po *
+prune *.pyc
