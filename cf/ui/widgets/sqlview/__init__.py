@@ -153,9 +153,12 @@ class SQLView(gtksourceview2.View):
         else:
             dialect = None
         for stmt in sqlparse.sqlsplit(content, dialect=dialect):
+            if not stmt.strip():
+                continue
             start, end = iter.forward_search(stmt.lstrip(),
                                              gtk.TEXT_SEARCH_TEXT_ONLY)
             yield start, end
             iter = end
             if not iter:
                 raise StopIteration
+        raise StopIteration
