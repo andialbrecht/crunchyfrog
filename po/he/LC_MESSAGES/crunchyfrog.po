@@ -1,4 +1,4 @@
-# French translation for crunchyfrog
+# Hebrew translation for crunchyfrog
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the crunchyfrog package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: crunchyfrog\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-10-08 10:42+0200\n"
-"PO-Revision-Date: 2008-10-12 13:56+0000\n"
-"Last-Translator: Enrico Rosina <Unknown>\n"
-"Language-Team: French <fr@li.org>\n"
+"PO-Revision-Date: 2008-10-15 00:10+0000\n"
+"Last-Translator: Yaron <sh.yaron@gmail.com>\n"
+"Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,59 +23,59 @@ msgstr "    "
 
 #: data/crunchyfrog.glade.h:2
 msgid "(objectclass=*)"
-msgstr ""
+msgstr "(objectclass=*)"
 
 #: data/crunchyfrog.glade.h:3
 msgid "<b>Automatic Indentation</b>"
-msgstr "<b>Indentation Automatique</b>"
+msgstr "<b>הזחה אוטומטית</b>"
 
 #: data/crunchyfrog.glade.h:4
 msgid "<b>Bracket Matching</b>"
-msgstr "<b>Correspondance des parenthèses</b>"
+msgstr "<b>התאמת סוגריים</b>"
 
 #: data/crunchyfrog.glade.h:5
 msgid "<b>Current Line</b>"
-msgstr "<b>Ligne Courante</b>"
+msgstr "<b>השורה הנוכחית</b>"
 
 #: data/crunchyfrog.glade.h:6
 msgid "<b>Font</b>"
-msgstr "<b>Police</b>"
+msgstr "<b>גופן</b>"
 
 #: data/crunchyfrog.glade.h:7
 msgid "<b>Installed backends</b>"
-msgstr "<b>Backends installés</b>"
+msgstr "<b>מנגנונים מותקנים</b>"
 
 #: data/crunchyfrog.glade.h:8
 msgid "<b>Line Numbers</b>"
-msgstr "<b>Numéros de Ligne</b>"
+msgstr "<b>מספרי שורות</b>"
 
 #: data/crunchyfrog.glade.h:9
 msgid "<b>New editors</b>"
-msgstr "<b>Nouveaux éditeurs</b>"
+msgstr "<b>עורכים חדשים</b>"
 
 #: data/crunchyfrog.glade.h:10
 msgid "<b>Right Margin</b>"
-msgstr "<b>Marge de droite</b>"
+msgstr "<b>שוליים ימניים</b>"
 
 #: data/crunchyfrog.glade.h:11
 msgid "<b>SQL Splitting</b>"
-msgstr "<b>Découpage du SQL</b>"
+msgstr "<b>פיצול SQL</b>"
 
 #: data/crunchyfrog.glade.h:12
 msgid "<b>Select an instance</b>"
-msgstr "<b>Choisir une instance</b>"
+msgstr "<b>בחר מופע</b>"
 
 #: data/crunchyfrog.glade.h:13
 msgid "<b>Tab Stops</b>"
-msgstr "<b>Tabulations</b>"
+msgstr "<b>עצירות טאב</b>"
 
 #: data/crunchyfrog.glade.h:14
 msgid "<b>Text Wrapping</b>"
-msgstr "<b>Coupure de texte</b>"
+msgstr "<b>גלישת טקסט</b>"
 
 #: data/crunchyfrog.glade.h:15
 msgid "<b>Variables</b>"
-msgstr "<b>Variables</b>"
+msgstr "<b>משתנים</b>"
 
 #: data/crunchyfrog.glade.h:17
 #, no-c-format
@@ -84,44 +84,43 @@ msgstr "<span size=\"large\"><b>%s</b></span>"
 
 #: data/crunchyfrog.glade.h:18
 msgid "<span weight=\"bold\">Color Scheme</span>"
-msgstr "<span weight=\"bold\">Jeu de couleurs</span>"
+msgstr "<span weight=\"bold\">ערכת צבעים</span>"
 
 #: data/crunchyfrog.glade.h:19
 msgid "Activate to split statements in a SQL editor before execution."
-msgstr ""
-"Activer pour découper les commandes dans un éditeur SQL avant éxécution"
+msgstr "הפעל כדי לפצל הצהרות בערוך SQL לפני הרצה."
 
 #: data/crunchyfrog.glade.h:20
 msgid "Begin transaction"
-msgstr "Début de transaction"
+msgstr "התחל בהעברה"
 
 #: data/crunchyfrog.glade.h:21
 msgid "Cancel query"
-msgstr "Annuler la requête"
+msgstr "בטל שאילתה"
 
 #: data/crunchyfrog.glade.h:22
 msgid "Close _without Saving"
-msgstr "Fermer _sans enregistrer"
+msgstr "סגור מ_בלי לשמור"
 
 #: data/crunchyfrog.glade.h:23
 msgid "Commit"
-msgstr "Commit"
+msgstr "שליחה"
 
 #: data/crunchyfrog.glade.h:24
 msgid "Configure plugins"
-msgstr ""
+msgstr "הגדר תוספים"
 
 #: data/crunchyfrog.glade.h:25
 msgid "Connections"
-msgstr "Connexions"
+msgstr "חיבורים"
 
 #: data/crunchyfrog.glade.h:26
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "העתק ללוח הגזירים"
 
 #: data/crunchyfrog.glade.h:27
 msgid "Create a new application instance"
-msgstr "Créer une nouvelle instance d'application"
+msgstr "צור מופע חדש של היישום"
 
 #: data/crunchyfrog.glade.h:28
 msgid "CrunchyFrog"
@@ -132,170 +131,168 @@ msgid ""
 "CrunchyFrog is already running.\n"
 "Open selected files..."
 msgstr ""
-"CrunchyFrog est déjà en cours d'exécution.\n"
-"Ouvrir les fichiers sélectionnés..."
+"CrunchyFrog כבר פעיל.\n"
+"פתח קבצים נבחרים..."
 
 #: data/crunchyfrog.glade.h:31
 msgid "D_atasource:"
-msgstr ""
+msgstr "מ_קור הנתונים:"
 
 #: data/crunchyfrog.glade.h:32
 msgid "Datasource Manager"
-msgstr "Gestionnaire de sources de données"
+msgstr "מנהל מקור הנתונים"
 
 #: data/crunchyfrog.glade.h:33
 msgid "Developer _Pages"
-msgstr "_Pages du développeur"
+msgstr "עמודים ל_מפתחים"
 
 #: data/crunchyfrog.glade.h:34
 msgid "Display right _margin"
-msgstr "Afficher la _marge de droite"
+msgstr "הצג שוליים _ימניים"
 
 #: data/crunchyfrog.glade.h:35
 msgid "Do not _split words over two lines"
-msgstr "Ne pas _couper les mots sur deux lignes"
+msgstr "אל ת_פצל מילים ליותר משתי שורות"
 
 #: data/crunchyfrog.glade.h:36
 msgid "E_xplain"
-msgstr ""
+msgstr "ה_סבר"
 
 #: data/crunchyfrog.glade.h:37
 msgid "Editor"
-msgstr "Éditeur"
+msgstr "עורך"
 
 #: data/crunchyfrog.glade.h:38
 msgid "Editor _font: "
-msgstr "_Police de l'éditeur: "
+msgstr "_גופן העורך: "
 
 #: data/crunchyfrog.glade.h:39
 msgid "Enable text _wrapping"
-msgstr ""
+msgstr "אפשר _גלישת טקסט"
 
 #: data/crunchyfrog.glade.h:40
 msgid "Execute query"
-msgstr "Exécuter la requête"
+msgstr "הרץ שאילתה"
 
 #: data/crunchyfrog.glade.h:41
 msgid "Font & Colors"
-msgstr "Police et couleurs"
+msgstr "גופן וצבעים"
 
 #: data/crunchyfrog.glade.h:42
 msgid "General"
-msgstr "Général"
+msgstr "כללי"
 
 #: data/crunchyfrog.glade.h:43
 msgid "Highlight current _line"
-msgstr "Surligner la _ligne actuelle"
+msgstr "ה_דגש את השורה הנוכחית"
 
 #: data/crunchyfrog.glade.h:44
 msgid "Highlight matching _bracket"
-msgstr "Surligner les _parenthèses correspondantes"
+msgstr "הדגש את ה_סוגר המתאים"
 
 #: data/crunchyfrog.glade.h:45
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
-"Si vous n'enregistrez pas, toutes vos modifications seront définitivement "
-"perdues."
+msgstr "אם לא תשמור, כל השינויים יאבדו לעד."
 
 #: data/crunchyfrog.glade.h:46
 msgid "Insert _spaces instead of tabs"
-msgstr "Insérer _des espaces à la place des tabulations"
+msgstr "הוסף _רווחים במקום טאבים"
 
 #: data/crunchyfrog.glade.h:47
 msgid "Installed backends"
-msgstr ""
+msgstr "מנגנונים מותקנים"
 
 #: data/crunchyfrog.glade.h:48
 msgid "New Query"
-msgstr "Nouvelle requête"
+msgstr "שאילתה חדשה"
 
 #: data/crunchyfrog.glade.h:49
 msgid "Open a new query window"
-msgstr "Ouvrir une nouvelle fenêtre de recherche"
+msgstr "פתח חלון שאילתה חדש"
 
 #: data/crunchyfrog.glade.h:50
 msgid "Open editor in _separate window"
-msgstr ""
+msgstr "פתח עורך בחלון _נפרד"
 
 #: data/crunchyfrog.glade.h:51
 msgid "Pick the editor font"
-msgstr "Choisissez la police de l'éditeur"
+msgstr "בחר את גופן העורך"
 
 #: data/crunchyfrog.glade.h:52
 msgid "Preferences"
-msgstr "Préférences"
+msgstr "העדפות"
 
 #: data/crunchyfrog.glade.h:53
 msgid "Progress"
-msgstr "Progression"
+msgstr "התקדמות"
 
 #: data/crunchyfrog.glade.h:54
 msgid "Query"
-msgstr "Requête"
+msgstr "שאילתה"
 
 #: data/crunchyfrog.glade.h:55
 msgid "Refresh"
-msgstr "Rafraîchir"
+msgstr "רענון"
 
 #: data/crunchyfrog.glade.h:56
 msgid "Replace _variables (e.g. '$MyVar')"
-msgstr "Remplacer les _variables (p.ex. '$MaVariable')"
+msgstr "החלף משתנים (לדוגמה '$MyVar')"
 
 #: data/crunchyfrog.glade.h:57
 msgid "Rollback"
-msgstr "Rollback"
+msgstr "שיחזור"
 
 #: data/crunchyfrog.glade.h:58
 msgid "SQL library"
-msgstr "Librairie SQL"
+msgstr "ספריית SQL"
 
 #: data/crunchyfrog.glade.h:59
 msgid "S_elect the documents you want to save:"
-msgstr "Sél_ectionner les documents que vous voulez sauvegarder:"
+msgstr "בחר את ה_מסמכים שברצונך לשמור:"
 
 #: data/crunchyfrog.glade.h:60
 msgid "S_tatement"
-msgstr ""
+msgstr "ה_צהרה"
 
 #: data/crunchyfrog.glade.h:61
 msgid "S_ub-tree level"
-msgstr ""
+msgstr "רמת _תת־עץ"
 
 #: data/crunchyfrog.glade.h:62
 msgid "Save files"
-msgstr "Sauvegarder les fichiers"
+msgstr "שמור קבצים"
 
 #: data/crunchyfrog.glade.h:63
 msgid "Save to library"
-msgstr "Sauvegarder dans la librairie"
+msgstr "שמור לספריה"
 
 #: data/crunchyfrog.glade.h:64
 msgid "Search s_cope:"
-msgstr ""
+msgstr "הי_קף החיפוש:"
 
 #: data/crunchyfrog.glade.h:65
 msgid "Select instance"
-msgstr "Sélectionner une instance"
+msgstr "בחר מופע"
 
 #: data/crunchyfrog.glade.h:66
 msgid "Separate attributes by commas"
-msgstr "Séparer les attributs par des virgules"
+msgstr "הפרד תכונות בפסיקים"
 
 #: data/crunchyfrog.glade.h:67
 msgid "Show in _main window"
-msgstr ""
+msgstr "הצג בחלון _ראשי"
 
 #: data/crunchyfrog.glade.h:68
 msgid "St_ored connections"
-msgstr ""
+msgstr "חיבורים _מאוחסנים"
 
 #: data/crunchyfrog.glade.h:69
 msgid "Synchronize with plugin repository"
-msgstr "Synchroniser avec la bibliothèque de plugins"
+msgstr "סנכרן עם מאגר התוספים"
 
 #: data/crunchyfrog.glade.h:70
 msgid "TODO"
-msgstr "À FAIRE"
+msgstr "מטלות"
 
 #: data/crunchyfrog.glade.h:71
 msgid ""
@@ -303,194 +300,196 @@ msgid ""
 "Plugins currently not available, e.g. because of missing requirements, are "
 "marked with a warning sign."
 msgstr ""
+"המנגנונים הבאים מותקנים במערכת שלך.\n"
+"התוספים שאינם זמינים כרגע, לדוגמה עקב דרישות חסרות, מסומנים בסימן אזהרה."
 
 #: data/crunchyfrog.glade.h:73
 msgid "Toggle favorites"
-msgstr "Basculer les favorits"
+msgstr "החלף מצב מועדפים"
 
 #: data/crunchyfrog.glade.h:74
 msgid "Toggle navigation bar"
-msgstr "Basculer la barre de navigation"
+msgstr "החלף מצב סרגל הניווט"
 
 #: data/crunchyfrog.glade.h:75
 msgid "Use SQL s_plitting"
-msgstr "Utiliser le fractionnement du SQL"
+msgstr "השתמש ב_פיצול SQL"
 
 #: data/crunchyfrog.glade.h:76
 msgid "View"
-msgstr "Afficher"
+msgstr "תצוגה"
 
 #: data/crunchyfrog.glade.h:77
 msgid "_About this plugin"
-msgstr "_A propos de ce plugin"
+msgstr "_אודות תוסף זה"
 
 #: data/crunchyfrog.glade.h:78
 msgid "_Attributes:"
-msgstr "_Attributs:"
+msgstr "_תכונות:"
 
 #: data/crunchyfrog.glade.h:79
 msgid "_Backend:"
-msgstr ""
+msgstr "_מנוע:"
 
 #: data/crunchyfrog.glade.h:80
 msgid "_Category:"
-msgstr "_Catégorie:"
+msgstr "_קטגוריה:"
 
 #: data/crunchyfrog.glade.h:81
 msgid "_Configure plugin"
-msgstr ""
+msgstr "ה_גדר תוסף"
 
 #: data/crunchyfrog.glade.h:82
 msgid "_Data Source"
-msgstr ""
+msgstr "מקור _נתונים"
 
 #: data/crunchyfrog.glade.h:83
 msgid "_Datasource Manager"
-msgstr "Gestionnaire de sources de _Données"
+msgstr "מנהל _מקורות הנתונים"
 
 #: data/crunchyfrog.glade.h:84
 msgid "_Datasources"
-msgstr ""
+msgstr "מ_קורות הנתונים"
 
 #: data/crunchyfrog.glade.h:85
 msgid "_Description:"
-msgstr "_Description:"
+msgstr "_תיאור:"
 
 #: data/crunchyfrog.glade.h:86
 msgid "_Display line numbers"
-msgstr "_Afficher les numéros de ligne"
+msgstr "_הצג את מספרי השורות"
 
 #: data/crunchyfrog.glade.h:87
 msgid "_Edit"
-msgstr "_Éditer"
+msgstr "_עריכה"
 
 #: data/crunchyfrog.glade.h:88
 msgid "_Editor"
-msgstr "_Éditeur"
+msgstr "_עורך"
 
 #: data/crunchyfrog.glade.h:89
 msgid "_Enable automatic indentation"
-msgstr "_Activer l'indentation automatique"
+msgstr "_אפשר הזחה אוטומטית"
 
 #: data/crunchyfrog.glade.h:90
 msgid "_Enable repository"
-msgstr ""
+msgstr "א_פשר מאגר"
 
 #: data/crunchyfrog.glade.h:91
 msgid "_File"
-msgstr "_Fichier"
+msgstr "_קובץ"
 
 #: data/crunchyfrog.glade.h:92
 msgid "_Filter:"
-msgstr "_Filtre:"
+msgstr "_מסנן:"
 
 #: data/crunchyfrog.glade.h:93
 msgid "_General"
-msgstr "_Général"
+msgstr "_כללי"
 
 #: data/crunchyfrog.glade.h:94
 msgid "_Help"
-msgstr "_Aide"
+msgstr "ע_זרה"
 
 #: data/crunchyfrog.glade.h:95
 msgid "_Install plugin"
-msgstr ""
+msgstr "ה_תקן תוסף"
 
 #: data/crunchyfrog.glade.h:96
 msgid "_Instance"
-msgstr "_Instance"
+msgstr "מו_פע"
 
 #: data/crunchyfrog.glade.h:97
 msgid "_Messages"
-msgstr "_Messages"
+msgstr "הו_דעות"
 
 #: data/crunchyfrog.glade.h:98
 msgid "_Name:"
-msgstr "_Nom:"
+msgstr "_שם:"
 
 #: data/crunchyfrog.glade.h:99
 msgid "_Navigator"
-msgstr "_Navigateur"
+msgstr "_נווט"
 
 #: data/crunchyfrog.glade.h:100
 msgid "_New"
-msgstr "_Nouveau"
+msgstr "_חדש"
 
 #: data/crunchyfrog.glade.h:101
 msgid "_One level"
-msgstr "_Premier Niveau"
+msgstr "_רמה אחת"
 
 #: data/crunchyfrog.glade.h:102
 msgid "_Online Resources"
-msgstr ""
+msgstr "_משאבים מקוונים"
 
 #: data/crunchyfrog.glade.h:103
 msgid "_Open plugin folder"
-msgstr "_Ouvrir le dossier des plugins"
+msgstr "_פתח את תיקיית התוסף"
 
 #: data/crunchyfrog.glade.h:104
 msgid "_Plugins"
-msgstr "_Plugins"
+msgstr "_תוספים"
 
 #: data/crunchyfrog.glade.h:105
 msgid "_Query"
-msgstr "_Requête"
+msgstr "_תשאל"
 
 #: data/crunchyfrog.glade.h:106
 msgid "_Recent Files"
-msgstr ""
+msgstr "_קבצים אחרונים"
 
 #: data/crunchyfrog.glade.h:107
 msgid "_Remove plugin"
-msgstr ""
+msgstr "ה_סר תוסף"
 
 #: data/crunchyfrog.glade.h:108
 msgid "_Report a Problem"
-msgstr ""
+msgstr "_דווח על תקלה"
 
 #: data/crunchyfrog.glade.h:109
 msgid "_Results"
-msgstr "_Résultats"
+msgstr "_תוצאות"
 
 #: data/crunchyfrog.glade.h:110
 msgid "_Right margin at column:"
-msgstr ""
+msgstr "_שוליים ימניים בעמודה:"
 
 #: data/crunchyfrog.glade.h:111
 msgid "_Search DN:"
-msgstr ""
+msgstr "_חיפוש DN:"
 
 #: data/crunchyfrog.glade.h:112
 msgid "_Statement:"
-msgstr ""
+msgstr "ה_צהרה:"
 
 #: data/crunchyfrog.glade.h:113
 msgid "_Synchronize"
-msgstr "_Synchroniser"
+msgstr "_סנכרן"
 
 #: data/crunchyfrog.glade.h:114
 msgid "_Tab width:"
-msgstr ""
+msgstr "_רוחב טאב:"
 
 #: data/crunchyfrog.glade.h:115
 msgid "_Test connection"
-msgstr "_Tester la connection"
+msgstr "_בדוק את החיבור"
 
 #: data/crunchyfrog.glade.h:116
 msgid "_Translate CrunchyFrog"
-msgstr "_Traduire CrunchyFrog"
+msgstr "_תרגם את CrunchyFrog"
 
 #: data/crunchyfrog.glade.h:117
 msgid "_URL:"
-msgstr "_URL:"
+msgstr "_כתובת:"
 
 #: data/crunchyfrog.glade.h:118
 msgid "_View"
-msgstr "_Afficher"
+msgstr "_תצוגה"
 
 #: data/crunchyfrog.glade.h:119
 msgid "gtk-about"
-msgstr "gtk-A-propos"
+msgstr "gtk-about"
 
 #: data/crunchyfrog.glade.h:120
 msgid "gtk-cancel"
@@ -562,8 +561,8 @@ msgstr "gtk-save-as"
 
 #: data/crunchyfrog.glade.h:137
 msgid "in an _existing instance"
-msgstr "dans une instance _existante"
+msgstr "בתוך מופע _קיים"
 
 #: data/crunchyfrog.glade.h:138
 msgid "in an _new instance"
-msgstr "dans une _nouvelle instance"
+msgstr "בתור מופע _חדש"

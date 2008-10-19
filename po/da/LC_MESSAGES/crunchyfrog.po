@@ -1,4 +1,4 @@
-# French translation for crunchyfrog
+# Danish translation for crunchyfrog
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the crunchyfrog package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: crunchyfrog\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-10-08 10:42+0200\n"
-"PO-Revision-Date: 2008-10-12 13:56+0000\n"
-"Last-Translator: Enrico Rosina <Unknown>\n"
-"Language-Team: French <fr@li.org>\n"
+"PO-Revision-Date: 2008-07-29 20:03+0000\n"
+"Last-Translator: Jeppe Toustrup <launchpad@tenzer.dk>\n"
+"Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -23,59 +23,59 @@ msgstr "    "
 
 #: data/crunchyfrog.glade.h:2
 msgid "(objectclass=*)"
-msgstr ""
+msgstr "(objektklasse=*)"
 
 #: data/crunchyfrog.glade.h:3
 msgid "<b>Automatic Indentation</b>"
-msgstr "<b>Indentation Automatique</b>"
+msgstr "<b>Automatisk indrykning</b>"
 
 #: data/crunchyfrog.glade.h:4
 msgid "<b>Bracket Matching</b>"
-msgstr "<b>Correspondance des parenthèses</b>"
+msgstr "<b>Parantesfremhævning</b>"
 
 #: data/crunchyfrog.glade.h:5
 msgid "<b>Current Line</b>"
-msgstr "<b>Ligne Courante</b>"
+msgstr "<b>Aktuel linje</b>"
 
 #: data/crunchyfrog.glade.h:6
 msgid "<b>Font</b>"
-msgstr "<b>Police</b>"
+msgstr "<b>Skrifttype</b>"
 
 #: data/crunchyfrog.glade.h:7
 msgid "<b>Installed backends</b>"
-msgstr "<b>Backends installés</b>"
+msgstr "<b>Installerede motorer</b>"
 
 #: data/crunchyfrog.glade.h:8
 msgid "<b>Line Numbers</b>"
-msgstr "<b>Numéros de Ligne</b>"
+msgstr "<b>Linjenummerering</b>"
 
 #: data/crunchyfrog.glade.h:9
 msgid "<b>New editors</b>"
-msgstr "<b>Nouveaux éditeurs</b>"
+msgstr "<b>Nye tekstbehandlere</b>"
 
 #: data/crunchyfrog.glade.h:10
 msgid "<b>Right Margin</b>"
-msgstr "<b>Marge de droite</b>"
+msgstr "<b>Højre margen</b>"
 
 #: data/crunchyfrog.glade.h:11
 msgid "<b>SQL Splitting</b>"
-msgstr "<b>Découpage du SQL</b>"
+msgstr ""
 
 #: data/crunchyfrog.glade.h:12
 msgid "<b>Select an instance</b>"
-msgstr "<b>Choisir une instance</b>"
+msgstr "<b>Vælg en instans</b>"
 
 #: data/crunchyfrog.glade.h:13
 msgid "<b>Tab Stops</b>"
-msgstr "<b>Tabulations</b>"
+msgstr "<b>Tabulatorstop</b>"
 
 #: data/crunchyfrog.glade.h:14
 msgid "<b>Text Wrapping</b>"
-msgstr "<b>Coupure de texte</b>"
+msgstr "<b>Tekstombrydning</b>"
 
 #: data/crunchyfrog.glade.h:15
 msgid "<b>Variables</b>"
-msgstr "<b>Variables</b>"
+msgstr "<b>Variabler</b>"
 
 #: data/crunchyfrog.glade.h:17
 #, no-c-format
@@ -84,28 +84,27 @@ msgstr "<span size=\"large\"><b>%s</b></span>"
 
 #: data/crunchyfrog.glade.h:18
 msgid "<span weight=\"bold\">Color Scheme</span>"
-msgstr "<span weight=\"bold\">Jeu de couleurs</span>"
+msgstr "<span weight=\"bold\">Farveskema</span>"
 
 #: data/crunchyfrog.glade.h:19
 msgid "Activate to split statements in a SQL editor before execution."
 msgstr ""
-"Activer pour découper les commandes dans un éditeur SQL avant éxécution"
 
 #: data/crunchyfrog.glade.h:20
 msgid "Begin transaction"
-msgstr "Début de transaction"
+msgstr "Start transaktion"
 
 #: data/crunchyfrog.glade.h:21
 msgid "Cancel query"
-msgstr "Annuler la requête"
+msgstr "Afbryd forespørgsel"
 
 #: data/crunchyfrog.glade.h:22
 msgid "Close _without Saving"
-msgstr "Fermer _sans enregistrer"
+msgstr "Luk uden at gemme"
 
 #: data/crunchyfrog.glade.h:23
 msgid "Commit"
-msgstr "Commit"
+msgstr "Udfør"
 
 #: data/crunchyfrog.glade.h:24
 msgid "Configure plugins"
@@ -113,7 +112,7 @@ msgstr ""
 
 #: data/crunchyfrog.glade.h:25
 msgid "Connections"
-msgstr "Connexions"
+msgstr "Forbindelser"
 
 #: data/crunchyfrog.glade.h:26
 msgid "Copy to clipboard"
@@ -121,7 +120,7 @@ msgstr ""
 
 #: data/crunchyfrog.glade.h:27
 msgid "Create a new application instance"
-msgstr "Créer une nouvelle instance d'application"
+msgstr "Opret en ny program instans"
 
 #: data/crunchyfrog.glade.h:28
 msgid "CrunchyFrog"
@@ -132,170 +131,168 @@ msgid ""
 "CrunchyFrog is already running.\n"
 "Open selected files..."
 msgstr ""
-"CrunchyFrog est déjà en cours d'exécution.\n"
-"Ouvrir les fichiers sélectionnés..."
+"CrunchyFrog kører allerede.\n"
+"Åben valgte filer..."
 
 #: data/crunchyfrog.glade.h:31
 msgid "D_atasource:"
-msgstr ""
+msgstr "Datakilde:"
 
 #: data/crunchyfrog.glade.h:32
 msgid "Datasource Manager"
-msgstr "Gestionnaire de sources de données"
+msgstr "Datakilde håndtering"
 
 #: data/crunchyfrog.glade.h:33
 msgid "Developer _Pages"
-msgstr "_Pages du développeur"
+msgstr "Udvikler sider"
 
 #: data/crunchyfrog.glade.h:34
 msgid "Display right _margin"
-msgstr "Afficher la _marge de droite"
+msgstr "Vis højre margen"
 
 #: data/crunchyfrog.glade.h:35
 msgid "Do not _split words over two lines"
-msgstr "Ne pas _couper les mots sur deux lignes"
+msgstr "Del ikke ord over to linjer"
 
 #: data/crunchyfrog.glade.h:36
 msgid "E_xplain"
-msgstr ""
+msgstr "Forklar"
 
 #: data/crunchyfrog.glade.h:37
 msgid "Editor"
-msgstr "Éditeur"
+msgstr "Tekstbehandler"
 
 #: data/crunchyfrog.glade.h:38
 msgid "Editor _font: "
-msgstr "_Police de l'éditeur: "
+msgstr "Skrifttype for tekst: "
 
 #: data/crunchyfrog.glade.h:39
 msgid "Enable text _wrapping"
-msgstr ""
+msgstr "Aktivér tekstombrydning"
 
 #: data/crunchyfrog.glade.h:40
 msgid "Execute query"
-msgstr "Exécuter la requête"
+msgstr "Udfør forespørgsel"
 
 #: data/crunchyfrog.glade.h:41
 msgid "Font & Colors"
-msgstr "Police et couleurs"
+msgstr "Skrifttyper og farver"
 
 #: data/crunchyfrog.glade.h:42
 msgid "General"
-msgstr "Général"
+msgstr "Generelt"
 
 #: data/crunchyfrog.glade.h:43
 msgid "Highlight current _line"
-msgstr "Surligner la _ligne actuelle"
+msgstr "Fremhæv aktuel linje"
 
 #: data/crunchyfrog.glade.h:44
 msgid "Highlight matching _bracket"
-msgstr "Surligner les _parenthèses correspondantes"
+msgstr "Fremhæv modsvarende parantes"
 
 #: data/crunchyfrog.glade.h:45
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
-"Si vous n'enregistrez pas, toutes vos modifications seront définitivement "
-"perdues."
+msgstr "Hvis du ikke gemmer, vil alle dine ændringer gå tabt."
 
 #: data/crunchyfrog.glade.h:46
 msgid "Insert _spaces instead of tabs"
-msgstr "Insérer _des espaces à la place des tabulations"
+msgstr "Indsæt mellemrum i stedet for tabulatorer"
 
 #: data/crunchyfrog.glade.h:47
 msgid "Installed backends"
-msgstr ""
+msgstr "Installerede motorer"
 
 #: data/crunchyfrog.glade.h:48
 msgid "New Query"
-msgstr "Nouvelle requête"
+msgstr "Ny forespørgsel"
 
 #: data/crunchyfrog.glade.h:49
 msgid "Open a new query window"
-msgstr "Ouvrir une nouvelle fenêtre de recherche"
+msgstr "Åben et nyt forespørgsels vindue"
 
 #: data/crunchyfrog.glade.h:50
 msgid "Open editor in _separate window"
-msgstr ""
+msgstr "Åben tekstbehandler i et seperart vindue"
 
 #: data/crunchyfrog.glade.h:51
 msgid "Pick the editor font"
-msgstr "Choisissez la police de l'éditeur"
+msgstr "Vælg tekstskrifttypen"
 
 #: data/crunchyfrog.glade.h:52
 msgid "Preferences"
-msgstr "Préférences"
+msgstr "Indstillinger"
 
 #: data/crunchyfrog.glade.h:53
 msgid "Progress"
-msgstr "Progression"
+msgstr "Fremgang"
 
 #: data/crunchyfrog.glade.h:54
 msgid "Query"
-msgstr "Requête"
+msgstr "Forespørgsel"
 
 #: data/crunchyfrog.glade.h:55
 msgid "Refresh"
-msgstr "Rafraîchir"
+msgstr "Opdatér"
 
 #: data/crunchyfrog.glade.h:56
 msgid "Replace _variables (e.g. '$MyVar')"
-msgstr "Remplacer les _variables (p.ex. '$MaVariable')"
+msgstr "Udskift variabler (f.eks. '$MinVar')"
 
 #: data/crunchyfrog.glade.h:57
 msgid "Rollback"
-msgstr "Rollback"
+msgstr "Tilbagerulning"
 
 #: data/crunchyfrog.glade.h:58
 msgid "SQL library"
-msgstr "Librairie SQL"
+msgstr "SQL bibliotek"
 
 #: data/crunchyfrog.glade.h:59
 msgid "S_elect the documents you want to save:"
-msgstr "Sél_ectionner les documents que vous voulez sauvegarder:"
+msgstr "Vælg de dokumenter du ønsker at gemme:"
 
 #: data/crunchyfrog.glade.h:60
 msgid "S_tatement"
-msgstr ""
+msgstr "Kald"
 
 #: data/crunchyfrog.glade.h:61
 msgid "S_ub-tree level"
-msgstr ""
+msgstr "Deltræ niveau"
 
 #: data/crunchyfrog.glade.h:62
 msgid "Save files"
-msgstr "Sauvegarder les fichiers"
+msgstr "Gem filer"
 
 #: data/crunchyfrog.glade.h:63
 msgid "Save to library"
-msgstr "Sauvegarder dans la librairie"
+msgstr "Gem til bibliotek"
 
 #: data/crunchyfrog.glade.h:64
 msgid "Search s_cope:"
-msgstr ""
+msgstr "Søge område:"
 
 #: data/crunchyfrog.glade.h:65
 msgid "Select instance"
-msgstr "Sélectionner une instance"
+msgstr "Vælg instans"
 
 #: data/crunchyfrog.glade.h:66
 msgid "Separate attributes by commas"
-msgstr "Séparer les attributs par des virgules"
+msgstr "Adskil attributter med kommaer"
 
 #: data/crunchyfrog.glade.h:67
 msgid "Show in _main window"
-msgstr ""
+msgstr "Vis i hovedvindue"
 
 #: data/crunchyfrog.glade.h:68
 msgid "St_ored connections"
-msgstr ""
+msgstr "Gemte forbindelser"
 
 #: data/crunchyfrog.glade.h:69
 msgid "Synchronize with plugin repository"
-msgstr "Synchroniser avec la bibliothèque de plugins"
+msgstr "Synkroniser med udvidelsesarkiv"
 
 #: data/crunchyfrog.glade.h:70
 msgid "TODO"
-msgstr "À FAIRE"
+msgstr "Gøremål"
 
 #: data/crunchyfrog.glade.h:71
 msgid ""
@@ -303,42 +300,45 @@ msgid ""
 "Plugins currently not available, e.g. because of missing requirements, are "
 "marked with a warning sign."
 msgstr ""
+"De følgende motorer er installeret på dit system.\n"
+"Udvidelser er ikke tilgængelige lige nu, eventuelt på grund af manglende "
+"krav, som er markeret med et advarsels skilt."
 
 #: data/crunchyfrog.glade.h:73
 msgid "Toggle favorites"
-msgstr "Basculer les favorits"
+msgstr "Slå favoritter til/fra"
 
 #: data/crunchyfrog.glade.h:74
 msgid "Toggle navigation bar"
-msgstr "Basculer la barre de navigation"
+msgstr "Slå navigationslinje till/fra"
 
 #: data/crunchyfrog.glade.h:75
 msgid "Use SQL s_plitting"
-msgstr "Utiliser le fractionnement du SQL"
+msgstr ""
 
 #: data/crunchyfrog.glade.h:76
 msgid "View"
-msgstr "Afficher"
+msgstr "Vis"
 
 #: data/crunchyfrog.glade.h:77
 msgid "_About this plugin"
-msgstr "_A propos de ce plugin"
+msgstr "Om denne udvidelse"
 
 #: data/crunchyfrog.glade.h:78
 msgid "_Attributes:"
-msgstr "_Attributs:"
+msgstr "Attributter:"
 
 #: data/crunchyfrog.glade.h:79
 msgid "_Backend:"
-msgstr ""
+msgstr "Motor:"
 
 #: data/crunchyfrog.glade.h:80
 msgid "_Category:"
-msgstr "_Catégorie:"
+msgstr "Kategori:"
 
 #: data/crunchyfrog.glade.h:81
 msgid "_Configure plugin"
-msgstr ""
+msgstr "Konfigurer udvidelse"
 
 #: data/crunchyfrog.glade.h:82
 msgid "_Data Source"
@@ -346,179 +346,179 @@ msgstr ""
 
 #: data/crunchyfrog.glade.h:83
 msgid "_Datasource Manager"
-msgstr "Gestionnaire de sources de _Données"
+msgstr "Datakilde håndtere"
 
 #: data/crunchyfrog.glade.h:84
 msgid "_Datasources"
-msgstr ""
+msgstr "Datakilder"
 
 #: data/crunchyfrog.glade.h:85
 msgid "_Description:"
-msgstr "_Description:"
+msgstr "Beskrivelse:"
 
 #: data/crunchyfrog.glade.h:86
 msgid "_Display line numbers"
-msgstr "_Afficher les numéros de ligne"
+msgstr "Vis linjenumre"
 
 #: data/crunchyfrog.glade.h:87
 msgid "_Edit"
-msgstr "_Éditer"
+msgstr "Redigér"
 
 #: data/crunchyfrog.glade.h:88
 msgid "_Editor"
-msgstr "_Éditeur"
+msgstr "Tekstbehandler"
 
 #: data/crunchyfrog.glade.h:89
 msgid "_Enable automatic indentation"
-msgstr "_Activer l'indentation automatique"
+msgstr "Aktivér automatisk indrykning"
 
 #: data/crunchyfrog.glade.h:90
 msgid "_Enable repository"
-msgstr ""
+msgstr "Aktivér arkiv"
 
 #: data/crunchyfrog.glade.h:91
 msgid "_File"
-msgstr "_Fichier"
+msgstr "Fil"
 
 #: data/crunchyfrog.glade.h:92
 msgid "_Filter:"
-msgstr "_Filtre:"
+msgstr "Filter:"
 
 #: data/crunchyfrog.glade.h:93
 msgid "_General"
-msgstr "_Général"
+msgstr "Generelt"
 
 #: data/crunchyfrog.glade.h:94
 msgid "_Help"
-msgstr "_Aide"
+msgstr "Hjælp"
 
 #: data/crunchyfrog.glade.h:95
 msgid "_Install plugin"
-msgstr ""
+msgstr "Installér udvidelse"
 
 #: data/crunchyfrog.glade.h:96
 msgid "_Instance"
-msgstr "_Instance"
+msgstr "Instans"
 
 #: data/crunchyfrog.glade.h:97
 msgid "_Messages"
-msgstr "_Messages"
+msgstr "Beskeder"
 
 #: data/crunchyfrog.glade.h:98
 msgid "_Name:"
-msgstr "_Nom:"
+msgstr "Navn:"
 
 #: data/crunchyfrog.glade.h:99
 msgid "_Navigator"
-msgstr "_Navigateur"
+msgstr "Navigator"
 
 #: data/crunchyfrog.glade.h:100
 msgid "_New"
-msgstr "_Nouveau"
+msgstr "Ny"
 
 #: data/crunchyfrog.glade.h:101
 msgid "_One level"
-msgstr "_Premier Niveau"
+msgstr "Et niveau"
 
 #: data/crunchyfrog.glade.h:102
 msgid "_Online Resources"
-msgstr ""
+msgstr "Online ressourcer"
 
 #: data/crunchyfrog.glade.h:103
 msgid "_Open plugin folder"
-msgstr "_Ouvrir le dossier des plugins"
+msgstr "Åben udvidelses mappe"
 
 #: data/crunchyfrog.glade.h:104
 msgid "_Plugins"
-msgstr "_Plugins"
+msgstr "Udvidelser"
 
 #: data/crunchyfrog.glade.h:105
 msgid "_Query"
-msgstr "_Requête"
+msgstr "Forespørgsel"
 
 #: data/crunchyfrog.glade.h:106
 msgid "_Recent Files"
-msgstr ""
+msgstr "Nylige filer"
 
 #: data/crunchyfrog.glade.h:107
 msgid "_Remove plugin"
-msgstr ""
+msgstr "Fjern udvidelse"
 
 #: data/crunchyfrog.glade.h:108
 msgid "_Report a Problem"
-msgstr ""
+msgstr "Rapportér et problem"
 
 #: data/crunchyfrog.glade.h:109
 msgid "_Results"
-msgstr "_Résultats"
+msgstr "Resultater"
 
 #: data/crunchyfrog.glade.h:110
 msgid "_Right margin at column:"
-msgstr ""
+msgstr "Højre margen ved kolonne:"
 
 #: data/crunchyfrog.glade.h:111
 msgid "_Search DN:"
-msgstr ""
+msgstr "Søg DN:"
 
 #: data/crunchyfrog.glade.h:112
 msgid "_Statement:"
-msgstr ""
+msgstr "Kald:"
 
 #: data/crunchyfrog.glade.h:113
 msgid "_Synchronize"
-msgstr "_Synchroniser"
+msgstr "Synkronisér"
 
 #: data/crunchyfrog.glade.h:114
 msgid "_Tab width:"
-msgstr ""
+msgstr "Tabulatorbredde:"
 
 #: data/crunchyfrog.glade.h:115
 msgid "_Test connection"
-msgstr "_Tester la connection"
+msgstr "Test forbindelse"
 
 #: data/crunchyfrog.glade.h:116
 msgid "_Translate CrunchyFrog"
-msgstr "_Traduire CrunchyFrog"
+msgstr "Oversæt CrunchyFrog"
 
 #: data/crunchyfrog.glade.h:117
 msgid "_URL:"
-msgstr "_URL:"
+msgstr "URL:"
 
 #: data/crunchyfrog.glade.h:118
 msgid "_View"
-msgstr "_Afficher"
+msgstr "Vis"
 
 #: data/crunchyfrog.glade.h:119
 msgid "gtk-about"
-msgstr "gtk-A-propos"
+msgstr "gtk-om gtk"
 
 #: data/crunchyfrog.glade.h:120
 msgid "gtk-cancel"
-msgstr "gtk-cancel"
+msgstr "gtk-annuller"
 
 #: data/crunchyfrog.glade.h:121
 msgid "gtk-close"
-msgstr "gtk-close"
+msgstr "gtk-luk"
 
 #: data/crunchyfrog.glade.h:122
 msgid "gtk-connect"
-msgstr "gtk-connect"
+msgstr "gtk-forbind"
 
 #: data/crunchyfrog.glade.h:123
 msgid "gtk-copy"
-msgstr "gtk-copy"
+msgstr "gtk-kopier"
 
 #: data/crunchyfrog.glade.h:124
 msgid "gtk-cut"
-msgstr "gtk-cut"
+msgstr "gtk-klip"
 
 #: data/crunchyfrog.glade.h:125
 msgid "gtk-delete"
-msgstr "gtk-delete"
+msgstr "gtk-slet"
 
 #: data/crunchyfrog.glade.h:126
 msgid "gtk-disconnect"
-msgstr "gtk-disconnect"
+msgstr "gtk-afbryd"
 
 #: data/crunchyfrog.glade.h:127
 msgid "gtk-find"
@@ -526,11 +526,11 @@ msgstr "gtk-find"
 
 #: data/crunchyfrog.glade.h:128
 msgid "gtk-help"
-msgstr "gtk-help"
+msgstr "gtk-hjælp"
 
 #: data/crunchyfrog.glade.h:129
 msgid "gtk-new"
-msgstr "gtk-new"
+msgstr "gtk-ny"
 
 #: data/crunchyfrog.glade.h:130
 msgid "gtk-ok"
@@ -538,32 +538,32 @@ msgstr "gtk-ok"
 
 #: data/crunchyfrog.glade.h:131
 msgid "gtk-open"
-msgstr "gtk-open"
+msgstr "gtk-åben"
 
 #: data/crunchyfrog.glade.h:132
 msgid "gtk-paste"
-msgstr "gtk-paste"
+msgstr "gtk-sæt ind"
 
 #: data/crunchyfrog.glade.h:133
 msgid "gtk-preferences"
-msgstr "gtk-preferences"
+msgstr "gtk-indstillinger"
 
 #: data/crunchyfrog.glade.h:134
 msgid "gtk-quit"
-msgstr "gtk-quit"
+msgstr "gtk-afslut"
 
 #: data/crunchyfrog.glade.h:135
 msgid "gtk-save"
-msgstr "gtk-save"
+msgstr "gtk-gem"
 
 #: data/crunchyfrog.glade.h:136
 msgid "gtk-save-as"
-msgstr "gtk-save-as"
+msgstr "gtk-gem som"
 
 #: data/crunchyfrog.glade.h:137
 msgid "in an _existing instance"
-msgstr "dans une instance _existante"
+msgstr "i en eksisterende instans"
 
 #: data/crunchyfrog.glade.h:138
 msgid "in an _new instance"
-msgstr "dans une _nouvelle instance"
+msgstr "i en ny instans"
