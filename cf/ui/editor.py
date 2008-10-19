@@ -20,30 +20,31 @@
 
 """SQL editor and results view"""
 
-import gtk
-import gobject
-import gconf
-import pango
-import gnome
-import gnomevfs
-
+from gettext import gettext as _
+import logging
+import os
 import re
+import string
 import thread
 import time
-import os
-import string
 
-from gettext import gettext as _
+import gconf
+import gnome
+import gnomevfs
+import gobject
+import gtk
+import pango
+
 from kiwi.ui import dialogs
 
 from cf import sqlparse
 from cf.backends import Query
 from cf.ui import GladeWidget
+from cf.ui.confirmsave import ConfirmSaveDialog
 from cf.ui.toolbar import CFToolbar
 from cf.ui.widgets import DataExportDialog
 from cf.ui.widgets.grid import Grid
 from cf.ui.widgets.sqlview import SQLView
-from cf.ui.confirmsave import ConfirmSaveDialog
 
 
 class Editor(GladeWidget):
@@ -66,6 +67,8 @@ class Editor(GladeWidget):
         self.set_data("win", None)
         self.show_all()
 
+    # Widget setup
+
     def _setup_widget(self):
         self._setup_textview()
         self._setup_resultsgrid()
@@ -80,6 +83,8 @@ class Editor(GladeWidget):
 
     def _setup_connections(self):
         self.textview.connect("populate-popup", self.on_populate_popup)
+
+    # Callbacks
 
     def on_close(self, *args):
         self.close()
@@ -176,7 +181,10 @@ class Editor(GladeWidget):
     def on_show_in_separate_window(self, *args):
         gobject.idle_add(self.show_in_separate_window)
 
+    # Public methods
+
     def close(self):
+        """Close editor, displays a confirmation dialog for unsaved files."""
         dlg = ConfirmSaveDialog(self, [self])
         resp = dlg.run()
         if resp == 1:
@@ -195,18 +203,21 @@ class Editor(GladeWidget):
             return True
 
     def commit(self):
+        """Commit current transaction, if any."""
         if not self.connection: return
         cur = self.connection.cursor()
         cur.execute("commit")
         cur.close()
 
     def rollback(self):
+        """Commit current transaction, if any."""
         if not self.connection: return
         cur = self.connection.cursor()
         cur.execute("rollback")
         cur.close()
 
     def begin_transaction(self):
+        """Begin transaction."""
         if not self.connection: return
         cur = self.connection.cursor()
         cur.execute("begin")
@@ -321,7 +332,8 @@ class Editor(GladeWidget):
             self.__conn_close_tag = None
         self.connection = conn
         if conn:
-            self.__conn_close_tag = self.connection.connect("closed", self.on_connection_closed)
+            self.__conn_close_tag = self.connection.connect("closed",
+                                                            self.on_connection_closed)
         else:
             self._conn_close_tag = None
         self.emit("connection-changed", conn)
