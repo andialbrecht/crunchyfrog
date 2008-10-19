@@ -163,7 +163,8 @@ class Editor(GladeWidget):
             msg = msg % (query.execution_time, query.rowcount)
             type_ = 'info'
         self.results.add_message(msg, type_, query.path_status)
-        self.connection.disconnect(tag_notice)
+        if self.connection.handler_is_connected(tag_notice):
+            self.connection.disconnect(tag_notice)
         self.textview.grab_focus()
 
     def on_show_context_help(self, menuitem, refviewer, url):
