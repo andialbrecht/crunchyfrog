@@ -142,11 +142,14 @@ class Editor(GladeWidget):
             gobject.source_remove(self._query_timer)
         self.results.add_separator()
         self.results.add_message(query.statement, type_='query')
-        query.iter_status = self.results.add_message("")
+        query.path_status = self.results.add_message("")
         self._query_timer = gobject.timeout_add(50, self.update_exectime,
                                                 start, query)
 
     def on_query_finished(self, query, tag_notice):
+        if self._query_timer:
+            gobject.source_remove(self._query_timer)
+            self._query_timer = None
         self.results.set_query(query)
         if query.failed:
             msg = _(u'Query failed (%.3f seconds)') % query.execution_time
@@ -159,10 +162,9 @@ class Editor(GladeWidget):
             msg = _(u"Query finished (%.3f seconds, %s affected rows)")
             msg = msg % (query.execution_time, query.rowcount)
             type_ = 'info'
-        gobject.idle_add(self.results.add_message,
-                         msg, type_, query.iter_status)
+        self.results.add_message(msg, type_, query.path_status)
         self.connection.disconnect(tag_notice)
-        gobject.idle_add(self.textview.grab_focus)
+        self.textview.grab_focus()
 
     def on_show_context_help(self, menuitem, refviewer, url):
         refviewer.load_url(url)
@@ -225,7 +227,9 @@ class Editor(GladeWidget):
                 query.coding_hint = self.connection.coding_hint
                 gtk.gdk.threads_enter()
                 query.connect("started", self.on_query_started)
-                query.connect("finished", self.on_query_finished, tag_notice)
+                query.connect("finished",
+                              self.on_query_finished,
+                              tag_notice)
                 gtk.gdk.threads_leave()
                 query.execute(True)
                 if query.failed:
@@ -423,7 +427,7 @@ class Editor(GladeWidget):
 
     def update_exectime(self, start, query):
         lbl = _("Query running... (%.3f seconds)" % (time.time()-start))
-        self.results.add_message(lbl, iter=query.iter_status)
+        self.results.add_message(lbl, path=query.path_status)
         if query.executed:
             if self._query_timer is not None:
                 gobject.source_remove(self._query_timer)
@@ -713,7 +717,7 @@ class ResultsView(GladeWidget):
         self.xml.get_widget("editor_export_data").set_sensitive(bool(query.rows))
         gobject.idle_add(self.set_current_page, curr_page)
 
-    def add_message(self, msg, type_=None, iter=None, monospaced=False):
+    def add_message(self, msg, type_=None, path=None, monospaced=False):
         """Add a message.
 
         Args:
@@ -749,18 +753,22 @@ class ResultsView(GladeWidget):
         if model is None:  # we are in shutdown phase
             return
         msg = msg.strip()
-        if iter is None:
+        if path is None:
             itr = model.append([stock_id, msg, foreground, weight,
                                 False, font])
         else:
-            model.set_value(iter, 0, stock_id)
-            model.set_value(iter, 1, msg)
-            model.set_value(iter, 2, foreground)
-            model.set_value(iter, 3, weight)
-            model.set_value(iter, 5, font)
-            itr = iter
+            try:
+                iter_ = model.get_iter(path)
+            except ValueError:
+                return
+            model.set_value(iter_, 0, stock_id)
+            model.set_value(iter_, 1, msg)
+            model.set_value(iter_, 2, foreground)
+            model.set_value(iter_, 3, weight)
+            model.set_value(iter_, 5, font)
+            itr = iter_
         self.messages.scroll_to_cell(model.get_path(itr))
-        return itr
+        return model.get_path(itr)
 
     def add_error(self, msg, monospaced=False):
         return self.add_message(msg, 'error', monospaced=monospaced)
