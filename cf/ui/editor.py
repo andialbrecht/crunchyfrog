@@ -223,6 +223,8 @@ class Editor(GladeWidget):
             else:
                 stmts = [statement]
             for stmt in stmts:
+                if not stmt.strip():
+                    continue
                 query = Query(stmt, cur)
                 query.coding_hint = self.connection.coding_hint
                 gtk.gdk.threads_enter()
