@@ -73,7 +73,7 @@ class DialectDefault(Dialect):
             return 1
         if token == 'CREATE':
             self._in_create = True
-            return 1
+            return 0
         if token == 'BEGIN':
             if self._in_declare or not self._in_create:
                 return 0
