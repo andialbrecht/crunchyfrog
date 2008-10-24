@@ -1,0 +1,90 @@
+2008-10-24 CrunchyFrog 0.3.0
+----------------------------
+
+New Features
+ * query splittng
+ * gnomekeyring support
+ * UI cleanup (incl. issue8)
+
+Bug Fixes
+ * Errors when a plugin isn't activated but a data source used fixed.
+ * Connection chooser doesn't get insensitive when a editor is closed.
+ * Fixed errors with progress messages.
+
+Other
+ * gtksourceview-1 is not supported anymore (issue10).
+ * gdl isn't required anymore.
+
+Translations
+ * Danish
+ * Dutch
+ * French
+ * German
+ * Hebrew
+ * Indonesian
+ * Italian
+ * Spanish
+ * Swedish
+ * Turkish
+
+Thanks to all Launchpad contributors!
+
+
+2008-06-10 CrunchyFrog 0.2.1
+----------------------------
+
+New Features
+ * SQL Server backend (using pymssql)
+ * HTTP logfile backend (requires sqlite3)
+ * recent files support
+
+Bug Fixes
+ * scrollable mode and duplicate popup menu on queries notebook fixed
+ * confirm dialog for unsaved changes
+ * unloading of shell plugin fixed (issue7)
+ * UI enhancements (incl. parts of issue8, thanks to paul.kishimoto
+   for the suggestions)
+ * info dialog about available backends
+
+Translations
+ * Finish
+ * French
+ * German
+ * Italian
+ * Spanish
+
+Thanks to all launchpad contributors!
+
+
+2008-04-04 CrunchyFrog 0.2.0
+----------------------------
+
+New Features
+ * navigator: refresh action
+ * double-click on datasource opens editor and assigns a connection
+ * SQL library plugin
+ * API documentation
+
+
+Bug Fixes
+ * load/unload of plugins fixed (issue #5)
+ * minor improvements to connection handling
+ * installation mechanism improved (issue #4)
+ * exception handling fixed (issue #3)
+ * reset explain tab when a query is started
+ * ConnectionButton: Sort alphabetically
+ * ConnectionButton: If the button is assigned to an editor, new
+   datasources are note recognized
+ * UserDB: provide some kind of callback mechanism so that plugins can
+   create or update tables themself (implemented in UserDBMixin)
+ * UserDB: remove USER_DB attribute and implement it as config
+   value (userdb.file, not visible in preferences dialog)
+ * Library: Manage saved queries
+ * ConnectionButton: Manage connections
+ * ResultGrid: Custom TreeModel and Renderer
+
+Other
+ * User manual (en, de)
+ * slight modifications to plugin management, it doesn't use setuptools anymore
+ * better instance handling
+ * minor UI improvements
