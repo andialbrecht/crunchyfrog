@@ -38,9 +38,7 @@ from cf.ui import GladeWidget
 class ConnectionButton(GladeWidget):
     """Connection chooser used in toolbars.
 
-    It is always bound to an `SQL Editor`_.
-
-    .. _SQL Editor: cf.ui.editor.Editor.html
+    It is always bound to an SQLEditor.
     """
 
     def __init__(self, app, xml):
@@ -81,13 +79,13 @@ class ConnectionButton(GladeWidget):
         self.set_editor(self._editor)
 
     def manage_connections(self):
-        """Displays a dialog to manage connections"""
+        """Displays a dialog to manage connections."""
         dlg = ConnectionsDialog(self.app)
         dlg.run()
         dlg.destroy()
 
     def rebuild_menu(self):
-        """Rebuilds the drop-down menu"""
+        """Rebuilds the drop-down menu."""
         while self._menu.get_children():
             self._menu.remove(self._menu.get_children()[0])
         if not self._editor:
@@ -128,13 +126,10 @@ class ConnectionButton(GladeWidget):
         self._menu.append(item)
 
     def set_editor(self, editor):
-        """Associates an editor
+        """Associates an editor.
 
-        :Parameter:
-            editor
-                `SQL editor`_
-
-        .. _SQL editor: cf.ui.editor.Editor.html
+        Arguments:
+            editor: SQLEditor instance.
         """
         self._editor = editor
         self.set_sensitive(bool(editor))
@@ -151,9 +146,9 @@ class ConnectionButton(GladeWidget):
 
 
 class DataExportDialog(gtk.FileChooserDialog):
-    """Export dialog
+    """Export dialog.
 
-    A modified ``gtk.FileChooserDialog`` for exporting data.
+    A modified gtk.FileChooserDialog for exporting data.
 
     Usage example
     =============
@@ -510,16 +505,16 @@ class ConnectionsDialog(GladeWidget):
 
 
 class CustomImageMenuItem(gtk.ImageMenuItem):
-    """Menu item with custom image
+    """Menu item with custom image.
 
-    This widget simplifies the creation of an ``gtk.ImageMenuItem`` with an
-    custom image. ``icon_name`` is used to lookup an icon in the default GTK
+    This widget simplifies the creation of an gtk.ImageMenuItem with an
+    custom image. icon_name is used to lookup an icon in the default GTK
     icon theme and so it is not restricted to stock id's. The additional method
-    ``set_markup()`` can be used to set a markup string as the menu items
+    set_markup() can be used to set a markup string as the menu items
     label.
 
-    .. Note:: It is not recommended to use ``set_markup()`` because it is very
-        unusual to have formatted text in menu items.
+    Note: It is not recommended to use set_markup() because it is very
+      unusual to have formatted text in menu items.
     """
 
     def __init__(self, icon_name, label, is_markup=False):
@@ -544,14 +539,16 @@ class CustomImageMenuItem(gtk.ImageMenuItem):
     def set_icon_name(self, icon_name):
         """Sets the image
 
-        :Parameter:
-            icon_name
-                Icon name of the image
+        Args:
+          icon_name: Icon name of the image.
+        Raises:
+          GError: if the icon isn't present in icon theme.
         """
         it = gtk.icon_theme_get_default()
         pb = it.load_icon(icon_name, gtk.ICON_SIZE_MENU,
                           gtk.ICON_LOOKUP_FORCE_SVG)
-        self.get_children()[1].set_from_pixbuf(pb)
+        img = gtk.image_new_from_pixbuf(pb)
+        self.set_image(gtk.image_new_from_pixbuf(pb))
 
     def set_label(self, label):
         """Sets the label
