@@ -22,14 +22,13 @@
 
 name = "CrunchyFrog"
 appname = name.lower()
-version = "0.2.90"
+version = "0.3.0"
 copyright = "Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>"
 description = "Database front-end for GNOME"
 author = "Andi Albrecht"
 author_email = "albrecht.andi@gmail.com"
 url = "http://cf.andialbrecht.de"
-long_description = """CrunchyFrog is a database navigator and SQL editor
-for the GNOME desktop.
+long_description = """CrunchyFrog is a database front-end for the GNOME desktop.
 
 Supported databases
 ===================
@@ -38,6 +37,7 @@ Supported databases
  * MySQL (requires MySQLdb)
  * SQLite3 (requires python-sqlite3)
  * Oracle (requires cx_Oracle)
+ * MS-SQL Server (requires pymssql)
  * LDAP (requires python-ldap)
 
 It is written in Python (PyGTK) and can be extended using plugins.
