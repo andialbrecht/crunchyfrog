@@ -22,12 +22,13 @@
 
 """
 
+import os
+import sys
+
 import gobject
 import gtk
 
-import sys
-
-from cf import release
+from cf import release, USER_DIR
 from config import Config
 from datasources import DatasourceManager
 from plugins.core import PluginManager
@@ -84,12 +85,22 @@ class CFApplication(gobject.GObject):
         """Initializes the application"""
         self.cb = CFAppCallbacks()
         self.__shutdown_tasks = []
+        self._check_version()
         self.config = Config(self, self.options.config)
         self.userdb = UserDB(self)
         self.plugins = PluginManager(self)
         self.datasources = DatasourceManager(self)
         self.dbus_service = CFService(self)
         self.recent_manager = gtk.recent_manager_get_default()
+
+    def _check_version(self):
+        """Run eventual version updates."""
+        version_file = os.path.join(USER_DIR, 'VERSION')
+        if not os.path.isfile(version_file):
+            f = open(version_file, "w")
+            f.write("0.3.0")
+            f.close()
+        # That's it for now, it's for future use.
 
     def new_instance(self, args=None):
         """Creates a new instances.
@@ -166,6 +177,7 @@ class CFApplication(gobject.GObject):
                 import traceback; traceback.print_exc()
                 log.error("Task failed: %s" % str(sys.exc_info()[1]))
         gtk.main_quit()
+
 
 class CFAppCallbacks(gobject.GObject):
     """Container for application specific signals.
