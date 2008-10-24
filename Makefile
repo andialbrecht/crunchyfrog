@@ -39,14 +39,14 @@ clean: po-clean
 	find . -name "*~" -print | xargs rm -rf
 	rm -rf build/
 	rm -rf manual/
+	rm -f MANIFEST
 
-	
 dist-prepare: clean
 
 dist-clean: dist-prepare
 	find . -path "*.svn*" -print | xargs rm -rf
 	rm -rf dist/
-	
+
 deb: dist-prepare
 	rm -rf /tmp/crunchyfrog-build
 	mkdir -p /tmp/crunchyfrog-build/crunchyfrog
@@ -64,14 +64,14 @@ sdist-release:
 
 sdist-upload:
 	$(PYTHON) setup.py egg_info sdist upload
-	
+
 sdist: dist-prepare
 	$(PYTHON) setup.py egg_info sdist
-	
+
 po-clean:
 	find data -type f -name *.h -print | xargs --no-run-if-empty rm -rf
 	find cf -type f -name *.h -print | xargs --no-run-if-empty rm -rf
-	
+
 make-install-dirs:
 	mkdir -p $(DESTDIR)$(BINDIR)
 	mkdir -p $(DESTDIR)$(LIBDIR)/cf
@@ -87,7 +87,7 @@ make-install-dirs:
 	mkdir -p $(DESTDIR)$(DATADIR)/pixmaps
 	mkdir -p $(DESTDIR)$(DATADIR)/icons/hicolor/scalable/apps
 	mkdir -p $(DESTDIR)$(DATADIR)/dbus-1/services
-	
+
 install: make-install-dirs
 	for mod in $(CF_MODULES); do install -m 644 $$mod $(DESTDIR)$(LIBDIR)/$$mod; done
 	install -m 644 data/crunchyfrog.glade $(DESTDIR)$(APPDATADIR)/
@@ -97,7 +97,7 @@ install: make-install-dirs
 	done
 	for lang in $(PO); do install -m 644 po/$$lang/LC_MESSAGES/crunchyfrog.mo $(DESTDIR)$(LOCALEDIR)/$$lang/LC_MESSAGES/crunchyfrog.mo; done
 	install -m 644 data/crunchyfrog.desktop $(DESTDIR)$(DATADIR)/applications/
-	install -m 755 data/crunchyfrog $(DESTDIR)$(BINDIR) 
+	install -m 755 data/crunchyfrog $(DESTDIR)$(BINDIR)
 	install -m 644 data/crunchyfrog.1 $(DESTDIR)$(MANDIR)/man1/
 	install -m 644 data/crunchyfrog.png $(DESTDIR)$(DATADIR)/pixmaps/
 	install -m 644 data/crunchyfrog.svg $(DESTDIR)$(DATADIR)/icons/hicolor/scalable/apps/
@@ -105,27 +105,27 @@ install: make-install-dirs
 
 po-data:
 	for lang in $(PO); do msgfmt po/$$lang/LC_MESSAGES/crunchyfrog.po -o po/$$lang/LC_MESSAGES/crunchyfrog.mo;done
-	
+
 po-gen:
 	intltool-extract --type=gettext/glade data/crunchyfrog.glade
 	xgettext --from-code=UTF-8 -k_ -kN_ -o po/crunchyfrog.pot `find cf/ -type f -name *.py` data/*.h `find cf -type f -name *.h`
 	for lang in $(PO); do msgmerge -U po/$$lang/LC_MESSAGES/crunchyfrog.po po/crunchyfrog.pot; done
-	
+
 api:
 	PYTHONPATH=`pwd`/data/:`pwd` apydia -c data/apydia.ini
 	cp docs/api/cf.html docs/api/index.html
-	
+
 manual-html:
 	for lang in $(MANUAL_LANG); do \
 		gnome-doc-tool xhtml -c manual.css -e .html -o manual/$$lang/ --copy-graphics data/gnome/help/crunchyfrog/$$lang/crunchyfrog.xml; \
 		python extras/manual/patch_layout.py manual/$$lang/; \
 	done;
 	mv manual/C manual/en
-	
+
 manual-pdf:
 	for lang in $(MANUAL_LANG); do \
 		dblatex -o manual/CrunchyFrog_UserManual_$$lang.pdf data/gnome/help/crunchyfrog/$$lang/crunchyfrog.xml; \
 	done;
 	mv manual/CrunchyFrog_UserManual_C.pdf manual/CrunchyFrog_UserManual.pdf
-	
+
 manual: manual-html manual-pdf
