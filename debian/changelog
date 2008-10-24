@@ -1,9 +1,17 @@
+crunchyfrog (0.3.0) experimental; urgency=low
+
+  * Minor bug fixes.
+  * Version bump to 0.3.0.
+
+ -- Andi Albrecht <albrecht.andi@gmail.com>  Fri, 24 Oct 2008 08:30:14 +0200
+
 crunchyfrog (0.2.90) experimental; urgency=low
 
   * Support for gnomekeyring
   * Support for multiple SQL statements
   * UI cleanup
   * Bug fixes
+
  -- Andi Albrecht <albrecht.andi@gmail.com>  Fri, 10 Oct 2008 08:53:02 +0200
 
 crunchyfrog (0.2.1-1ubuntu) experimental; urgency=low
