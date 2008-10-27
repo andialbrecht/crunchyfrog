@@ -20,41 +20,37 @@
 
 """Instance class"""
 
-import gtk
-import gtk.glade
+from gettext import gettext as _
+import os
+
 import gnome
 import gnomevfs
 import gobject
-
-import os
-
-from gettext import gettext as _
+import gtk
+import gtk.glade
 
 from cf import release
 from cf.ui import GladeWidget
 from cf.ui import pdock
 from cf.ui.browser import Browser
+from cf.ui.confirmsave import ConfirmSaveDialog
 from cf.ui.datasources import DatasourceManager
 from cf.ui.editor import Editor, EditorWindow
 from cf.ui.queries import QueriesNotebook
 from cf.ui.statusbar import CFStatusbar
 from cf.ui.toolbar import CFToolbar
 from cf.ui.widgets import ConnectionButton
-from cf.ui.confirmsave import ConfirmSaveDialog
+
 
 class CFInstance(GladeWidget):
 
     def __init__(self, app):
-        """
-        The constructor of this class takes one argument:
+        """Constructor.
 
-        :Parameter:
-            app
-                `CFApplication`_ instance
-
-        .. _CFApplication: cf.app.CFApplication.html
+        Args:
+          app: CFApplication instance.
         """
-        GladeWidget.__init__(self, app, "crunchyfrog", "mainwindow")
+        super(GladeWidget, self).__init__(app, "crunchyfrog", "mainwindow")
         self._editor = None
         self._editor_conn_tag = None
         self._editors = list()
@@ -81,16 +77,20 @@ class CFInstance(GladeWidget):
         self.dock.show_all()
         # Queries
         self.queries = QueriesNotebook(self.app, self)
-        item = pdock.DockItem(self.dock, "queries", self.queries, _(u"Queries"),
+        item = pdock.DockItem(self.dock, "queries",
+                              self.queries, _(u"Queries"),
                               "gtk-edit", None, pdock.DOCK_ITEM_BEH_LOCKED)
         self.dock.add_item(item)
         # Browser
         self.browser = Browser(self.app, self)
-        item = pdock.DockItem(self.dock, "browser", self.browser, _(u"Navigator"),
-                              "gtk-find", gtk.POS_LEFT, pdock.DOCK_ITEM_BEH_CANT_CLOSE)
+        item = pdock.DockItem(self.dock, "browser",
+                              self.browser, _(u"Navigator"),
+                              "gtk-find", gtk.POS_LEFT,
+                              pdock.DOCK_ITEM_BEH_CANT_CLOSE)
         self.dock.add_item(item)
         self.browser.set_data("dock_item", item)
-        gobject.idle_add(self.xml.get_widget("mn_navigator").set_active, self.app.config.get("navigator.visible", True))
+        gobject.idle_add(self.xml.get_widget("mn_navigator").set_active,
+                         self.app.config.get("navigator.visible", True))
         # Menu bar
         recent_menu = gtk.RecentChooserMenu(self.app.recent_manager)
         filter = gtk.RecentFilter()
@@ -108,7 +108,8 @@ class CFInstance(GladeWidget):
 
     def on_about(self, *args):
         def open_url(dialog, url):
-            gnome.url_show(url)
+            gtk.show_uri(dialog.get_screen(), url,
+                         gtk.gdk.x11_get_server_time(dialog.window))
         gtk.about_dialog_set_url_hook(open_url)
         dlg = gtk.AboutDialog()
         dlg.set_name(release.name)
@@ -151,17 +152,20 @@ class CFInstance(GladeWidget):
     def on_copy(self, *args):
         if not self._editor:
             return
-        self._editor.textview.get_buffer().copy_clipboard(self._get_clipboard())
+        buffer_ = self._editor.textview.get_buffer()
+        buffer_.copy_clipboard(self._get_clipboard())
 
     def on_paste(self, *args):
         if not self._editor:
             return
-        self._editor.textview.get_buffer().paste_clipboard(self._get_clipboard(), None, True)
+        buffer_ = self._editor.textview.get_buffer()
+        buffer_.paste_clipboard(self._get_clipboard(), None, True)
 
     def on_cut(self, *args):
         if not self._editor:
             return
-        self._editor.textview.get_buffer().cut_clipboard(self._get_clipboard(), True)
+        buffer_ = self._editor.textview.get_buffer()
+        buffer_.cut_clipboard(self._get_clipboard(), True)
 
     def on_recent_item_activated(self, chooser):
         self.new_editor(chooser.get_current_uri())
@@ -169,7 +173,8 @@ class CFInstance(GladeWidget):
     def on_delete(self, *args):
         if not self._editor:
             return
-        self._editor.textview.get_buffer().delete_selection(True, True)
+        buffer_ = self._editor.textview.get_buffer()
+        buffer_.delete_selection(True, True)
 
     def on_datasource_manager(self, *args):
         dlg = DatasourceManager(self.app, self)
@@ -229,7 +234,8 @@ class CFInstance(GladeWidget):
             if chooser.get_current_uri():
                 dlg.set_uri(chooser.get_current_uri())
         recent_chooser.connect("selection-changed", dlg_set_uri, dlg)
-        recent_chooser.connect("item-activated", lambda chooser: dlg.response(gtk.RESPONSE_OK))
+        recent_chooser.connect("item-activated",
+                               lambda chooser: dlg.response(gtk.RESPONSE_OK))
         exp = gtk.Expander(_(u"_Recent files:"))
         exp.add(recent_chooser)
         exp.set_use_underline(True)
@@ -237,7 +243,8 @@ class CFInstance(GladeWidget):
         recent_chooser.show()
         if dlg.run() == gtk.RESPONSE_OK:
             self.new_editor(dlg.get_filename())
-            self.app.config.set("editor.recent_folder", dlg.get_current_folder())
+            self.app.config.set("editor.recent_folder",
+                                dlg.get_current_folder())
         dlg.destroy()
 
     def on_save_file(self, *args):
@@ -251,13 +258,16 @@ class CFInstance(GladeWidget):
         self._editor.save_file_as()
 
     def on_report_problem(self, *args):
-        gobject.idle_add(self.open_website, "http://code.google.com/p/crunchyfrog/issues/list")
+        gobject.idle_add(self.open_website,
+                         "http://code.google.com/p/crunchyfrog/issues/list")
 
     def on_open_devpages(self, *args):
         gobject.idle_add(self.open_website, "http://cf.andialbrecht.de")
 
     def on_open_helptranslate(self, *args):
-        gobject.idle_add(self.open_website, "https://translations.launchpad.net/crunchyfrog/trunk/")
+        gobject.idle_add(self.open_website,
+                         ("https://translations.launchpad.net/"
+                          "crunchyfrog/trunk/"))
 
     def on_preferences(self, *args):
         self.app.preferences_show()
@@ -275,18 +285,18 @@ class CFInstance(GladeWidget):
 
     def on_window_state_event(self, win, event):
         config = self.app.config
-        bit = gtk.gdk.WINDOW_STATE_MAXIMIZED.value_names[0] in event.new_window_state.value_names
-        config.set("gui.maximized", bit)
+        val_names = event.new_window_state.value_names
+        config.set("gui.maximized",
+                   gtk.gdk.WINDOW_STATE_MAXIMIZED.value_names[0] in val_names)
 
     def new_editor(self, fname=None):
-        """Creates a new SQL editor
+        """Creates a new SQL editor.
 
-        :Parameter:
-            fname
-                If given, the file ``fname`` is opened with this editor
-        :Returns: `Editor`_ instance
+        Arguments:
+          fname: If given, the file fname is opened with this editor.
 
-        .. _Editor: cf.ui.editor.Editor.html
+        Returns:
+          An Editor instance.
         """
         editor = Editor(self.app, self)
         if fname:
@@ -321,7 +331,7 @@ class CFInstance(GladeWidget):
         return ret
 
     def open_website(self, url):
-        gnome.url_show(url)
+        gtk.show_uri(gtk.gdk.screen_get_default(), url, 0)
 
     def set_editor_active(self, editor, active):
         if not active:
@@ -331,17 +341,20 @@ class CFInstance(GladeWidget):
             self._editor_conn_tag = None
         self._editor = editor
         if self._editor:
-            self._editor_conn_tag = self._editor.connect("connection-changed", self.on_editor_connection_changed)
-            self.on_editor_connection_changed(self._editor, self._editor.connection)
+            self._editor_conn_tag = self._editor.connect(
+                "connection-changed", self.on_editor_connection_changed)
+            self.on_editor_connection_changed(
+                self._editor, self._editor.connection)
         else:
             self.set_title("CrunchyFrog")
         self.toolbar.set_editor(editor)
         self.app.plugins.editor_notify(editor, self)
 
     def get_editor(self):
-        """Returns the active editor
+        """Returns the active editor.
 
-        :Returns: editor instance or ``None``
+        Returns:
+          Editor instance or .None.
         """
         return self._editor
 
@@ -367,7 +380,8 @@ class InstanceSelector(GladeWidget):
     def _setup_connections(self):
         sel = self.list.get_selection()
         sel.connect("changed", self.on_isel_changed)
-        self.xml.get_widget("btn_newinstance").connect("toggled", self.on_newi_toggled)
+        self.xml.get_widget("btn_newinstance").connect(
+            "toggled", self.on_newi_toggled)
 
     def on_newi_toggled(self, btn):
         sel = self.list.get_selection()

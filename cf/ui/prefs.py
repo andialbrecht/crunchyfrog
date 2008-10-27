@@ -310,7 +310,9 @@ class PreferencesDialog(GladeWidget):
         self.sync_repo_file()
 
     def on_plugin_folder_show(self, *args):
-        gnome.url_show(cf.USER_PLUGIN_URI)
+        gtk.show_uri(self.widget.get_screen(),
+                     cf.USER_PLUGIN_URI,
+                     gtk.gdk.x11_get_server_time(self.widget.window))
 
     def refresh(self):
         self.refresh_editor()

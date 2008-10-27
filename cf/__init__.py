@@ -18,28 +18,17 @@
 
 # $Id$
 
-"""
-CrunchyFrog Package
+"""CrunchyFrog Package"""
 
-A good starting point to read this API documentation is the `CFApplication`_
-class.
-
-
-Other Resources
-===============
-    Development pages
-        http://cf.andialbrecht.de
-    Additional documentation
-        http://code.google.com/p/crunchyfrog/wiki/Documentation?tm=6
-    Discussions
-        http://groups.google.com/group/crunchyfrog
-
-.. _GNOME: http://www.gnome.org
-.. _Wiki: http://code.google.com/p/crunchyfrog/wiki/Documentation?tm=6
-.. _CFApplication: cf.app.CFApplication.html
-"""
-
-__doc_all__ = ["main", "backends"]
+import errno
+import gettext
+import hotshot
+from optparse import OptionParser
+import os
+from os.path import abspath, dirname, join, isfile, isdir, expanduser
+from os import makedirs
+import sys
+import traceback
 
 import pygtk; pygtk.require("2.0")
 
@@ -49,25 +38,12 @@ import gnomevfs
 import gobject
 import gtk
 import gtk.glade
-import gettext
-import hotshot
-import traceback
-import os
-import errno
 
 gobject.threads_init()
 
 from cf import release
 
-from optparse import OptionParser
-from os.path import abspath, dirname, join, isfile, isdir, expanduser
-from os import makedirs
-import sys
 
-#if sys.version_info[:2] >= (2, 5):
-#    LOG_FORMAT_APP = '[%(levelname)s] %(asctime)s %(message)s\n\t%(pathname)s:%(lineno)s in %(funcName)s\n\tPID: %(process)s, Thread: %(threadName)s [%(thread)d], Logger: %(name)s\n'
-#else:
-#    LOG_FORMAT_APP = '[%(levelname)s] %(asctime)s %(message)s\n\t%(pathname)s:%(lineno)s\n\tPID: %(process)s, Thread: %(threadName)s [%(thread)d], Logger: %(name)s\n'
 LOG_FORMAT_APP = '%(levelname)s\t%(name)s\t%(created)f\t%(message)s'
 
 import logging
@@ -95,13 +71,16 @@ USER_PLUGIN_REPO = join(USER_DIR, "repo.xml")
 USER_PLUGIN_REPO_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_REPO)
 PID_FILE = join(USER_DIR, "crunchyfrog.pid")
 
+
 gettext.bindtextdomain("crunchyfrog", LOCALE_DIR)
 gettext.textdomain("crunchyfrog")
 gtk.glade.bindtextdomain("crunchyfrog", LOCALE_DIR)
 gtk.glade.textdomain("crunchyfrog")
 
+
 from cf.app import CFApplication
 from cf import dbus_manager
+
 
 def _parse_commandline():
     """Parses command line arguments and handles all arguments
@@ -126,6 +105,7 @@ def _parse_commandline():
         print
         sys.exit()
     return options, args
+
 
 # grabbed from listen / gajm
 def is_alive(pid_file):

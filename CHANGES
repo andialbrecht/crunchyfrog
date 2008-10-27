@@ -1,3 +1,10 @@
+Development
+-----------
+
+Other
+ * Replaced some gnome.* stuff with methods now in gtk (gtk 2.14).
+
+
 2008-10-24 CrunchyFrog 0.3.0
 ----------------------------
 
