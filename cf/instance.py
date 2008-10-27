@@ -50,7 +50,7 @@ class CFInstance(GladeWidget):
         Args:
           app: CFApplication instance.
         """
-        super(GladeWidget, self).__init__(app, "crunchyfrog", "mainwindow")
+        GladeWidget.__init__(self, app, "crunchyfrog", "mainwindow")
         self._editor = None
         self._editor_conn_tag = None
         self._editors = list()
