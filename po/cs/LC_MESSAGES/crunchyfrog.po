@@ -1,0 +1,570 @@
+# Czech translation of CrunchyFrog.
+# Copyright (C) 2008 the author(s) of CrunchyFrog.
+# Copyright (C) 2008 Martin Picek <picek.martin@gnome-cesko.cz>.
+# This file is distributed under the same license as the crunchyfrog package.
+# Martin Picek <picek.martin@gnome-cesko.cz>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: CrunchyFrog 0.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-10-08 10:42+0200\n"
+"PO-Revision-Date: 2008-10-31 12:05+0100\n"
+"Last-Translator: Martin Picek <picek.martin@gnome-cesko.cz>\n"
+"Language-Team: Martin Picek <picek.martin@gnome-cesko.cz>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: data/crunchyfrog.glade.h:1
+msgid "    "
+msgstr "    "
+
+#: data/crunchyfrog.glade.h:2
+msgid "(objectclass=*)"
+msgstr "(objectclass=*)"
+
+#: data/crunchyfrog.glade.h:3
+msgid "<b>Automatic Indentation</b>"
+msgstr "<b>Automatické odsazování</b>"
+
+#: data/crunchyfrog.glade.h:4
+msgid "<b>Bracket Matching</b>"
+msgstr "<b>Odpovídající závorky</b>"
+
+#: data/crunchyfrog.glade.h:5
+msgid "<b>Current Line</b>"
+msgstr "<b>Aktuální řádek</b>"
+
+#: data/crunchyfrog.glade.h:6
+msgid "<b>Font</b>"
+msgstr "<b>Písmo</b>"
+
+#: data/crunchyfrog.glade.h:7
+msgid "<b>Installed backends</b>"
+msgstr "<b>Instalované podpůrné vrstvy</b>"
+
+#: data/crunchyfrog.glade.h:8
+msgid "<b>Line Numbers</b>"
+msgstr "<b>Čísla řádků</b>"
+
+#: data/crunchyfrog.glade.h:9
+msgid "<b>New editors</b>"
+msgstr "<b>Nové editory</b>"
+
+#: data/crunchyfrog.glade.h:10
+msgid "<b>Right Margin</b>"
+msgstr "<b>Pravý okraj</b>"
+
+#: data/crunchyfrog.glade.h:11
+msgid "<b>SQL Splitting</b>"
+msgstr "<b>Rozdělování SQL</b>"
+
+#: data/crunchyfrog.glade.h:12
+msgid "<b>Select an instance</b>"
+msgstr "<b>Vyberte instanci</b>"
+
+#: data/crunchyfrog.glade.h:13
+msgid "<b>Tab Stops</b>"
+msgstr "<b>Tabulátory</b>"
+
+#: data/crunchyfrog.glade.h:14
+msgid "<b>Text Wrapping</b>"
+msgstr "<b>Zalamování textu</b>"
+
+#: data/crunchyfrog.glade.h:15
+msgid "<b>Variables</b>"
+msgstr "<b>Proměnné</b>"
+
+#: data/crunchyfrog.glade.h:17
+#, no-c-format
+msgid "<span size=\"large\"><b>%s</b></span>"
+msgstr "<span size=\"large\"><b>%s</b></span>"
+
+#: data/crunchyfrog.glade.h:18
+msgid "<span weight=\"bold\">Color Scheme</span>"
+msgstr "<span weight=\"bold\">Schéma barev</span>"
+
+#: data/crunchyfrog.glade.h:19
+msgid "Activate to split statements in a SQL editor before execution."
+msgstr "V editoru SQL aktivovat rozdělování výrazů před spouštěním."
+
+#: data/crunchyfrog.glade.h:20
+msgid "Begin transaction"
+msgstr "Začít transakci"
+
+#: data/crunchyfrog.glade.h:21
+msgid "Cancel query"
+msgstr "Zrušit dotaz"
+
+#: data/crunchyfrog.glade.h:22
+msgid "Close _without Saving"
+msgstr "_Zavřít bez uložení"
+
+#: data/crunchyfrog.glade.h:23
+#, fuzzy
+msgid "Commit"
+msgstr "Potvrdit"
+
+#: data/crunchyfrog.glade.h:24
+msgid "Configure plugins"
+msgstr "Nastavit přídavné moduly"
+
+#: data/crunchyfrog.glade.h:25
+msgid "Connections"
+msgstr "Spojení"
+
+#: data/crunchyfrog.glade.h:26
+msgid "Copy to clipboard"
+msgstr "Kopírovat do schránky"
+
+#: data/crunchyfrog.glade.h:27
+msgid "Create a new application instance"
+msgstr "Vytvořit novou instanci aplikace"
+
+#: data/crunchyfrog.glade.h:28
+msgid "CrunchyFrog"
+msgstr "CrunchyFrog"
+
+#: data/crunchyfrog.glade.h:29
+msgid ""
+"CrunchyFrog is already running.\n"
+"Open selected files..."
+msgstr ""
+"CrunchyFrog již běží.\n"
+"Otevřete vybrané soubory…"
+
+#: data/crunchyfrog.glade.h:31
+msgid "D_atasource:"
+msgstr "_Zdroj dat:"
+
+#: data/crunchyfrog.glade.h:32
+msgid "Datasource Manager"
+msgstr "Správce zdrojů dat"
+
+#: data/crunchyfrog.glade.h:33
+msgid "Developer _Pages"
+msgstr "Stránky _vývojářů"
+
+#: data/crunchyfrog.glade.h:34
+msgid "Display right _margin"
+msgstr "Zobrazovat pravý _okraj"
+
+#: data/crunchyfrog.glade.h:35
+msgid "Do not _split words over two lines"
+msgstr "Nerozdělovat _slova na dva řádky"
+
+#: data/crunchyfrog.glade.h:36
+msgid "E_xplain"
+msgstr "Vysvě_tlení"
+
+#: data/crunchyfrog.glade.h:37
+msgid "Editor"
+msgstr "Editor"
+
+#: data/crunchyfrog.glade.h:38
+msgid "Editor _font: "
+msgstr "_Písmo editoru: "
+
+#: data/crunchyfrog.glade.h:39
+msgid "Enable text _wrapping"
+msgstr "Povolit zalamování _textu"
+
+#: data/crunchyfrog.glade.h:40
+msgid "Execute query"
+msgstr "Vykonat dotaz"
+
+#: data/crunchyfrog.glade.h:41
+msgid "Font & Colors"
+msgstr "Písma a barvy"
+
+#: data/crunchyfrog.glade.h:42
+msgid "General"
+msgstr "Obecné"
+
+#: data/crunchyfrog.glade.h:43
+msgid "Highlight current _line"
+msgstr "Zvýrazňovat _aktuální řádek"
+
+#: data/crunchyfrog.glade.h:44
+msgid "Highlight matching _bracket"
+msgstr "Zvýrazňovat odpovídající _závorku"
+
+#: data/crunchyfrog.glade.h:45
+msgid "If you don't save, all your changes will be permanently lost."
+msgstr "Pokud je neuložíte, budou všechny změny navždy ztraceny."
+
+#: data/crunchyfrog.glade.h:46
+msgid "Insert _spaces instead of tabs"
+msgstr "Vkládat _mezery místo tabulátorů"
+
+#: data/crunchyfrog.glade.h:47
+msgid "Installed backends"
+msgstr "Instalované podpůrné vrstvy"
+
+#: data/crunchyfrog.glade.h:48
+msgid "New Query"
+msgstr "Nový dotaz"
+
+#: data/crunchyfrog.glade.h:49
+msgid "Open a new query window"
+msgstr "Otevřít okno s novým dotazem"
+
+#: data/crunchyfrog.glade.h:50
+msgid "Open editor in _separate window"
+msgstr "Otevírat editory v samostatných _oknech"
+
+#: data/crunchyfrog.glade.h:51
+msgid "Pick the editor font"
+msgstr "Zvolte písmo editoru"
+
+#: data/crunchyfrog.glade.h:52
+msgid "Preferences"
+msgstr "Nastavení"
+
+#: data/crunchyfrog.glade.h:53
+msgid "Progress"
+msgstr "Průběh"
+
+#: data/crunchyfrog.glade.h:54
+msgid "Query"
+msgstr "Dotaz"
+
+#: data/crunchyfrog.glade.h:55
+msgid "Refresh"
+msgstr "Obnovit"
+
+#: data/crunchyfrog.glade.h:56
+msgid "Replace _variables (e.g. '$MyVar')"
+msgstr "Nahrazovat _proměnné (například „$mojeProměnná“)"
+
+#: data/crunchyfrog.glade.h:57
+#, fuzzy
+msgid "Rollback"
+msgstr "Vrátit"
+
+#: data/crunchyfrog.glade.h:58
+msgid "SQL library"
+msgstr "Knihovna SQL"
+
+#: data/crunchyfrog.glade.h:59
+msgid "S_elect the documents you want to save:"
+msgstr "_Vyberte dokumenty, které chcete uložit:"
+
+#: data/crunchyfrog.glade.h:60
+msgid "S_tatement"
+msgstr "_Výraz"
+
+#: data/crunchyfrog.glade.h:61
+msgid "S_ub-tree level"
+msgstr "Úroveň _podstromů"
+
+#: data/crunchyfrog.glade.h:62
+msgid "Save files"
+msgstr "Uložit soubory"
+
+#: data/crunchyfrog.glade.h:63
+msgid "Save to library"
+msgstr "Uložit do knihovny"
+
+#: data/crunchyfrog.glade.h:64
+msgid "Search s_cope:"
+msgstr "_Rozsah vyhledávání:"
+
+#: data/crunchyfrog.glade.h:65
+msgid "Select instance"
+msgstr "Vyberte instanci"
+
+#: data/crunchyfrog.glade.h:66
+msgid "Separate attributes by commas"
+msgstr "Oddělovat atributy čárkami"
+
+#: data/crunchyfrog.glade.h:67
+msgid "Show in _main window"
+msgstr "Zobrazovat v _hlavním okně"
+
+#: data/crunchyfrog.glade.h:68
+msgid "St_ored connections"
+msgstr "_Uložená spojení"
+
+#: data/crunchyfrog.glade.h:69
+msgid "Synchronize with plugin repository"
+msgstr "Synchronizovat s repozitářem s moduly"
+
+#: data/crunchyfrog.glade.h:70
+msgid "TODO"
+msgstr "TODO"
+
+#: data/crunchyfrog.glade.h:71
+msgid ""
+"The following backends are installed on your system.\n"
+"Plugins currently not available, e.g. because of missing requirements, are marked with a warning sign."
+msgstr ""
+"Na vašem systému jsou instalovány následující podpůrné vrstvy.\n"
+"Aktuálně nedostupné přídavné moduly (nedostupné například kvůli nesplněným závislostem) jsou označeny symbolem varování."
+
+#: data/crunchyfrog.glade.h:73
+msgid "Toggle favorites"
+msgstr "Přepnout oblíbené"
+
+#: data/crunchyfrog.glade.h:74
+msgid "Toggle navigation bar"
+msgstr "Přepnout lištu navigátoru"
+
+#: data/crunchyfrog.glade.h:75
+msgid "Use SQL s_plitting"
+msgstr "Používat _rozdělování SQL"
+
+#: data/crunchyfrog.glade.h:76
+msgid "View"
+msgstr "Zobrazit"
+
+#: data/crunchyfrog.glade.h:77
+msgid "_About this plugin"
+msgstr "O tomto _modulu"
+
+#: data/crunchyfrog.glade.h:78
+msgid "_Attributes:"
+msgstr "_Atributy:"
+
+#: data/crunchyfrog.glade.h:79
+msgid "_Backend:"
+msgstr "Podpůrná _vrstva"
+
+#: data/crunchyfrog.glade.h:80
+msgid "_Category:"
+msgstr "_Kategorie:"
+
+#: data/crunchyfrog.glade.h:81
+msgid "_Configure plugin"
+msgstr "_Nastavit přídavný modul"
+
+#: data/crunchyfrog.glade.h:82
+msgid "_Data Source"
+msgstr "_Zdroj dat"
+
+#: data/crunchyfrog.glade.h:83
+msgid "_Datasource Manager"
+msgstr "Správce _zdrojů dat"
+
+#: data/crunchyfrog.glade.h:84
+msgid "_Datasources"
+msgstr "_Zdroje dat"
+
+#: data/crunchyfrog.glade.h:85
+msgid "_Description:"
+msgstr "_Popis:"
+
+#: data/crunchyfrog.glade.h:86
+msgid "_Display line numbers"
+msgstr "Zobrazovat čísla řá_dků"
+
+#: data/crunchyfrog.glade.h:87
+msgid "_Edit"
+msgstr "_Upravit"
+
+#: data/crunchyfrog.glade.h:88
+msgid "_Editor"
+msgstr "_Editor"
+
+#: data/crunchyfrog.glade.h:89
+msgid "_Enable automatic indentation"
+msgstr "Povolit automatické _odsazování"
+
+#: data/crunchyfrog.glade.h:90
+msgid "_Enable repository"
+msgstr "Povolit _repozitář"
+
+#: data/crunchyfrog.glade.h:91
+msgid "_File"
+msgstr "_Soubor"
+
+#: data/crunchyfrog.glade.h:92
+msgid "_Filter:"
+msgstr "_Filtr:"
+
+#: data/crunchyfrog.glade.h:93
+msgid "_General"
+msgstr "_Obecné"
+
+#: data/crunchyfrog.glade.h:94
+msgid "_Help"
+msgstr "_Nápověda"
+
+#: data/crunchyfrog.glade.h:95
+msgid "_Install plugin"
+msgstr "_Instalovat modul"
+
+#: data/crunchyfrog.glade.h:96
+msgid "_Instance"
+msgstr "_Instance"
+
+#: data/crunchyfrog.glade.h:97
+msgid "_Messages"
+msgstr "_Zprávy"
+
+#: data/crunchyfrog.glade.h:98
+msgid "_Name:"
+msgstr "_Název:"
+
+#: data/crunchyfrog.glade.h:99
+msgid "_Navigator"
+msgstr "_Navigátor"
+
+#: data/crunchyfrog.glade.h:100
+msgid "_New"
+msgstr "_Nový"
+
+#: data/crunchyfrog.glade.h:101
+msgid "_One level"
+msgstr "_Jedna úroveň"
+
+#: data/crunchyfrog.glade.h:102
+msgid "_Online Resources"
+msgstr "Informace na _Internetu"
+
+#: data/crunchyfrog.glade.h:103
+msgid "_Open plugin folder"
+msgstr "_Otevřít adresář s moduly"
+
+#: data/crunchyfrog.glade.h:104
+msgid "_Plugins"
+msgstr "Přídavné _moduly"
+
+#: data/crunchyfrog.glade.h:105
+msgid "_Query"
+msgstr "_Dotaz"
+
+#: data/crunchyfrog.glade.h:106
+msgid "_Recent Files"
+msgstr "Nedávné _soubory"
+
+#: data/crunchyfrog.glade.h:107
+msgid "_Remove plugin"
+msgstr "_Odstranit modul"
+
+#: data/crunchyfrog.glade.h:108
+msgid "_Report a Problem"
+msgstr "_Nahlásit problém"
+
+#: data/crunchyfrog.glade.h:109
+msgid "_Results"
+msgstr "_Výsledky"
+
+#: data/crunchyfrog.glade.h:110
+msgid "_Right margin at column:"
+msgstr "_Pravý okraj ve sloupci"
+
+#: data/crunchyfrog.glade.h:111
+msgid "_Search DN:"
+msgstr "Pro_hledat DN:"
+
+#: data/crunchyfrog.glade.h:112
+msgid "_Statement:"
+msgstr "_Výraz:"
+
+#: data/crunchyfrog.glade.h:113
+msgid "_Synchronize"
+msgstr "_Synchronizovat"
+
+#: data/crunchyfrog.glade.h:114
+msgid "_Tab width:"
+msgstr "Šířka _tabulátorů:"
+
+#: data/crunchyfrog.glade.h:115
+msgid "_Test connection"
+msgstr "_Vyzkoušet spojení"
+
+#: data/crunchyfrog.glade.h:116
+msgid "_Translate CrunchyFrog"
+msgstr "_Přeložit CrunchyFrog"
+
+#: data/crunchyfrog.glade.h:117
+msgid "_URL:"
+msgstr "_URL:"
+
+#: data/crunchyfrog.glade.h:118
+msgid "_View"
+msgstr "_Zobrazit"
+
+#: data/crunchyfrog.glade.h:119
+msgid "gtk-about"
+msgstr "gtk-about"
+
+#: data/crunchyfrog.glade.h:120
+msgid "gtk-cancel"
+msgstr "gtk-cancel"
+
+#: data/crunchyfrog.glade.h:121
+msgid "gtk-close"
+msgstr "gtk-close"
+
+#: data/crunchyfrog.glade.h:122
+msgid "gtk-connect"
+msgstr "gtk-connect"
+
+#: data/crunchyfrog.glade.h:123
+msgid "gtk-copy"
+msgstr "gtk-copy"
+
+#: data/crunchyfrog.glade.h:124
+msgid "gtk-cut"
+msgstr "gtk-cut"
+
+#: data/crunchyfrog.glade.h:125
+msgid "gtk-delete"
+msgstr "gtk-delete"
+
+#: data/crunchyfrog.glade.h:126
+msgid "gtk-disconnect"
+msgstr "gtk-disconnect"
+
+#: data/crunchyfrog.glade.h:127
+msgid "gtk-find"
+msgstr "gtk-find"
+
+#: data/crunchyfrog.glade.h:128
+msgid "gtk-help"
+msgstr "gtk-help"
+
+#: data/crunchyfrog.glade.h:129
+msgid "gtk-new"
+msgstr "gtk-new"
+
+#: data/crunchyfrog.glade.h:130
+msgid "gtk-ok"
+msgstr "gtk-ok"
+
+#: data/crunchyfrog.glade.h:131
+msgid "gtk-open"
+msgstr "gtk-open"
+
+#: data/crunchyfrog.glade.h:132
+msgid "gtk-paste"
+msgstr "gtk-paste"
+
+#: data/crunchyfrog.glade.h:133
+msgid "gtk-preferences"
+msgstr "gtk-preferences"
+
+#: data/crunchyfrog.glade.h:134
+msgid "gtk-quit"
+msgstr "gtk-quit"
+
+#: data/crunchyfrog.glade.h:135
+msgid "gtk-save"
+msgstr "gtk-save"
+
+#: data/crunchyfrog.glade.h:136
+msgid "gtk-save-as"
+msgstr "gtk-save-as"
+
+#: data/crunchyfrog.glade.h:137
+msgid "in an _existing instance"
+msgstr "v _existující instanci"
+
+#: data/crunchyfrog.glade.h:138
+msgid "in an _new instance"
+msgstr "v _nové instanci"
+
