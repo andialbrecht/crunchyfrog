@@ -70,8 +70,13 @@ class TabLabel(gtk.HBox):
         self.label.set_width_chars(15)
         self.label.set_single_line_mode(True)
         self.label.set_alignment(0, 0.5)
+        # use a slightly smaller font in tabs like Empathy does...
+        font_desc = self.label.get_style().font_desc
+        font_desc.set_size(int(font_desc.get_size()*.8))
+        self.label.modify_font(font_desc)
         self.editor = editor
-        self.editor.connect("connection-changed", self.on_editor_connection_changed)
+        self.editor.connect("connection-changed",
+                            self.on_editor_connection_changed)
         buffer = self.editor.textview.get_buffer()
         buffer.connect("changed", self.on_buffer_changed)
         self.update_label(buffer)
@@ -86,18 +91,15 @@ class TabLabel(gtk.HBox):
         self.show_all()
 
     def add_icon_to_button(self,button):
-        iconBox = gtk.HBox(False, 0)
         image = gtk.Image()
         image.set_from_stock(gtk.STOCK_CLOSE,gtk.ICON_SIZE_MENU)
-        gtk.Button.set_relief(button,gtk.RELIEF_NONE)
-        #gtk.Button.set_focus_on_click(button,False)
-        settings = gtk.Widget.get_settings (button)
+        button.set_relief(gtk.RELIEF_NONE)
+        button.set_image(image)
+        settings = gtk.Widget.get_settings(image)
         (w,h) = gtk.icon_size_lookup_for_settings(settings,gtk.ICON_SIZE_MENU)
-        gtk.Widget.set_size_request (button, w+4, h+4);
+        button.set_size_request(w+12, h+6)
+        button.set_border_width(0)
         image.show()
-        iconBox.pack_start(image, True, False, 0)
-        button.add(iconBox)
-        iconBox.show()
         return
 
     def on_button_close_clicked(self, button):
