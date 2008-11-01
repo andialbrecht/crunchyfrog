@@ -4,6 +4,11 @@ Development
 Other
  * Replaced some gnome.* stuff with methods now in gtk (gtk 2.14).
 
+Translation
+ * crunchyfrog.pot covers now all translatable strings in Python files.
+   Thanks to Martin Picek for pointing at this bug.
+ * Czech (new translation)
+
 
 2008-10-24 CrunchyFrog 0.3.0
 ----------------------------

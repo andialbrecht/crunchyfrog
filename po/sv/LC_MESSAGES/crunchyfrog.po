@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: crunchyfrog\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-31 20:35+0100\n"
+"POT-Creation-Date: 2008-11-01 19:09+0100\n"
 "PO-Revision-Date: 2008-09-23 08:36+0000\n"
 "Last-Translator: Linus C Unneback <linus@folkdatorn.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -16,6 +16,710 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2008-10-19 19:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+
+#: cf/backends/dbapi2helper.py:95
+msgid "An error occured"
+msgstr ""
+
+#: cf/backends/ldapbe.py:46
+msgid "LDAP Plugin"
+msgstr ""
+
+#: cf/backends/ldapbe.py:47
+msgid "Provides access to LDAP/ActiveDirectory servers"
+msgstr ""
+
+#: cf/backends/ldapbe.py:66
+#, python-format
+msgid "Search: %(dn)s"
+msgstr ""
+
+#: cf/backends/ldapbe.py:82
+msgid "_Details"
+msgstr ""
+
+#: cf/backends/ldapbe.py:103
+msgid "Base DN:"
+msgstr ""
+
+#: cf/backends/ldapbe.py:119
+msgid "Python module ldap is not installed."
+msgstr ""
+
+#: cf/backends/ldapbe.py:192
+msgid "Export"
+msgstr ""
+
+#: cf/backends/ldapbe.py:304
+#, fuzzy
+msgid "Attribute"
+msgstr "_Attribut:"
+
+#: cf/backends/ldapbe.py:307
+msgid "Value"
+msgstr ""
+
+#: cf/backends/ldapbe.py:342
+msgid "Python module ldap required."
+msgstr ""
+
+#: cf/backends/mssql.py:40
+msgid "MS-SQL Plugin"
+msgstr ""
+
+#: cf/backends/mssql.py:41
+msgid "Provides access to MS-SQL databases"
+msgstr ""
+
+#: cf/backends/mssql.py:75 cf/backends/mysql.py:79 cf/backends/postgres.py:93
+msgid "No password given."
+msgstr ""
+
+#: cf/backends/mssql.py:159
+msgid "Python module pymssql not found."
+msgstr ""
+
+#: cf/backends/mysql.py:42
+msgid "MySQL Plugin"
+msgstr ""
+
+#: cf/backends/mysql.py:43
+msgid "Provides access to MySQL databases"
+msgstr ""
+
+#: cf/backends/mysql.py:84
+msgid "Python module MySQLdb is not installed."
+msgstr ""
+
+#: cf/backends/mysql.py:161
+#, fuzzy
+msgid "MySQL Reference"
+msgstr "Inställningar"
+
+#: cf/backends/mysql.py:173
+msgid "Python module MySQLdb required."
+msgstr ""
+
+#: cf/backends/postgres.py:45
+#, fuzzy
+msgid "PostgreSQL Reference"
+msgstr "Inställningar"
+
+#: cf/backends/postgres.py:56
+msgid "PostgreSQL Plugin"
+msgstr ""
+
+#: cf/backends/postgres.py:57
+msgid "Provides access to PostgreSQL databases"
+msgstr ""
+
+#: cf/backends/postgres.py:98
+msgid "Python module psycopg2 is not installed."
+msgstr ""
+
+#: cf/backends/postgres.py:170
+msgid "Languages"
+msgstr ""
+
+#: cf/backends/postgres.py:173
+msgid "Language"
+msgstr ""
+
+#: cf/backends/postgres.py:304
+#, fuzzy
+msgid "Definition"
+msgstr "_Beskrivning:"
+
+#: cf/backends/postgres.py:312
+msgid "Python module psycopg2 required."
+msgstr ""
+
+#: cf/backends/schema/__init__.py:59
+msgid "Schematas"
+msgstr ""
+
+#: cf/backends/schema/__init__.py:62
+msgid "Schema"
+msgstr ""
+
+#: cf/backends/schema/__init__.py:66
+msgid "Tables"
+msgstr ""
+
+#: cf/backends/schema/__init__.py:70
+msgid "Table"
+msgstr ""
+
+#: cf/backends/schema/__init__.py:74
+msgid "Columns"
+msgstr ""
+
+#: cf/backends/schema/__init__.py:77
+msgid "Column"
+msgstr ""
+
+#: cf/backends/schema/__init__.py:82
+#, fuzzy
+msgid "Views"
+msgstr "Visa"
+
+#: cf/backends/schema/__init__.py:86 cf/ui/prefs.py:82
+#: data/crunchyfrog.glade.h:78
+msgid "View"
+msgstr "Visa"
+
+#: cf/backends/schema/__init__.py:90
+#, fuzzy
+msgid "Sequences"
+msgstr "Inställningar"
+
+#: cf/backends/schema/__init__.py:94
+msgid "Sequence"
+msgstr ""
+
+#: cf/backends/schema/__init__.py:99
+#, fuzzy
+msgid "Functions"
+msgstr "Anslutningar"
+
+#: cf/backends/schema/__init__.py:103
+#, fuzzy
+msgid "Function"
+msgstr "Anslutningar"
+
+#: cf/backends/schema/__init__.py:108
+msgid "Packages"
+msgstr ""
+
+#: cf/backends/schema/__init__.py:111
+msgid "Package"
+msgstr ""
+
+#: cf/backends/schema/__init__.py:115
+#, fuzzy
+msgid "Constraints"
+msgstr "Anslutningar"
+
+#: cf/backends/schema/__init__.py:118
+#, fuzzy
+msgid "Contraint"
+msgstr "Anslutningar"
+
+#: cf/backends/schema/__init__.py:122
+msgid "Indexes"
+msgstr ""
+
+#: cf/backends/schema/__init__.py:125
+msgid "Index"
+msgstr ""
+
+#: cf/backends/sqlite.py:41
+msgid "SQLite3 Plugin"
+msgstr ""
+
+#: cf/backends/sqlite.py:42
+msgid "Provides access to SQLite3 databases"
+msgstr ""
+
+#: cf/backends/sqlite.py:59
+msgid "Database file:"
+msgstr ""
+
+#: cf/backends/sqlite.py:61
+msgid "Select database file"
+msgstr ""
+
+#: cf/backends/sqlite.py:75
+msgid "Python module sqlite3 is not installed."
+msgstr ""
+
+#: cf/backends/sqlite.py:133
+msgid "SQLite Reference"
+msgstr ""
+
+#: cf/backends/sqlite.py:143
+msgid "Python module sqlite3 required."
+msgstr ""
+
+#: cf/config/__init__.py:116
+msgid "Writing configuration"
+msgstr ""
+
+#: cf/filter/exportfilter.py:28
+msgid "CSV Export"
+msgstr ""
+
+#: cf/filter/exportfilter.py:29
+msgid "Export query results as CSV files"
+msgstr ""
+
+#: cf/filter/exportfilter.py:36
+msgid "Text CSV (.csv)"
+msgstr ""
+
+#: cf/filter/exportfilter.py:51
+msgid "OpenDocument Export"
+msgstr ""
+
+#: cf/filter/exportfilter.py:52
+msgid "Export query results as OpenDocument Spreadsheets"
+msgstr ""
+
+#: cf/filter/exportfilter.py:58
+msgid "OpenDocument Spreadsheet (.ods)"
+msgstr ""
+
+#: cf/filter/exportfilter.py:70
+#, fuzzy
+msgid "CrunchyFrog Data Export"
+msgstr "CrunchyFrog"
+
+#: cf/instance.py:81
+#, fuzzy
+msgid "Queries"
+msgstr "Förfrågan"
+
+#: cf/instance.py:87
+msgid "Navigator"
+msgstr ""
+
+#: cf/instance.py:208 cf/ui/editor.py:507
+#, fuzzy
+msgid "Select file"
+msgstr "Spara filer"
+
+#: cf/instance.py:215 cf/ui/editor.py:406 cf/ui/editor.py:514
+msgid "All files (*)"
+msgstr ""
+
+#: cf/instance.py:219 cf/instance.py:226 cf/ui/editor.py:410
+#: cf/ui/editor.py:518
+msgid "SQL files (*.sql)"
+msgstr ""
+
+#: cf/instance.py:239
+msgid "_Recent files:"
+msgstr ""
+
+#: cf/library.py:46
+#, fuzzy
+msgid "Library"
+msgstr "SQL bibliotek"
+
+#: cf/library.py:47
+#, fuzzy
+msgid "A personal SQL library"
+msgstr "SQL bibliotek"
+
+#: cf/library.py:98
+#, fuzzy
+msgid "_Library"
+msgstr "SQL bibliotek"
+
+#: cf/library.py:108
+#, fuzzy
+msgid "_Open library"
+msgstr "SQL bibliotek"
+
+#: cf/library.py:112
+#, fuzzy
+msgid "_Add to library"
+msgstr "Spara till bibliotek"
+
+#: cf/library.py:210 cf/library.py:344
+#, fuzzy
+msgid "New category"
+msgstr "Ny förfrågan"
+
+#: cf/library.py:230 cf/library.py:325 cf/library.py:332
+#, fuzzy
+msgid "Add category"
+msgstr "_Kategori:"
+
+#: cf/library.py:328 cf/library.py:335
+msgid "Add query"
+msgstr ""
+
+#: cf/library.py:367
+msgid "Category is not empty."
+msgstr ""
+
+#: cf/library.py:436
+#, fuzzy
+msgid "New query"
+msgstr "Ny förfrågan"
+
+#: cf/plugins/core.py:147
+msgid "Password required"
+msgstr ""
+
+#: cf/plugins/core.py:147
+msgid "Enter the password to connect to this database."
+msgstr ""
+
+#: cf/plugins/core.py:152
+msgid "Miscellaneous"
+msgstr ""
+
+#: cf/plugins/core.py:153
+msgid "Database backends"
+msgstr ""
+
+#: cf/plugins/core.py:154
+msgid "Export filter"
+msgstr ""
+
+#: cf/plugins/core.py:155 cf/ui/prefs.py:83 data/crunchyfrog.glade.h:36
+msgid "Editor"
+msgstr "Redigerare"
+
+#: cf/plugins/core.py:216
+msgid "Closing plugins"
+msgstr ""
+
+#: cf/plugins/core.py:462
+msgid "Copying files..."
+msgstr ""
+
+#: cf/plugins/core.py:467
+msgid "Plugin installed."
+msgstr ""
+
+#: cf/shell/__init__.py:37 cf/shell/__init__.py:66 cf/shell/__init__.py:84
+msgid "Shell"
+msgstr ""
+
+#: cf/shell/__init__.py:38
+msgid "Interactive shell (mainly for debugging)"
+msgstr ""
+
+#: cf/shell/__init__.py:57
+msgid "Import to shell"
+msgstr ""
+
+#: cf/shell/__init__.py:137
+#, python-format
+msgid "Table %(tablename)r imported as %(varname)r to shell"
+msgstr ""
+
+#: cf/ui/browser.py:95
+msgid ""
+"<b>No active data sources</b>\n"
+"\n"
+"<a href=\"#\">Click</a> to open the data source manager."
+msgstr ""
+
+#: cf/ui/browser.py:120 cf/ui/browser.py:211 cf/ui/datasources.py:169
+#: cf/ui/widgets/__init__.py:72
+#, fuzzy
+msgid "Connection failed"
+msgstr "Anslutningar"
+
+#: cf/ui/browser.py:128
+msgid "Disconnect"
+msgstr ""
+
+#: cf/ui/browser.py:131
+#, fuzzy
+msgid "Connect"
+msgstr "Anslutningar"
+
+#: cf/ui/browser.py:157
+#, fuzzy
+msgid "Add data source"
+msgstr "D_atakällor:"
+
+#: cf/ui/browser.py:172
+msgid "Details"
+msgstr ""
+
+#: cf/ui/browser.py:203
+#, fuzzy
+msgid "Connecting..."
+msgstr "Anslutningar"
+
+#: cf/ui/browser.py:315
+#, python-format
+msgid "Details: %(objname)s"
+msgstr ""
+
+#: cf/ui/confirmsave.py:73 cf/ui/confirmsave.py:97
+#, python-format
+msgid "Unsaved Query %(num)s"
+msgstr ""
+
+#: cf/ui/confirmsave.py:98
+#, python-format
+msgid "Save the changes to document \"%(filename)s\" before closing?"
+msgstr ""
+
+#: cf/ui/confirmsave.py:102
+#, python-format
+msgid ""
+"There are %(num)d documents with unsaved changes. Save changes before "
+"closing?"
+msgstr ""
+
+#: cf/ui/datasources.py:75
+#, fuzzy
+msgid "_Connections"
+msgstr "Anslutningar"
+
+#: cf/ui/datasources.py:81
+msgid "No active database backends."
+msgstr ""
+
+#: cf/ui/datasources.py:82
+msgid "Open preferences and activate at least one database backend plugin."
+msgstr ""
+
+#: cf/ui/datasources.py:92
+msgid "Other..."
+msgstr ""
+
+#: cf/ui/datasources.py:108
+#, fuzzy
+msgid "Database:"
+msgstr "D_atakällor:"
+
+#: cf/ui/datasources.py:115
+msgid "DSN:"
+msgstr ""
+
+#: cf/ui/datasources.py:122
+msgid "Host:"
+msgstr ""
+
+#: cf/ui/datasources.py:132
+msgid "Port:"
+msgstr ""
+
+#: cf/ui/datasources.py:139
+msgid "User:"
+msgstr ""
+
+#: cf/ui/datasources.py:149
+msgid "_Ask for password"
+msgstr ""
+
+#: cf/ui/datasources.py:157
+msgid "Password:"
+msgstr ""
+
+#: cf/ui/datasources.py:171
+msgid "Successful."
+msgstr ""
+
+#: cf/ui/datasources.py:201 cf/ui/datasources.py:360
+msgid "Plugin not active"
+msgstr ""
+
+#: cf/ui/datasources.py:202
+msgid "Please activate the following plugin to use this data source: "
+msgstr ""
+
+#: cf/ui/datasources.py:275
+msgid "Plugin not active."
+msgstr ""
+
+#: cf/ui/editor.py:119
+msgid "Split statements"
+msgstr ""
+
+#: cf/ui/editor.py:126 cf/ui/editor.py:471
+#, fuzzy
+msgid "Show in main window"
+msgstr "Visa i huvudfönstret"
+
+#: cf/ui/editor.py:129 cf/ui/queries.py:115
+#, fuzzy
+msgid "Show in separate window"
+msgstr "Visa i huvudfönstret"
+
+#: cf/ui/editor.py:160
+#, python-format
+msgid "Query failed (%(sec).3f seconds)"
+msgstr ""
+
+#: cf/ui/editor.py:164
+#, python-format
+msgid "Query finished (%(sec).3f seconds, %(num)d rows)"
+msgstr ""
+
+#: cf/ui/editor.py:169
+#, python-format
+msgid "Query finished (%(sec).3f seconds, %(num)d affected rows)"
+msgstr ""
+
+#: cf/ui/editor.py:326
+msgid "Select a single statement to explain."
+msgstr ""
+
+#: cf/ui/editor.py:374
+#, python-format
+msgid "Save file %(name)s before closing the editor?"
+msgstr ""
+
+#: cf/ui/editor.py:394
+#, fuzzy
+msgid "Save file"
+msgstr "Spara filer"
+
+#: cf/ui/editor.py:448
+#, python-format
+msgid "Query running... (%.3f seconds)"
+msgstr ""
+
+#: cf/ui/editor.py:594 cf/ui/editor.py:596 cf/ui/queries.py:68
+#: cf/ui/queries.py:150 data/crunchyfrog.glade.h:55
+msgid "Query"
+msgstr "Förfrågan"
+
+#: cf/ui/editor.py:694
+msgid "Data copied to clipboard"
+msgstr ""
+
+#: cf/ui/editor.py:835
+#, fuzzy
+msgid "Variables"
+msgstr "<b>Variabler</b>"
+
+#: cf/ui/prefs.py:81 data/crunchyfrog.glade.h:42
+msgid "General"
+msgstr "Allmänt"
+
+#: cf/ui/prefs.py:84
+#, fuzzy
+msgid "Fonts & Colors"
+msgstr "Typsnitt och färger"
+
+#: cf/ui/prefs.py:183
+#, python-format
+msgid "Download plugin %r?"
+msgstr ""
+
+#: cf/ui/prefs.py:198
+#, python-format
+msgid "Downloading plugin %r..."
+msgstr ""
+
+#: cf/ui/prefs.py:203
+msgid "Plugin downloaded."
+msgstr ""
+
+#: cf/ui/prefs.py:210
+#, fuzzy, python-format
+msgid "Failed to install plugin %r"
+msgstr "_Installera plugin"
+
+#: cf/ui/prefs.py:221 cf/ui/prefs.py:377 cf/ui/prefs.py:443
+msgid "Unknown"
+msgstr ""
+
+#: cf/ui/prefs.py:238
+#, fuzzy
+msgid "Install plugin"
+msgstr "_Installera plugin"
+
+#: cf/ui/prefs.py:243
+msgid "CrunchyFrog plugins (*.zip, *.py)"
+msgstr ""
+
+#: cf/ui/prefs.py:474
+msgid "Downloading repository data..."
+msgstr ""
+
+#: cf/ui/prefs.py:479
+msgid "Repository data synchronized."
+msgstr ""
+
+#: cf/ui/prefs.py:494
+msgid "Failed to load repository data"
+msgstr ""
+
+#: cf/ui/queries.py:159 cf/ui/widgets/__init__.py:144
+msgid "Not connected"
+msgstr ""
+
+#: cf/ui/refviewer.py:40
+#, fuzzy
+msgid "Reference Browser"
+msgstr "Inställningar"
+
+#: cf/ui/refviewer.py:41
+msgid "A tiny webbrowser to view references"
+msgstr ""
+
+#: cf/ui/refviewer.py:70
+#, fuzzy
+msgid "Reference"
+msgstr "Inställningar"
+
+#: cf/ui/refviewer.py:78
+msgid "Reference Viewer"
+msgstr ""
+
+#: cf/ui/widgets/__init__.py:104 cf/ui/widgets/__init__.py:141
+#, fuzzy
+msgid "Connection"
+msgstr "Anslutningar"
+
+#: cf/ui/widgets/__init__.py:115
+#, fuzzy
+msgid "New connection"
+msgstr "Lagrade uppkopplingar"
+
+#: cf/ui/widgets/__init__.py:123
+#, fuzzy
+msgid "Show connections"
+msgstr "Lagrade uppkopplingar"
+
+#: cf/ui/widgets/__init__.py:145
+#, fuzzy
+msgid "Click to open a connection"
+msgstr "Lagrade uppkopplingar"
+
+#: cf/ui/widgets/__init__.py:211
+msgid "Export data"
+msgstr ""
+
+#: cf/ui/widgets/__init__.py:229
+msgid "_Edit export options"
+msgstr ""
+
+#: cf/ui/widgets/__init__.py:235
+msgid "_Open file when finished"
+msgstr ""
+
+#: cf/ui/widgets/grid.py:133
+msgid "Copy value to clipboard"
+msgstr ""
+
+#: cf/ui/widgets/grid.py:142 cf/ui/widgets/grid.py:244
+#, fuzzy
+msgid "Save as..."
+msgstr "Spara filer"
+
+#: cf/ui/widgets/grid.py:149
+msgid "Open with..."
+msgstr ""
+
+#: cf/ui/widgets/grid.py:160
+msgid "View value"
+msgstr ""
+
+#: cf/ui/widgets/grid.py:165
+msgid "This cell contains a 'NULL' value."
+msgstr ""
+
+#: cf/ui/widgets/grid.py:256
+#, fuzzy
+msgid "All files"
+msgstr "Spara filer"
+
+#: cf/ui/widgets/grid.py:641
+msgid "Data"
+msgstr ""
 
 #: data/crunchyfrog.glade.h:1
 msgid "    "
@@ -154,10 +858,6 @@ msgstr "Dela _inte upp ord över två rader"
 msgid "E_xplain"
 msgstr "_Förklara"
 
-#: data/crunchyfrog.glade.h:36
-msgid "Editor"
-msgstr "Redigerare"
-
 #: data/crunchyfrog.glade.h:37
 msgid "Editor _font: "
 msgstr "Redigerar_typsnitt: "
@@ -177,10 +877,6 @@ msgstr ""
 #: data/crunchyfrog.glade.h:41
 msgid "Font & Colors"
 msgstr "Typsnitt och färger"
-
-#: data/crunchyfrog.glade.h:42
-msgid "General"
-msgstr "Allmänt"
 
 #: data/crunchyfrog.glade.h:43
 msgid "Highlight current _line"
@@ -231,10 +927,6 @@ msgstr "Inställningar"
 #: data/crunchyfrog.glade.h:54
 msgid "Progress"
 msgstr "Förlopp"
-
-#: data/crunchyfrog.glade.h:55
-msgid "Query"
-msgstr "Förfrågan"
 
 #: data/crunchyfrog.glade.h:56
 msgid "Refresh"
@@ -322,10 +1014,6 @@ msgstr ""
 #: data/crunchyfrog.glade.h:77
 msgid "Use SQL s_plitting"
 msgstr ""
-
-#: data/crunchyfrog.glade.h:78
-msgid "View"
-msgstr "Visa"
 
 #: data/crunchyfrog.glade.h:79
 msgid "_About this plugin"
@@ -577,6 +1265,3 @@ msgstr ""
 
 #~ msgid "Cancel query"
 #~ msgstr "Avbryt förfrågan"
-
-#~ msgid "New Query"
-#~ msgstr "Ny förfrågan"

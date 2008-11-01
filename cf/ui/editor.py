@@ -157,15 +157,19 @@ class Editor(GladeWidget):
             self._query_timer = None
         self.results.set_query(query)
         if query.failed:
-            msg = _(u'Query failed (%.3f seconds)') % query.execution_time
+            msg = _(u'Query failed (%(sec).3f seconds)')
+            msg = msg % {"sec": query.execution_time}
             type_ = 'error'
         elif query.description:
-            msg = (_(u"Query finished (%.3f seconds, %s rows)")
-                   % (query.execution_time, query.rowcount))
+            msg = (_(u"Query finished (%(sec).3f seconds, %(num)d rows)")
+                   % {"sec": query.execution_time,
+                      "num": query.rowcount})
             type_ = 'info'
         else:
-            msg = _(u"Query finished (%.3f seconds, %s affected rows)")
-            msg = msg % (query.execution_time, query.rowcount)
+            msg = _(u"Query finished (%(sec).3f seconds, "
+                    u"%(num)d affected rows)")
+            msg = msg % {"sec": query.execution_time,
+                         "num": query.rowcount}
             type_ = 'info'
         self.results.add_message(msg, type_, query.path_status)
         if self.connection.handler_is_connected(tag_notice):
