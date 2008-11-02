@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: crunchyfrog\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-01 19:09+0100\n"
+"POT-Creation-Date: 2008-11-02 09:46+0100\n"
 "PO-Revision-Date: 2008-10-15 00:10+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
@@ -73,6 +73,7 @@ msgid "Provides access to MS-SQL databases"
 msgstr ""
 
 #: cf/backends/mssql.py:75 cf/backends/mysql.py:79 cf/backends/postgres.py:93
+#: data/plugins/backend_oracle/__init__.py:74
 msgid "No password given."
 msgstr ""
 
@@ -239,7 +240,7 @@ msgstr ""
 msgid "SQLite Reference"
 msgstr ""
 
-#: cf/backends/sqlite.py:143
+#: cf/backends/sqlite.py:143 data/plugins/backend_httplog/__init__.py:168
 msgid "Python module sqlite3 required."
 msgstr ""
 
@@ -730,6 +731,31 @@ msgstr "שמור קבצים"
 
 #: cf/ui/widgets/grid.py:641
 msgid "Data"
+msgstr ""
+
+#: data/plugins/backend_httplog/__init__.py:77
+msgid "Log file:"
+msgstr ""
+
+#: data/plugins/backend_httplog/__init__.py:79
+#, fuzzy
+msgid "Select HTTP log file"
+msgstr "בחר מופע"
+
+#: data/plugins/backend_oracle/__init__.py:39
+msgid "Oracle Plugin"
+msgstr ""
+
+#: data/plugins/backend_oracle/__init__.py:40
+msgid "Provides access to Oracle databases"
+msgstr ""
+
+#: data/plugins/backend_oracle/__init__.py:79
+msgid "Python module cx_Oracle is not installed."
+msgstr ""
+
+#: data/plugins/backend_oracle/__init__.py:216
+msgid "Python module cx_Oracle required."
 msgstr ""
 
 #: data/crunchyfrog.glade.h:1

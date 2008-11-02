@@ -110,6 +110,7 @@ po-gen:
 	intltool-extract --type=gettext/glade data/crunchyfrog.glade
 	xgettext --from-code=UTF-8 -k_ -kN_ \
 	    -o po/crunchyfrog.pot `find cf/ -type f -name "*.py"` \
+	    `find data/plugins/ -type f -name "*.py"` \
 	    data/*.h `find cf -type f -name "*.h"`
 	for lang in $(PO); do msgmerge -U po/$$lang/LC_MESSAGES/crunchyfrog.po po/crunchyfrog.pot; done
 
