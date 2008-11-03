@@ -115,7 +115,7 @@ class ConstraintCollection(Collection):
     name = _(u"Constraints")
 
 class Constraint(Node):
-    name = _(u"Contraint")
+    name = _(u"Constraint")
     icon = "gtk-spell-check"
 
 class IndexCollection(Collection):
