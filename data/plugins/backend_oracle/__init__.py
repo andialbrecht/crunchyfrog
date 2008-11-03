@@ -38,26 +38,26 @@ class OracleBackend(DBBackendPlugin):
     id = "crunchyfrog.backend.oracle"
     name = _(u"Oracle Plugin")
     description = _(u"Provides access to Oracle databases")
-    
+
     def __init__(self, app):
         DBBackendPlugin.__init__(self, app)
         log.info("Activating Oracle backend")
         self.schema = OracleSchema()
-        
+
     def _get_conn_opts_from_opts(self, opts):
         conn_opts = dict()
         if opts["database"]: conn_opts["dsn"] = opts["database"]
         if opts["user"]: conn_opts["user"] = opts["user"]
         if opts["password"]: conn_opts["password"] = opts["password"]
         return conn_opts
-        
+
     def shutdown(self):
         log.info("Shutting down Oracle backend")
-    
+
     @classmethod
     def get_datasource_options_widgets(cls, data_widgets, initial_data=None):
         return data_widgets, ["database", "user", "password"]
-    
+
     @classmethod
     def get_label(cls, datasource_info):
         s = "%s@%s" % (datasource_info.options.get("user", None) or "??",
@@ -65,7 +65,7 @@ class OracleBackend(DBBackendPlugin):
         if datasource_info.name:
             s = '%s (%s)' % (datasource_info.name, s)
         return s
-    
+
     def dbconnect(self, data):
         opts = self._get_conn_opts_from_opts(data)
         if data.get("ask_for_password", False):
@@ -84,7 +84,7 @@ class OracleBackend(DBBackendPlugin):
         conn = OracleConnection(self, self.app, real_conn)
         conn.threadsafety = cx_Oracle.threadsafety
         return conn
-    
+
     def test_connection(self, data):
         try:
             conn = self.dbconnect(data)
@@ -92,49 +92,49 @@ class OracleBackend(DBBackendPlugin):
         except DBConnectError, err:
             return str(err)
         return None
-    
+
 class OracleCursor(DbAPI2Cursor):
-    
+
     def __init__(self, *args, **kw):
         DbAPI2Cursor.__init__(self, *args, **kw)
         self._fetched = None
-        
+
     def fetchall(self):
         if self._fetched == None:
             self._fetched = self._cur.fetchall()
         return self._fetched
-    
+
     def execute(self, statement):
         DbAPI2Cursor.execute(self, statement)
         self.fetchall()
-    
+
     def _get_rowcount(self):
         if self._fetched == None:
             return -1
         return len(self._fetched)
     rowcount = property(fget=_get_rowcount)
-    
+
 class OracleConnection(DbAPI2Connection):
     cursor_class = OracleCursor
-    
+
     def get_server_info(self):
         return "Oracle %s" % self._conn.version
-    
-    
+
+
 class OracleSchema(SchemaProvider):
-    
+
     def q(self, connection, sql):
         cur = connection.cursor()._cur
         cur.execute(sql)
         return cur.fetchall()
-    
+
     def fetch_children(self, connection, parent):
         if isinstance(parent, DatasourceInfo):
             return [TableCollection(),
                     ViewCollection(),
                     SequenceCollection(),
                     PackageCollection()]
-        
+
         elif isinstance(parent, TableCollection):
             ret = []
             sql = "select t.table_name, c.comments \
@@ -144,7 +144,7 @@ class OracleSchema(SchemaProvider):
             for item in self.q(connection, sql):
                 ret.append(Table(item[0], item[1]))
             return ret
-        
+
         elif isinstance(parent, ViewCollection):
             ret = []
             sql = "select t.view_name, c.comments from user_views t \
@@ -153,15 +153,15 @@ class OracleSchema(SchemaProvider):
             for item in self.q(connection, sql):
                 ret.append(View(item[0]))
             return ret
-        
+
         elif isinstance(parent, Table):
             return [ColumnCollection(table=parent),
                     ConstraintCollection(table=parent),
                     IndexCollection(table=parent)]
-        
+
         elif isinstance(parent, View):
             return [ColumnCollection(table=parent)]
-        
+
         elif isinstance(parent, ColumnCollection):
             table = parent.get_data("table")
             ret = []
@@ -171,7 +171,7 @@ class OracleSchema(SchemaProvider):
             where col.table_name = '%(table)s'" % {"table" : table.name}
             [ret.append(Column(item[0], item[1])) for item in self.q(connection, sql)]
             return ret
-        
+
         elif isinstance(parent, ConstraintCollection):
             table = parent.get_data("table")
             ret = []
@@ -179,7 +179,7 @@ class OracleSchema(SchemaProvider):
             where table_name = '%(table)s'" % {"table" : table.name}
             [ret.append(Constraint(item[0])) for item in self.q(connection, sql)]
             return ret
-        
+
         elif isinstance(parent, IndexCollection):
             table = parent.get_data("table")
             ret = []
@@ -187,13 +187,13 @@ class OracleSchema(SchemaProvider):
             where table_name = '%(table)s'" % {"table" : table.name}
             [ret.append(Index(item[0])) for item in self.q(connection, sql)]
             return ret
-        
+
         elif isinstance(parent, SequenceCollection):
             ret = []
             sql = "select sequence_name from user_sequences"
             [ret.append(Sequence(item[0])) for item in self.q(connection, sql)]
             return ret
-        
+
         # FIXME: Cleanup packages and procedures
         elif isinstance(parent, PackageCollection):
             ret = []
@@ -201,7 +201,7 @@ class OracleSchema(SchemaProvider):
             where object_name is not null"
             [ret.append(Package(item[0])) for item in self.q(connection, sql)]
             return ret
-        
+
         elif isinstance(parent, Package):
             ret = []
             sql = "select procedure_name from user_procedures \

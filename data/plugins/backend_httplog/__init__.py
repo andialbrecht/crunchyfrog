@@ -52,26 +52,26 @@ import apachelogs
 class HttpLogBackendPlugin(DBBackendPlugin):
     id = "crunchyfrog.backend.http"
     plugin_type = PLUGIN_TYPE_BACKEND
-    name = "HTTP log file backend"
-    description = "Analyse HTTP log files with SQL"
+    name = _(u"HTTP log file backend")
+    description = _(u"Analyse HTTP log files with SQL")
     author = "Andi Albrecht"
     license = "GPL"
     homepage = "http://cf.andialbrecht.de"
     version = "0.1"
-    
+
     def __init__(self, *args, **kw):
         DBBackendPlugin.__init__(self, *args, **kw)
         self.db_file = None
-        
+
     @classmethod
     def _get_filename(cls, chooser):
         return chooser.get_filename()
-        
+
     def shutdown(self):
         log.info("Shutting down HTTP log backend")
         if self.db_file and os.path.isfile(self.db_file):
             os.remove(self.db_file)
-    
+
     @classmethod
     def get_datasource_options_widgets(cls, data_widgets, initial_data=None):
         lbl = gtk.Label(_(u"Log file:"))
@@ -81,11 +81,11 @@ class HttpLogBackendPlugin(DBBackendPlugin):
             file_chooser.select_filename(initial_data.options.get("log_file"))
         data_widgets["log_file"] = (cls._get_filename, file_chooser)
         return data_widgets, [lbl, file_chooser]
-    
+
     @classmethod
     def get_label(cls, datasource_info):
         return "%s (http-log://%s)" % (datasource_info.name, datasource_info.options.get("log_file"))
-    
+
     def dbconnect(self, data):
         create_db = False
         if not self.db_file:
@@ -99,7 +99,7 @@ class HttpLogBackendPlugin(DBBackendPlugin):
             return HttpLogConnection(self, self.app, real_conn, data["log_file"])
         except StandardError, err:
             raise DBConnectError(str(err))
-    
+
     def test_connection(self, data):
         try:
             conn = self.dbconnect(data)
@@ -107,7 +107,7 @@ class HttpLogBackendPlugin(DBBackendPlugin):
         except DBConnectError, err:
             return str(err)
         return None
-    
+
     def init_db(self, dbfile, logfile):
         conn = sqlite3.connect(dbfile)
         cur = conn.cursor()
@@ -125,17 +125,17 @@ class HttpLogBackendPlugin(DBBackendPlugin):
             sql = SQL_INSERT % data
             cur.execute(sql)
         conn.commit()
-    
+
 class HttpLogConnection(DbAPI2Connection):
-    
+
     def __init__(self, backend, app, real_conn, log_file):
         DbAPI2Connection.__init__(self, backend, app, real_conn)
         self.log_file = log_file
-    
+
     def get_server_info(self):
         return self.log_file
-    
-    
+
+
 TABLE_CREATE = """
 create table logfile (
     http_method text,
@@ -157,7 +157,7 @@ INSERT INTO log (http_method, http_response_code, http_response_size,
 http_user, http_vers, referrer, request_line, time, url, user_agent,
 ident, ip)
 values ('%(http_method)s', %(http_response_code)d, %(http_response_size)d,
-'%(http_user)s', '%(http_vers)s', '%(referrer)s', '%(request_line)s', 
+'%(http_user)s', '%(http_vers)s', '%(referrer)s', '%(request_line)s',
 '%(time)s', '%(url)s', '%(user_agent)s', '%(ident)s', '%(ip)s')
 """
 
