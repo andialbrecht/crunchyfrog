@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: crunchyfrog\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-02 09:46+0100\n"
+"POT-Creation-Date: 2008-11-03 21:00+0100\n"
 "PO-Revision-Date: 2008-08-12 00:39+0000\n"
 "Last-Translator: Edwin Dijk <edwin@sitix.nl>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -205,7 +205,7 @@ msgstr "Verbindingen"
 
 #: cf/backends/schema/__init__.py:118
 #, fuzzy
-msgid "Contraint"
+msgid "Constraint"
 msgstr "Verbindingen"
 
 #: cf/backends/schema/__init__.py:122
@@ -616,7 +616,7 @@ msgstr ""
 msgid "Failed to install plugin %r"
 msgstr ""
 
-#: cf/ui/prefs.py:221 cf/ui/prefs.py:377 cf/ui/prefs.py:443
+#: cf/ui/prefs.py:221 cf/ui/prefs.py:377 cf/ui/prefs.py:444
 msgid "Unknown"
 msgstr ""
 
@@ -628,15 +628,19 @@ msgstr ""
 msgid "CrunchyFrog plugins (*.zip, *.py)"
 msgstr ""
 
-#: cf/ui/prefs.py:474
+#: cf/ui/prefs.py:382
+msgid "ERROR"
+msgstr ""
+
+#: cf/ui/prefs.py:475
 msgid "Downloading repository data..."
 msgstr ""
 
-#: cf/ui/prefs.py:479
+#: cf/ui/prefs.py:480
 msgid "Repository data synchronized."
 msgstr ""
 
-#: cf/ui/prefs.py:494
+#: cf/ui/prefs.py:495
 msgid "Failed to load repository data"
 msgstr ""
 
@@ -723,6 +727,16 @@ msgstr "Bestanden opslaan"
 #: cf/ui/widgets/grid.py:641
 msgid "Data"
 msgstr ""
+
+#: data/plugins/backend_httplog/__init__.py:55
+#, fuzzy
+msgid "HTTP log file backend"
+msgstr "Selecteer instantie"
+
+#: data/plugins/backend_httplog/__init__.py:56
+#, fuzzy
+msgid "Analyse HTTP log files with SQL"
+msgstr "Selecteer instantie"
 
 #: data/plugins/backend_httplog/__init__.py:77
 msgid "Log file:"
@@ -1295,6 +1309,10 @@ msgstr ""
 #: data/crunchyfrog.glade.h:140
 msgid "in an _new instance"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Contraint"
+#~ msgstr "Verbindingen"
 
 #~ msgid "Cancel query"
 #~ msgstr "Annuleer query"
