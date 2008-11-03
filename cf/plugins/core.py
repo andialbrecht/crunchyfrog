@@ -213,7 +213,7 @@ class PluginManager(gobject.GObject):
         self.__active_plugins = dict()
         gnomevfs.monitor_add(USER_PLUGIN_DIR, gnomevfs.MONITOR_DIRECTORY, self.on_plugin_folder_changed)
         gnomevfs.monitor_add(PLUGIN_DIR, gnomevfs.MONITOR_DIRECTORY, self.on_plugin_folder_changed)
-        self.app.register_shutdown_task(self.on_app_shutdown, _(u"Closing plugins"))
+        self.app.register_shutdown_task(self.on_app_shutdown, "")
         self.app.cb.connect("instance-created", self.on_instance_created)
         self.refresh()
         self._first_run()
