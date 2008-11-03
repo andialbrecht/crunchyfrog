@@ -378,7 +378,8 @@ class PreferencesDialog(GladeWidget):
                 if plugin.description:
                     lbl += "\n"+plugin.description
                 if plugin.INIT_ERROR:
-                    lbl += '\n<span color="red">ERROR: '+plugin.INIT_ERROR+'</span>'
+                    lbl += '\n<span color="red">'
+                    lbl += _(u'ERROR')+': '+plugin.INIT_ERROR+'</span>'
                 if plugin.icon:
                     ico = it.load_icon(plugin.icon, gtk.ICON_SIZE_LARGE_TOOLBAR, gtk.ICON_LOOKUP_FORCE_SVG)
                 else:
