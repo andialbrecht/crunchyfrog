@@ -66,7 +66,7 @@ Luca Livraghi (https://launchpad.net/~luca91)
 Marion Cisternas Milla (https://launchpad.net/~mcisternas)
 Christian Olate Opazo (https://launchpad.net/~cristian-olate)
 Penegal (https://launchpad.net/~penegal)
-Martin Picek
+Martin Picek <picek.martin@gnome-cesko.cz>
 Nicola Piovesan (https://launchpad.net/~piovesannicola)
 Enrico Rosina (https://launchpad.net/~e-rosina)
 Xoan Sampaiño (https://launchpad.net/~xoan)
