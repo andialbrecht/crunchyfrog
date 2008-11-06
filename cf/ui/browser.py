@@ -143,7 +143,7 @@ class Browser(gtk.ScrolledWindow):
         else:
             if not self.get_child() == self._hint:
                 self.remove(self.object_tree)
-                self.add(self._hint)
+                self.add_with_viewport(self._hint)
         self.show_all()
 
     def _show_popup_menu(self, treeview, event):
