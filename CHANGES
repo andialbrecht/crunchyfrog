@@ -1,6 +1,9 @@
 Development
 -----------
 
+Bug Fixes
+ * Confirmation dialog when closing editors without changes fixed.
+
 Other
  * Replaced some gnome.* stuff with methods now in gtk (gtk 2.14).
 

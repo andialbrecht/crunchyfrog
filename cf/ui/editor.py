@@ -189,15 +189,18 @@ class Editor(GladeWidget):
 
     def close(self):
         """Close editor, displays a confirmation dialog for unsaved files."""
-        dlg = ConfirmSaveDialog(self, [self])
-        resp = dlg.run()
-        if resp == 1:
-            ret = dlg.save_files()
-        elif resp == 2:
-            ret = True
+        if self.contents_changed():
+            dlg = ConfirmSaveDialog(self, [self])
+            resp = dlg.run()
+            if resp == 1:
+                ret = dlg.save_files()
+            elif resp == 2:
+                ret = True
+            else:
+                ret = False
+            dlg.destroy()
         else:
-            ret = False
-        dlg.destroy()
+            ret = True
         if ret:
             if self.get_data("win"):
                 self.get_data("win").destroy()
