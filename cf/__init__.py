@@ -32,6 +32,8 @@ import traceback
 
 import pygtk; pygtk.require("2.0")
 
+# import kiwi first, just to get rid of no translation for domain message
+import kiwi
 import bonobo
 import gnome
 import gnomevfs
