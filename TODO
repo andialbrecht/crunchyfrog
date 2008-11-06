@@ -9,6 +9,8 @@ User Interface
   options and return values.
 - Accelerators don't work in SQL window.
 - Add support for printing.
+- Replace toolbar from data source manager? It's too large and looks
+  ugly with some GTK themes.
 
 
 Library
