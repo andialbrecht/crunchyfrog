@@ -5,7 +5,8 @@ Bug Fixes
  * Confirmation dialog when closing editors without changes fixed.
 
 Other
- * Replaced some gnome.* stuff with methods now in gtk (gtk 2.14).
+ * Replaced some gnome.* stuff with their gtk counterparts (gtk 2.14).
+ * Start script preserves environment variables.
 
 Translation
  * crunchyfrog.pot covers now all translatable strings in Python files.
@@ -17,7 +18,7 @@ Translation
 ----------------------------
 
 New Features
- * query splittng
+ * query splitting
  * gnomekeyring support
  * UI cleanup (incl. issue8)
 
@@ -50,7 +51,7 @@ Thanks to all Launchpad contributors!
 
 New Features
  * SQL Server backend (using pymssql)
- * HTTP logfile backend (requires sqlite3)
+ * HTTP log file backend (requires sqlite3)
  * recent files support
 
 Bug Fixes
@@ -76,7 +77,7 @@ Thanks to all launchpad contributors!
 
 New Features
  * navigator: refresh action
- * double-click on datasource opens editor and assigns a connection
+ * double-click on data source opens editor and assigns a connection
  * SQL library plugin
  * API documentation
 
@@ -89,9 +90,9 @@ Bug Fixes
  * reset explain tab when a query is started
  * ConnectionButton: Sort alphabetically
  * ConnectionButton: If the button is assigned to an editor, new
-   datasources are note recognized
+   data sources are note recognized
  * UserDB: provide some kind of callback mechanism so that plugins can
-   create or update tables themself (implemented in UserDBMixin)
+   create or update tables them self (implemented in UserDBMixin)
  * UserDB: remove USER_DB attribute and implement it as config
    value (userdb.file, not visible in preferences dialog)
  * Library: Manage saved queries
