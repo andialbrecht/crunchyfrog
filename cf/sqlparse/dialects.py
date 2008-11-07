@@ -97,7 +97,7 @@ class DialectPSQL(DialectDefault):
         self._in_dbldollar = False
 
     def semicolon_split_level(self, token):
-        if token == '$$':
+        if token == '$$' or token.upper() == '$BODY$':
             if not self._in_dbldollar:
                 self._in_dbldollar = True
                 return 1
