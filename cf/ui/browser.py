@@ -138,7 +138,7 @@ class Browser(gtk.ScrolledWindow):
     def guess_hint(self):
         if self.object_tree.get_model().get_iter_first():
             if not self.get_child() == self.object_tree:
-                self.remove(self._hint)
+                self.remove(self._hint.get_parent())
                 self.add(self.object_tree)
         else:
             if not self.get_child() == self._hint:
