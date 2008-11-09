@@ -32,7 +32,9 @@ from gettext import gettext as _
 
 from ipython_view import *
 
+
 class CFShell(GenericPlugin, InstanceMixin):
+
     id = "crunchyfrog.plugin.cfshell"
     name = _(u"Shell")
     description = _(u"Interactive shell (mainly for debugging)")
@@ -55,7 +57,8 @@ class CFShell(GenericPlugin, InstanceMixin):
     def on_object_menu_popup(self, browser, popup, object, view):
         if isinstance(object, Table):
             item = gtk.MenuItem(_(u"Import to shell"))
-            item.connect("activate", self.on_import_table_to_shell, object, view)
+            item.connect("activate",
+                         self.on_import_table_to_shell, object, view)
             item.show()
             popup.append(item)
 
@@ -67,10 +70,12 @@ class CFShell(GenericPlugin, InstanceMixin):
                               "gnome-terminal", gtk.POS_BOTTOM)
             instance.dock.add_item(item)
             view.connect("destroy", self.on_view_destroyed, menuitem, instance)
-            tag = instance.browser.connect("object-menu-popup", self.on_object_menu_popup, view)
+            tag = instance.browser.connect("object-menu-popup",
+                                           self.on_object_menu_popup, view)
             view.set_data("object-menu-tag", tag)
         else:
-            instance.browser.disconnect(self._shells[instance].get_data("object-menu-tag"))
+            instance.browser.disconnect(
+                self._shells[instance].get_data("object-menu-tag"))
             self._shells[instance].destroy()
             del self._shells[instance]
 
@@ -101,6 +106,7 @@ class CFShell(GenericPlugin, InstanceMixin):
             instance, shell = self._shells.popitem()
             shell.destroy()
 
+
 class CFShellView(gtk.ScrolledWindow):
 
     def __init__(self, app, instance):
@@ -111,15 +117,19 @@ class CFShellView(gtk.ScrolledWindow):
         self.instance = instance
         self.iview = IPythonView()
         self.iview.connect("drag_data_received", self.on_drag_data_received)
-        self.iview.drag_dest_set(gtk.DEST_DEFAULT_MOTION|gtk.DEST_DEFAULT_HIGHLIGHT|gtk.DEST_DEFAULT_DROP,
-                                 [("text/plain", 0, 80)], gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_COPY)
-        self.iview.updateNamespace({"app" : self.app,
-                                    "instance" : self.instance})
+        self.iview.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
+                                 gtk.DEST_DEFAULT_HIGHLIGHT |
+                                 gtk.DEST_DEFAULT_DROP,
+                                 [("text/plain", 0, 80)],
+                                 gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_COPY)
+        self.iview.updateNamespace({"app": self.app,
+                                    "instance": self.instance})
         self.add(self.iview)
         self.set_size_request(-1, 100)
         self.show_all()
 
-    def on_drag_data_received(self, widget, context, x, y, selection, target_type, timestamp):
+    def on_drag_data_received(self, widget, context, x, y, selection,
+                              target_type, timestamp):
         object = self.instance.browser.get_object_by_id(int(selection.data))
         if isinstance(object, Table):
             self.import_table(object)
@@ -133,5 +143,8 @@ class CFShellView(gtk.ScrolledWindow):
         # TODO: Create some nice ORM and some usable models.
         #       Maybe we can fix this, when DDL operations are implemented...
         model_name = table.name.lower()+"_model"
-        self.iview.updateNamespace({model_name : table})
-        gobject.idle_add(self.instance.statusbar.set_message, _(u"Table %(tablename)r imported as %(varname)r to shell") % {"tablename" : table.name, "varname" : table.name.lower()})
+        self.iview.updateNamespace({model_name: table})
+        msg = _(u"Table %(tablename)r imported as %(varname)r to shell")
+        gobject.idle_add(self.instance.statusbar.set_message,
+                         msg % {"tablename": table.name,
+                                "varname": table.name.lower()})
