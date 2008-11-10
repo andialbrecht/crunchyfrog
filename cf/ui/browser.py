@@ -29,7 +29,7 @@ from kiwi.ui import dialogs
 import sexy
 
 from cf.datasources import DatasourceInfo
-from cf.backends import DBConnectError
+from cf.backends import DBConnectError, schema
 from cf.ui import pdock
 from cf.ui.editor import SQLView
 
@@ -81,13 +81,26 @@ class Browser(gtk.ScrolledWindow):
         col.add_attribute(renderer, 'text', 1)
         self.object_tree.append_column(col)
         self.object_tree.set_headers_visible(False)
-        self.object_tree.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, (("text/plain", gtk.TARGET_SAME_APP, 80),), gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_COPY)
+        self.object_tree.enable_model_drag_source(gtk.gdk.BUTTON1_MASK,
+                                                  (("text/plain",
+                                                    gtk.TARGET_SAME_APP, 80),
+                                                   ),
+                                                  gtk.gdk.ACTION_DEFAULT |
+                                                  gtk.gdk.ACTION_COPY)
+
         def drag_data_get(treeview, context, selection, info, timestamp):
             treeselection = treeview.get_selection()
             model, iter = treeselection.get_selected()
-            text = id(model.get_value(iter, 0))
-            selection.set('text/plain', 8, str(text))
+            obj = model.get_value(iter, 0)
+            # row_draggable(path) doesn't work somehow...
+            if isinstance(obj, schema.Node) \
+            and not isinstance(obj, schema.Collection):
+                text = model.get_value(iter, 1)
+            else:
+                text = ""
+            selection.set('text/plain', 8, text)
             return
+
         self.object_tree.connect("drag_data_get", drag_data_get)
         self.set_shadow_type(gtk.SHADOW_ETCHED_IN)
         # Hint
@@ -332,22 +345,6 @@ class Browser(gtk.ScrolledWindow):
             iter = self.model.iter_next(iter)
         return None
 
-    def get_object_by_id(self, id_, iter=None, model=None):
-        if not iter:
-            model = self.object_tree.get_model()
-            iter = model.get_iter_first()
-        while iter:
-            value = model.get_value(iter, 0)
-            if id(value) == id_:
-                return value
-            citer = model.iter_children(iter)
-            while citer:
-                ret = self.get_object_by_id(id_, citer, model)
-                if ret:
-                    return ret
-                citer = model.iter_next(citer)
-            iter = model.iter_next(iter)
-
     def reset_tree(self):
         self.model.clear()
         for datasource_info in self.app.datasources.get_all():
@@ -355,10 +352,13 @@ class Browser(gtk.ScrolledWindow):
             self.set_datasource_info(iter, datasource_info)
 
     def set_datasource_info(self, iter, datasource_info):
+        it = gtk.icon_theme_get_default()
         if datasource_info.get_connections():
-            ico = gtk.icon_theme_get_default().load_icon("stock_connect", gtk.ICON_SIZE_MENU, gtk.ICON_LOOKUP_FORCE_SVG)
+            ico = it.load_icon("stock_connect", gtk.ICON_SIZE_MENU,
+                               gtk.ICON_LOOKUP_FORCE_SVG)
         else:
-            ico = gtk.icon_theme_get_default().load_icon("stock_disconnect", gtk.ICON_SIZE_MENU, gtk.ICON_LOOKUP_FORCE_SVG)
+            ico = it.load_icon("stock_disconnect", gtk.ICON_SIZE_MENU,
+                               gtk.ICON_LOOKUP_FORCE_SVG)
         self.model.set(iter,
                   0, datasource_info,
                   1, datasource_info.get_label(),

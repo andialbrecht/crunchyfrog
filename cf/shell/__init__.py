@@ -116,35 +116,8 @@ class CFShellView(gtk.ScrolledWindow):
         self.app = app
         self.instance = instance
         self.iview = IPythonView()
-        self.iview.connect("drag_data_received", self.on_drag_data_received)
-        self.iview.drag_dest_set(gtk.DEST_DEFAULT_MOTION |
-                                 gtk.DEST_DEFAULT_HIGHLIGHT |
-                                 gtk.DEST_DEFAULT_DROP,
-                                 [("text/plain", 0, 80)],
-                                 gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_COPY)
         self.iview.updateNamespace({"app": self.app,
                                     "instance": self.instance})
         self.add(self.iview)
         self.set_size_request(-1, 100)
         self.show_all()
-
-    def on_drag_data_received(self, widget, context, x, y, selection,
-                              target_type, timestamp):
-        object = self.instance.browser.get_object_by_id(int(selection.data))
-        if isinstance(object, Table):
-            self.import_table(object)
-            context.drop_finish(True, timestamp)
-        else:
-            context.drop_finish(False, timestamp)
-        widget.stop_emission("drag-data-received")
-        return False
-
-    def import_table(self, table):
-        # TODO: Create some nice ORM and some usable models.
-        #       Maybe we can fix this, when DDL operations are implemented...
-        model_name = table.name.lower()+"_model"
-        self.iview.updateNamespace({model_name: table})
-        msg = _(u"Table %(tablename)r imported as %(varname)r to shell")
-        gobject.idle_add(self.instance.statusbar.set_message,
-                         msg % {"tablename": table.name,
-                                "varname": table.name.lower()})
