@@ -107,7 +107,6 @@ class MySQLSchema(SchemaProvider):
 
     def q(self, connection, sql):
         cur = connection.cursor()._cur
-        cur.execute("use information_schema;")
         cur.execute(sql)
         return cur.fetchall()
 
@@ -117,7 +116,7 @@ class MySQLSchema(SchemaProvider):
 
         elif isinstance(parent, SchemaCollection):
             ret = []
-            sql = "select schema_name from schemata"
+            sql = "select schema_name from information_schema.schemata"
             for item in self.q(connection, sql):
                 ret.append(Schema(item[0]))
             return ret
@@ -136,8 +135,11 @@ class MySQLSchema(SchemaProvider):
                 kind = "VIEW"
             ret = []
             schema = parent.get_data("schema")
-            sql = "select table_name, table_comment from tables \
-            where table_schema = '%(schema)s' and table_type = '%(kind)s'" % {"schema" : schema.name, "kind" : kind}
+            sql = ('select table_name, table_comment '
+                   'from information_schema.tables '
+                   'where table_schema = \'%(schema)s\' '
+                   'and table_type = \'%(kind)s\''
+                   % {"schema" : schema.name, "kind" : kind})
             for item in self.q(connection, sql):
                 ret.append(obj(item[0], item[1], schema=schema))
             return ret
@@ -151,8 +153,12 @@ class MySQLSchema(SchemaProvider):
         elif isinstance(parent, ColumnCollection):
             ret = []
             table = parent.get_data("table")
-            sql = "select column_name, column_comment from columns \
-            where table_name = '%(table)s' and table_schema = '%(schema)s'" % {"table" : table.name, "schema": table.get_data("schema").name}
+            sql = ("select column_name, column_comment "
+                   "from information_schema.columns "
+                   "where table_name = '%(table)s' "
+                   "and table_schema = '%(schema)s'"
+                   % {"table" : table.name,
+                      "schema": table.get_data("schema").name})
             for item in self.q(connection, sql):
                 ret.append(Column(item[0], item[1], table=table))
             return ret
