@@ -3,6 +3,8 @@ Development
 
 Bug Fixes
  * Confirmation dialog when closing editors without changes fixed.
+ * MySQL browser has changed the default database when browsing the
+   database objects (issue13).
 
 Other
  * Replaced some gnome.* stuff with their gtk counterparts (gtk 2.14).
