@@ -8,6 +8,7 @@
 import re
 
 _TOKENIZER_REGEX = r"""%(multiwordkeywords)s|
+--.*[\r\n]+|
 \s+|
 ;|
 (?:'[^'\n\r]*')+|
@@ -57,7 +58,6 @@ class DialectDefault(Dialect):
     def __init__(self):
         super(DialectDefault, self).__init__()
         self._in_declare = False
-        self._in_create = False
 
     def semicolon_split_level(self, token):
         """Returns a value to adjust the semicolon split level.
@@ -71,11 +71,8 @@ class DialectDefault(Dialect):
         if token == 'DECLARE':
             self._in_declare = True
             return 1
-        if token == 'CREATE':
-            self._in_create = True
-            return 0
         if token == 'BEGIN':
-            if self._in_declare or not self._in_create:
+            if self._in_declare:
                 return 0
             return 1
         if token == 'END':
@@ -97,7 +94,7 @@ class DialectPSQL(DialectDefault):
         self._in_dbldollar = False
 
     def semicolon_split_level(self, token):
-        if token == '$$' or token.upper() == '$BODY$':
+        if token == '$$':
             if not self._in_dbldollar:
                 self._in_dbldollar = True
                 return 1
