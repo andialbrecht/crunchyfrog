@@ -169,8 +169,8 @@ class UserDB(gobject.GObject):
         except sqlite.OperationalError, e:
             log.error("Failed to create table '%s': %s", name, str(e))
             return False
-        sql = "insert into sy_table_version (tablename, version) \
-        values (?,?)"
+        sql = ("insert into sy_table_version (tablename, version) "
+               "values (?,?)")
         self.cursor.execute(sql, (name, version))
         self.conn.commit()
         return True
