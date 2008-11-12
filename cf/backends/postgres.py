@@ -136,10 +136,12 @@ class PgCursor(DbAPI2Cursor):
         #self._check_notices()
 
     def get_messages(self):
+        ret = []
+        while self.connection._conn.notices:
+            ret.append(self.connection._conn.notices.pop())
         if self._cur.statusmessage:
-            return [self._cur.statusmessage]
-        else:
-            return []
+            ret.append(self._cur.statusmessage)
+        return ret
 
 class PgConnection(DbAPI2Connection):
     cursor_class = PgCursor

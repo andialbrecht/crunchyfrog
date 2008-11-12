@@ -12,6 +12,7 @@ Bug Fixes
 Other
  * Replaced some gnome.* stuff with their gtk counterparts (gtk 2.14).
  * Start script preserves environment variables.
+ * Display notices from PostgreSQL connection.
 
 Translation
  * crunchyfrog.pot covers now all translatable strings in Python files.
