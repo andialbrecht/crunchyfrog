@@ -113,7 +113,7 @@ class Token(object):
         return unicode(self._raw)
 
     def __cmp__(self, other):
-        if isinstance(other, basestring):
+        if isinstance(other, basestring) or isinstance(other, Token):
             return cmp(self.upper(), other.upper())
         return cmp(self, other)
 
