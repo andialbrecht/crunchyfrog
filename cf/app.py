@@ -24,6 +24,7 @@
 
 import os
 import sys
+import threading
 
 import gobject
 import gtk
@@ -33,14 +34,14 @@ from config import Config
 from datasources import DatasourceManager
 from plugins.core import PluginManager
 from ui.prefs import PreferencesDialog
-from userdb import UserDB
-from dbus_manager import CFService
+from cf.userdb import UserDB
+from ipc import IPCListener
 
 import logging
-log = logging.getLogger("APP")
+
 
 class CFApplication(gobject.GObject):
-    """Main application object
+    """Main application object.
 
     An instance of this class is accessible in almost every class in
     CrunchyFrog through the ``app`` attribute. It provides access
@@ -88,9 +89,9 @@ class CFApplication(gobject.GObject):
         self._check_version()
         self.config = Config(self, self.options.config)
         self.userdb = UserDB(self)
+        self.run_listener()
         self.plugins = PluginManager(self)
         self.datasources = DatasourceManager(self)
-        self.dbus_service = CFService(self)
         self.recent_manager = gtk.recent_manager_get_default()
 
     def _check_version(self):
@@ -114,7 +115,8 @@ class CFApplication(gobject.GObject):
         instances[self.__icount] = instance
         self.set_data("instances", instances)
         instance.set_data("instance-id", self.__icount)
-        instance.widget.connect("destroy", self.on_instance_destroyed, self.__icount)
+        instance.widget.connect("destroy",
+                                self.on_instance_destroyed, self.__icount)
         instance.widget.show()
         self.cb.emit("instance-created", instance)
         return instance
@@ -162,6 +164,13 @@ class CFApplication(gobject.GObject):
         """
         self.__shutdown_tasks.append((func, msg, args, kwargs))
 
+    def run_listener(self):
+        """Creates and runs a simple socket server."""
+        self.ipc_listener = IPCListener(self)
+        t = threading.Thread(target=self.ipc_listener.serve_forever)
+        t.setDaemon(True)
+        t.start()
+
     def shutdown(self):
         """Execute all shutdown tasks and quit application
 
@@ -170,12 +179,13 @@ class CFApplication(gobject.GObject):
         """
         while self.__shutdown_tasks:
             func, msg, args, kwargs = self.__shutdown_tasks.pop()
-            log.info(msg)
+            logging.info(msg)
             try:
                 func(*args, **kwargs)
             except:
                 import traceback; traceback.print_exc()
-                log.error("Task failed: %s" % str(sys.exc_info()[1]))
+                logging.error("Task failed: %s" % str(sys.exc_info()[1]))
+        self.ipc_listener.shutdown()
         gtk.main_quit()
 
 

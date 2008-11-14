@@ -71,7 +71,7 @@ if not isdir(USER_PLUGIN_DIR):
 USER_PLUGIN_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_DIR)
 USER_PLUGIN_REPO = join(USER_DIR, "repo.xml")
 USER_PLUGIN_REPO_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_REPO)
-PID_FILE = join(USER_DIR, "crunchyfrog.pid")
+IPC_SOCKET = join(USER_DIR, "crunchyfog.sock")
 
 
 gettext.bindtextdomain("crunchyfrog", LOCALE_DIR)
@@ -81,7 +81,7 @@ gtk.glade.textdomain("crunchyfrog")
 
 
 from cf.app import CFApplication
-from cf import dbus_manager
+from cf import ipc
 
 
 def _parse_commandline():
@@ -109,44 +109,10 @@ def _parse_commandline():
     return options, args
 
 
-# grabbed from listen / gajm
-def is_alive(pid_file):
-    try:
-        pf = open(pid_file)
-    except:
-        # probably file not found
+def is_alive(client):
+    response = client.ping()
+    if not response:
         return False
-
-    try:
-        pid = int(pf.read().strip())
-        pf.close()
-    except:
-        traceback.print_exc()
-        # PID file exists, but something happened trying to read PID
-        # Could be 0.10 style empty PID file, so assume Gajim is running
-        return False
-
-    try:
-        if not os.path.exists('/proc'):
-            print "missing /proc"
-            return True # no /proc, assume Listen is running
-        try:
-            f = open('/proc/%d/cmdline'% pid)
-        except IOError, e:
-            if e.errno == errno.ENOENT:
-                return False # file/pid does not exist
-            raise
-
-        n = f.read().lower()
-        f.close()
-        if n.find('cf/__init__.py') < 0:
-            return False
-        return True # Running Listen found at pid
-    except:
-        traceback.print_exc()
-
-    # If we are here, pidfile exists, but some unexpected error occured.
-    # Assume Listen is running.
     return True
 
 
@@ -160,7 +126,9 @@ def main():
         log_level = logging.WARNING
     logger = logging.getLogger()
     logger.setLevel(log_level)
-    if not is_alive(PID_FILE):
+    ipc_client = ipc.get_client()
+    if not is_alive(ipc_client):
+        logging.info('Creating new application')
         if isfile(abspath(join(dirname(__file__), "../setup.py"))):
             props = {'app-datadir':
                      abspath(join(dirname(__file__), '../data'))}
@@ -171,20 +139,15 @@ def main():
                    properties=props)
         app = CFApplication(options)
         app.init()
-        instance = app.new_instance(args)
-        f = open(PID_FILE, "w")
-        f.write(str(os.getpid()))
-        f.close()
-        logger.debug("PID: %d [%s]" % (os.getpid(), PID_FILE))
+        instance = ipc_client.new_instance(args)
         for fname in args:
             instance.new_editor(fname)
         gtk.main()
-        os.remove(PID_FILE)
     else:
-        client = dbus_manager.get_client()
+        logging.info('Running application found')
         if args:
             from cf.instance import InstanceSelector
-            sel = InstanceSelector(client)
+            sel = InstanceSelector(ipc_client)
             if sel.run() == 1:
                 instance_id = sel.get_instance_id()
                 if not instance_id:
@@ -193,7 +156,7 @@ def main():
                     client.open_uri(instance_id, fname)
             sel.destroy()
         else:
-            client.new_instance()
+            ipc_client.new_instance()
 
 
 if __name__ == "__main__":
