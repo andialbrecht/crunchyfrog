@@ -139,7 +139,7 @@ def main():
                    properties=props)
         app = CFApplication(options)
         app.init()
-        instance = ipc_client.new_instance(args)
+        instance = app.new_instance(args)
         for fname in args:
             instance.new_editor(fname)
         gtk.main()
