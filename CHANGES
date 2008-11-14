@@ -8,6 +8,7 @@ Bug Fixes
  * Removed some old code that caused the editor to display some IDs
    instead of table names when dragging from browser (issue15).
  * Improved SQL parsing (incl. issue14).
+ * Replaced dbus_manager.py by ipc.py (issue12).
 
 Other
  * Replaced some gnome.* stuff with their gtk counterparts (gtk 2.14).

@@ -24,7 +24,7 @@ GTKMOZEMBED_PATH=/usr/lib/firefox
 
 CONFIGURE_IN = sed -e 's!GTKMOZEMBED_PATH!MOZILLA_FIVE_HOME=$(GTKMOZEMBED_PATH) LD_LIBRARY_PATH=$(GTKMOZEMBED_PATH)!g' -e 's!LIBDIR!$(LIBDIR)!g' -e 's!DATADIR!$(DATADIR)!g' -e 's!PREFIX!$(PREFIX)!g' -e 's!BINDIR!$(BINDIR)!g' -e 's!LOCALEDIR!$(LOCALEDIR)!g'
 
-FILES_IN = data/crunchyfrog.in data/org.gnome.crunchyfrog.service.in cf/dist.py.in
+FILES_IN = data/crunchyfrog.in cf/dist.py.in
 
 all: clean
 	for fn in $(FILES_IN) ; do \
@@ -86,7 +86,6 @@ make-install-dirs:
 	mkdir -p $(DESTDIR)$(MANDIR)/man1
 	mkdir -p $(DESTDIR)$(DATADIR)/pixmaps
 	mkdir -p $(DESTDIR)$(DATADIR)/icons/hicolor/scalable/apps
-	mkdir -p $(DESTDIR)$(DATADIR)/dbus-1/services
 
 install: make-install-dirs
 	for mod in $(CF_MODULES); do install -m 644 $$mod $(DESTDIR)$(LIBDIR)/$$mod; done
@@ -101,7 +100,7 @@ install: make-install-dirs
 	install -m 644 data/crunchyfrog.1 $(DESTDIR)$(MANDIR)/man1/
 	install -m 644 data/crunchyfrog.png $(DESTDIR)$(DATADIR)/pixmaps/
 	install -m 644 data/crunchyfrog.svg $(DESTDIR)$(DATADIR)/icons/hicolor/scalable/apps/
-	install -m 644 data/org.gnome.crunchyfrog.service $(DESTDIR)$(DBUSDIR)/services
+
 
 po-data:
 	for lang in $(PO); do msgfmt po/$$lang/LC_MESSAGES/crunchyfrog.po -o po/$$lang/LC_MESSAGES/crunchyfrog.mo;done
