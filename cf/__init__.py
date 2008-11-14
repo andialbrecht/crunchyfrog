@@ -146,14 +146,17 @@ def main():
     else:
         logging.info('Running application found')
         if args:
+            # TODO(andi): Move instance selector to app.
+            #             - It causes broken pipes on socket.
+            #             - If it's in app it can have a mainwin as parent.
             from cf.instance import InstanceSelector
             sel = InstanceSelector(ipc_client)
             if sel.run() == 1:
                 instance_id = sel.get_instance_id()
                 if not instance_id:
-                    instance_id = client.new_instance()
+                    instance_id = ipc_client.new_instance()
                 for fname in args:
-                    client.open_uri(instance_id, fname)
+                    ipc_client.open_uri(instance_id, fname)
             sel.destroy()
         else:
             ipc_client.new_instance()
