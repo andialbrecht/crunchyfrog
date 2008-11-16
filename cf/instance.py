@@ -257,6 +257,16 @@ class CFInstance(GladeWidget):
             return
         self._editor.save_file_as()
 
+    def on_print(self, *args):
+        if not self._editor:
+            return
+        self._editor.print_contents()
+
+    def on_print_preview(self, *args):
+        if not self._editor:
+            return
+        self._editor.print_contents(preview=True)
+
     def on_report_problem(self, *args):
         gobject.idle_add(self.open_website,
                          "http://code.google.com/p/crunchyfrog/issues/list")

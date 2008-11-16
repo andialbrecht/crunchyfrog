@@ -1,6 +1,9 @@
 Development
 -----------
 
+New Features
+ * Initial printing support.
+
 Bug Fixes
  * Confirmation dialog when closing editors without changes fixed.
  * MySQL browser has changed the default database when browsing the

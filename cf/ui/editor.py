@@ -33,6 +33,7 @@ import gnome
 import gnomevfs
 import gobject
 import gtk
+import gtksourceview2
 import pango
 
 from kiwi.ui import dialogs
@@ -457,6 +458,34 @@ class Editor(GladeWidget):
             return False
         else:
             return True
+
+    # Printing
+
+    def on_print_paginate(self, operation, context, compositor):
+        if compositor.paginate(context):
+            n_pages = compositor.get_n_pages()
+            operation.set_n_pages(n_pages)
+            return True
+        return False
+
+    def on_print_draw_page(self, operation, context, page_no, compositor):
+        compositor.draw_page(context, page_no)
+
+    def on_end_page(self, operation, context, compositor):
+        pass
+
+    def print_contents(self, preview=False):
+        """Send content of editor to printer."""
+        view = self.textview
+        compositor = gtksourceview2.print_compositor_new_from_view(view)
+        operation = gtk.PrintOperation()
+        operation.connect('paginate', self.on_print_paginate, compositor)
+        operation.connect('draw-page', self.on_print_draw_page, compositor)
+        if preview:
+            action = gtk.PRINT_OPERATION_ACTION_PREVIEW
+        else:
+            action = gtk.PRINT_OPERATION_ACTION_PRINT_DIALOG
+        operation.run(action)
 
 
 class EditorWindow(GladeWidget):
