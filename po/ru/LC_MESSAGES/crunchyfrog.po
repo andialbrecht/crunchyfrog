@@ -1,4 +1,4 @@
-# Finnish translation for crunchyfrog
+# Russian translation for crunchyfrog
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the crunchyfrog package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: crunchyfrog\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-11-03 21:00+0100\n"
-"PO-Revision-Date: 2008-05-04 11:40+0000\n"
-"Last-Translator: Kari Argillander <Unknown>\n"
-"Language-Team: Finnish <fi@li.org>\n"
+"PO-Revision-Date: 2008-11-14 09:34+0000\n"
+"Last-Translator: Alexei Klimenko <Unknown>\n"
+"Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,24 +19,24 @@ msgstr ""
 
 #: cf/backends/dbapi2helper.py:95
 msgid "An error occured"
-msgstr ""
+msgstr "Произошла ошибка"
 
 #: cf/backends/ldapbe.py:46
 msgid "LDAP Plugin"
-msgstr ""
+msgstr "LDAP плагин"
 
 #: cf/backends/ldapbe.py:47
 msgid "Provides access to LDAP/ActiveDirectory servers"
-msgstr ""
+msgstr "Предоставляет доступ к LDAP/ActiveDirectory серверам"
 
 #: cf/backends/ldapbe.py:66
 #, python-format
 msgid "Search: %(dn)s"
-msgstr ""
+msgstr "Поиск: %(dn)s"
 
 #: cf/backends/ldapbe.py:82
 msgid "_Details"
-msgstr ""
+msgstr "_Подробности"
 
 #: cf/backends/ldapbe.py:103
 msgid "Base DN:"
@@ -44,306 +44,306 @@ msgstr ""
 
 #: cf/backends/ldapbe.py:119
 msgid "Python module ldap is not installed."
-msgstr ""
+msgstr "Модуль питона ldap не установлен"
 
 #: cf/backends/ldapbe.py:192
 msgid "Export"
-msgstr ""
+msgstr "Экспорт"
 
 #: cf/backends/ldapbe.py:304
 msgid "Attribute"
-msgstr ""
+msgstr "Атрибут"
 
 #: cf/backends/ldapbe.py:307
 msgid "Value"
-msgstr ""
+msgstr "Значение"
 
 #: cf/backends/ldapbe.py:342
 msgid "Python module ldap required."
-msgstr ""
+msgstr "Требуется модуль питона ldap"
 
 #: cf/backends/mssql.py:40
 msgid "MS-SQL Plugin"
-msgstr ""
+msgstr "MS-SQL плагин"
 
 #: cf/backends/mssql.py:41
 msgid "Provides access to MS-SQL databases"
-msgstr ""
+msgstr "Предоставляет доступ к базам данных MS-SQL"
 
 #: cf/backends/mssql.py:75 cf/backends/mysql.py:79 cf/backends/postgres.py:93
 #: data/plugins/backend_oracle/__init__.py:74
 msgid "No password given."
-msgstr ""
+msgstr "Не задан пароль."
 
 #: cf/backends/mssql.py:159
 msgid "Python module pymssql not found."
-msgstr ""
+msgstr "Модуль питона pymssql не найден"
 
 #: cf/backends/mysql.py:42
 msgid "MySQL Plugin"
-msgstr ""
+msgstr "MySQL плагин"
 
 #: cf/backends/mysql.py:43
 msgid "Provides access to MySQL databases"
-msgstr ""
+msgstr "Предоставляет доступ к базам данных MySQL"
 
 #: cf/backends/mysql.py:84
 msgid "Python module MySQLdb is not installed."
-msgstr ""
+msgstr "Модуль питона MySQLdb не установлен"
 
 #: cf/backends/mysql.py:161
 msgid "MySQL Reference"
-msgstr ""
+msgstr "Справка по MySQL"
 
 #: cf/backends/mysql.py:173
 msgid "Python module MySQLdb required."
-msgstr ""
+msgstr "Требуется python модуль MySQLdb"
 
 #: cf/backends/postgres.py:45
 msgid "PostgreSQL Reference"
-msgstr ""
+msgstr "Справка по PostgreSQL"
 
 #: cf/backends/postgres.py:56
 msgid "PostgreSQL Plugin"
-msgstr ""
+msgstr "PostgreSQL плагин"
 
 #: cf/backends/postgres.py:57
 msgid "Provides access to PostgreSQL databases"
-msgstr ""
+msgstr "Предоставляет доступ к базам данных PostgreSQL"
 
 #: cf/backends/postgres.py:98
 msgid "Python module psycopg2 is not installed."
-msgstr ""
+msgstr "Не установлен python модуль psycopg2"
 
 #: cf/backends/postgres.py:170
 msgid "Languages"
-msgstr ""
+msgstr "Языки"
 
 #: cf/backends/postgres.py:173
 msgid "Language"
-msgstr ""
+msgstr "Язык"
 
 #: cf/backends/postgres.py:304
 msgid "Definition"
-msgstr ""
+msgstr "Структура"
 
 #: cf/backends/postgres.py:312
 msgid "Python module psycopg2 required."
-msgstr ""
+msgstr "Необходим  python модуль  psycopg2"
 
 #: cf/backends/schema/__init__.py:59
 msgid "Schematas"
-msgstr ""
+msgstr "Схемы"
 
 #: cf/backends/schema/__init__.py:62
 msgid "Schema"
-msgstr ""
+msgstr "Схема"
 
 #: cf/backends/schema/__init__.py:66
 msgid "Tables"
-msgstr ""
+msgstr "Таблицы"
 
 #: cf/backends/schema/__init__.py:70
 msgid "Table"
-msgstr ""
+msgstr "Таблица"
 
 #: cf/backends/schema/__init__.py:74
 msgid "Columns"
-msgstr ""
+msgstr "Столбцы"
 
 #: cf/backends/schema/__init__.py:77
 msgid "Column"
-msgstr ""
+msgstr "Столбец"
 
 #: cf/backends/schema/__init__.py:82
 msgid "Views"
-msgstr ""
+msgstr "Представления"
 
 #: cf/backends/schema/__init__.py:86 cf/ui/prefs.py:82
 #: data/crunchyfrog.glade.h:78
 msgid "View"
-msgstr ""
+msgstr "Представление"
 
 #: cf/backends/schema/__init__.py:90
 msgid "Sequences"
-msgstr ""
+msgstr "Последовательности"
 
 #: cf/backends/schema/__init__.py:94
 msgid "Sequence"
-msgstr ""
+msgstr "Последовательность"
 
 #: cf/backends/schema/__init__.py:99
 msgid "Functions"
-msgstr ""
+msgstr "Функции"
 
 #: cf/backends/schema/__init__.py:103
 msgid "Function"
-msgstr ""
+msgstr "Функция"
 
 #: cf/backends/schema/__init__.py:108
 msgid "Packages"
-msgstr ""
+msgstr "Пакеты"
 
 #: cf/backends/schema/__init__.py:111
 msgid "Package"
-msgstr ""
+msgstr "Пакет"
 
 #: cf/backends/schema/__init__.py:115
 msgid "Constraints"
-msgstr ""
+msgstr "Ограничения"
 
 #: cf/backends/schema/__init__.py:118
 msgid "Constraint"
-msgstr ""
+msgstr "Ограничение"
 
 #: cf/backends/schema/__init__.py:122
 msgid "Indexes"
-msgstr ""
+msgstr "Индексы"
 
 #: cf/backends/schema/__init__.py:125
 msgid "Index"
-msgstr ""
+msgstr "Индекс"
 
 #: cf/backends/sqlite.py:41
 msgid "SQLite3 Plugin"
-msgstr ""
+msgstr "SQLite3 плагин"
 
 #: cf/backends/sqlite.py:42
 msgid "Provides access to SQLite3 databases"
-msgstr ""
+msgstr "Предоставляет доступ к базам данных SQLite3"
 
 #: cf/backends/sqlite.py:59
 msgid "Database file:"
-msgstr ""
+msgstr "Файл базы данных sqlite"
 
 #: cf/backends/sqlite.py:61
 msgid "Select database file"
-msgstr ""
+msgstr "Укажите файл базы даннх"
 
 #: cf/backends/sqlite.py:75
 msgid "Python module sqlite3 is not installed."
-msgstr ""
+msgstr "Python модуль sqlite3 не установлен"
 
 #: cf/backends/sqlite.py:133
 msgid "SQLite Reference"
-msgstr ""
+msgstr "Справка по SQLite"
 
 #: cf/backends/sqlite.py:143 data/plugins/backend_httplog/__init__.py:168
 msgid "Python module sqlite3 required."
-msgstr ""
+msgstr "Требуется python модуль sqlite3"
 
 #: cf/config/__init__.py:116
 msgid "Writing configuration"
-msgstr ""
+msgstr "Сохраняются настройки"
 
 #: cf/filter/exportfilter.py:28
 msgid "CSV Export"
-msgstr ""
+msgstr "Экспорт в CSV"
 
 #: cf/filter/exportfilter.py:29
 msgid "Export query results as CSV files"
-msgstr ""
+msgstr "Экспорт результатов запроса в CSV файл."
 
 #: cf/filter/exportfilter.py:36
 msgid "Text CSV (.csv)"
-msgstr ""
+msgstr "Текст CSV (.csv)"
 
 #: cf/filter/exportfilter.py:51
 msgid "OpenDocument Export"
-msgstr ""
+msgstr "Экспорт в формат OpenDocument"
 
 #: cf/filter/exportfilter.py:52
 msgid "Export query results as OpenDocument Spreadsheets"
-msgstr ""
+msgstr "Экспотрт результатов запроса в OpenDocument Spreadsheets"
 
 #: cf/filter/exportfilter.py:58
 msgid "OpenDocument Spreadsheet (.ods)"
-msgstr ""
+msgstr "OpenDocument Spreadsheet (.ods)"
 
 #: cf/filter/exportfilter.py:70
 msgid "CrunchyFrog Data Export"
-msgstr ""
+msgstr "CrunchyFrog экспорт данных"
 
 #: cf/instance.py:81
 msgid "Queries"
-msgstr ""
+msgstr "Запросы"
 
 #: cf/instance.py:87
 msgid "Navigator"
-msgstr ""
+msgstr "Навигатор"
 
 #: cf/instance.py:208 cf/ui/editor.py:507
 msgid "Select file"
-msgstr ""
+msgstr "Выберите файл"
 
 #: cf/instance.py:215 cf/ui/editor.py:406 cf/ui/editor.py:514
 msgid "All files (*)"
-msgstr ""
+msgstr "Все файлы (*)"
 
 #: cf/instance.py:219 cf/instance.py:226 cf/ui/editor.py:410
 #: cf/ui/editor.py:518
 msgid "SQL files (*.sql)"
-msgstr ""
+msgstr "SQL files (*.sql)"
 
 #: cf/instance.py:239
 msgid "_Recent files:"
-msgstr ""
+msgstr "Последние файлы"
 
 #: cf/library.py:46
 msgid "Library"
-msgstr ""
+msgstr "Библиотека"
 
 #: cf/library.py:47
 msgid "A personal SQL library"
-msgstr ""
+msgstr "Персональная библиотека запросов"
 
 #: cf/library.py:98
 msgid "_Library"
-msgstr ""
+msgstr "_Библиотека"
 
 #: cf/library.py:108
 msgid "_Open library"
-msgstr ""
+msgstr "_Открыть библиотеку"
 
 #: cf/library.py:112
 msgid "_Add to library"
-msgstr ""
+msgstr "_Добавить в библиотеку"
 
 #: cf/library.py:210 cf/library.py:344
 msgid "New category"
-msgstr ""
+msgstr "Новая категория"
 
 #: cf/library.py:230 cf/library.py:325 cf/library.py:332
 msgid "Add category"
-msgstr ""
+msgstr "Добавить категорию"
 
 #: cf/library.py:328 cf/library.py:335
 msgid "Add query"
-msgstr ""
+msgstr "Добавить запрос"
 
 #: cf/library.py:367
 msgid "Category is not empty."
-msgstr ""
+msgstr "Категория не пуста"
 
 #: cf/library.py:436
 msgid "New query"
-msgstr ""
+msgstr "Новый запрос"
 
 #: cf/plugins/core.py:147
 msgid "Password required"
-msgstr ""
+msgstr "Требуется пароль"
 
 #: cf/plugins/core.py:147
 msgid "Enter the password to connect to this database."
-msgstr ""
+msgstr "Введите пароль для подключения к выбранной базе данных"
 
 #: cf/plugins/core.py:152
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Прочие"
 
 #: cf/plugins/core.py:153
 msgid "Database backends"
-msgstr ""
+msgstr "Database backends"
 
 #: cf/plugins/core.py:154
 msgid "Export filter"
@@ -351,36 +351,36 @@ msgstr ""
 
 #: cf/plugins/core.py:155 cf/ui/prefs.py:83 data/crunchyfrog.glade.h:36
 msgid "Editor"
-msgstr ""
+msgstr "Редактор"
 
 #: cf/plugins/core.py:216
 msgid "Closing plugins"
-msgstr ""
+msgstr "Закрытие плагинов"
 
 #: cf/plugins/core.py:462
 msgid "Copying files..."
-msgstr ""
+msgstr "Копирование файлов..."
 
 #: cf/plugins/core.py:467
 msgid "Plugin installed."
-msgstr ""
+msgstr "Плагин установлен"
 
 #: cf/shell/__init__.py:37 cf/shell/__init__.py:66 cf/shell/__init__.py:84
 msgid "Shell"
-msgstr ""
+msgstr "Shell"
 
 #: cf/shell/__init__.py:38
 msgid "Interactive shell (mainly for debugging)"
-msgstr ""
+msgstr "Интерактивный shell (в основом для отладки)"
 
 #: cf/shell/__init__.py:57
 msgid "Import to shell"
-msgstr ""
+msgstr "Импорт в shell"
 
 #: cf/shell/__init__.py:137
 #, python-format
 msgid "Table %(tablename)r imported as %(varname)r to shell"
-msgstr ""
+msgstr "Таблица %(tablename)r импортирована как %(varname)r в shell"
 
 #: cf/ui/browser.py:95
 msgid ""
@@ -388,46 +388,49 @@ msgid ""
 "\n"
 "<a href=\"#\">Click</a> to open the data source manager."
 msgstr ""
+"<b>Нет активных источников данных</b>\n"
+"\n"
+"<a href=\"#\">Нажать</a> для открытия менеджера источников данных."
 
 #: cf/ui/browser.py:120 cf/ui/browser.py:211 cf/ui/datasources.py:169
 #: cf/ui/widgets/__init__.py:72
 msgid "Connection failed"
-msgstr ""
+msgstr "Ошибка соединения"
 
 #: cf/ui/browser.py:128
 msgid "Disconnect"
-msgstr ""
+msgstr "Дисконнект"
 
 #: cf/ui/browser.py:131
 msgid "Connect"
-msgstr ""
+msgstr "Подключить"
 
 #: cf/ui/browser.py:157
 msgid "Add data source"
-msgstr ""
+msgstr "Добавить источник данных"
 
 #: cf/ui/browser.py:172
 msgid "Details"
-msgstr ""
+msgstr "Подробности"
 
 #: cf/ui/browser.py:203
 msgid "Connecting..."
-msgstr ""
+msgstr "Соединение..."
 
 #: cf/ui/browser.py:315
 #, python-format
 msgid "Details: %(objname)s"
-msgstr ""
+msgstr "Детали: %(objname)s"
 
 #: cf/ui/confirmsave.py:73 cf/ui/confirmsave.py:97
 #, python-format
 msgid "Unsaved Query %(num)s"
-msgstr ""
+msgstr "Несохраненных запросов %(num)s"
 
 #: cf/ui/confirmsave.py:98
 #, python-format
 msgid "Save the changes to document \"%(filename)s\" before closing?"
-msgstr ""
+msgstr "Сохранить изменения в документе \"%(filename)s\" перед закрытием?"
 
 #: cf/ui/confirmsave.py:102
 #, python-format
@@ -435,10 +438,12 @@ msgid ""
 "There are %(num)d documents with unsaved changes. Save changes before "
 "closing?"
 msgstr ""
+"%(num)d  документов с несохраненными данными. Сохранить изменения до "
+"закрытия?"
 
 #: cf/ui/datasources.py:75
 msgid "_Connections"
-msgstr ""
+msgstr "_Соединения"
 
 #: cf/ui/datasources.py:81
 msgid "No active database backends."
@@ -447,139 +452,142 @@ msgstr ""
 #: cf/ui/datasources.py:82
 msgid "Open preferences and activate at least one database backend plugin."
 msgstr ""
+"Открыть настройки и активировать хотя бы один backend плагин для базы данных"
 
 #: cf/ui/datasources.py:92
 msgid "Other..."
-msgstr ""
+msgstr "Разное..."
 
 #: cf/ui/datasources.py:108
 msgid "Database:"
-msgstr ""
+msgstr "База данных:"
 
 #: cf/ui/datasources.py:115
 msgid "DSN:"
-msgstr ""
+msgstr "DSN:"
 
 #: cf/ui/datasources.py:122
 msgid "Host:"
-msgstr ""
+msgstr "Хост:"
 
 #: cf/ui/datasources.py:132
 msgid "Port:"
-msgstr ""
+msgstr "Порт:"
 
 #: cf/ui/datasources.py:139
 msgid "User:"
-msgstr ""
+msgstr "Пользователь:"
 
 #: cf/ui/datasources.py:149
 msgid "_Ask for password"
-msgstr ""
+msgstr "_Спросить пароль"
 
 #: cf/ui/datasources.py:157
 msgid "Password:"
-msgstr ""
+msgstr "Пароль:"
 
 #: cf/ui/datasources.py:171
 msgid "Successful."
-msgstr ""
+msgstr "Успешно."
 
 #: cf/ui/datasources.py:201 cf/ui/datasources.py:360
 msgid "Plugin not active"
-msgstr ""
+msgstr "Плагин не активен"
 
 #: cf/ui/datasources.py:202
 msgid "Please activate the following plugin to use this data source: "
 msgstr ""
+"Пожалуйства активируйте следущий плагин для использования этого источника "
+"данных "
 
 #: cf/ui/datasources.py:275
 msgid "Plugin not active."
-msgstr ""
+msgstr "Плагин не активен"
 
 #: cf/ui/editor.py:119
 msgid "Split statements"
-msgstr ""
+msgstr "Разделить выражение"
 
 #: cf/ui/editor.py:126 cf/ui/editor.py:471
 msgid "Show in main window"
-msgstr ""
+msgstr "Показать в главном окне"
 
 #: cf/ui/editor.py:129 cf/ui/queries.py:115
 msgid "Show in separate window"
-msgstr ""
+msgstr "Показать в отдельном окне"
 
 #: cf/ui/editor.py:160
 #, python-format
 msgid "Query failed (%(sec).3f seconds)"
-msgstr ""
+msgstr "Ошибка запроса (%(sec).3f секунды)"
 
 #: cf/ui/editor.py:164
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d rows)"
-msgstr ""
+msgstr "Запрос завершен (%(sec).3f секунд, %(num)d строк)"
 
 #: cf/ui/editor.py:169
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d affected rows)"
-msgstr ""
+msgstr "Запрос завершен (%(sec).3f секунды, %(num)d затронуто строк)"
 
 #: cf/ui/editor.py:326
 msgid "Select a single statement to explain."
-msgstr ""
+msgstr "Выберите одно выражение для запуска explain."
 
 #: cf/ui/editor.py:374
 #, python-format
 msgid "Save file %(name)s before closing the editor?"
-msgstr ""
+msgstr "Сохранить файл %(name)s перед закрытием редактора?"
 
 #: cf/ui/editor.py:394
 msgid "Save file"
-msgstr ""
+msgstr "Сохранить файл"
 
 #: cf/ui/editor.py:448
 #, python-format
 msgid "Query running... (%.3f seconds)"
-msgstr ""
+msgstr "Запрос запущен... (%.3f секунды)"
 
 #: cf/ui/editor.py:594 cf/ui/editor.py:596 cf/ui/queries.py:68
 #: cf/ui/queries.py:150 data/crunchyfrog.glade.h:55
 msgid "Query"
-msgstr ""
+msgstr "Запрос"
 
 #: cf/ui/editor.py:694
 msgid "Data copied to clipboard"
-msgstr ""
+msgstr "Данные скопированы в клипбоард"
 
 #: cf/ui/editor.py:835
 msgid "Variables"
-msgstr ""
+msgstr "Переменные"
 
 #: cf/ui/prefs.py:81 data/crunchyfrog.glade.h:42
 msgid "General"
-msgstr ""
+msgstr "Общие"
 
 #: cf/ui/prefs.py:84
 msgid "Fonts & Colors"
-msgstr ""
+msgstr "Шрифты и цвета"
 
 #: cf/ui/prefs.py:183
 #, python-format
 msgid "Download plugin %r?"
-msgstr ""
+msgstr "Скачать плагин %r?"
 
 #: cf/ui/prefs.py:198
 #, python-format
 msgid "Downloading plugin %r..."
-msgstr ""
+msgstr "Скачивается плагин %r..."
 
 #: cf/ui/prefs.py:203
 msgid "Plugin downloaded."
-msgstr ""
+msgstr "Плагин сохранен"
 
 #: cf/ui/prefs.py:210
 #, python-format
 msgid "Failed to install plugin %r"
-msgstr ""
+msgstr "Ошибка установки плагина %r"
 
 #: cf/ui/prefs.py:221 cf/ui/prefs.py:377 cf/ui/prefs.py:444
 msgid "Unknown"
@@ -587,31 +595,31 @@ msgstr ""
 
 #: cf/ui/prefs.py:238
 msgid "Install plugin"
-msgstr ""
+msgstr "Установить плагин"
 
 #: cf/ui/prefs.py:243
 msgid "CrunchyFrog plugins (*.zip, *.py)"
-msgstr ""
+msgstr "CrunchyFrog плагины (*.zip, *.py)"
 
 #: cf/ui/prefs.py:382
 msgid "ERROR"
-msgstr ""
+msgstr "ОШИБКА"
 
 #: cf/ui/prefs.py:475
 msgid "Downloading repository data..."
-msgstr ""
+msgstr "Скачиваю данные из репозитория..."
 
 #: cf/ui/prefs.py:480
 msgid "Repository data synchronized."
-msgstr ""
+msgstr "Данные синхронизованы с репозиторием"
 
 #: cf/ui/prefs.py:495
 msgid "Failed to load repository data"
-msgstr ""
+msgstr "Ошибка загрузки данных из репозитория"
 
 #: cf/ui/queries.py:159 cf/ui/widgets/__init__.py:144
 msgid "Not connected"
-msgstr ""
+msgstr "Нет соединения"
 
 #: cf/ui/refviewer.py:40
 msgid "Reference Browser"
@@ -619,75 +627,75 @@ msgstr ""
 
 #: cf/ui/refviewer.py:41
 msgid "A tiny webbrowser to view references"
-msgstr ""
+msgstr "Небольшой веб браузер для просмотра справки"
 
 #: cf/ui/refviewer.py:70
 msgid "Reference"
-msgstr ""
+msgstr "Ссылка"
 
 #: cf/ui/refviewer.py:78
 msgid "Reference Viewer"
-msgstr ""
+msgstr "Просмотрщик справки"
 
 #: cf/ui/widgets/__init__.py:104 cf/ui/widgets/__init__.py:141
 msgid "Connection"
-msgstr ""
+msgstr "Соединение"
 
 #: cf/ui/widgets/__init__.py:115
 msgid "New connection"
-msgstr ""
+msgstr "Новое соединение"
 
 #: cf/ui/widgets/__init__.py:123
 msgid "Show connections"
-msgstr ""
+msgstr "Показать соединения"
 
 #: cf/ui/widgets/__init__.py:145
 msgid "Click to open a connection"
-msgstr ""
+msgstr "Нажмите для открытия соединения"
 
 #: cf/ui/widgets/__init__.py:211
 msgid "Export data"
-msgstr ""
+msgstr "Экспорт данных"
 
 #: cf/ui/widgets/__init__.py:229
 msgid "_Edit export options"
-msgstr ""
+msgstr "_Редактировать опции экспорта"
 
 #: cf/ui/widgets/__init__.py:235
 msgid "_Open file when finished"
-msgstr ""
+msgstr "_Открыть файл по завершению"
 
 #: cf/ui/widgets/grid.py:133
 msgid "Copy value to clipboard"
-msgstr ""
+msgstr "Копировать значение в клипбоард"
 
 #: cf/ui/widgets/grid.py:142 cf/ui/widgets/grid.py:244
 msgid "Save as..."
-msgstr ""
+msgstr "Сохранить как..."
 
 #: cf/ui/widgets/grid.py:149
 msgid "Open with..."
-msgstr ""
+msgstr "Открыть с помощью..."
 
 #: cf/ui/widgets/grid.py:160
 msgid "View value"
-msgstr ""
+msgstr "Просмотреть значение"
 
 #: cf/ui/widgets/grid.py:165
 msgid "This cell contains a 'NULL' value."
-msgstr ""
+msgstr "Эта ячейка содержит значение 'NULL'"
 
 #: cf/ui/widgets/grid.py:256
 msgid "All files"
-msgstr ""
+msgstr "Все файлы"
 
 #: cf/ui/widgets/grid.py:641
 msgid "Data"
-msgstr ""
+msgstr "Данные"
 
 #: data/plugins/backend_httplog/__init__.py:55
 msgid "HTTP log file backend"
-msgstr ""
+msgstr "backend для HTTP лог файла"
 
 #: data/plugins/backend_httplog/__init__.py:56
 msgid "Analyse HTTP log files with SQL"
@@ -695,51 +703,51 @@ msgstr ""
 
 #: data/plugins/backend_httplog/__init__.py:77
 msgid "Log file:"
-msgstr ""
+msgstr "Журнал:"
 
 #: data/plugins/backend_httplog/__init__.py:79
 msgid "Select HTTP log file"
-msgstr ""
+msgstr "Выберите журнал"
 
 #: data/plugins/backend_oracle/__init__.py:39
 msgid "Oracle Plugin"
-msgstr ""
+msgstr "Oracle плагин"
 
 #: data/plugins/backend_oracle/__init__.py:40
 msgid "Provides access to Oracle databases"
-msgstr ""
+msgstr "Предоставляет доступ к базам данных Oracle"
 
 #: data/plugins/backend_oracle/__init__.py:79
 msgid "Python module cx_Oracle is not installed."
-msgstr ""
+msgstr "Python модуль cx_Oracle не установлен"
 
 #: data/plugins/backend_oracle/__init__.py:216
 msgid "Python module cx_Oracle required."
-msgstr ""
+msgstr "Требуется python модуль cx_Oracle"
 
 #: data/crunchyfrog.glade.h:1
 msgid "    "
-msgstr ""
+msgstr "    "
 
 #: data/crunchyfrog.glade.h:2
 msgid "(objectclass=*)"
-msgstr ""
+msgstr "(objectclass=*)"
 
 #: data/crunchyfrog.glade.h:3
 msgid "<b>Automatic Indentation</b>"
-msgstr ""
+msgstr "<b>Автоматический отступ</b>"
 
 #: data/crunchyfrog.glade.h:4
 msgid "<b>Bracket Matching</b>"
-msgstr ""
+msgstr "<b>Соответствие скобок</b>"
 
 #: data/crunchyfrog.glade.h:5
 msgid "<b>Current Line</b>"
-msgstr ""
+msgstr "<b>Текущая строка</b>"
 
 #: data/crunchyfrog.glade.h:6
 msgid "<b>Font</b>"
-msgstr ""
+msgstr "<b>Шрифт</b>"
 
 #: data/crunchyfrog.glade.h:7
 msgid "<b>Installed backends</b>"
@@ -747,15 +755,15 @@ msgstr ""
 
 #: data/crunchyfrog.glade.h:8
 msgid "<b>Line Numbers</b>"
-msgstr ""
+msgstr "<b>Номера строк</b>"
 
 #: data/crunchyfrog.glade.h:9
 msgid "<b>New editors</b>"
-msgstr ""
+msgstr "<b>Новые редакторы</b>"
 
 #: data/crunchyfrog.glade.h:10
 msgid "<b>Right Margin</b>"
-msgstr ""
+msgstr "<b>Правая граница</b>"
 
 #: data/crunchyfrog.glade.h:11
 msgid "<b>SQL Splitting</b>"
@@ -767,126 +775,128 @@ msgstr ""
 
 #: data/crunchyfrog.glade.h:13
 msgid "<b>Tab Stops</b>"
-msgstr ""
+msgstr "<b>Метки табуляции</b>"
 
 #: data/crunchyfrog.glade.h:14
 msgid "<b>Text Wrapping</b>"
-msgstr ""
+msgstr "<b>Перенос текста</b>"
 
 #: data/crunchyfrog.glade.h:15
 msgid "<b>Variables</b>"
-msgstr ""
+msgstr "<b>Переменные</b>"
 
 #: data/crunchyfrog.glade.h:17
 #, no-c-format
 msgid "<span size=\"large\"><b>%s</b></span>"
-msgstr ""
+msgstr "<span size=\"large\"><b>%s</b></span>"
 
 #: data/crunchyfrog.glade.h:18
 msgid "<span weight=\"bold\">Color Scheme</span>"
-msgstr ""
+msgstr "<span weight=\"bold\">Цветовая схема</span>"
 
 #: data/crunchyfrog.glade.h:19
 msgid "Activate to split statements in a SQL editor before execution."
-msgstr ""
+msgstr "Активировать для разбивки выражений в редакторе SQL до выполнения."
 
 #: data/crunchyfrog.glade.h:20
 msgid "Begin transaction"
-msgstr ""
+msgstr "Помочь в переводе"
 
 #: data/crunchyfrog.glade.h:21
 msgid "Close _without Saving"
-msgstr ""
+msgstr "Закрыть _без сохранения"
 
 #: data/crunchyfrog.glade.h:22
 msgid "Commit"
-msgstr ""
+msgstr "Зафиксировать"
 
 #: data/crunchyfrog.glade.h:23
 msgid "Configure plugins"
-msgstr ""
+msgstr "Конфигурировать плагины"
 
 #: data/crunchyfrog.glade.h:24
 msgid "Connections"
-msgstr ""
+msgstr "Соединения"
 
 #: data/crunchyfrog.glade.h:25
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Копировать в буфер обмена"
 
 #: data/crunchyfrog.glade.h:26
 msgid "Create a new application instance"
-msgstr ""
+msgstr "Запустить еще одну копию приложения"
 
 #: data/crunchyfrog.glade.h:27
 msgid "CrunchyFrog"
-msgstr ""
+msgstr "CrunchyFrog"
 
 #: data/crunchyfrog.glade.h:28
 msgid ""
 "CrunchyFrog is already running.\n"
 "Open selected files..."
 msgstr ""
+"CrunchyFrog уже запущен.\n"
+"Открыть выбранные файлы..."
 
 #: data/crunchyfrog.glade.h:30
 msgid "D_atasource:"
-msgstr ""
+msgstr "_Источники данных"
 
 #: data/crunchyfrog.glade.h:31
 msgid "Datasource Manager"
-msgstr ""
+msgstr "Мэнеджер источников данных"
 
 #: data/crunchyfrog.glade.h:32
 msgid "Developer _Pages"
-msgstr ""
+msgstr "Страница _Разработчика"
 
 #: data/crunchyfrog.glade.h:33
 msgid "Display right _margin"
-msgstr ""
+msgstr "Отображать правую _границу"
 
 #: data/crunchyfrog.glade.h:34
 msgid "Do not _split words over two lines"
-msgstr ""
+msgstr "Не _разрывать слово между двумя строками"
 
 #: data/crunchyfrog.glade.h:35
 msgid "E_xplain"
-msgstr ""
+msgstr "E_xplain"
 
 #: data/crunchyfrog.glade.h:37
 msgid "Editor _font: "
-msgstr ""
+msgstr "_Шрифт редактора: "
 
 #: data/crunchyfrog.glade.h:38
 msgid "Enable text _wrapping"
-msgstr ""
+msgstr "Включить режим _переноса текста"
 
 #: data/crunchyfrog.glade.h:39
 msgid "Execute"
-msgstr ""
+msgstr "Выполнить"
 
 #: data/crunchyfrog.glade.h:40
 msgid "Execute query"
-msgstr ""
+msgstr "Выполнить запрос"
 
 #: data/crunchyfrog.glade.h:41
 msgid "Font & Colors"
-msgstr ""
+msgstr "Шрифты и цвета"
 
 #: data/crunchyfrog.glade.h:43
 msgid "Highlight current _line"
-msgstr ""
+msgstr "Под_свечивать текущую строку"
 
 #: data/crunchyfrog.glade.h:44
 msgid "Highlight matching _bracket"
-msgstr ""
+msgstr "Подсвечивать соответствующую _скобку"
 
 #: data/crunchyfrog.glade.h:45
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
+msgstr "Если вы не сохраните, все изменения будут безвозвратно утеряны."
 
 #: data/crunchyfrog.glade.h:46
 msgid "Insert _spaces instead of tabs"
-msgstr ""
+msgstr "Вставлять про_белы вместо табуляций"
 
 #: data/crunchyfrog.glade.h:47
 msgid "Installed backends"
@@ -894,51 +904,51 @@ msgstr ""
 
 #: data/crunchyfrog.glade.h:48
 msgid "New"
-msgstr ""
+msgstr "Новый"
 
 #: data/crunchyfrog.glade.h:49
 msgid "Open"
-msgstr ""
+msgstr "Открыть"
 
 #: data/crunchyfrog.glade.h:50
 msgid "Open a new query window"
-msgstr ""
+msgstr "Открыть запрос в новом окне"
 
 #: data/crunchyfrog.glade.h:51
 msgid "Open editor in _separate window"
-msgstr ""
+msgstr "Открыть редактор в отдельном _окне"
 
 #: data/crunchyfrog.glade.h:52
 msgid "Pick the editor font"
-msgstr ""
+msgstr "Выберите цвет редактора"
 
 #: data/crunchyfrog.glade.h:53
 msgid "Preferences"
-msgstr ""
+msgstr "Настройки"
 
 #: data/crunchyfrog.glade.h:54
 msgid "Progress"
-msgstr ""
+msgstr "Ход выполнения"
 
 #: data/crunchyfrog.glade.h:56
 msgid "Refresh"
-msgstr ""
+msgstr "Обновить"
 
 #: data/crunchyfrog.glade.h:57
 msgid "Replace _variables (e.g. '$MyVar')"
-msgstr ""
+msgstr "Заменять _переменные (e.g. '$MyVar')"
 
 #: data/crunchyfrog.glade.h:58
 msgid "Rollback"
-msgstr ""
+msgstr "Rollback"
 
 #: data/crunchyfrog.glade.h:59
 msgid "SQL library"
-msgstr ""
+msgstr "Библиотека SQL"
 
 #: data/crunchyfrog.glade.h:60
 msgid "S_elect the documents you want to save:"
-msgstr ""
+msgstr "_Выберите документы, которые вы хотите сохранить:"
 
 #: data/crunchyfrog.glade.h:61
 msgid "S_tatement"
@@ -950,39 +960,39 @@ msgstr ""
 
 #: data/crunchyfrog.glade.h:63
 msgid "Save files"
-msgstr ""
+msgstr "Сохранить файлы"
 
 #: data/crunchyfrog.glade.h:64
 msgid "Save to library"
-msgstr ""
+msgstr "Сохранить в библиотеку"
 
 #: data/crunchyfrog.glade.h:65
 msgid "Search s_cope:"
-msgstr ""
+msgstr "Зоны поиска"
 
 #: data/crunchyfrog.glade.h:66
 msgid "Select instance"
-msgstr ""
+msgstr "Выберите экземпляр"
 
 #: data/crunchyfrog.glade.h:67
 msgid "Separate attributes by commas"
-msgstr ""
+msgstr "Разделать аттрибуты запятой"
 
 #: data/crunchyfrog.glade.h:68
 msgid "Show in _main window"
-msgstr ""
+msgstr "Показать в _главном окне"
 
 #: data/crunchyfrog.glade.h:69
 msgid "St_ored connections"
-msgstr ""
+msgstr "Со_храненные соединения"
 
 #: data/crunchyfrog.glade.h:70
 msgid "Synchronize with plugin repository"
-msgstr ""
+msgstr "Синхронизировать с хранилищем плагинов"
 
 #: data/crunchyfrog.glade.h:71
 msgid "TODO"
-msgstr ""
+msgstr "Предстоит сделать"
 
 #: data/crunchyfrog.glade.h:72
 msgid ""
@@ -993,259 +1003,259 @@ msgstr ""
 
 #: data/crunchyfrog.glade.h:74
 msgid "Toggle favorites"
-msgstr ""
+msgstr "Переключить предпочтительные"
 
 #: data/crunchyfrog.glade.h:75
 msgid "Toggle navigation bar"
-msgstr ""
+msgstr "Включить/выключить панель навигации"
 
 #: data/crunchyfrog.glade.h:76
 msgid "Transaction"
-msgstr ""
+msgstr "Транзакция"
 
 #: data/crunchyfrog.glade.h:77
 msgid "Use SQL s_plitting"
-msgstr ""
+msgstr "Использовать ра_збивку SQL"
 
 #: data/crunchyfrog.glade.h:79
 msgid "_About this plugin"
-msgstr ""
+msgstr "_О плагине"
 
 #: data/crunchyfrog.glade.h:80
 msgid "_Attributes:"
-msgstr ""
+msgstr "_Аттрибуты"
 
 #: data/crunchyfrog.glade.h:81
 msgid "_Backend:"
-msgstr ""
+msgstr "_Движок"
 
 #: data/crunchyfrog.glade.h:82
 msgid "_Category:"
-msgstr ""
+msgstr "_Категория:"
 
 #: data/crunchyfrog.glade.h:83
 msgid "_Configure plugin"
-msgstr ""
+msgstr "_Настроить плагин"
 
 #: data/crunchyfrog.glade.h:84
 msgid "_Data Source"
-msgstr ""
+msgstr "_Источник данных"
 
 #: data/crunchyfrog.glade.h:85
 msgid "_Datasource Manager"
-msgstr ""
+msgstr "_Управление источниками данных"
 
 #: data/crunchyfrog.glade.h:86
 msgid "_Datasources"
-msgstr ""
+msgstr "_Источники данных"
 
 #: data/crunchyfrog.glade.h:87
 msgid "_Description:"
-msgstr ""
+msgstr "О_писание:"
 
 #: data/crunchyfrog.glade.h:88
 msgid "_Display line numbers"
-msgstr ""
+msgstr "По_казывать номера строк"
 
 #: data/crunchyfrog.glade.h:89
 msgid "_Edit"
-msgstr ""
+msgstr "_Править"
 
 #: data/crunchyfrog.glade.h:90
 msgid "_Editor"
-msgstr ""
+msgstr "_Редактор"
 
 #: data/crunchyfrog.glade.h:91
 msgid "_Enable automatic indentation"
-msgstr ""
+msgstr "_Включить автоматический отступ"
 
 #: data/crunchyfrog.glade.h:92
 msgid "_Enable repository"
-msgstr ""
+msgstr "_Включить поддержку репозитория"
 
 #: data/crunchyfrog.glade.h:93
 msgid "_File"
-msgstr ""
+msgstr "_Файл"
 
 #: data/crunchyfrog.glade.h:94
 msgid "_Filter:"
-msgstr ""
+msgstr "_Фильтр:"
 
 #: data/crunchyfrog.glade.h:95
 msgid "_General"
-msgstr ""
+msgstr "Общие"
 
 #: data/crunchyfrog.glade.h:96
 msgid "_Help"
-msgstr ""
+msgstr "_Помощь"
 
 #: data/crunchyfrog.glade.h:97
 msgid "_Install plugin"
-msgstr ""
+msgstr "_Установить плагин"
 
 #: data/crunchyfrog.glade.h:98
 msgid "_Instance"
-msgstr ""
+msgstr "_Экземпляр"
 
 #: data/crunchyfrog.glade.h:99
 msgid "_Messages"
-msgstr ""
+msgstr "_Сообщения"
 
 #: data/crunchyfrog.glade.h:100
 msgid "_Name:"
-msgstr ""
+msgstr "_Имя:"
 
 #: data/crunchyfrog.glade.h:101
 msgid "_Navigator"
-msgstr ""
+msgstr "_Навигатор"
 
 #: data/crunchyfrog.glade.h:102
 msgid "_New"
-msgstr ""
+msgstr "Создать"
 
 #: data/crunchyfrog.glade.h:103
 msgid "_One level"
-msgstr ""
+msgstr "_Первый уровень"
 
 #: data/crunchyfrog.glade.h:104
 msgid "_Online Resources"
-msgstr ""
+msgstr "_Ресурсы онлайн"
 
 #: data/crunchyfrog.glade.h:105
 msgid "_Open plugin folder"
-msgstr ""
+msgstr "_Открыть директорию плагинов"
 
 #: data/crunchyfrog.glade.h:106
 msgid "_Plugins"
-msgstr ""
+msgstr "Плагины"
 
 #: data/crunchyfrog.glade.h:107
 msgid "_Query"
-msgstr ""
+msgstr "Запрос"
 
 #: data/crunchyfrog.glade.h:108
 msgid "_Recent Files"
-msgstr ""
+msgstr "_Последние файлы"
 
 #: data/crunchyfrog.glade.h:109
 msgid "_Remove plugin"
-msgstr ""
+msgstr "_Удалить плагин"
 
 #: data/crunchyfrog.glade.h:110
 msgid "_Report a Problem"
-msgstr ""
+msgstr "_Сообщить об ошибке"
 
 #: data/crunchyfrog.glade.h:111
 msgid "_Results"
-msgstr ""
+msgstr "Результаты"
 
 #: data/crunchyfrog.glade.h:112
 msgid "_Right margin at column:"
-msgstr ""
+msgstr "П_равая граница у столбца:"
 
 #: data/crunchyfrog.glade.h:113
 msgid "_Search DN:"
-msgstr ""
+msgstr "_Искать DN:"
 
 #: data/crunchyfrog.glade.h:114
 msgid "_Statement:"
-msgstr ""
+msgstr "_Выражение"
 
 #: data/crunchyfrog.glade.h:115
 msgid "_Synchronize"
-msgstr ""
+msgstr "Синхронизовать"
 
 #: data/crunchyfrog.glade.h:116
 msgid "_Tab width:"
-msgstr ""
+msgstr "_Ширина табуляции:"
 
 #: data/crunchyfrog.glade.h:117
 msgid "_Test connection"
-msgstr ""
+msgstr "_Проверить соединение"
 
 #: data/crunchyfrog.glade.h:118
 msgid "_Translate CrunchyFrog"
-msgstr ""
+msgstr "_Перевести CrunchyFrog"
 
 #: data/crunchyfrog.glade.h:119
 msgid "_URL:"
-msgstr ""
+msgstr "_Адрес (URL):"
 
 #: data/crunchyfrog.glade.h:120
 msgid "_View"
-msgstr ""
+msgstr "View"
 
 #: data/crunchyfrog.glade.h:121
 msgid "gtk-about"
-msgstr ""
+msgstr "О программе"
 
 #: data/crunchyfrog.glade.h:122
 msgid "gtk-cancel"
-msgstr ""
+msgstr "Отменить"
 
 #: data/crunchyfrog.glade.h:123
 msgid "gtk-close"
-msgstr ""
+msgstr "Закрыть"
 
 #: data/crunchyfrog.glade.h:124
 msgid "gtk-connect"
-msgstr ""
+msgstr "Соединение"
 
 #: data/crunchyfrog.glade.h:125
 msgid "gtk-copy"
-msgstr ""
+msgstr "Копировать"
 
 #: data/crunchyfrog.glade.h:126
 msgid "gtk-cut"
-msgstr ""
+msgstr "Вырезать"
 
 #: data/crunchyfrog.glade.h:127
 msgid "gtk-delete"
-msgstr ""
+msgstr "Удалить"
 
 #: data/crunchyfrog.glade.h:128
 msgid "gtk-disconnect"
-msgstr ""
+msgstr "Отключиться"
 
 #: data/crunchyfrog.glade.h:129
 msgid "gtk-find"
-msgstr ""
+msgstr "Поиск"
 
 #: data/crunchyfrog.glade.h:130
 msgid "gtk-help"
-msgstr ""
+msgstr "справка"
 
 #: data/crunchyfrog.glade.h:131
 msgid "gtk-new"
-msgstr ""
+msgstr "новый"
 
 #: data/crunchyfrog.glade.h:132
 msgid "gtk-ok"
-msgstr ""
+msgstr "ОК"
 
 #: data/crunchyfrog.glade.h:133
 msgid "gtk-open"
-msgstr ""
+msgstr "Открыть"
 
 #: data/crunchyfrog.glade.h:134
 msgid "gtk-paste"
-msgstr ""
+msgstr "Вставить"
 
 #: data/crunchyfrog.glade.h:135
 msgid "gtk-preferences"
-msgstr ""
+msgstr "Параметры"
 
 #: data/crunchyfrog.glade.h:136
 msgid "gtk-quit"
-msgstr ""
+msgstr "Выход"
 
 #: data/crunchyfrog.glade.h:137
 msgid "gtk-save"
-msgstr ""
+msgstr "сохранить"
 
 #: data/crunchyfrog.glade.h:138
 msgid "gtk-save-as"
-msgstr ""
+msgstr "сохранить как"
 
 #: data/crunchyfrog.glade.h:139
 msgid "in an _existing instance"
@@ -1253,4 +1263,4 @@ msgstr ""
 
 #: data/crunchyfrog.glade.h:140
 msgid "in an _new instance"
-msgstr ""
+msgstr "В новом экземпляре"

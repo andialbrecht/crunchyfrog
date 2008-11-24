@@ -3,163 +3,156 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-03 21:00+0100\n"
-"PO-Revision-Date: 2008-10-08 11:10+0000\n"
+"PO-Revision-Date: 2008-11-12 06:04+0000\n"
 "Last-Translator: andialbrecht <Unknown>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-10-19 19:32+0000\n"
+"X-Launchpad-Export-Date: 2008-11-24 07:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: cf/backends/dbapi2helper.py:95
 msgid "An error occured"
-msgstr ""
+msgstr "Ein Fehler ist aufgetreten"
 
 #: cf/backends/ldapbe.py:46
-#, fuzzy
 msgid "LDAP Plugin"
-msgstr "_Plugins"
+msgstr "LDAP Plugin"
 
 #: cf/backends/ldapbe.py:47
 msgid "Provides access to LDAP/ActiveDirectory servers"
-msgstr ""
+msgstr "Zugriff auf LDAP/ActiveDirectory-Server"
 
 #: cf/backends/ldapbe.py:66
 #, python-format
 msgid "Search: %(dn)s"
-msgstr ""
+msgstr "Suche: %(dn)s"
 
 #: cf/backends/ldapbe.py:82
 msgid "_Details"
-msgstr ""
+msgstr "_Details"
 
 #: cf/backends/ldapbe.py:103
 msgid "Base DN:"
-msgstr ""
+msgstr "Basis DN:"
 
 #: cf/backends/ldapbe.py:119
 msgid "Python module ldap is not installed."
-msgstr ""
+msgstr "Python-Modul ldap ist nicht installiert."
 
 #: cf/backends/ldapbe.py:192
 msgid "Export"
-msgstr ""
+msgstr "Exportieren"
 
 #: cf/backends/ldapbe.py:304
-#, fuzzy
 msgid "Attribute"
-msgstr "_Attribute:"
+msgstr "Attribut"
 
 #: cf/backends/ldapbe.py:307
 msgid "Value"
-msgstr ""
+msgstr "Wert"
 
 #: cf/backends/ldapbe.py:342
 msgid "Python module ldap required."
-msgstr ""
+msgstr "Python-Modul ldap wird benötigt."
 
 #: cf/backends/mssql.py:40
 msgid "MS-SQL Plugin"
-msgstr ""
+msgstr "MS-SQL Plugin"
 
 #: cf/backends/mssql.py:41
 msgid "Provides access to MS-SQL databases"
-msgstr ""
+msgstr "Zugriff auf MS-SQL-Datenbanken"
 
 #: cf/backends/mssql.py:75 cf/backends/mysql.py:79 cf/backends/postgres.py:93
 #: data/plugins/backend_oracle/__init__.py:74
 msgid "No password given."
-msgstr ""
+msgstr "Kein Passwort angegeben."
 
 #: cf/backends/mssql.py:159
 msgid "Python module pymssql not found."
-msgstr ""
+msgstr "Python-Modul pymssql wurde nicht gefunden."
 
 #: cf/backends/mysql.py:42
-#, fuzzy
 msgid "MySQL Plugin"
-msgstr "_Plugins"
+msgstr "MySQL-Plugin"
 
 #: cf/backends/mysql.py:43
 msgid "Provides access to MySQL databases"
-msgstr ""
+msgstr "Zugriff auf MySQL-Datenbanken"
 
 #: cf/backends/mysql.py:84
 msgid "Python module MySQLdb is not installed."
-msgstr ""
+msgstr "Python-Modul MySQLdb ist nicht installiert."
 
 #: cf/backends/mysql.py:161
-#, fuzzy
 msgid "MySQL Reference"
-msgstr "Einstellungen"
+msgstr "MySQL-Referenz"
 
 #: cf/backends/mysql.py:173
 msgid "Python module MySQLdb required."
-msgstr ""
+msgstr "Python-Modul MySQLdb wird benötigt."
 
 #: cf/backends/postgres.py:45
-#, fuzzy
 msgid "PostgreSQL Reference"
-msgstr "Einstellungen"
+msgstr "PostgreSQL-Referenz"
 
 #: cf/backends/postgres.py:56
 msgid "PostgreSQL Plugin"
-msgstr ""
+msgstr "PostgreSQL-Plugin"
 
 #: cf/backends/postgres.py:57
 msgid "Provides access to PostgreSQL databases"
-msgstr ""
+msgstr "Zugriff auf PostgreSQL-Datenbanken"
 
 #: cf/backends/postgres.py:98
 msgid "Python module psycopg2 is not installed."
-msgstr ""
+msgstr "Python-Modul psycopg2 ist nicht installiert."
 
 #: cf/backends/postgres.py:170
 msgid "Languages"
-msgstr ""
+msgstr "Sprachen"
 
 #: cf/backends/postgres.py:173
 msgid "Language"
-msgstr ""
+msgstr "Sprache"
 
 #: cf/backends/postgres.py:304
-#, fuzzy
 msgid "Definition"
-msgstr "_Beschreibung:"
+msgstr "Definition"
 
 #: cf/backends/postgres.py:312
 msgid "Python module psycopg2 required."
-msgstr ""
+msgstr "Python-Modul psycopg2 wird benötigt."
 
 #: cf/backends/schema/__init__.py:59
 msgid "Schematas"
-msgstr ""
+msgstr "Schemata"
 
 #: cf/backends/schema/__init__.py:62
 msgid "Schema"
-msgstr ""
+msgstr "Schema"
 
 #: cf/backends/schema/__init__.py:66
 msgid "Tables"
-msgstr ""
+msgstr "Tabellen"
 
 #: cf/backends/schema/__init__.py:70
 msgid "Table"
-msgstr ""
+msgstr "Tabelle"
 
 #: cf/backends/schema/__init__.py:74
 msgid "Columns"
-msgstr ""
+msgstr "Spalten"
 
 #: cf/backends/schema/__init__.py:77
 msgid "Column"
-msgstr ""
+msgstr "Spalte"
 
 #: cf/backends/schema/__init__.py:82
-#, fuzzy
 msgid "Views"
-msgstr "Ansicht"
+msgstr "Views"
 
 #: cf/backends/schema/__init__.py:86 cf/ui/prefs.py:82
 #: data/crunchyfrog.glade.h:78
@@ -167,242 +160,222 @@ msgid "View"
 msgstr "Ansicht"
 
 #: cf/backends/schema/__init__.py:90
-#, fuzzy
 msgid "Sequences"
-msgstr "Einstellungen"
+msgstr "Sequenzen"
 
 #: cf/backends/schema/__init__.py:94
 msgid "Sequence"
-msgstr ""
+msgstr "Sequenz"
 
 #: cf/backends/schema/__init__.py:99
-#, fuzzy
 msgid "Functions"
-msgstr "Verbindungen"
+msgstr "Funktionen"
 
 #: cf/backends/schema/__init__.py:103
-#, fuzzy
 msgid "Function"
-msgstr "Verbindungen"
+msgstr "Funktion"
 
 #: cf/backends/schema/__init__.py:108
 msgid "Packages"
-msgstr ""
+msgstr "Pakete"
 
 #: cf/backends/schema/__init__.py:111
 msgid "Package"
-msgstr ""
+msgstr "Paket"
 
 #: cf/backends/schema/__init__.py:115
-#, fuzzy
 msgid "Constraints"
-msgstr "Verbindungen"
+msgstr "Constraints"
 
 #: cf/backends/schema/__init__.py:118
-#, fuzzy
 msgid "Constraint"
-msgstr "Verbindungen"
+msgstr "Einschränkung"
 
 #: cf/backends/schema/__init__.py:122
 msgid "Indexes"
-msgstr ""
+msgstr "Indizes"
 
 #: cf/backends/schema/__init__.py:125
 msgid "Index"
-msgstr ""
+msgstr "Index"
 
 #: cf/backends/sqlite.py:41
 msgid "SQLite3 Plugin"
-msgstr ""
+msgstr "SQLite3-Plugin"
 
 #: cf/backends/sqlite.py:42
 msgid "Provides access to SQLite3 databases"
-msgstr ""
+msgstr "Zugriff auf SQLite3-Datenbanken"
 
 #: cf/backends/sqlite.py:59
 msgid "Database file:"
-msgstr ""
+msgstr "Datenbank-Datei:"
 
 #: cf/backends/sqlite.py:61
 msgid "Select database file"
-msgstr ""
+msgstr "Datenbank-Datei auswählen"
 
 #: cf/backends/sqlite.py:75
 msgid "Python module sqlite3 is not installed."
-msgstr ""
+msgstr "Python-Modul sqlite3 ist nicht installiert."
 
 #: cf/backends/sqlite.py:133
 msgid "SQLite Reference"
-msgstr ""
+msgstr "SQLite-Referenz"
 
 #: cf/backends/sqlite.py:143 data/plugins/backend_httplog/__init__.py:168
 msgid "Python module sqlite3 required."
-msgstr ""
+msgstr "Python-Modul sqlite3 wird benötigt."
 
 #: cf/config/__init__.py:116
 msgid "Writing configuration"
-msgstr ""
+msgstr "Schreibe Konfiguration"
 
 #: cf/filter/exportfilter.py:28
 msgid "CSV Export"
-msgstr ""
+msgstr "CSV-Export"
 
 #: cf/filter/exportfilter.py:29
 msgid "Export query results as CSV files"
-msgstr ""
+msgstr "Abfrageergebnisse als CSV-Datei exportieren"
 
 #: cf/filter/exportfilter.py:36
 msgid "Text CSV (.csv)"
-msgstr ""
+msgstr "CSV-Datei (.csv)"
 
 #: cf/filter/exportfilter.py:51
 msgid "OpenDocument Export"
-msgstr ""
+msgstr "OpenDocument-Export"
 
 #: cf/filter/exportfilter.py:52
 msgid "Export query results as OpenDocument Spreadsheets"
-msgstr ""
+msgstr "Abfrageergebnisse als OpenDocument-Tabelle exportieren"
 
 #: cf/filter/exportfilter.py:58
 msgid "OpenDocument Spreadsheet (.ods)"
-msgstr ""
+msgstr "OpenDocument-Tabelle (.ods)"
 
 #: cf/filter/exportfilter.py:70
-#, fuzzy
 msgid "CrunchyFrog Data Export"
-msgstr "CrunchyFrog"
+msgstr "CrunchyFrog Datenexport"
 
 #: cf/instance.py:81
-#, fuzzy
 msgid "Queries"
-msgstr "Abfrage"
+msgstr "Abfragen"
 
 #: cf/instance.py:87
-#, fuzzy
 msgid "Navigator"
-msgstr "_Navigator"
+msgstr "Navigator"
 
 #: cf/instance.py:208 cf/ui/editor.py:507
-#, fuzzy
 msgid "Select file"
-msgstr "Instanz wählen"
+msgstr "Datei wählen"
 
 #: cf/instance.py:215 cf/ui/editor.py:406 cf/ui/editor.py:514
 msgid "All files (*)"
-msgstr ""
+msgstr "Alle Dateien (*)"
 
 #: cf/instance.py:219 cf/instance.py:226 cf/ui/editor.py:410
 #: cf/ui/editor.py:518
 msgid "SQL files (*.sql)"
-msgstr ""
+msgstr "SQL-Dateien (*.sql)"
 
 #: cf/instance.py:239
-#, fuzzy
 msgid "_Recent files:"
-msgstr "_Zuletzt geöffnet"
+msgstr "Zu_letzt verwendet"
 
 #: cf/library.py:46
-#, fuzzy
 msgid "Library"
-msgstr "SQL-Bibliothek"
+msgstr "Bibliothek"
 
 #: cf/library.py:47
-#, fuzzy
 msgid "A personal SQL library"
-msgstr "SQL-Bibliothek"
+msgstr "Eine persönliche SQL-Bibliothek"
 
 #: cf/library.py:98
-#, fuzzy
 msgid "_Library"
-msgstr "SQL-Bibliothek"
+msgstr "_Bibliothek"
 
 #: cf/library.py:108
-#, fuzzy
 msgid "_Open library"
-msgstr "SQL-Bibliothek"
+msgstr "Bibliothek ö_ffnen"
 
 #: cf/library.py:112
-#, fuzzy
 msgid "_Add to library"
-msgstr "In Bibliothek speichern"
+msgstr "Zu_r Bibliothek hinzufügen"
 
 #: cf/library.py:210 cf/library.py:344
-#, fuzzy
 msgid "New category"
-msgstr "Neue Abfrage"
+msgstr "Neue Kategorie"
 
 #: cf/library.py:230 cf/library.py:325 cf/library.py:332
-#, fuzzy
 msgid "Add category"
-msgstr "_Kategorie:"
+msgstr "Kategorie hinzufügen"
 
 #: cf/library.py:328 cf/library.py:335
 msgid "Add query"
-msgstr ""
+msgstr "Abfrage hinzufügen"
 
 #: cf/library.py:367
 msgid "Category is not empty."
-msgstr ""
+msgstr "Kategorie ist leer"
 
 #: cf/library.py:436
-#, fuzzy
 msgid "New query"
 msgstr "Neue Abfrage"
 
 #: cf/plugins/core.py:147
 msgid "Password required"
-msgstr ""
+msgstr "Passwort erforderlich"
 
 #: cf/plugins/core.py:147
 msgid "Enter the password to connect to this database."
-msgstr ""
+msgstr "Passwort eingeben, um zur Datenbank zu verbinden"
 
 #: cf/plugins/core.py:152
 msgid "Miscellaneous"
-msgstr ""
+msgstr "Verschiedenes"
 
 #: cf/plugins/core.py:153
-#, fuzzy
 msgid "Database backends"
-msgstr "Installierte Datenbank-Plugins"
+msgstr "Datenbankanbindungen"
 
 #: cf/plugins/core.py:154
 msgid "Export filter"
-msgstr ""
+msgstr "Exportfilter"
 
 #: cf/plugins/core.py:155 cf/ui/prefs.py:83 data/crunchyfrog.glade.h:36
 msgid "Editor"
 msgstr "Editor"
 
 #: cf/plugins/core.py:216
-#, fuzzy
 msgid "Closing plugins"
-msgstr "Plugins konfigurieren"
+msgstr "Beende Plugins"
 
 #: cf/plugins/core.py:462
 msgid "Copying files..."
-msgstr ""
+msgstr "Dateien werden kopiert ..."
 
 #: cf/plugins/core.py:467
 msgid "Plugin installed."
-msgstr ""
+msgstr "Plugin installiert."
 
 #: cf/shell/__init__.py:37 cf/shell/__init__.py:66 cf/shell/__init__.py:84
 msgid "Shell"
-msgstr ""
+msgstr "Shell"
 
 #: cf/shell/__init__.py:38
 msgid "Interactive shell (mainly for debugging)"
-msgstr ""
+msgstr "Interaktive Shell (hauptsächlich zum Debuggen)"
 
 #: cf/shell/__init__.py:57
 msgid "Import to shell"
-msgstr ""
+msgstr "In die Shell importieren"
 
 #: cf/shell/__init__.py:137
 #, python-format
 msgid "Table %(tablename)r imported as %(varname)r to shell"
-msgstr ""
+msgstr "Tabelle %(tablename)s als %(varname)s in die Shell importiert"
 
 #: cf/ui/browser.py:95
 msgid ""
@@ -410,51 +383,48 @@ msgid ""
 "\n"
 "<a href=\"#\">Click</a> to open the data source manager."
 msgstr ""
+"<b>Keine aktiven Datenquellen</b>\n"
+"<a href=\"#\">Hier klicken</a>, um die Datenquellenverwaltung zu öffnen."
 
 #: cf/ui/browser.py:120 cf/ui/browser.py:211 cf/ui/datasources.py:169
 #: cf/ui/widgets/__init__.py:72
-#, fuzzy
 msgid "Connection failed"
-msgstr "Verbindungen"
+msgstr "Verbindung fehlgeschlagen"
 
 #: cf/ui/browser.py:128
-#, fuzzy
 msgid "Disconnect"
-msgstr "gtk-disconnect"
+msgstr "Verbindung trennen"
 
 #: cf/ui/browser.py:131
-#, fuzzy
 msgid "Connect"
-msgstr "Verbindungen"
+msgstr "Verbinden"
 
 #: cf/ui/browser.py:157
-#, fuzzy
 msgid "Add data source"
-msgstr "D_atenquelle:"
+msgstr "Datenquelle hinzufügen"
 
 #: cf/ui/browser.py:172
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: cf/ui/browser.py:203
-#, fuzzy
 msgid "Connecting..."
-msgstr "Verbindungen"
+msgstr "Verbindung wird aufgebaut ..."
 
 #: cf/ui/browser.py:315
 #, python-format
 msgid "Details: %(objname)s"
-msgstr ""
+msgstr "Details: %(objname)s"
 
 #: cf/ui/confirmsave.py:73 cf/ui/confirmsave.py:97
 #, python-format
 msgid "Unsaved Query %(num)s"
-msgstr ""
+msgstr "Ungespeicherte Abfrage %(num)s"
 
 #: cf/ui/confirmsave.py:98
 #, python-format
 msgid "Save the changes to document \"%(filename)s\" before closing?"
-msgstr ""
+msgstr "Änderungen an Dokument \"%(filename)s\" vor dem Schließen speichern?"
 
 #: cf/ui/confirmsave.py:102
 #, python-format
@@ -462,117 +432,114 @@ msgid ""
 "There are %(num)d documents with unsaved changes. Save changes before "
 "closing?"
 msgstr ""
+"Es gibt %(num)d Dokumente mit ungespeicherten Änderungen. Änderungen vor dem "
+"Beenden speichern?"
 
 #: cf/ui/datasources.py:75
-#, fuzzy
 msgid "_Connections"
-msgstr "Verbindungen"
+msgstr "_Verbindungen"
 
 #: cf/ui/datasources.py:81
 msgid "No active database backends."
-msgstr ""
+msgstr "Keine aktiven Datenbank-Backends,"
 
 #: cf/ui/datasources.py:82
 msgid "Open preferences and activate at least one database backend plugin."
-msgstr ""
+msgstr "Einstellungen öffnen und zumindest ein Datenbank-Plugin aktivieren."
 
 #: cf/ui/datasources.py:92
 msgid "Other..."
-msgstr ""
+msgstr "Sonstige ..."
 
 #: cf/ui/datasources.py:108
-#, fuzzy
 msgid "Database:"
-msgstr "D_atenquelle:"
+msgstr "Datenbank:"
 
 #: cf/ui/datasources.py:115
 msgid "DSN:"
-msgstr ""
+msgstr "DSN:"
 
 #: cf/ui/datasources.py:122
 msgid "Host:"
-msgstr ""
+msgstr "Rechner:"
 
 #: cf/ui/datasources.py:132
 msgid "Port:"
-msgstr ""
+msgstr "Port:"
 
 #: cf/ui/datasources.py:139
 msgid "User:"
-msgstr ""
+msgstr "Benutzer:"
 
 #: cf/ui/datasources.py:149
 msgid "_Ask for password"
-msgstr ""
+msgstr "_Nach Passwort fragen"
 
 #: cf/ui/datasources.py:157
 msgid "Password:"
-msgstr ""
+msgstr "Passwort:"
 
 #: cf/ui/datasources.py:171
 msgid "Successful."
-msgstr ""
+msgstr "Erfolgreich"
 
 #: cf/ui/datasources.py:201 cf/ui/datasources.py:360
 msgid "Plugin not active"
-msgstr ""
+msgstr "Plugin nicht aktiv"
 
 #: cf/ui/datasources.py:202
 msgid "Please activate the following plugin to use this data source: "
 msgstr ""
+"Bitte folgendes Plugin aktivieren, um diese Datenquelle zu verwenden: "
 
 #: cf/ui/datasources.py:275
 msgid "Plugin not active."
-msgstr ""
+msgstr "Plugin nicht aktiv."
 
 #: cf/ui/editor.py:119
-#, fuzzy
 msgid "Split statements"
-msgstr "A_bfrage"
+msgstr "Abfragen aufteilen"
 
 #: cf/ui/editor.py:126 cf/ui/editor.py:471
-#, fuzzy
 msgid "Show in main window"
 msgstr "Im Hauptfenster anzeigen"
 
 #: cf/ui/editor.py:129 cf/ui/queries.py:115
-#, fuzzy
 msgid "Show in separate window"
-msgstr "Im Hauptfenster anzeigen"
+msgstr "In separatem Fenster anzeigen"
 
 #: cf/ui/editor.py:160
 #, python-format
 msgid "Query failed (%(sec).3f seconds)"
-msgstr ""
+msgstr "Abfrage fehlgeschlagen (%(sec).3f Sekunden)"
 
 #: cf/ui/editor.py:164
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d rows)"
-msgstr ""
+msgstr "Abfrage beendet (%(sec).3f Sekunden, %(num)d Zeilen)"
 
 #: cf/ui/editor.py:169
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d affected rows)"
-msgstr ""
+msgstr "Abfrage beendet (%(sec).3f Sekunden, %(num)d betroffene Zeilen)"
 
 #: cf/ui/editor.py:326
 msgid "Select a single statement to explain."
-msgstr ""
+msgstr "Nur eine Abfrage für \"explain\" auswählen."
 
 #: cf/ui/editor.py:374
 #, python-format
 msgid "Save file %(name)s before closing the editor?"
-msgstr ""
+msgstr "Datei %(name)s vor dem Schließen des Editors speichern?"
 
 #: cf/ui/editor.py:394
-#, fuzzy
 msgid "Save file"
-msgstr "Dateien speichern"
+msgstr "Datei speichern"
 
 #: cf/ui/editor.py:448
 #, python-format
 msgid "Query running... (%.3f seconds)"
-msgstr ""
+msgstr "Abfrage läuft... (%.3f Sekunden)"
 
 #: cf/ui/editor.py:594 cf/ui/editor.py:596 cf/ui/queries.py:68
 #: cf/ui/queries.py:150 data/crunchyfrog.glade.h:55
@@ -580,192 +547,175 @@ msgid "Query"
 msgstr "Abfrage"
 
 #: cf/ui/editor.py:694
-#, fuzzy
 msgid "Data copied to clipboard"
-msgstr "In die Zwischenablage kopieren"
+msgstr "Daten wurden in die Zwischenablage kopiert"
 
 #: cf/ui/editor.py:835
-#, fuzzy
 msgid "Variables"
-msgstr "<b>Platzhalter</b>"
+msgstr "Variablen"
 
 #: cf/ui/prefs.py:81 data/crunchyfrog.glade.h:42
 msgid "General"
 msgstr "Allgemein"
 
 #: cf/ui/prefs.py:84
-#, fuzzy
 msgid "Fonts & Colors"
-msgstr "Schrift und Farben"
+msgstr "Schriften & Farben"
 
 #: cf/ui/prefs.py:183
 #, python-format
 msgid "Download plugin %r?"
-msgstr ""
+msgstr "Plugin %r herunterladen?"
 
 #: cf/ui/prefs.py:198
 #, python-format
 msgid "Downloading plugin %r..."
-msgstr ""
+msgstr "Plugin %r wird heruntergeladen..."
 
 #: cf/ui/prefs.py:203
 msgid "Plugin downloaded."
-msgstr ""
+msgstr "Plugin heruntergeladen."
 
 #: cf/ui/prefs.py:210
-#, fuzzy, python-format
+#, python-format
 msgid "Failed to install plugin %r"
-msgstr "Plugin _installieren"
+msgstr "Installation des Plugins %r fehlgeschlagen"
 
 #: cf/ui/prefs.py:221 cf/ui/prefs.py:377 cf/ui/prefs.py:444
 msgid "Unknown"
-msgstr ""
+msgstr "Unbekannt"
 
 #: cf/ui/prefs.py:238
-#, fuzzy
 msgid "Install plugin"
-msgstr "Plugin _installieren"
+msgstr "Plugin installieren"
 
 #: cf/ui/prefs.py:243
 msgid "CrunchyFrog plugins (*.zip, *.py)"
-msgstr ""
+msgstr "CrunchyFrog-Plugins (*.zip, *.py)"
 
 #: cf/ui/prefs.py:382
 msgid "ERROR"
-msgstr ""
+msgstr "FEHLER"
 
 #: cf/ui/prefs.py:475
 msgid "Downloading repository data..."
-msgstr ""
+msgstr "Repository-Daten werden heruntergeladen..."
 
 #: cf/ui/prefs.py:480
 msgid "Repository data synchronized."
-msgstr ""
+msgstr "Repository-Daten wurden synchronisiert."
 
 #: cf/ui/prefs.py:495
 msgid "Failed to load repository data"
-msgstr ""
+msgstr "Laden der Repository-Daten gescheitert."
 
 #: cf/ui/queries.py:159 cf/ui/widgets/__init__.py:144
-#, fuzzy
 msgid "Not connected"
-msgstr "gtk-connect"
+msgstr "Nicht verbunden"
 
 #: cf/ui/refviewer.py:40
-#, fuzzy
 msgid "Reference Browser"
-msgstr "Einstellungen"
+msgstr "Referenz"
 
 #: cf/ui/refviewer.py:41
 msgid "A tiny webbrowser to view references"
-msgstr ""
+msgstr "Ein einfacher Webbrowser, um Online-Referenzen anzuzeigen"
 
 #: cf/ui/refviewer.py:70
-#, fuzzy
 msgid "Reference"
-msgstr "Einstellungen"
+msgstr "Referenz"
 
 #: cf/ui/refviewer.py:78
 msgid "Reference Viewer"
-msgstr ""
+msgstr "Referenzanzeige"
 
 #: cf/ui/widgets/__init__.py:104 cf/ui/widgets/__init__.py:141
-#, fuzzy
 msgid "Connection"
-msgstr "Verbindungen"
+msgstr "Verbindung"
 
 #: cf/ui/widgets/__init__.py:115
-#, fuzzy
 msgid "New connection"
-msgstr "Verbindung _testen"
+msgstr "Neue Verbindung"
 
 #: cf/ui/widgets/__init__.py:123
-#, fuzzy
 msgid "Show connections"
-msgstr "Ge_speicherte Verbindungen"
+msgstr "Verbindungen anzeigen"
 
 #: cf/ui/widgets/__init__.py:145
-#, fuzzy
 msgid "Click to open a connection"
-msgstr "Ge_speicherte Verbindungen"
+msgstr "Klicken, um Verbindung zu öffnen"
 
 #: cf/ui/widgets/__init__.py:211
 msgid "Export data"
-msgstr ""
+msgstr "Exportiere Daten"
 
 #: cf/ui/widgets/__init__.py:229
 msgid "_Edit export options"
-msgstr ""
+msgstr "_Export-Einstellungen bearbeiten"
 
 #: cf/ui/widgets/__init__.py:235
 msgid "_Open file when finished"
-msgstr ""
+msgstr "_Datei nach Export öffnen"
 
 #: cf/ui/widgets/grid.py:133
-#, fuzzy
 msgid "Copy value to clipboard"
-msgstr "In die Zwischenablage kopieren"
+msgstr "Wert in die Zwischenablage kopieren"
 
 #: cf/ui/widgets/grid.py:142 cf/ui/widgets/grid.py:244
-#, fuzzy
 msgid "Save as..."
-msgstr "Dateien speichern"
+msgstr "Speichern unter..."
 
 #: cf/ui/widgets/grid.py:149
 msgid "Open with..."
-msgstr ""
+msgstr "Öffnen mit..."
 
 #: cf/ui/widgets/grid.py:160
 msgid "View value"
-msgstr ""
+msgstr "Wert anzeigen"
 
 #: cf/ui/widgets/grid.py:165
 msgid "This cell contains a 'NULL' value."
-msgstr ""
+msgstr "Die Datenzelle enthält einen NULL-Wert."
 
 #: cf/ui/widgets/grid.py:256
-#, fuzzy
 msgid "All files"
-msgstr "Dateien speichern"
+msgstr "Alle Dateien"
 
 #: cf/ui/widgets/grid.py:641
 msgid "Data"
-msgstr ""
+msgstr "Daten"
 
 #: data/plugins/backend_httplog/__init__.py:55
-#, fuzzy
 msgid "HTTP log file backend"
-msgstr "Instanz wählen"
+msgstr "Auswertug von HTTP-Log-Dateien"
 
 #: data/plugins/backend_httplog/__init__.py:56
-#, fuzzy
 msgid "Analyse HTTP log files with SQL"
-msgstr "Instanz wählen"
+msgstr "HTTP-Log-Dateien mit Hilfe von SQL auswerten"
 
 #: data/plugins/backend_httplog/__init__.py:77
 msgid "Log file:"
-msgstr ""
+msgstr "Protokolldatei:"
 
 #: data/plugins/backend_httplog/__init__.py:79
-#, fuzzy
 msgid "Select HTTP log file"
-msgstr "Instanz wählen"
+msgstr "HTTP-Logfile auswählen"
 
 #: data/plugins/backend_oracle/__init__.py:39
 msgid "Oracle Plugin"
-msgstr ""
+msgstr "Oracle-Plugin"
 
 #: data/plugins/backend_oracle/__init__.py:40
 msgid "Provides access to Oracle databases"
-msgstr ""
+msgstr "Zugriff auf Oracle-Datenbanken"
 
 #: data/plugins/backend_oracle/__init__.py:79
 msgid "Python module cx_Oracle is not installed."
-msgstr ""
+msgstr "Python-Modul cx_Oracle ist nicht installiert."
 
 #: data/plugins/backend_oracle/__init__.py:216
 msgid "Python module cx_Oracle required."
-msgstr ""
+msgstr "Python-Modul cx_Oracle wird benötigt."
 
 #: data/crunchyfrog.glade.h:1
 msgid "    "
@@ -913,9 +863,8 @@ msgid "Enable text _wrapping"
 msgstr "_Zeilenumbruch aktivieren"
 
 #: data/crunchyfrog.glade.h:39
-#, fuzzy
 msgid "Execute"
-msgstr "Abfrage ausführen"
+msgstr "Ausführen"
 
 #: data/crunchyfrog.glade.h:40
 msgid "Execute query"
@@ -946,13 +895,12 @@ msgid "Installed backends"
 msgstr "Installierte Datenbank-Plugins"
 
 #: data/crunchyfrog.glade.h:48
-#, fuzzy
 msgid "New"
-msgstr "_Neu"
+msgstr "Neu"
 
 #: data/crunchyfrog.glade.h:49
 msgid "Open"
-msgstr ""
+msgstr "Öffnen"
 
 #: data/crunchyfrog.glade.h:50
 msgid "Open a new query window"
@@ -1058,9 +1006,8 @@ msgid "Toggle navigation bar"
 msgstr "Navigationsleiste anzeigen/verbergen"
 
 #: data/crunchyfrog.glade.h:76
-#, fuzzy
 msgid "Transaction"
-msgstr "Transaktion beginnen"
+msgstr "Transaktion"
 
 #: data/crunchyfrog.glade.h:77
 msgid "Use SQL s_plitting"
@@ -1180,7 +1127,7 @@ msgstr "_Plugins"
 
 #: data/crunchyfrog.glade.h:107
 msgid "_Query"
-msgstr "_Abfrage"
+msgstr "Ab_frage"
 
 #: data/crunchyfrog.glade.h:108
 msgid "_Recent Files"
@@ -1314,12 +1261,11 @@ msgstr "in einer _laufenden Instanz"
 msgid "in an _new instance"
 msgstr "in einer _neuen Instanz"
 
-#, fuzzy
-#~ msgid "Contraint"
-#~ msgstr "Verbindungen"
-
 #~ msgid "Cancel query"
 #~ msgstr "Abfrage abbrechen"
+
+#~ msgid "New Query"
+#~ msgstr "Neue Abfrage"
 
 #~ msgid "_Datasource manager"
 #~ msgstr "_Datenquellenverwaltung"

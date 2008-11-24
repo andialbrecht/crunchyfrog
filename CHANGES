@@ -1,17 +1,17 @@
-Development
------------
+2008-11-24 CrunchyFrog 0.3.1
+----------------------------
 
 New Features
  * Initial printing support.
 
 Bug Fixes
- * Confirmation dialog when closing editors without changes fixed.
  * MySQL browser has changed the default database when browsing the
    database objects (issue13).
  * Removed some old code that caused the editor to display some IDs
    instead of table names when dragging from browser (issue15).
  * Improved SQL parsing (incl. issue14).
  * Replaced dbus_manager.py by ipc.py (issue12).
+ * Confirmation dialog when closing editors without changes fixed.
 
 Other
  * Replaced some gnome.* stuff with their gtk counterparts (gtk 2.14).
@@ -21,7 +21,9 @@ Other
 Translation
  * crunchyfrog.pot covers now all translatable strings in Python files.
    Thanks to Martin Picek for pointing at this bug.
- * Czech (new translation, thanks to Martin for his work!)
+ * New translations: Czech, Russian.
+ * Updated translations: Dutch, German, Italian, Spanish, Swedish.
+ * Thanks to all contributors!
 
 
 2008-10-24 CrunchyFrog 0.3.0

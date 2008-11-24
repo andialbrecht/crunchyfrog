@@ -22,7 +22,7 @@
 
 name = "CrunchyFrog"
 appname = name.lower()
-version = "0.3.0"
+version = "0.3.1"
 copyright = "Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>"
 description = "Database front-end for GNOME"
 author = "Andi Albrecht"
@@ -58,7 +58,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>."""
 
 translators="""Kari Argillander (https://launchpad.net/~kari-argillander)
+cd (https://launchpad.net/~zadoev)
+Thanos Chatziathanassiou (https://launchpad.net/~tchatzi)
 Edwin Dijk (https://launchpad.net/~sitix)
+Micke Elm (https://launchpad.net/~mickeelm)
 Anthony Guéchoum (https://launchpad.net/~athael)
 Guybrush88 (https://launchpad.net/~erpizzo)
 Ryutatsu Ishigami (https://launchpad.net/~ai-inside+ubuntu)
@@ -68,6 +71,7 @@ Christian Olate Opazo (https://launchpad.net/~cristian-olate)
 Penegal (https://launchpad.net/~penegal)
 Martin Picek <picek.martin@gnome-cesko.cz>
 Nicola Piovesan (https://launchpad.net/~piovesannicola)
+rcares (https://launchpad.net/~rcares)
 Enrico Rosina (https://launchpad.net/~e-rosina)
 Xoan Sampaiño (https://launchpad.net/~xoan)
 Skiros (https://launchpad.net/~magoskiros)

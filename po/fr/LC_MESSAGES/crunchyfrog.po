@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: crunchyfrog\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-11-03 21:00+0100\n"
 "PO-Revision-Date: 2008-10-12 13:56+0000\n"
 "Last-Translator: Enrico Rosina <Unknown>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-10-19 19:32+0000\n"
+"X-Launchpad-Export-Date: 2008-11-24 07:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: cf/backends/dbapi2helper.py:95
@@ -22,9 +22,8 @@ msgid "An error occured"
 msgstr ""
 
 #: cf/backends/ldapbe.py:46
-#, fuzzy
 msgid "LDAP Plugin"
-msgstr "_Plugins"
+msgstr ""
 
 #: cf/backends/ldapbe.py:47
 msgid "Provides access to LDAP/ActiveDirectory servers"
@@ -52,9 +51,8 @@ msgid "Export"
 msgstr ""
 
 #: cf/backends/ldapbe.py:304
-#, fuzzy
 msgid "Attribute"
-msgstr "_Attributs:"
+msgstr ""
 
 #: cf/backends/ldapbe.py:307
 msgid "Value"
@@ -82,9 +80,8 @@ msgid "Python module pymssql not found."
 msgstr ""
 
 #: cf/backends/mysql.py:42
-#, fuzzy
 msgid "MySQL Plugin"
-msgstr "_Plugins"
+msgstr ""
 
 #: cf/backends/mysql.py:43
 msgid "Provides access to MySQL databases"
@@ -95,18 +92,16 @@ msgid "Python module MySQLdb is not installed."
 msgstr ""
 
 #: cf/backends/mysql.py:161
-#, fuzzy
 msgid "MySQL Reference"
-msgstr "Préférences"
+msgstr ""
 
 #: cf/backends/mysql.py:173
 msgid "Python module MySQLdb required."
 msgstr ""
 
 #: cf/backends/postgres.py:45
-#, fuzzy
 msgid "PostgreSQL Reference"
-msgstr "Préférences"
+msgstr ""
 
 #: cf/backends/postgres.py:56
 msgid "PostgreSQL Plugin"
@@ -129,9 +124,8 @@ msgid "Language"
 msgstr ""
 
 #: cf/backends/postgres.py:304
-#, fuzzy
 msgid "Definition"
-msgstr "_Description:"
+msgstr ""
 
 #: cf/backends/postgres.py:312
 msgid "Python module psycopg2 required."
@@ -162,9 +156,8 @@ msgid "Column"
 msgstr ""
 
 #: cf/backends/schema/__init__.py:82
-#, fuzzy
 msgid "Views"
-msgstr "Afficher"
+msgstr ""
 
 #: cf/backends/schema/__init__.py:86 cf/ui/prefs.py:82
 #: data/crunchyfrog.glade.h:78
@@ -172,23 +165,20 @@ msgid "View"
 msgstr "Afficher"
 
 #: cf/backends/schema/__init__.py:90
-#, fuzzy
 msgid "Sequences"
-msgstr "Préférences"
+msgstr ""
 
 #: cf/backends/schema/__init__.py:94
 msgid "Sequence"
 msgstr ""
 
 #: cf/backends/schema/__init__.py:99
-#, fuzzy
 msgid "Functions"
-msgstr "Connexions"
+msgstr ""
 
 #: cf/backends/schema/__init__.py:103
-#, fuzzy
 msgid "Function"
-msgstr "Connexions"
+msgstr ""
 
 #: cf/backends/schema/__init__.py:108
 msgid "Packages"
@@ -199,14 +189,12 @@ msgid "Package"
 msgstr ""
 
 #: cf/backends/schema/__init__.py:115
-#, fuzzy
 msgid "Constraints"
-msgstr "Connexions"
+msgstr ""
 
 #: cf/backends/schema/__init__.py:118
-#, fuzzy
 msgid "Constraint"
-msgstr "Connexions"
+msgstr ""
 
 #: cf/backends/schema/__init__.py:122
 msgid "Indexes"
@@ -273,24 +261,20 @@ msgid "OpenDocument Spreadsheet (.ods)"
 msgstr ""
 
 #: cf/filter/exportfilter.py:70
-#, fuzzy
 msgid "CrunchyFrog Data Export"
-msgstr "CrunchyFrog"
+msgstr ""
 
 #: cf/instance.py:81
-#, fuzzy
 msgid "Queries"
-msgstr "Requête"
+msgstr ""
 
 #: cf/instance.py:87
-#, fuzzy
 msgid "Navigator"
-msgstr "_Navigateur"
+msgstr ""
 
 #: cf/instance.py:208 cf/ui/editor.py:507
-#, fuzzy
 msgid "Select file"
-msgstr "Sélectionner une instance"
+msgstr ""
 
 #: cf/instance.py:215 cf/ui/editor.py:406 cf/ui/editor.py:514
 msgid "All files (*)"
@@ -306,39 +290,32 @@ msgid "_Recent files:"
 msgstr ""
 
 #: cf/library.py:46
-#, fuzzy
 msgid "Library"
-msgstr "Librairie SQL"
+msgstr ""
 
 #: cf/library.py:47
-#, fuzzy
 msgid "A personal SQL library"
-msgstr "Librairie SQL"
+msgstr ""
 
 #: cf/library.py:98
-#, fuzzy
 msgid "_Library"
-msgstr "Librairie SQL"
+msgstr ""
 
 #: cf/library.py:108
-#, fuzzy
 msgid "_Open library"
-msgstr "Librairie SQL"
+msgstr ""
 
 #: cf/library.py:112
-#, fuzzy
 msgid "_Add to library"
-msgstr "Sauvegarder dans la librairie"
+msgstr ""
 
 #: cf/library.py:210 cf/library.py:344
-#, fuzzy
 msgid "New category"
-msgstr "Nouvelle requête"
+msgstr ""
 
 #: cf/library.py:230 cf/library.py:325 cf/library.py:332
-#, fuzzy
 msgid "Add category"
-msgstr "_Catégorie:"
+msgstr ""
 
 #: cf/library.py:328 cf/library.py:335
 msgid "Add query"
@@ -349,9 +326,8 @@ msgid "Category is not empty."
 msgstr ""
 
 #: cf/library.py:436
-#, fuzzy
 msgid "New query"
-msgstr "Nouvelle requête"
+msgstr ""
 
 #: cf/plugins/core.py:147
 msgid "Password required"
@@ -415,19 +391,16 @@ msgstr ""
 
 #: cf/ui/browser.py:120 cf/ui/browser.py:211 cf/ui/datasources.py:169
 #: cf/ui/widgets/__init__.py:72
-#, fuzzy
 msgid "Connection failed"
-msgstr "Connexions"
+msgstr ""
 
 #: cf/ui/browser.py:128
-#, fuzzy
 msgid "Disconnect"
-msgstr "gtk-disconnect"
+msgstr ""
 
 #: cf/ui/browser.py:131
-#, fuzzy
 msgid "Connect"
-msgstr "Connexions"
+msgstr ""
 
 #: cf/ui/browser.py:157
 msgid "Add data source"
@@ -438,9 +411,8 @@ msgid "Details"
 msgstr ""
 
 #: cf/ui/browser.py:203
-#, fuzzy
 msgid "Connecting..."
-msgstr "Connexions"
+msgstr ""
 
 #: cf/ui/browser.py:315
 #, python-format
@@ -465,9 +437,8 @@ msgid ""
 msgstr ""
 
 #: cf/ui/datasources.py:75
-#, fuzzy
 msgid "_Connections"
-msgstr "Connexions"
+msgstr ""
 
 #: cf/ui/datasources.py:81
 msgid "No active database backends."
@@ -562,9 +533,8 @@ msgid "Save file %(name)s before closing the editor?"
 msgstr ""
 
 #: cf/ui/editor.py:394
-#, fuzzy
 msgid "Save file"
-msgstr "Sauvegarder les fichiers"
+msgstr ""
 
 #: cf/ui/editor.py:448
 #, python-format
@@ -581,18 +551,16 @@ msgid "Data copied to clipboard"
 msgstr ""
 
 #: cf/ui/editor.py:835
-#, fuzzy
 msgid "Variables"
-msgstr "<b>Variables</b>"
+msgstr ""
 
 #: cf/ui/prefs.py:81 data/crunchyfrog.glade.h:42
 msgid "General"
 msgstr "Général"
 
 #: cf/ui/prefs.py:84
-#, fuzzy
 msgid "Fonts & Colors"
-msgstr "Police et couleurs"
+msgstr ""
 
 #: cf/ui/prefs.py:183
 #, python-format
@@ -642,42 +610,36 @@ msgid "Failed to load repository data"
 msgstr ""
 
 #: cf/ui/queries.py:159 cf/ui/widgets/__init__.py:144
-#, fuzzy
 msgid "Not connected"
-msgstr "gtk-connect"
+msgstr ""
 
 #: cf/ui/refviewer.py:40
-#, fuzzy
 msgid "Reference Browser"
-msgstr "Préférences"
+msgstr ""
 
 #: cf/ui/refviewer.py:41
 msgid "A tiny webbrowser to view references"
 msgstr ""
 
 #: cf/ui/refviewer.py:70
-#, fuzzy
 msgid "Reference"
-msgstr "Préférences"
+msgstr ""
 
 #: cf/ui/refviewer.py:78
 msgid "Reference Viewer"
 msgstr ""
 
 #: cf/ui/widgets/__init__.py:104 cf/ui/widgets/__init__.py:141
-#, fuzzy
 msgid "Connection"
-msgstr "Connexions"
+msgstr ""
 
 #: cf/ui/widgets/__init__.py:115
-#, fuzzy
 msgid "New connection"
-msgstr "_Tester la connection"
+msgstr ""
 
 #: cf/ui/widgets/__init__.py:123
-#, fuzzy
 msgid "Show connections"
-msgstr "Connexions"
+msgstr ""
 
 #: cf/ui/widgets/__init__.py:145
 msgid "Click to open a connection"
@@ -700,9 +662,8 @@ msgid "Copy value to clipboard"
 msgstr ""
 
 #: cf/ui/widgets/grid.py:142 cf/ui/widgets/grid.py:244
-#, fuzzy
 msgid "Save as..."
-msgstr "Sauvegarder les fichiers"
+msgstr ""
 
 #: cf/ui/widgets/grid.py:149
 msgid "Open with..."
@@ -717,32 +678,28 @@ msgid "This cell contains a 'NULL' value."
 msgstr ""
 
 #: cf/ui/widgets/grid.py:256
-#, fuzzy
 msgid "All files"
-msgstr "Sauvegarder les fichiers"
+msgstr ""
 
 #: cf/ui/widgets/grid.py:641
 msgid "Data"
 msgstr ""
 
 #: data/plugins/backend_httplog/__init__.py:55
-#, fuzzy
 msgid "HTTP log file backend"
-msgstr "Sélectionner une instance"
+msgstr ""
 
 #: data/plugins/backend_httplog/__init__.py:56
-#, fuzzy
 msgid "Analyse HTTP log files with SQL"
-msgstr "Sélectionner une instance"
+msgstr ""
 
 #: data/plugins/backend_httplog/__init__.py:77
 msgid "Log file:"
 msgstr ""
 
 #: data/plugins/backend_httplog/__init__.py:79
-#, fuzzy
 msgid "Select HTTP log file"
-msgstr "Sélectionner une instance"
+msgstr ""
 
 #: data/plugins/backend_oracle/__init__.py:39
 msgid "Oracle Plugin"
@@ -907,9 +864,8 @@ msgid "Enable text _wrapping"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:39
-#, fuzzy
 msgid "Execute"
-msgstr "Exécuter la requête"
+msgstr ""
 
 #: data/crunchyfrog.glade.h:40
 msgid "Execute query"
@@ -942,9 +898,8 @@ msgid "Installed backends"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:48
-#, fuzzy
 msgid "New"
-msgstr "_Nouveau"
+msgstr ""
 
 #: data/crunchyfrog.glade.h:49
 msgid "Open"
@@ -1050,9 +1005,8 @@ msgid "Toggle navigation bar"
 msgstr "Basculer la barre de navigation"
 
 #: data/crunchyfrog.glade.h:76
-#, fuzzy
 msgid "Transaction"
-msgstr "Début de transaction"
+msgstr ""
 
 #: data/crunchyfrog.glade.h:77
 msgid "Use SQL s_plitting"
@@ -1305,10 +1259,3 @@ msgstr "dans une instance _existante"
 #: data/crunchyfrog.glade.h:140
 msgid "in an _new instance"
 msgstr "dans une _nouvelle instance"
-
-#, fuzzy
-#~ msgid "Contraint"
-#~ msgstr "Connexions"
-
-#~ msgid "Cancel query"
-#~ msgstr "Annuler la requête"

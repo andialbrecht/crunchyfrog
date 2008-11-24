@@ -56,7 +56,7 @@ class Collection(Node):
     icon = "gtk-open"
 
 class SchemaCollection(Collection):
-    name = _(u"Schematas")
+    name = _(u"Schemata")
 
 class Schema(Node):
     name = _(u"Schema")

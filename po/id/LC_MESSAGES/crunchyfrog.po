@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: crunchyfrog\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-11-03 21:00+0100\n"
 "PO-Revision-Date: 2008-09-01 10:32+0000\n"
 "Last-Translator: Muhammad Zulfikar <muhzulfikar@gmail.com>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-10-19 19:32+0000\n"
+"X-Launchpad-Export-Date: 2008-11-24 07:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: cf/backends/dbapi2helper.py:95
@@ -92,18 +92,16 @@ msgid "Python module MySQLdb is not installed."
 msgstr ""
 
 #: cf/backends/mysql.py:161
-#, fuzzy
 msgid "MySQL Reference"
-msgstr "Pengaturan"
+msgstr ""
 
 #: cf/backends/mysql.py:173
 msgid "Python module MySQLdb required."
 msgstr ""
 
 #: cf/backends/postgres.py:45
-#, fuzzy
 msgid "PostgreSQL Reference"
-msgstr "Pengaturan"
+msgstr ""
 
 #: cf/backends/postgres.py:56
 msgid "PostgreSQL Plugin"
@@ -167,23 +165,20 @@ msgid "View"
 msgstr ""
 
 #: cf/backends/schema/__init__.py:90
-#, fuzzy
 msgid "Sequences"
-msgstr "Pengaturan"
+msgstr ""
 
 #: cf/backends/schema/__init__.py:94
 msgid "Sequence"
 msgstr ""
 
 #: cf/backends/schema/__init__.py:99
-#, fuzzy
 msgid "Functions"
-msgstr "Sambungan"
+msgstr ""
 
 #: cf/backends/schema/__init__.py:103
-#, fuzzy
 msgid "Function"
-msgstr "Sambungan"
+msgstr ""
 
 #: cf/backends/schema/__init__.py:108
 msgid "Packages"
@@ -194,14 +189,12 @@ msgid "Package"
 msgstr ""
 
 #: cf/backends/schema/__init__.py:115
-#, fuzzy
 msgid "Constraints"
-msgstr "Sambungan"
+msgstr ""
 
 #: cf/backends/schema/__init__.py:118
-#, fuzzy
 msgid "Constraint"
-msgstr "Sambungan"
+msgstr ""
 
 #: cf/backends/schema/__init__.py:122
 msgid "Indexes"
@@ -268,9 +261,8 @@ msgid "OpenDocument Spreadsheet (.ods)"
 msgstr ""
 
 #: cf/filter/exportfilter.py:70
-#, fuzzy
 msgid "CrunchyFrog Data Export"
-msgstr "CrunchyFrog"
+msgstr ""
 
 #: cf/instance.py:81
 msgid "Queries"
@@ -399,32 +391,28 @@ msgstr ""
 
 #: cf/ui/browser.py:120 cf/ui/browser.py:211 cf/ui/datasources.py:169
 #: cf/ui/widgets/__init__.py:72
-#, fuzzy
 msgid "Connection failed"
-msgstr "Sambungan"
+msgstr ""
 
 #: cf/ui/browser.py:128
 msgid "Disconnect"
 msgstr ""
 
 #: cf/ui/browser.py:131
-#, fuzzy
 msgid "Connect"
-msgstr "Sambungan"
+msgstr ""
 
 #: cf/ui/browser.py:157
-#, fuzzy
 msgid "Add data source"
-msgstr "Sumberd_ata:"
+msgstr ""
 
 #: cf/ui/browser.py:172
 msgid "Details"
 msgstr ""
 
 #: cf/ui/browser.py:203
-#, fuzzy
 msgid "Connecting..."
-msgstr "Sambungan"
+msgstr ""
 
 #: cf/ui/browser.py:315
 #, python-format
@@ -449,9 +437,8 @@ msgid ""
 msgstr ""
 
 #: cf/ui/datasources.py:75
-#, fuzzy
 msgid "_Connections"
-msgstr "Sambungan"
+msgstr ""
 
 #: cf/ui/datasources.py:81
 msgid "No active database backends."
@@ -466,9 +453,8 @@ msgid "Other..."
 msgstr ""
 
 #: cf/ui/datasources.py:108
-#, fuzzy
 msgid "Database:"
-msgstr "Sumberd_ata:"
+msgstr ""
 
 #: cf/ui/datasources.py:115
 msgid "DSN:"
@@ -565,18 +551,16 @@ msgid "Data copied to clipboard"
 msgstr ""
 
 #: cf/ui/editor.py:835
-#, fuzzy
 msgid "Variables"
-msgstr "<b>Variables</b>"
+msgstr ""
 
 #: cf/ui/prefs.py:81 data/crunchyfrog.glade.h:42
 msgid "General"
 msgstr "Umum"
 
 #: cf/ui/prefs.py:84
-#, fuzzy
 msgid "Fonts & Colors"
-msgstr "Huruf dan Warna"
+msgstr ""
 
 #: cf/ui/prefs.py:183
 #, python-format
@@ -630,37 +614,32 @@ msgid "Not connected"
 msgstr ""
 
 #: cf/ui/refviewer.py:40
-#, fuzzy
 msgid "Reference Browser"
-msgstr "Pengaturan"
+msgstr ""
 
 #: cf/ui/refviewer.py:41
 msgid "A tiny webbrowser to view references"
 msgstr ""
 
 #: cf/ui/refviewer.py:70
-#, fuzzy
 msgid "Reference"
-msgstr "Pengaturan"
+msgstr ""
 
 #: cf/ui/refviewer.py:78
 msgid "Reference Viewer"
 msgstr ""
 
 #: cf/ui/widgets/__init__.py:104 cf/ui/widgets/__init__.py:141
-#, fuzzy
 msgid "Connection"
-msgstr "Sambungan"
+msgstr ""
 
 #: cf/ui/widgets/__init__.py:115
-#, fuzzy
 msgid "New connection"
-msgstr "Sambungan"
+msgstr ""
 
 #: cf/ui/widgets/__init__.py:123
-#, fuzzy
 msgid "Show connections"
-msgstr "Sambungan"
+msgstr ""
 
 #: cf/ui/widgets/__init__.py:145
 msgid "Click to open a connection"
@@ -1021,9 +1000,8 @@ msgid "Toggle navigation bar"
 msgstr ""
 
 #: data/crunchyfrog.glade.h:76
-#, fuzzy
 msgid "Transaction"
-msgstr "Mulai transaksi"
+msgstr ""
 
 #: data/crunchyfrog.glade.h:77
 msgid "Use SQL s_plitting"
@@ -1276,7 +1254,3 @@ msgstr ""
 #: data/crunchyfrog.glade.h:140
 msgid "in an _new instance"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Contraint"
-#~ msgstr "Sambungan"
