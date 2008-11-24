@@ -1,3 +1,10 @@
+crunchyfrog (0.3.1) experimental; urgency=low
+
+  * Bug fixes.
+  * Initial printing support.
+
+ -- Andi Albrecht <albrecht.andi@gmail.com>  Mon, 24 Nov 2008 09:37:58 +0100
+
 crunchyfrog (0.3.0) experimental; urgency=low
 
   * Minor bug fixes.
