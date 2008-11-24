@@ -6,10 +6,10 @@ include TODO
 include Makefile
 include setup.py
 include crunchyfrog
-recursive-include cf *
+recursive-include cf *.py *.cfg *.in
 recursive-include data *
 recursive-include debian *
 recursive-include docs *
-recursive-include extras *
+recursive-include extras *.py
 recursive-include po *
 prune *.pyc
