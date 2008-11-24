@@ -16,16 +16,6 @@ Editor
 - Alt-<NUMBER> should change tabs in editor
 - Search (and replace)
 
-Editor
-------
-- Alt-<NUMBER> should change tabs in editor
-- Search (and replace)
-
-Editor
-------
-- Alt-<NUMBER> should change tabs in editor (Done in 0.4 branch).
-- Search (and replace)
-
 
 Library
 -------
