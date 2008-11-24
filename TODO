@@ -10,6 +10,7 @@ User Interface
 - Accelerators don't work in SQL window.
 - Replace toolbar from data source manager? It's too large and looks
   ugly with some GTK themes.
+- Alt-NUMBER should change tabs in editor
 
 Editor
 ------
