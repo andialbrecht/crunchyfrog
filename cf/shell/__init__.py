@@ -24,16 +24,16 @@ import gtk
 import gobject
 
 from cf.backends.schema import Table
-from cf.plugins.core import GenericPlugin
+from cf.plugins.core import BottomPanePlugin
 from cf.plugins.mixins import InstanceMixin
-from cf.ui.pdock import DockItem
+from cf.ui.pane import PaneItem
 
 from gettext import gettext as _
 
 from ipython_view import *
 
 
-class CFShell(GenericPlugin, InstanceMixin):
+class CFShell(BottomPanePlugin, InstanceMixin):
 
     id = "crunchyfrog.plugin.cfshell"
     name = _(u"Shell")
@@ -45,7 +45,7 @@ class CFShell(GenericPlugin, InstanceMixin):
     version = "0.1"
 
     def __init__(self, app):
-        GenericPlugin.__init__(self, app)
+        BottomPanePlugin.__init__(self, app)
         self._shells = dict()
         self._instances = dict()
         for instance in app.get_instances():
@@ -85,14 +85,17 @@ class CFShell(GenericPlugin, InstanceMixin):
     def init_instance(self, instance):
         if instance in self._instances.keys():
             return
-        mn_view = instance.xml.get_widget("mn_view")
-        item = gtk.CheckMenuItem(_(u"Shell"))
-        item.connect("activate", self.on_toggle_shell, instance)
-        item.show()
-        if self.app.config.get("cfshell.visible"):
-            item.set_active(True)
-        mn_view.append(item)
-        self._instances[instance] = item
+        view = CFShellView(self.app, instance)
+        instance.bottom_pane.add_item(CFShellView(self.app, instance))
+        self._instances[instance] = view
+##         mn_view = instance.xml.get_widget("mn_view")
+##         item = gtk.CheckMenuItem(_(u"Shell"))
+##         item.connect("activate", self.on_toggle_shell, instance)
+##         item.show()
+##         if self.app.config.get("cfshell.visible"):
+##             item.set_active(True)
+##         mn_view.append(item)
+##         self._instances[instance] = item
 
     def shutdown(self):
         if self._shells.keys():
@@ -107,7 +110,11 @@ class CFShell(GenericPlugin, InstanceMixin):
             shell.destroy()
 
 
-class CFShellView(gtk.ScrolledWindow):
+class CFShellView(gtk.ScrolledWindow, PaneItem):
+
+    name = _(u'Shell')
+    icon = 'gnome-terminal'
+    detachable = True
 
     def __init__(self, app, instance):
         gtk.ScrolledWindow.__init__(self)

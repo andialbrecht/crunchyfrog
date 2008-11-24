@@ -5,101 +5,80 @@
 
 """This module contains classes that represent SQL dialects."""
 
-import re
-
-_TOKENIZER_REGEX = r"""%(multiwordkeywords)s|
---.*[\r\n]+|
-\s+|
-;|
-(?:'[^'\n\r]*')+|
-<=|>=|!=|=|<|>|
-:\w+|
-,|
-\*|
--?\d+(?:\.\d+)?|
-\w+|
-\(|\)|
-\S+|
-"""
+import pygments.token
 
 
 class Dialect(object):
 
-    operators = []
+    def handle_token(self, tokentype, text):
+        """Handle a token.
+
+        Arguments:
+          tokentype: A token type.
+          text: Text representation of the token.
+
+        Returns:
+          A tuple of three items: tokentype, text, splitlevel.
+          splitlevel is either -1, 0 or 1 and describes an identation level.
+        """
+        raise NotImplementedError
+
+    def reset(self):
+        """Reset Dialect state."""
+        pass
+
+
+class DefaultDialect(Dialect):
 
     def __init__(self):
-        if hasattr(self, 'multi_word_keywords'):
-            multiwordkeywords = '|'.join(self.multi_word_keywords)
-        else:
-            multiwordkeywords = ''
-        regex = _TOKENIZER_REGEX % {'multiwordkeywords': multiwordkeywords}
-        self._tokenizer_regex = re.compile(regex,
-                                           re.VERBOSE | re.IGNORECASE)
-
-    def semicolon_split_level(self, token):
-        return 0
-
-    @property
-    def tokenizer_regex(self):
-        return self._tokenizer_regex
-
-
-class DialectDefault(Dialect):
-
-    multi_word_keywords = [
-        'END\sIF',
-        'END\sLOOP',
-    ]
-
-    operators = [
-        '=', '<', '>', '<=', '>=', 'IN'
-    ]
-
-    def __init__(self):
-        super(DialectDefault, self).__init__()
         self._in_declare = False
 
-    def semicolon_split_level(self, token):
-        """Returns a value to adjust the semicolon split level.
-
-         0: Don't change level.
-         1: Increase level.
-        -1: Decrease level.
-
-        For example, if token is 'BEGIN' 1 should be returned.
-        """
-        if token == 'DECLARE':
+    def handle_token(self, tokentype, text):
+        if not tokentype == pygments.token.Keyword:
+            return tokentype, text, 0
+        unified = text.upper()
+        if unified == 'DECLARE':
             self._in_declare = True
-            return 1
-        if token == 'BEGIN':
+            return tokentype, text, 1
+        if unified == 'BEGIN':
             if self._in_declare:
-                return 0
-            return 1
-        if token == 'END':
-            return -1
-        return 0
+                return tokentype, text, 0
+            return tokentype, text, 1
+        if unified == 'END':
+            return tokentype, text, -1
+        if unified in ('IF', 'FOR'):
+            return tokentype, text, 1
+        return tokentype, text, 0
 
-    def _get_operators(self):
-        return super(DialectDefault, self)._get_operators()+self._operators
+    def reset(self):
+        self._in_declare = False
 
 
-class DialectPSQL(DialectDefault):
-
-    operators = DialectDefault.operators + [
-        'LIKE', '~'
-    ]
+class PSQLDialect(DefaultDialect):
 
     def __init__(self):
-        super(DialectPSQL, self).__init__()
+        super(PSQLDialect, self).__init__()
+        self._dollar_started = False
         self._in_dbldollar = False
 
-    def semicolon_split_level(self, token):
-        if token == '$$' or token.upper() == '$BODY$':
-            if not self._in_dbldollar:
-                self._in_dbldollar = True
-                return 1
-            else:
-                self._in_dbldollar = False
-                return -1
+    def handle_token(self, tokentype, text):
+        if tokentype == pygments.token.Error and text == '$':
+            if not self._dollar_started:
+                self._dollar_started = True
+                return tokentype, text, 0
+            elif self._dollar_started:
+                self._dollar_started = False
+                if not self._in_dbldollar:
+                    self._in_dbldollar = True
+                    return tokentype, text, 1
+                else:
+                    self._in_dbldollar = False
+                    return tokentype, text, -1
+        elif self._in_dbldollar:
+            return tokentype, text, 0
         else:
-            return super(DialectPSQL, self).semicolon_split_level(token)
+            return super(PSQLDialect, self).handle_token(tokentype, text)
+
+    def reset(self):
+        self._dollar_started = False
+        self._in_dbldollar = False

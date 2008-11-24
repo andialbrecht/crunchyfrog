@@ -30,15 +30,15 @@ import sexy
 
 from cf.datasources import DatasourceInfo
 from cf.backends import DBConnectError, schema
-from cf.ui import pdock
 from cf.ui.editor import SQLView
+from cf.ui import pane
 
 
 class DummyNode(object):
     pass
 
 
-class Browser(gtk.ScrolledWindow):
+class Browser(gtk.ScrolledWindow, pane.PaneItem):
 
     __gsignals__ = {
         "object-menu-popup" : (gobject.SIGNAL_RUN_LAST,
@@ -46,6 +46,11 @@ class Browser(gtk.ScrolledWindow):
                                (gobject.TYPE_PYOBJECT,
                                 gobject.TYPE_PYOBJECT)),
     }
+
+    item_id = 'navigator'
+    name = _(u'Navigator')
+    icon = gtk.STOCK_CONNECT
+    detachable = True
 
     def __init__(self, app, instance):
         self.app = app
@@ -213,20 +218,19 @@ class Browser(gtk.ScrolledWindow):
             obj = model.get_value(iter, 0)
             if isinstance(obj, DatasourceInfo) \
             and not obj.internal_connection:
-                self.instance.statusbar.set_message(_(u"Connecting..."))
+                self.instance.statusbar.push(0, _(u"Connecting..."))
                 try:
                     conn = obj.dbconnect()
-                    editor = self.instance.new_editor()
+                    editor = self.instance.editor_create()
                     editor.set_connection(conn)
-                    gobject.idle_add(editor.textview.grab_focus)
-                    self.on_object_tree_selection_changed(self.object_tree.get_selection())
+                    self.on_object_tree_selection_changed(
+                        self.object_tree.get_selection())
                 except DBConnectError, err:
                     dialogs.error(_(u"Connection failed"), str(err))
-                    self.instance.statusbar.set_message("")
+                    self.instance.statusbar.pop(0)
             elif isinstance(obj, DatasourceInfo):
-                editor = self.instance.new_editor()
+                editor = self.instance.editor_create()
                 editor.set_connection(obj.internal_connection)
-                gobject.idle_add(editor.textview.grab_focus)
 
     def on_button_press_event(self, treeview, event):
         if event.type == gtk.gdk._2BUTTON_PRESS \
@@ -262,14 +266,14 @@ class Browser(gtk.ScrolledWindow):
             if obj.internal_connection:
                 server_info = obj.internal_connection.get_server_info()
                 if server_info:
-                    self.instance.statusbar.set_message(server_info)
+                    self.instance.statusbar.push(0, server_info)
                 else:
-                    self.instance.statusbar.set_message("")
+                    self.instance.statusbar.pop(0)
             else:
-                self.instance.statusbar.set_message("")
+                self.instance.statusbar.pop(0)
         else:
             comm = model.get_value(iter, 5) or ""
-            self.instance.statusbar.set_message(comm)
+            self.instance.statusbar.push(0, comm)
 
     def on_refresh_node(self, menuitem, model, iter):
         citer = model.iter_children(iter)
@@ -325,6 +329,8 @@ class Browser(gtk.ScrolledWindow):
                     widget.get_buffer().set_text(value)
                     nb.append_page(sw, gtk.Label(key))
             nb.show_all()
+            # XXX
+            return
             item = pdock.DockItem(self.instance.dock, "details", nb, _(u"Details: %(objname)s") % {"objname": object.name},
                               "gtk-edit", None)
             self.instance.dock.add_item(item)

@@ -49,8 +49,9 @@ from cf.plugins.core import GenericPlugin
 
 class PreferencesDialog(GladeWidget):
 
-    def __init__(self, app, mode="editor"):
-        GladeWidget.__init__(self, app, "crunchyfrog", "preferences_dialog")
+    def __init__(self, win, mode="editor"):
+        GladeWidget.__init__(self, win, "glade/preferences",
+                             "preferences_dialog")
         self.sync_repo_file(silent=True)
         self.refresh()
         if mode == "editor":
@@ -64,6 +65,7 @@ class PreferencesDialog(GladeWidget):
     def _setup_widget(self):
         self._setup_plugins()
         self._setup_editor()
+        self._setup_shortcuts()
         # Fix secondary button
         btn = self.xml.get_widget("btn_help")
         box = self.xml.get_widget("dialog-action_area1")
@@ -82,6 +84,8 @@ class PreferencesDialog(GladeWidget):
         model.append([1, _(u"View"), get_pb("gtk-justify-left")])
         model.append([2, _(u"Editor"), get_pb("gtk-edit")])
         model.append([3, _(u"Fonts & Colors"), get_pb("gtk-font")])
+        model.append([4, _(u'Keyboard\nShortcuts'),
+                      get_pb('preferences-desktop-keyboard-shortcuts')])
         iconview.connect("selection-changed", self.on_editor_selection_changed)
         schemes = self.xml.get_widget("editor_schemes")
         model = gtk.ListStore(str, str)
@@ -135,9 +139,43 @@ class PreferencesDialog(GladeWidget):
         sel = self.plugin_list.get_selection()
         sel.connect("changed", self.on_plugin_selection_changed)
 
+    def _setup_shortcuts(self):
+        self.shortcuts_model = gtk.TreeStore(str,                  # 0 label
+                                             int,                  # 1 keyval
+                                             gtk.gdk.ModifierType, # 2 mods
+                                             bool,                 # 3 visible
+                                             str,                  # 4 tooltip
+                                             gobject.TYPE_PYOBJECT,# 5 action
+                                             )
+        self.list_shortcuts = self.xml.get_widget('list_shortcuts')
+        col = gtk.TreeViewColumn('', gtk.CellRendererText(), text=0)
+        self.list_shortcuts.append_column(col)
+        renderer = gtk.CellRendererAccel()
+        renderer.connect('accel-edited', self.on_accel_edited)
+        col = gtk.TreeViewColumn('', renderer,
+                                 accel_key=1, accel_mods=2, visible=3,
+                                 editable=3)
+        self.list_shortcuts.append_column(col)
+        col = gtk.TreeViewColumn('', gtk.CellRendererText(), text=4)
+        self.list_shortcuts.append_column(col)
+        self.shortcuts_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
+        self.list_shortcuts.set_model(self.shortcuts_model)
+
     def _setup_connections(self):
         self.app.plugins.connect("plugin-added", self.on_plugin_added)
         self.app.plugins.connect("plugin-removed", self.on_plugin_removed)
+
+    def on_accel_edited(self, renderer, path, accel_key, accel_mods,
+                        hardware_keycode):
+        model = self.shortcuts_model
+        iter_ = model.get_iter(path)
+        action = model.get_value(iter_, 5)
+        if not action:
+            return
+        model.set_value(iter_, 1, accel_key)
+        model.set_value(iter_, 2, accel_mods)
+        gtk.accel_map_change_entry(action.get_accel_path(),
+                                   accel_key, accel_mods, True)
 
     def on_editor_open_in_window_toggled(self, toggle):
         self.app.config.set("editor.open_in_window", toggle.get_active())
@@ -317,6 +355,7 @@ class PreferencesDialog(GladeWidget):
     def refresh(self):
         self.refresh_editor()
         self.refresh_plugins()
+        self.refresh_shortcuts()
 
     def refresh_editor(self):
         config = self.app.config
@@ -498,3 +537,28 @@ class PreferencesDialog(GladeWidget):
         if not silent:
             dlg.set_finished(True)
         return retval
+
+    def refresh_shortcuts(self):
+        model = self.shortcuts_model
+        model.clear()
+        for group in self.win.ui.get_action_groups():
+            if group.get_name() == 'clipboard':
+                continue
+            iter_ = model.append(None)
+            lbl = group.get_data('cf::label') or group.get_name()
+            model.set(iter_, 0, lbl, 3, False)
+            for action in group.list_actions():
+                # Don't display menu items with submenus
+                if action.get_name().endswith('menu-action') \
+                or action.get_name().startswith('activate-editor'):
+                    continue
+                citer = model.append(iter_)
+                accel_path = action.get_accel_path()
+                keyval, mods = gtk.accel_map_lookup_entry(accel_path)
+                model.set(citer,
+                          0, action.props.label.replace('_', ''),
+                          1, keyval,
+                          2, mods,
+                          3, True,
+                          4, action.props.tooltip,
+                          5, action)

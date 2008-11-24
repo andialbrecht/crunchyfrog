@@ -31,7 +31,6 @@ import gobject
 
 from cf.plugins.core import GenericPlugin
 from cf.ui import GladeWidget
-from cf.ui.pdock import DockItem
 
 from gettext import gettext as _
 
@@ -65,6 +64,8 @@ class ReferenceViewer(GenericPlugin):
         menuitem.set_active(False)
 
     def create_view(self, menuitem, instance):
+        # XXX
+        return
         view = RefView(self.app, instance)
         self._viewer[instance] = view
         item = DockItem(instance.dock, "refview", view.widget, _(u"Reference"),

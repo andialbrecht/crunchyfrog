@@ -31,7 +31,7 @@ import gtk.glade
 
 from cf import release
 from cf.ui import GladeWidget
-from cf.ui import pdock
+from cf.ui import pane
 from cf.ui.browser import Browser
 from cf.ui.confirmsave import ConfirmSaveDialog
 from cf.ui.datasources import DatasourceManager
@@ -69,28 +69,29 @@ class CFInstance(GladeWidget):
         self.toolbar.show_all()
         # Statusbar
         self.statusbar = CFStatusbar(self.app, self.xml)
-        # Dock
-        self.dock = pdock.Dock()
-        box = self.xml.get_widget("box_main")
-        box.pack_start(self.dock, True, True)
-        box.reorder_child(self.dock, 2)
-        self.dock.show_all()
+        # Setup main layout
+        hpaned = gtk.HPaned()
+        vpaned = gtk.VPaned()
+        boxmain = self.xml.get_widget('box_main')
+        boxmain.pack_start(hpaned)
+        boxmain.reorder_child(hpaned, 2)
+        hpaned.add2(vpaned)
+        self.side_pane = pane.SidePane()
+        self.bottom_pane = pane.BottomPane()
+        hpaned.add1(self.side_pane)
+        vpaned.add2(self.bottom_pane)
         # Queries
         self.queries = QueriesNotebook(self.app, self)
-        item = pdock.DockItem(self.dock, "queries",
-                              self.queries, _(u"Queries"),
-                              "gtk-edit", None, pdock.DOCK_ITEM_BEH_LOCKED)
-        self.dock.add_item(item)
+        vpaned.add1(self.queries)
+        self.queries.show_all()
+        vpaned.show_all()
         # Browser
         self.browser = Browser(self.app, self)
-        item = pdock.DockItem(self.dock, "browser",
-                              self.browser, _(u"Navigator"),
-                              "gtk-find", gtk.POS_LEFT,
-                              pdock.DOCK_ITEM_BEH_CANT_CLOSE)
-        self.dock.add_item(item)
-        self.browser.set_data("dock_item", item)
-        gobject.idle_add(self.xml.get_widget("mn_navigator").set_active,
-                         self.app.config.get("navigator.visible", True))
+        hpaned.add1(self.browser)
+        hpaned.show_all()
+        self.browser.show_all()
+#        gobject.idle_add(self.xml.get_widget("mn_navigator").set_active,
+#                         self.app.config.get("navigator.visible", True))
         # Menu bar
         recent_menu = gtk.RecentChooserMenu(self.app.recent_manager)
         filter = gtk.RecentFilter()
@@ -106,38 +107,9 @@ class CFInstance(GladeWidget):
     def _init_ui(self, argv):
         pass
 
-    def on_about(self, *args):
-        def open_url(dialog, url):
-            gtk.show_uri(dialog.get_screen(), url,
-                         gtk.gdk.x11_get_server_time(dialog.window))
-        gtk.about_dialog_set_url_hook(open_url)
-        dlg = gtk.AboutDialog()
-        dlg.set_name(release.name)
-        dlg.set_version(release.version)
-        dlg.set_copyright(release.copyright)
-        dlg.set_license(release.license)
-        dlg.set_website(release.url)
-        dlg.set_website_label(release.url)
-        dlg.set_logo_icon_name(release.appname)
-        dlg.set_program_name(release.appname)
-        dlg.set_translator_credits(release.translators)
-        dlg.run()
-        dlg.destroy()
 
-    def on_commit(self, *args):
-        if not self._editor:
-            return
-        gobject.idle_add(self._editor.commit)
 
-    def on_rollback(self, *args):
-        if not self._editor:
-            return
-        gobject.idle_add(self._editor.rollback)
 
-    def on_begin_transaction(self, *args):
-        if not self._editor:
-            return
-        gobject.idle_add(self._editor.begin_transaction)
 
     def on_configure_event(self, win, event):
         config = self.app.config
@@ -195,10 +167,8 @@ class CFInstance(GladeWidget):
 
     def on_navigator_toggled(self, menuitem):
         if menuitem.get_active():
-            self.browser.get_data("dock_item").show()
             self.app.config.set("navigator.visible", True)
         else:
-            self.browser.get_data("dock_item").hide()
             self.app.config.set("navigator.visible", False)
 
     def on_new_instance(self, *args):

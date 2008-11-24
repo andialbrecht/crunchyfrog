@@ -18,10 +18,9 @@
 
 # $Id$
 
-"""Application object
+"""Application object"""
 
-"""
-
+import logging
 import os
 import sys
 import threading
@@ -33,6 +32,8 @@ from cf import release, USER_DIR
 from config import Config
 from datasources import DatasourceManager
 from plugins.core import PluginManager
+from cf.ui.widgets import ConnectionsDialog
+from ui.mainwindow import MainWindow
 from ui.prefs import PreferencesDialog
 from cf.userdb import UserDB
 from ipc import IPCListener
@@ -44,42 +45,25 @@ class CFApplication(gobject.GObject):
     """Main application object.
 
     An instance of this class is accessible in almost every class in
-    CrunchyFrog through the ``app`` attribute. It provides access
+    CrunchyFrog through the app attribute. It provides access
     to application internals.
 
-    The easiest way to learn more about this object is to activate the
-    Python shell plugin. The shell has two local variables: ``app``
-    is the CFApplication instance and ``instance`` is the `CFInstance`_
-    object for the GUI the shell runs in.
-
-    Attributes
-    ==========
-
-        :config: Configuration (see `Config`_ class)
-        :userdb: User database (see `UserDB`_ class)
-        :plugins: Plugin registry (see `PluginManager`_ class)
-        :datasources: Datasource information (see `DatasourceManager`_ class)
-
-    .. _Config: cf.config.Config.html
-    .. _UserDB: cf.userdb.UserDB.html
-    .. _PluginManager: cf.plugins.core.PluginManager.html
-    .. _DatasourceManager: cf.datasources.DatasourceManager.html
-    .. _CFInstance: cf.instance.CFInstance.html
+    Instance attributes:
+      config: Configuration
+      userdb: User database
+      plugins: Plugin registry
+      datasources: Datasource information
     """
 
     def __init__(self, options):
-        """
-        The constructor of this class takes one argument:
+        """Constructor.
 
-        :Parameter:
-            options
-                Commandline options as returned by `optparse`_
-
-        .. _optparse: http://docs.python.org/lib/module-optparse.html
+        Parameter:
+          options: Command line options as returned by optparse.
         """
         self.__gobject_init__()
-        self.set_data("instances", {})
-        self.__icount = 0L
+        self._instances = []
+        self.__icount = 0
         self.options = options
 
     def init(self):
@@ -95,7 +79,7 @@ class CFApplication(gobject.GObject):
         self.recent_manager = gtk.recent_manager_get_default()
 
     def _check_version(self):
-        """Run eventual version updates."""
+        """Run possible version updates."""
         version_file = os.path.join(USER_DIR, 'VERSION')
         if not os.path.isfile(version_file):
             f = open(version_file, "w")
@@ -103,64 +87,71 @@ class CFApplication(gobject.GObject):
             f.close()
         # That's it for now, it's for future use.
 
-    def new_instance(self, args=None):
+    # ---
+    # Instance handling
+    # ---
+
+    def new_instance(self, args=None, show=True):
         """Creates a new instances.
 
-        ``args`` is an optional list of file names to open
+        Arguments:
+          args: List of filenames to open in new instance (default: None).
+          show: If True, instance.show() is called here (default: True).
+
+        Returns:
+          The new instance.
         """
-        from cf.instance import CFInstance
-        instance = CFInstance(self)
-        instances = self.get_data("instances")
-        self.__icount += 1
-        instances[self.__icount] = instance
-        self.set_data("instances", instances)
-        instance.set_data("instance-id", self.__icount)
-        instance.widget.connect("destroy",
-                                self.on_instance_destroyed, self.__icount)
-        instance.widget.show()
+        instance = MainWindow(self)
+        for arg in args:
+            instance.editor_create(arg)
+        self._instances.append(instance)
+        instance.connect("destroy", self.on_instance_destroyed)
+        if show:
+            instance.show()
         self.cb.emit("instance-created", instance)
         return instance
 
-    def on_instance_destroyed(self, instance, instance_id):
+    def on_instance_destroyed(self, instance):
         instances = self.get_data("instances")
-        if instances.has_key(instance_id):
-            del instances[instance_id]
-        self.set_data("instances", instances)
-        if not instances:
+        if instance in self._instances:
+            self._instances.remove(instance)
+        if len(self._instances) == 0:
             self.shutdown()
 
     def get_instance(self, instance_id):
-        """Returns an instances identified by ID"""
-        return self.get_data("instances").get(instance_id)
+        """Returns an instances identified by ID."""
+        for instance in self._instances:
+            if id(instance) == instance_id:
+                return instance
 
     def get_instances(self):
-        """Returns a list of active instances
+        """Returns a list of active instances."""
+        return self._instances
 
-        :Returns: List of `CFInstance`_ instances
+    # ---
 
-        .. _CFInstance: cf.instance.CFInstance.html
-        """
-        return self.get_data("instances").values()
+    def manage_connections(self, win):
+        """Displays a dialog to manage connections."""
+        dlg = ConnectionsDialog(win)
+        dlg.run()
+        dlg.destroy()
 
-    def preferences_show(self, mode="editor"):
+    def preferences_show(self, win, mode="editor"):
         """Displays the preferences dialog"""
-        dlg = PreferencesDialog(self, mode=mode)
+        dlg = PreferencesDialog(win, mode=mode)
         dlg.run() # IGNORE:E1101 - Generic method
         dlg.destroy() # IGNORE:E1101 - Generic method
 
     def register_shutdown_task(self, func, msg, *args, **kwargs):
         """Registers a new shutdown task.
 
-        Shutdown tasks are executed when the ``shutdown`` method is
+        Shutdown tasks are executed when the shutdown method is
         called.
 
-        :Parameter:
-            func
-                A callable
-            msg
-                A human readable message explaingin what the task does
-            args, kwargs
-                arguments and keyword arguments for ``func`` (optional)
+        Parameter:
+          func: A callable to execute.
+          msg:  A human readable message explaining what the task does.
+          args, kwargs: arguments and keyword arguments for func (optional).
         """
         self.__shutdown_tasks.append((func, msg, args, kwargs))
 

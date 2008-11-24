@@ -8,45 +8,30 @@
 import logging
 import os
 
-# Setup namespace
-from errors import SQLParseError
-from errors import SQLParseParseError
-from errors import SQLParseMultiStatementError
-from query import Query
-
-import tokenizer as _tokenizer
-from dialects import DialectDefault, DialectPSQL
-_default_dialect = DialectDefault()
-
 
 if 'SQLPARSE_DEBUG' in os.environ:
     logging.basicConfig(level=logging.DEBUG)
 
 
-def sqlparse(statement, dialect=None):
-    """Parse a SQL statement.
-
-    Args:
-        statement: String containing a SQL statement.
-
-    Returns:
-        A Query object.
-
-    Raises:
-        SQLParseParseError if parsing fails.
-        SQLParseMultiStatementError if statement has more than one statement.
-    """
-    if dialect is None:
-        dialect = _default_dialect
-    return Query(statement, dialect)
+STATEMENT_TYPE_UNKNOWN = 0
+STATEMENT_TYPE_SELECT = 1
+STATEMENT_TYPE_INSERT = 2
+STATEMENT_TYPE_DELETE = 3
+STATEMENT_TYPE_UPDATE = 4
+STATEMENT_TYPE_DROP = 5
+STATEMENT_TYPE_CREATE = 6
+STATEMENT_TYPE_ALTER = 7
 
 
-def sqlsplit(statements, dialect=None):
-    """Parse statements in a list of statements."""
-    if dialect is None:
-        dialect = _default_dialect
-    splitted = _tokenizer._split_statements(_tokenizer._tokenize(statements,
-                                                                 dialect),
-                                            dialect)
-    return [_tokenizer._join_tokens(tokens)
-            for tokens in splitted]
+# Setup namespace
+from parser import Parser
+
+
+def parse(sql, dialect=None):
+    parser = Parser(dialect)
+    return parser.parse(sql)
+
+
+def split_str(sql, dialect=None):
+    parser = Parser(dialect)
+    return [unicode(statement) for statement in parser.parse(sql)]

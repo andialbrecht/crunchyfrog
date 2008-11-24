@@ -20,6 +20,8 @@
 
 """User interface"""
 
+import logging
+
 import gobject
 import gtk
 
@@ -50,7 +52,7 @@ class GladeWidget(gobject.GObject):
     .. _gtk.glade.XML: http://pygtk.org/docs/pygtk/class-gladexml.html
     """
 
-    def __init__(self, app, xml, widget_name,
+    def __init__(self, win, xml, widget_name,
                  signal_autoconnect=True,
                  cb_provider=None):
         """
@@ -82,11 +84,17 @@ class GladeWidget(gobject.GObject):
         .. _gtk.glade.XML: http://pygtk.org/docs/pygtk/class-gladexml.html
         """
         self.__gobject_init__()
-        self.app = app
+        self.win = win
+        if self.win:
+            self.app = win.app
+        else:
+            self.app = None
         if isinstance(xml, basestring):
             if not xml.endswith(".glade"):
                 xml += ".glade"
-            self.xml = gtk.glade.XML(join(cf.DATA_DIR, xml), widget_name)
+            glade_file = join(cf.DATA_DIR, xml)
+            logging.info('Loading Glade file %r' % glade_file)
+            self.xml = gtk.glade.XML(glade_file, widget_name)
         else:
             self.xml = xml
         if signal_autoconnect:

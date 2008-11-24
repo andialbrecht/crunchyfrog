@@ -39,7 +39,21 @@ class QueriesNotebook(gtk.Notebook):
         self.set_property("enable-popup", False)
         self.connect("switch-page", self.on_switch_page)
         self.connect("page-removed", self.on_page_removed)
-        self.connect("page-added", self.on_page_added)
+        def foo(notebook, context):
+            dest_window = context.dest_window
+            if dest_window == self.instance:
+                return
+            for win in self.app.get_instances():
+                print win, dest_window
+                if win != self.instance and win == dest_window:
+                    win.editor_append(self.get_editor_by_pagenum(notebook.props.page))
+                    return
+            editor = self.get_editor_by_pagenum(notebook.props.page)
+            editor.show_in_separate_window()
+        #self.connect('drag-end', foo)
+        def bar(widget, context, x, y, timestamp):
+            print widget, context, x, y
+        self.connect('drag-drop', bar)
 
     def on_page_added(self, notebook, child, page_num):
         gobject.idle_add(self.set_current_page, page_num)
@@ -58,8 +72,14 @@ class QueriesNotebook(gtk.Notebook):
         else:
             self.append_page(editor.widget, TabLabel(editor))
         self.set_tab_reorderable(editor.widget, True)
+        self.set_tab_detachable(editor.widget, True)
         self.popup_disable()
         self.set_property("enable-popup", False)
+
+    def get_editor_by_pagenum(self, page_num):
+        child = self.get_nth_page(page_num)
+        lbl = self.get_tab_label(child)
+        return lbl.editor
 
 class TabLabel(gtk.HBox):
 
@@ -160,3 +180,4 @@ class TabLabel(gtk.HBox):
         if self.editor.get_filename():
             markup += "\n<b>File:</b> "+self.editor.get_filename()
         self.label.set_tooltip_markup(markup)
+

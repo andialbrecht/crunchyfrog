@@ -145,7 +145,7 @@ class PgCursor(DbAPI2Cursor):
 
 class PgConnection(DbAPI2Connection):
     cursor_class = PgCursor
-    sqlparse_dialect = sqlparse.DialectPSQL()
+    sqlparse_dialect = sqlparse.dialects.PSQLDialect()
 
     def update_transaction_status(self):
         stat = self._conn.get_transaction_status()

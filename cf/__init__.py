@@ -23,6 +23,7 @@
 import errno
 import gettext
 import hotshot
+import logging
 from optparse import OptionParser
 import os
 from os.path import abspath, dirname, join, isfile, isdir, expanduser
@@ -48,9 +49,6 @@ from cf import release
 
 LOG_FORMAT_APP = '%(levelname)s\t%(name)s\t%(created)f\t%(message)s'
 
-import logging
-logging.basicConfig(format=LOG_FORMAT_APP)
-
 try:
     from dist import DATA_DIR, LOCALE_DIR
 except ImportError:
@@ -74,10 +72,11 @@ USER_PLUGIN_REPO_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_REPO)
 IPC_SOCKET = join(USER_DIR, "crunchyfog.sock")
 
 
-gettext.bindtextdomain("crunchyfrog", LOCALE_DIR)
-gettext.textdomain("crunchyfrog")
+#gettext.bindtextdomain("crunchyfrog", LOCALE_DIR)
+#gettext.textdomain("crunchyfrog")
 gtk.glade.bindtextdomain("crunchyfrog", LOCALE_DIR)
 gtk.glade.textdomain("crunchyfrog")
+gettext.install('crunchyfrog', LOCALE_DIR, True)
 
 
 from cf.app import CFApplication
@@ -124,8 +123,7 @@ def main():
         log_level = logging.DEBUG
     else:
         log_level = logging.WARNING
-    logger = logging.getLogger()
-    logger.setLevel(log_level)
+    logging.basicConfig(format=LOG_FORMAT_APP, level=log_level)
     ipc_client = ipc.get_client()
     if not is_alive(ipc_client):
         logging.info('Creating new application')
@@ -154,7 +152,7 @@ def main():
             if sel.run() == 1:
                 instance_id = sel.get_instance_id()
                 if not instance_id:
-                    instance_id = ipc_client.new_instance()
+                    instance_id = ipc_client.new_instance(args)
                 for fname in args:
                     ipc_client.open_uri(instance_id, fname)
             sel.destroy()

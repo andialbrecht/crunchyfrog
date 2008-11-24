@@ -66,16 +66,17 @@ class IPCRequestHandler(SocketServer.BaseRequestHandler):
         if cmd == 'ping':
             self._respond(True)
         elif cmd == 'new-instance':
-            gobject.idle_add(lambda: not self.app.new_instance())
+            args = args.split('|')
+            gobject.idle_add(lambda: not self.app.new_instance(args))
             self._respond(-1)
         elif cmd == 'get-instances':
-            self._respond([(i.get_data('instance-id'), i.widget.get_title())
+            self._respond([(id(i), i.get_title())
                            for i in self.app.get_instances()])
         elif cmd == 'open-uri':
             instance_id, uri = args.split(':', 1)
             for i in self.app.get_instances():
-                if i.get_data('instance-id') == int(instance_id):
-                    i.new_editor(uri)
+                if id(i) == int(instance_id):
+                    i.editor_create(uri)
                     self._respond(True)
             self._respond(False)
         else:
@@ -143,8 +144,12 @@ class IPCClient(object):
 
     def new_instance(self, args=None):
         """Creates a new instance, optionally with args as files to open."""
+        if args is not None:
+            args = '|'.join(args)
+        else:
+            args = ''
         try:
-            return self.communicate('new-instance:')
+            return self.communicate('new-instance:%s' % args)
         except socket.error, err:
             return None
 

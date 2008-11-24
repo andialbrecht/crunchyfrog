@@ -1,0 +1,9 @@
+Branch TODO's
+-------------
+
+* Panes loose state when new instance was created and closed last.
+* Drag'n'Drop for editor tabs:
+  * drop inside same window -> do nothing
+  * drop into another instance -> add editor to this instance
+  * drop anywhere else -> create a new instance with this editor
+* Redesign Data Source Manager

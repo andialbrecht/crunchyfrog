@@ -56,7 +56,7 @@ from cf import sqlparse
 class SQLView(gtksourceview2.View):
     """SQLViewBase implementation"""
 
-    def __init__(self, app, editor=None):
+    def __init__(self, win, editor=None):
         gtksourceview2.View.__init__(self)
         self.editor = editor
         self.buffer = gtksourceview2.Buffer()
@@ -71,7 +71,7 @@ class SQLView(gtksourceview2.View):
         self.set_mark_category_pixbuf('sql', pixbuf)
         lang_manager = gtksourceview2.language_manager_get_default()
         self.buffer.set_language(lang_manager.get_language('sql'))
-        self.app = app
+        self.app = win.app
         self.app.config.connect('changed', self.on_config_changed)
         self.update_textview_options()
         self._buffer_changed_cb = None
@@ -146,19 +146,24 @@ class SQLView(gtksourceview2.View):
         Returns:
             List of 2-tuples (start iter, end iter).
         """
-        content = self.buffer.get_text(*self.buffer.get_bounds())
-        iter = self.buffer.get_start_iter()
+        buffer_start, buffer_end = self.buffer.get_bounds()
+        content = self.buffer.get_text(buffer_start, buffer_end)
+        iter_ = buffer_start
         if self.editor and self.editor.connection:
             dialect = self.editor.connection.get_dialect()
         else:
             dialect = None
-        for stmt in sqlparse.sqlsplit(content, dialect=dialect):
+        for stmt in sqlparse.parse(content, dialect=dialect):
+            stmt = unicode(stmt)
             if not stmt.strip():
                 continue
-            start, end = iter.forward_search(stmt.lstrip(),
-                                             gtk.TEXT_SEARCH_TEXT_ONLY)
+            bounds = iter_.forward_search(stmt.lstrip(),
+                                          gtk.TEXT_SEARCH_TEXT_ONLY)
+            if bounds is None:
+                continue
+            start, end = bounds
             yield start, end
-            iter = end
-            if not iter:
+            iter_ = end
+            if not iter_:
                 raise StopIteration
         raise StopIteration

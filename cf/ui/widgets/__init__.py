@@ -35,14 +35,17 @@ from cf.datasources import DatasourceInfo
 from cf.ui import GladeWidget
 
 
-class ConnectionButton(GladeWidget):
+class ConnectionButton(gtk.MenuToolButton):
     """Connection chooser used in toolbars.
 
     It is always bound to an SQLEditor.
     """
 
-    def __init__(self, app, xml):
-        GladeWidget.__init__(self, app, xml, "tb_connection")
+    def __init__(self, mainwin):
+        gtk.MenuToolButton.__init__(self, gtk.STOCK_CONNECT)
+        self.app = mainwin.app
+        self.mainwin = mainwin
+        self._editor = None
         self._setup_widget()
         self.set_editor(None)
         self.app.datasources.connect("datasource-modified",
@@ -63,67 +66,9 @@ class ConnectionButton(GladeWidget):
         self._menu = gtk.Menu()
         self.set_menu(self._menu)
 
-    def on_new_connection(self, item, datasource_info):
-        try:
-            conn = datasource_info.dbconnect()
-            self._editor.set_connection(conn)
-            self.set_editor(self._editor)
-        except DBConnectError, err:
-            dialogs.error(_(u"Connection failed"), str(err))
-
-    def on_manage_connections(self, *args):
-        self.manage_connections()
-
-    def on_set_connection(self, item, connection):
-        self._editor.set_connection(connection)
-        self.set_editor(self._editor)
-
-    def manage_connections(self):
-        """Displays a dialog to manage connections."""
-        dlg = ConnectionsDialog(self.app)
-        dlg.run()
-        dlg.destroy()
-
     def rebuild_menu(self):
         """Rebuilds the drop-down menu."""
-        while self._menu.get_children():
-            self._menu.remove(self._menu.get_children()[0])
-        if not self._editor:
-            return
-        ghas_connections = False
-        dinfos = self.app.datasources.get_all()
-        dinfos.sort(lambda x, y: cmp(x.get_label().lower(),
-                                     y.get_label().lower()))
-        for datasource_info in dinfos:
-            item = gtk.MenuItem(datasource_info.get_label())
-            item.show()
-            self._menu.append(item)
-            menu = gtk.Menu()
-            has_connections = False
-            for conn in datasource_info.get_connections():
-                yitem = gtk.MenuItem((_(u"Connection")+" #%s"
-                                      % conn.conn_number))
-                yitem.connect("activate", self.on_set_connection, conn)
-                yitem.show()
-                menu.append(yitem)
-                has_connections = True
-                ghas_connections = True
-            if has_connections:
-                sep = gtk.SeparatorMenuItem()
-                sep.show()
-                menu.append(sep)
-            xitem = gtk.MenuItem(_(u"New connection"))
-            xitem.connect("activate", self.on_new_connection, datasource_info)
-            xitem.show()
-            menu.append(xitem)
-            item.set_submenu(menu)
-        sep = gtk.SeparatorMenuItem()
-        sep.show()
-        self._menu.append(sep)
-        item = gtk.MenuItem(_(u"Show connections"))
-        item.connect("activate", lambda *a: self.manage_connections())
-        item.show()
-        self._menu.append(item)
+        rebuild_connection_menu(self._menu, self.mainwin, self._editor)
 
     def set_editor(self, editor):
         """Associates an editor.
@@ -131,9 +76,18 @@ class ConnectionButton(GladeWidget):
         Arguments:
             editor: SQLEditor instance.
         """
+        if self._editor:
+            sig = self._editor.get_data('cf::connbtn::sig_conn_changed')
+            if sig:
+                self._editor.disconnect(sig)
+                self._editor.set_data('cf::connbtn::sig_conn_changed', None)
         self._editor = editor
         self.set_sensitive(bool(editor))
         self.rebuild_menu()
+        if editor is not None:
+            sig = editor.connect('connection-changed',
+                                 lambda *a: self.set_editor(editor))
+            editor.set_data('cf::connbtn::sig_conn_changed', sig)
         if editor and editor.connection:
             self._label.set_text(editor.connection.get_label())
             markup = ("<b>%s</b>\n%s #%s"
@@ -145,33 +99,91 @@ class ConnectionButton(GladeWidget):
             self.set_tooltip_markup(_(u"Click to open a connection"))
 
 
+def rebuild_connection_menu(menu, win, editor=None):
+    """Rebuilds the connection chooser menu.
+
+    Arguments:
+      menu: The menu to rebuild.
+      win: A main window instance.
+      editor: The editor for which the menu is build (default: None).
+    """
+    while menu.get_children():
+        menu.remove(menu.get_children()[0])
+    if editor is None:
+        return
+
+    def cb_new_connection(menuitem, datasource_info, editor):
+        try:
+            conn = datasource_info.dbconnect()
+            editor.set_connection(conn)
+        except DBConnectError, err:
+            dialogs.error(_(u'Connection failed'), str(err))
+
+    ghas_connections = False
+    dinfos = win.app.datasources.get_all()
+    dinfos.sort(lambda x, y: cmp(x.get_label().lower(),
+                                 y.get_label().lower()))
+    for datasource_info in dinfos:
+        item = gtk.MenuItem(datasource_info.get_label())
+        item.show()
+        menu.append(item)
+        submenu = gtk.Menu()
+        has_connections = False
+        for conn in datasource_info.get_connections():
+            yitem = gtk.MenuItem((_(u'Connection')+' #%s'
+                                  % conn.conn_number))
+            yitem.connect('activate',
+                          lambda i, c: editor.set_connection(c),
+                          conn)
+            yitem.show()
+            submenu.append(yitem)
+            has_connections = True
+            ghas_connections = True
+        if has_connections:
+            sep = gtk.SeparatorMenuItem()
+            sep.show()
+            submenu.append(sep)
+        xitem = gtk.MenuItem(_(u'New connection'))
+        xitem.connect('activate', cb_new_connection,
+                      datasource_info, editor)
+        xitem.show()
+        submenu.append(xitem)
+        item.set_submenu(submenu)
+    sep = gtk.SeparatorMenuItem()
+    sep.show()
+    menu.append(sep)
+    action = win._get_action('query-show-connections')
+    item = action.create_menu_item()
+    item.show()
+    menu.append(item)
+    action = win._get_action('query-connection-disconnect')
+    item = action.create_menu_item()
+    action.set_sensitive(editor.connection is not None)
+    item.show()
+    menu.append(item)
+
+
 class DataExportDialog(gtk.FileChooserDialog):
-    """Export dialog.
+    """Modified gtk.FileChooserDialog for exporting data.
 
-    A modified gtk.FileChooserDialog for exporting data.
+    Usage example:
 
-    Usage example
-    =============
-
-        .. sourcecode:: python
-
-            >>> from cf.ui.widgets import DataExportDialog
-            >>> import gtk
-            >>> data = [["foo", 1, True], ["bar", 2, False]]
-            >>> selected = [2,]
-            >>> statement = ("select name, anumber, anotherfield "
-                              from foo limit 3;"
-            >>> description = (("name", str, None, None, None, None, None),
-            ...          ("anumber", int, None, None, None, None, None),
-            ...          ("anotherfield", bool, None, None, None, None, None))
-            >>> dlg = DataExportDialog(app, instance.widget,
-            ...                        data, selected, statement, description)
-            >>> if dlg.run() == gtk.RESPONSE_OK:
-            ...     dlg.hide()
-            ...     dlg.export_data()
-            ...
-            >>> dlg.destroy()
-
+      >>> from cf.ui.widgets import DataExportDialog
+      >>> import gtk
+      >>> data = [['foo', 1, True], ['bar', 2, False]]
+      >>> selected = [2,]
+      >>> statement = ('select name, anumber, anotherfield '
+          from foo limit 3;'
+      >>> description = (('name', str, None, None, None, None, None),
+      ...          ('anumber', int, None, None, None, None, None),
+      ...          ('anotherfield', bool, None, None, None, None, None))
+      >>> dlg = DataExportDialog(app, instance.widget,
+      ...                        data, selected, statement, description)
+      >>> if dlg.run() == gtk.RESPONSE_OK:
+      ...     dlg.hide()
+      ...     dlg.export_data()
+      ...
+      >>> dlg.destroy()
     """
 
     def __init__(self, app, parent, data, selected, statement, description):
@@ -371,7 +383,7 @@ class ProgressDialog(GladeWidget):
 
         :Parameter:
             finished
-                If ``True`` the close button gets sensitive.
+                If True the close button gets sensitive.
         """
         self.xml.get_widget("progress_btn_close").set_sensitive(finished)
 
@@ -379,17 +391,32 @@ class ProgressDialog(GladeWidget):
 class ConnectionsWidget(GladeWidget):
     """Lists datasources and active connections"""
 
-    def __init__(self, app, xml="crunchyfrog"):
-        GladeWidget.__init__(self, app, xml, "connections_widget")
+    def __init__(self, win, xml="glade/connectionsdialog"):
+        GladeWidget.__init__(self, win, xml, "connections_widget")
         self.refresh()
 
     def _setup_widget(self):
         self.list_conn = self.xml.get_widget("list_connections")
-        model = gtk.TreeStore(gobject.TYPE_PYOBJECT, str)
-        model.set_sort_column_id(1, gtk.SORT_ASCENDING)
+        model = gtk.ListStore(gobject.TYPE_PYOBJECT,  # 0 object
+                              str,                    # 1 label
+                              bool,                   # 2 is separator
+                              int,                    # 3 font weight
+                              str,                    # 4 stock-id
+                              str,                    # 5 sort name
+                              )
+#        model.set_sort_column_id(5, gtk.SORT_ASCENDING)
         self.list_conn.set_model(model)
-        col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=1)
+        col = gtk.TreeViewColumn()
+        renderer = gtk.CellRendererPixbuf()
+        col.pack_start(renderer, expand=False)
+        col.add_attribute(renderer, 'stock-id', 4)
+        renderer = gtk.CellRendererText()
+        col.pack_start(renderer, expand=True)
+        col.add_attribute(renderer, 'text', 1)
+        col.add_attribute(renderer, 'weight', 3)
         self.list_conn.append_column(col)
+        self.list_conn.set_hover_expand(True)
+        self.list_conn.set_row_separator_func(lambda m, i: m.get_value(i, 2))
 
     def _setup_connections(self):
         sel = self.list_conn.get_selection()
@@ -400,6 +427,17 @@ class ConnectionsWidget(GladeWidget):
                                      self.on_datasource_deleted)
         self.app.datasources.connect("datasource-modified",
                                      self.on_datasource_modified)
+
+    def on_assign_to_editor(self, *args):
+        sel = self.list_conn.get_selection()
+        model, iter = sel.get_selected()
+        if not iter:
+            return
+        obj = model.get_value(iter, 0)
+        editor = self.win.get_active_editor()
+        if editor is None:
+            return
+        editor.set_connection(obj)
 
     def on_connect(self, *args):
         sel = self.list_conn.get_selection()
@@ -414,10 +452,13 @@ class ConnectionsWidget(GladeWidget):
         iter = model.get_iter_first()
         while iter:
             if model.get_value(iter, 0) == conn.datasource_info:
-                citer = model.append(iter)
-                model.set(citer, 0, conn, 1, conn.get_label())
+                citer = model.insert_after(iter)
+                model.set(citer, 0, conn, 1, conn.get_label(short=True),
+                          5, conn.get_label())
                 break
             iter = model.iter_next(iter)
+        self.list_conn.expand_to_path(model.get_path(citer))
+        sel.select_iter(citer)
 
     def on_disconnect(self, *args):
         sel = self.list_conn.get_selection()
@@ -480,28 +521,47 @@ class ConnectionsWidget(GladeWidget):
             obj = model.get_value(iter, 0)
             is_ds = isinstance(obj, DatasourceInfo)
             is_connection = isinstance(obj, DBConnection)
-        self.xml.get_widget("btn_disconnect").set_sensitive(is_connection)
-        self.xml.get_widget("btn_connect").set_sensitive(is_ds)
+        self.xml.get_widget('btn_disconnect').set_sensitive(is_connection)
+        self.xml.get_widget('btn_connect').set_sensitive(is_ds)
+        btn_assign = self.xml.get_widget('btn_assign')
+        editor = self.win.get_active_editor()
+        btn_assign.set_sensitive(bool(is_connection and editor))
 
     def refresh(self):
         """Initializes the data model"""
         model = self.list_conn.get_model()
         for datasource_info in self.app.datasources.get_all():
             iter = model.append(None)
-            model.set(iter, 0, datasource_info, 1, datasource_info.get_label())
+            model.set(iter, 0, datasource_info,
+                      1, datasource_info.get_label(),
+                      2, False,
+                      3, pango.WEIGHT_BOLD,
+                      5, datasource_info.get_label())
+            citer = None
             for conn in datasource_info.get_connections():
-                citer = model.append(iter)
-                model.set(citer, 0, conn, 1, conn.get_label())
+                citer = model.append(None)
+                model.set(citer,
+                          0, conn,
+                          1, conn.get_label(short=True),
+                          2, False,
+                          5, conn.get_label())
+            if citer is None:
+                model.set_value(iter, 4, gtk.STOCK_DISCONNECT)
+            else:
+                model.set_value(iter, 4, gtk.STOCK_CONNECT)
+        self.list_conn.expand_all()
 
 
 class ConnectionsDialog(GladeWidget):
     """Dialog displaying connections"""
 
-    def __init__(self, app):
-        GladeWidget.__init__(self, app, "crunchyfrog", "connectionsdialog")
+    def __init__(self, win):
+        GladeWidget.__init__(self, win, "glade/connectionsdialog",
+                             "connectionsdialog")
+        self.win = win
 
     def _setup_widget(self):
-        self.connections = ConnectionsWidget(self.app, self.xml)
+        self.connections = ConnectionsWidget(self.win, self.xml)
 
 
 class CustomImageMenuItem(gtk.ImageMenuItem):

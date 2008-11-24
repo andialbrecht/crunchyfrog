@@ -35,9 +35,10 @@ COMMON_OPTIONS = ["dsn", "database", "host", "port", "user", "password"]
 
 class DatasourceManager(GladeWidget):
 
-    def __init__(self, app, instance):
-        self.instance = instance
-        GladeWidget.__init__(self, app, "crunchyfrog", "datasourcemanager")
+    def __init__(self, win):
+        self.instance = win
+        GladeWidget.__init__(self, win, "glade/datasourcemanager",
+                             "datasourcemanager")
         from cf.plugins.core import PLUGIN_TYPE_BACKEND
         if not self.app.plugins.get_plugins(PLUGIN_TYPE_BACKEND, True):
             self.run = self.run_warning
@@ -71,7 +72,7 @@ class DatasourceManager(GladeWidget):
         self.refresh_saved_connections()
         # Connections
         notebook = self.xml.get_widget("dsmanager_notebook")
-        self.connections = ConnectionsWidget(self.app)
+        self.connections = ConnectionsWidget(self.win)
         lbl = gtk.Label(_(u"_Connections"))
         lbl.set_use_underline(True)
         self.connections.widget.set_border_width(5)

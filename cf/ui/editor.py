@@ -56,17 +56,35 @@ class Editor(GladeWidget):
                                 (gobject.TYPE_PYOBJECT,))
     }
 
-    def __init__(self, app, instance):
-        self.app = app
-        self.instance = instance
+    __gproperties__ = {
+        'buffer-dirty': (gobject.TYPE_BOOLEAN,
+                         'dirty flag',
+                         'is the buffer dirty?',
+                         False,
+                         gobject.PARAM_READWRITE),
+        }
+
+    def __init__(self, win):
+        self.app = win.app
+        self.instance = win
         self.connection = None
+        self._buffer_dirty = False
         self.__conn_close_tag = None
         self._query_timer = None
         self._filename = None
         self._filecontent_read = ""
-        GladeWidget.__init__(self, app, "crunchyfrog", "box_editor")
+        GladeWidget.__init__(self, self.instance, "glade/editor",
+                             "box_editor")
         self.set_data("win", None)
         self.show_all()
+
+    def do_get_property(self, param):
+        if param.name == 'buffer-dirty':
+            return self._buffer_dirty
+
+    def do_set_property(self, param, value):
+        if param.name == 'buffer-dirty':
+            self._buffer_dirty = value
 
     # Widget setup
 
@@ -75,17 +93,21 @@ class Editor(GladeWidget):
         self._setup_resultsgrid()
 
     def _setup_textview(self):
-        self.textview = SQLView(self.app, self)
+        self.textview = SQLView(self.win, self)
         sw = self.xml.get_widget("sw_editor_textview")
         sw.add(self.textview)
+        self.textview.buffer.connect('changed', self.on_buffer_changed)
 
     def _setup_resultsgrid(self):
-        self.results = ResultsView(self.app, self.instance, self.xml)
+        self.results = ResultsView(self.instance, self.xml)
 
     def _setup_connections(self):
         self.textview.connect("populate-popup", self.on_populate_popup)
 
     # Callbacks
+
+    def on_buffer_changed(self, buffer):
+        self.props.buffer_dirty = self.contents_changed()
 
     def on_close(self, *args):
         self.close()
@@ -239,9 +261,10 @@ class Editor(GladeWidget):
                     dialect = self.connection.sqlparse_dialect
                 else:
                     dialect = None
-                stmts = sqlparse.sqlsplit(statement, dialect=dialect)
+                stmts = sqlparse.parse(statement, dialect=dialect)
             else:
                 stmts = [statement]
+            stmts = [unicode(s) for s in stmts]
             for stmt in stmts:
                 if not stmt.strip():
                     continue
@@ -436,10 +459,9 @@ class Editor(GladeWidget):
         buffer = self.get_buffer().set_text(txt)
 
     def show_in_separate_window(self):
-        win = EditorWindow(self.app, self.instance,
-                           editor=self)
-        win.show_all()
-        self.set_data("win", win)
+        instance = self.app.new_instance(show=False)
+        instance.editor_append(self)
+        instance.show()
 
     def show_in_main_window(self):
         self.instance.queries.attach(self)
@@ -631,12 +653,12 @@ class EditorWindow(GladeWidget):
 
 class ResultsView(GladeWidget):
 
-    def __init__(self, app, instance, xml):
-        self.instance = instance
-        GladeWidget.__init__(self, app, xml, "editor_results")
+    def __init__(self, win, xml):
+        self.instance = win
+        GladeWidget.__init__(self, win, xml, "editor_results")
 
     def _setup_widget(self):
-        self.grid = ResultList(self.app, self.instance, self.xml)
+        self.grid = ResultList(self.instance, self.xml)
         self.messages = self.xml.get_widget("editor_results_messages")
         model = gtk.ListStore(str,  # 0 stock id
                               str,  # 1 message
@@ -843,9 +865,9 @@ class ResultsView(GladeWidget):
 class ResultList(GladeWidget):
     """Result list with toolbar"""
 
-    def __init__(self, app, instance, xml):
-        GladeWidget.__init__(self, app, xml, "editor_results_data")
-        self.instance = instance
+    def __init__(self, win, xml):
+        GladeWidget.__init__(self, win, xml, "editor_results_data")
+        self.instance = win
         self.query = None
 
     def _setup_widget(self):

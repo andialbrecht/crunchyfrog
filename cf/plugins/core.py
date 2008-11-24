@@ -94,6 +94,10 @@ class GenericPlugin(gobject.GObject):
         """Called when the plugin is deactivated."""
         pass
 
+
+class BottomPanePlugin(GenericPlugin):
+    """A plugin that lives in the bottom pane."""
+
 class ExportPlugin(GenericPlugin):
     """Export filter base class"""
     icon = "gtk-save-as"
@@ -416,10 +420,11 @@ class PluginManager(gobject.GObject):
 
     def init_instance_mixins(self, plugin, instance):
         plugin.init_instance(instance)
-        if isinstance(plugin, MenubarMixin):
-            plugin.menubar_load(instance.xml.get_widget("menubar"), instance)
-        if isinstance(plugin, EditorMixin):
-            self.editor_notify(instance._editor, instance)
+        # XXX
+        #if isinstance(plugin, MenubarMixin):
+        #    plugin.menubar_load(instance.xml.get_widget("menubar"), instance)
+        #if isinstance(plugin, EditorMixin):
+        #    self.editor_notify(instance._editor, instance)
 
     def unload_instance_mixins(self, plugin, instance):
         if isinstance(plugin, MenubarMixin):

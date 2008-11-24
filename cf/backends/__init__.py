@@ -66,7 +66,7 @@ class DBConnection(gobject.GObject):
                             gobject.PARAM_READWRITE),
     }
 
-    sqlparse_dialect = cf.sqlparse.DialectDefault()
+    sqlparse_dialect = cf.sqlparse.dialects.DefaultDialect()
 
     def __init__(self, provider, app):
         self.app = app
@@ -90,8 +90,12 @@ class DBConnection(gobject.GObject):
         else:
             raise AttributeError, "unknown property %r" % property.name
 
-    def get_label(self):
-        return self.datasource_info.get_label() + " #%s" % self.conn_number
+    def get_label(self, short=False):
+        if short:
+            prefix = _(u'Connection')
+        else:
+            prefix = self.datasource_info.get_label()
+        return prefix + " #%s" % self.conn_number
 
     def close(self):
         self.emit("closed")
