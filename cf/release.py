@@ -27,7 +27,7 @@ copyright = "Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>"
 description = "Database front-end for GNOME"
 author = "Andi Albrecht"
 author_email = "albrecht.andi@gmail.com"
-url = "http://cf.andialbrecht.de"
+url = "http://crunchyfrog.googlecode.com"
 long_description = """CrunchyFrog is a database front-end for the GNOME desktop.
 
 Supported databases
