@@ -22,13 +22,13 @@
 
 import gtk
 
-from kiwi.ui import dialogs
-
 import sys
 
 from gettext import gettext as _
 
 from cf.backends import DBConnection, DBCursor
+from cf.ui import dialogs
+
 
 class DbAPI2Cursor(DBCursor):
 

@@ -36,11 +36,9 @@ import gtk
 import gtksourceview2
 import pango
 
-from kiwi.ui import dialogs
-
 from cf import sqlparse
 from cf.backends import Query
-from cf.ui import GladeWidget
+from cf.ui import GladeWidget, dialogs
 from cf.ui.confirmsave import ConfirmSaveDialog
 from cf.ui.toolbar import CFToolbar
 from cf.ui.widgets import DataExportDialog
@@ -213,7 +211,7 @@ class Editor(GladeWidget):
     def close(self):
         """Close editor, displays a confirmation dialog for unsaved files."""
         if self.contents_changed():
-            dlg = ConfirmSaveDialog(self, [self])
+            dlg = ConfirmSaveDialog(self.instance, [self])
             resp = dlg.run()
             if resp == 1:
                 ret = dlg.save_files()

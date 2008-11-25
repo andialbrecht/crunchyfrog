@@ -28,11 +28,9 @@ import gobject
 import gtk
 import pango
 
-from kiwi.ui import dialogs
-
 from cf.backends import DBConnectError, DBConnection
 from cf.datasources import DatasourceInfo
-from cf.ui import GladeWidget
+from cf.ui import GladeWidget, dialogs
 
 
 class ConnectionButton(gtk.MenuToolButton):

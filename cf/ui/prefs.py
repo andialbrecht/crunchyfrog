@@ -40,10 +40,9 @@ try:
     from xml.etree import ElementTree as etree
 except ImportError:
     from lxml import etree
-from kiwi.ui import dialogs
 
 import cf
-from cf.ui import GladeWidget
+from cf.ui import GladeWidget, dialogs
 from cf.ui.widgets import ProgressDialog
 from cf.plugins.core import GenericPlugin
 

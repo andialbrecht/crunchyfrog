@@ -29,11 +29,9 @@ This module contains the SQL library plugin.
 import gtk
 import gobject
 
-from kiwi.ui import dialogs
-
 from cf.plugins.core import GenericPlugin
 from cf.plugins.mixins import MenubarMixin, EditorMixin, UserDBMixin
-from cf.ui import GladeWidget
+from cf.ui import GladeWidget, dialogs
 from cf.ui.widgets import CustomImageMenuItem
 from cf.ui.widgets.sqlview import SQLView
 

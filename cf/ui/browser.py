@@ -25,13 +25,12 @@ from gettext import gettext as _
 import gtk
 import gobject
 
-from kiwi.ui import dialogs
 import sexy
 
 from cf.datasources import DatasourceInfo
 from cf.backends import DBConnectError, schema
 from cf.ui.editor import SQLView
-from cf.ui import pane
+from cf.ui import pane, dialogs
 
 
 class DummyNode(object):

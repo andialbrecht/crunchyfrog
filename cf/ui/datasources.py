@@ -23,11 +23,9 @@
 import gtk
 import gobject
 
-from kiwi.ui import dialogs
-
 from gettext import gettext as _
 
-from cf.ui import GladeWidget
+from cf.ui import GladeWidget, dialogs
 from cf.ui.widgets import ConnectionsWidget
 from cf.datasources import DatasourceInfo
 

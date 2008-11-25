@@ -27,7 +27,6 @@ import os
 from inspect import isclass
 import imp
 import zipimport
-from kiwi.ui import dialogs
 
 import logging
 log = logging.getLogger("PLUGINS")
@@ -43,6 +42,7 @@ from cf import USER_PLUGIN_DIR, PLUGIN_DIR, USER_PLUGIN_URI
 
 from cf.plugins.mixins import InstanceMixin, MenubarMixin, EditorMixin
 from cf.plugins.mixins import UserDBMixin
+from cf.ui import dialogs
 from cf.ui.widgets import ProgressDialog
 
 class GenericPlugin(gobject.GObject):
