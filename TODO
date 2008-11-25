@@ -14,6 +14,7 @@ User Interface
 Editor
 ------
 - Search (and replace)
+- Disable export button if not filter plugin is active.
 
 
 Library
