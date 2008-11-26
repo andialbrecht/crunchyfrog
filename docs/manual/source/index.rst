@@ -8,6 +8,8 @@ Welcome to CrunchyFrog Manual's documentation!
 Contents:
 
 .. toctree::
+
+   intro
    :maxdepth: 2
 
 Indices and tables
