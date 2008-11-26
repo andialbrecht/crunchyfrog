@@ -13,19 +13,8 @@ User Interface
 
 Editor
 ------
-- Alt-<NUMBER> should change tabs in editor
-- Search (and replace)
-
-Editor
-------
-- Alt-<NUMBER> should change tabs in editor
-- Search (and replace)
-
-Editor
-------
 - Search (and replace)
 - Disable export button if not filter plugin is active.
-
 
 Library
 -------
@@ -51,7 +40,6 @@ Misc.
 - Export filter should emit a progress signal (and of course the dialog
   should have a callback).
 - LDAP connections make no sense in editor, should be suppressed somehow.
-
 
 Software Engineering
 --------------------
