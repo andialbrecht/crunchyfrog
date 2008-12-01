@@ -7,22 +7,13 @@
 
 import re
 
-from pygments.filter import Filter
 import pygments.token
 from pygments.util import get_bool_opt
 from pygments.lexers import SqlLexer
 
 from dialects import Dialect, DefaultDialect
-
-
-class IfFilter(Filter):
-    """Marks IF as keyword."""
-
-    def filter(self, lexer, stream):
-        for ttype, value in stream:
-            if ttype is pygments.token.Name and value.upper() == 'IF':
-                ttype = pygments.token.Keyword
-            yield ttype, value
+from filters import IfFilter
+import formatter
 
 
 class Parser(object):
@@ -93,3 +84,6 @@ class Statement(object):
     def get_type(self):
         """Return statement type."""
         pass
+
+    def format(self, **options):
+        return formatter.format(self, options)
