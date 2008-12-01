@@ -36,4 +36,4 @@ def split_str(sql, dialect=None):
     parser = Parser(dialect)
     return [unicode(statement) for statement in parser.parse(sql)]
 
-split = split_str
+sqlsplit = split_str
