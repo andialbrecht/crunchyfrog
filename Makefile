@@ -37,6 +37,8 @@ all: clean
 clean: po-clean
 	find . -name "*.pyc" -print | xargs rm -rf
 	find . -name "*~" -print | xargs rm -rf
+	rm -f cf/dist.py
+	rm -f data/crunchyfrog
 	rm -rf build/
 	rm -rf manual/
 	rm -f MANIFEST
