@@ -24,7 +24,12 @@ import cPickle
 import logging
 
 import gobject
-import gnomekeyring
+
+try:
+    import gnomekeyring
+    USE_KEYRING = True
+except ImportError:
+    USE_KEYRING = False
 
 
 log = logging.getLogger("DS")
@@ -137,6 +142,19 @@ class DatasourceInfo(gobject.GObject):
           pwd: Password (delete existing if None)
           db_id: Datasource ID
         """
+        if USE_KEYRING:
+            self._store_password_keyring(pwd, db_id)
+        else:
+            self._store_password_userdb(pwd, db_id)
+
+    def _store_password_userdb(self, pwd, db_id):
+        sql = "update datasource set password = ? where id = ?"
+        cur = self.app.userdb.cursor
+        conn = self.app.userdb.conn
+        cur.execute(sql, (pwd, db_id))
+        conn.commit()
+
+    def _store_password_keyring(self, pwd, db_id):
         item_type = gnomekeyring.ITEM_GENERIC_SECRET
         attrs = {"crunchyfrog": db_id}
         try:
@@ -161,6 +179,12 @@ class DatasourceInfo(gobject.GObject):
         Returns:
           Password as string or None.
         """
+        if USE_KEYRING:
+            return self._get_password_keyring(db_id)
+        else:
+            return self._get_password_userdb(db_id)
+
+    def _get_password_keyring(self, db_id):
         if db_id is None:
             return None
         item_type = gnomekeyring.ITEM_GENERIC_SECRET
@@ -170,6 +194,17 @@ class DatasourceInfo(gobject.GObject):
             return entry[0].secret
         except gnomekeyring.NoMatchError:
             return None
+
+    def _get_password_userdb(self, db_id):
+        if db_id is None:
+            return None
+        sql = "select password from datasource where id = ?"
+        cur = self.app.userdb.cursor
+        cur.execute(sql)
+        res = cur.fetchone()
+        if res:
+            return res[0]
+        return None
 
     @classmethod
     def load(cls, app, db_id):
@@ -287,6 +322,17 @@ class DatasourceManager(gobject.GObject):
             or not self.app.plugins.is_active(item.backend):
                 continue
             self._cache.append(item)
+        self._check_password_field()
+
+    def _check_password_field(self):
+        cur = self.app.userdb.cursor
+        conn = self.app.userdb.conn
+        sql = 'pragma table_info(datasource)'
+        cur.execute(sql)
+        if not 'password' in [x[1] for x in cur.fetchall()]:
+            sql = 'alter table datasource add password text'
+            cur.execute(sql)
+            conn.commit()
 
     def on_datasource_added(self, manager, datasource_info):
         self._cache.append(datasource_info)
