@@ -73,7 +73,6 @@ gettext.install('crunchyfrog', LOCALE_DIR, True)
 
 
 from cf.app import CFApplication
-from cf import ipc
 
 
 def _parse_commandline():
@@ -117,8 +116,13 @@ def main():
     else:
         log_level = logging.WARNING
     logging.basicConfig(format=LOG_FORMAT_APP, level=log_level)
-    ipc_client = ipc.get_client()
-    if not is_alive(ipc_client):
+    try:
+        from cf import ipc
+        ipc_client = ipc.get_client()
+    except AttributeError, err:
+        logging.warning('No IPC available: %s', err)
+        ipc_client = None
+    if ipc_client is None or not is_alive(ipc_client):
         logging.info('Creating new application')
 ##         if isfile(abspath(join(dirname(__file__), "../setup.py"))):
 ##             props = {'app-datadir':

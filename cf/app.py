@@ -36,7 +36,6 @@ from cf.ui.widgets import ConnectionsDialog
 from ui.mainwindow import MainWindow
 from ui.prefs import PreferencesDialog
 from cf.userdb import UserDB
-from ipc import IPCListener
 
 import logging
 
@@ -157,6 +156,11 @@ class CFApplication(gobject.GObject):
 
     def run_listener(self):
         """Creates and runs a simple socket server."""
+        try:
+            from cf.ipc import IPCListener
+        except AttributeError:
+            self.ipc_listener = None
+            return
         self.ipc_listener = IPCListener(self)
         t = threading.Thread(target=self.ipc_listener.serve_forever)
         t.setDaemon(True)
@@ -176,7 +180,8 @@ class CFApplication(gobject.GObject):
             except:
                 import traceback; traceback.print_exc()
                 logging.error("Task failed: %s" % str(sys.exc_info()[1]))
-        self.ipc_listener.shutdown()
+        if self.ipc_listener is not None:
+            self.ipc_listener.shutdown()
         gtk.main_quit()
 
 
