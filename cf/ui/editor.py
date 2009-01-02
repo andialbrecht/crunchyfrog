@@ -27,10 +27,8 @@ import re
 import string
 import thread
 import time
+import urlparse
 
-import gconf
-import gnome
-import gnomevfs
 import gobject
 import gtk
 import gtksourceview2
@@ -44,6 +42,17 @@ from cf.ui.toolbar import CFToolbar
 from cf.ui.widgets import DataExportDialog
 from cf.ui.widgets.grid import Grid
 from cf.ui.widgets.sqlview import SQLView
+
+
+def to_uri(filename):
+    """Converts a filename to URI. It's ok to pass in a URI here."""
+    scheme, netloc, path, params, query, fragment = urlparse.urlparse(filename)
+    if not scheme:
+        uri = urlparse.urlunparse(('file', netloc, path, params,
+                                   query, fragment))
+    else:
+        uri = filename
+    return uri
 
 
 class Editor(GladeWidget):
@@ -377,7 +386,7 @@ class Editor(GladeWidget):
             a = ""
         self._filecontent_read = a
         self.textview.get_buffer().set_text(a)
-        self.app.recent_manager.add_item(gnomevfs.get_uri_from_local_path(filename))
+        self.app.recent_manager.add_item(to_uri(filename))
 
     def get_filename(self):
         return self._filename
