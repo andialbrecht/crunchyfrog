@@ -64,6 +64,7 @@ class CFApplication(gobject.GObject):
         self._instances = []
         self.__icount = 0
         self.options = options
+        self.icon_theme = gtk.icon_theme_get_default()
 
     def init(self):
         """Initializes the application"""
@@ -183,6 +184,15 @@ class CFApplication(gobject.GObject):
         if self.ipc_listener is not None:
             self.ipc_listener.shutdown()
         gtk.main_quit()
+
+    def load_icon(self, icon_name, size, lookup_method):
+        """Wrapper for gtk.IconTheme.load_icon that catches GError."""
+        try:
+            return self.icon_theme.load_icon(icon_name, size, lookup_method)
+        except gobject.GError, err:
+            logging.warning(err)
+            return self.icon_theme.load_icon('gtk-missing-image',
+                                             size, lookup_method)
 
 
 class CFAppCallbacks(gobject.GObject):

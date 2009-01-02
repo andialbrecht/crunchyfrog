@@ -54,7 +54,6 @@ class PreferencesDialog(GladeWidget):
     def __init__(self, win, mode="editor"):
         GladeWidget.__init__(self, win, "glade/preferences",
                              "preferences_dialog")
-        self.sync_repo_file(silent=True)
         self.refresh()
         if mode == "editor":
             curr_page = 1
@@ -79,9 +78,8 @@ class PreferencesDialog(GladeWidget):
         iconview.set_model(model)
         iconview.set_text_column(1)
         iconview.set_pixbuf_column(2)
-        it = gtk.icon_theme_get_default()
         def get_pb(stock):
-            return it.load_icon(stock, 36, gtk.ICON_LOOKUP_FORCE_SVG)
+            return self.app.load_icon(stock, 36, gtk.ICON_LOOKUP_FORCE_SVG)
         model.append([0, _(u"General"), get_pb("gtk-execute")])
         model.append([1, _(u"View"), get_pb("gtk-justify-left")])
         model.append([2, _(u"Editor"), get_pb("gtk-edit")])
@@ -221,7 +219,6 @@ class PreferencesDialog(GladeWidget):
 
     def on_plugin_added(self, manager, plugin):
         iter = self.plugin_model.get_iter_first()
-        it = gtk.icon_theme_get_default()
         while iter:
             if self.plugin_model.get_value(iter, 0) == plugin.plugin_type:
                 break
@@ -231,7 +228,9 @@ class PreferencesDialog(GladeWidget):
             if plugin.description:
                 lbl += "\n"+plugin.description
             if plugin.icon:
-                ico = it.load_icon(plugin.icon, gtk.ICON_SIZE_LARGE_TOOLBAR, gtk.ICON_LOOKUP_FORCE_SVG)
+                ico = self.app.load_icon(plugin.icon,
+                                         gtk.ICON_SIZE_LARGE_TOOLBAR,
+                                         gtk.ICON_LOOKUP_FORCE_SVG)
             else:
                 ico = None
             citer = self.plugin_model.append(iter)
@@ -377,7 +376,6 @@ class PreferencesDialog(GladeWidget):
         # Plugins
         model = self.plugin_model
         model.clear()
-        it = gtk.icon_theme_get_default()
         for key, value in self.app.plugins.plugin_types.items():
             iter = model.append(None)
             model.set(iter,
@@ -394,7 +392,9 @@ class PreferencesDialog(GladeWidget):
                     lbl += '\n<span color="red">'
                     lbl += _(u'ERROR')+': '+plugin.INIT_ERROR+'</span>'
                 if plugin.icon:
-                    ico = it.load_icon(plugin.icon, gtk.ICON_SIZE_LARGE_TOOLBAR, gtk.ICON_LOOKUP_FORCE_SVG)
+                    ico = self.app.load_icon(plugin.icon,
+                                             gtk.ICON_SIZE_LARGE_TOOLBAR,
+                                             gtk.ICON_LOOKUP_FORCE_SVG)
                 else:
                     ico = None
                 citer = model.append(iter)
@@ -457,8 +457,9 @@ class PreferencesDialog(GladeWidget):
             lbl = '<b>[REPO] %s</b>' % plugin.xpath("//*/name")[0].text or _(u"Unknown")
             if plugin.xpath("//*/description"):
                 lbl += "\n"+plugin.xpath("//*/description")[0].text
-            it = gtk.icon_theme_get_default()
-            ico = it.load_icon("stock_internet", gtk.ICON_SIZE_LARGE_TOOLBAR, gtk.ICON_LOOKUP_FORCE_SVG)
+            ico = self.app.load_icon("stock_internet",
+                                     gtk.ICON_SIZE_LARGE_TOOLBAR,
+                                     gtk.ICON_LOOKUP_FORCE_SVG)
             citer = model.append(iter)
             model.set(citer,
                       0, plugin,

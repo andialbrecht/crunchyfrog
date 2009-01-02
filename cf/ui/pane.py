@@ -118,9 +118,8 @@ class Pane(object):
     def on_notebook_switch_page(self, nb, unusable, page_num):
         page = nb.get_nth_page(page_num)
         self.top_label.set_text(page.name)
-        it = gtk.icon_theme_get_default()
-        pb = it.load_icon(page.icon, gtk.ICON_SIZE_MENU,
-                          gtk.ICON_LOOKUP_FORCE_SVG)
+        pb = self.app.load_icon(page.icon, gtk.ICON_SIZE_MENU,
+                                gtk.ICON_LOOKUP_FORCE_SVG)
         self.top_img.set_from_pixbuf(pb)
 
     def on_page_detach(self, menuitem, page):
@@ -166,9 +165,8 @@ class Pane(object):
     def add_item(self, item):
         """Add a PaneItem."""
         assert isinstance(item, PaneItem)
-        it = gtk.icon_theme_get_default()
-        pb = it.load_icon(item.icon, gtk.ICON_SIZE_MENU,
-                          gtk.ICON_LOOKUP_FORCE_SVG)
+        pb = self.app.load_icon(item.icon, gtk.ICON_SIZE_MENU,
+                                gtk.ICON_LOOKUP_FORCE_SVG)
         img = gtk.image_new_from_pixbuf(pb)
         img.set_tooltip_text(item.name)
         img.show()
