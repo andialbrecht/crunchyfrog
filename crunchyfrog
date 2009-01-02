@@ -1,8 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env python
 
-export PYTHONPATH=`pwd`:$PYTHONPATH
-export LD_LIBRARY_PATH=/usr/lib/firefox:$LD_LIBRARY_PATH
-export MOZILLA_FIVE_HOME=/usr/lib/firefox
-
-python cf/__init__.py $*
-
+import cf
+cf.main()
