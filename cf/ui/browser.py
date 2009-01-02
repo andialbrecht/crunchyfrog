@@ -340,12 +340,6 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
                     widget.get_buffer().set_text(value)
                     nb.append_page(sw, gtk.Label(key))
             nb.show_all()
-            # XXX
-            return
-            item = pdock.DockItem(self.instance.dock, "details", nb, _(u"Details: %(objname)s") % {"objname": object.name},
-                              "gtk-edit", None)
-            self.instance.dock.add_item(item)
-            item.show_all()
 
     def find_datasource_info(self, model, iter):
         while iter:
