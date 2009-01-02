@@ -21,9 +21,14 @@
 import logging
 import os
 
-import gnomevfs
 import gobject
 import gtk
+
+try:
+    import gnomevfs
+    HAVE_GNOMEVFS = True
+except ImportError:
+    HAVE_GNOMEVFS = False
 
 from cf import USER_CONFIG_DIR
 from cf import release
@@ -606,7 +611,7 @@ class MainWindow(gtk.Window):
         """
         editor = Editor(self)
         if fname:
-            if fname.startswith("file://"):
+            if fname.startswith("file://") and HAVE_GNOMEVFS:
                 fname = gnomevfs.get_local_path_from_uri(fname)
             editor.set_filename(fname)
         editor.show_all()

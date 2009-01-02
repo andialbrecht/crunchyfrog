@@ -23,10 +23,15 @@
 from gettext import gettext as _
 import os
 
-import gnomevfs
 import gobject
 import gtk
 import pango
+
+try:
+    import gnomevfs
+    HAVE_GNOMEVFS = True
+except ImportError:
+    HAVE_GNOMEVFS = False
 
 from cf.backends import DBConnectError, DBConnection
 from cf.datasources import DatasourceInfo
@@ -238,12 +243,15 @@ class DataExportDialog(gtk.FileChooserDialog):
         self.set_extra_widget(vbox)
         self.edit_export_options = gtk.CheckButton(_(u"_Edit export options"))
         vbox.pack_start(self.edit_export_options, False, False)
-        self.export_selection = gtk.CheckButton(_(u("_Only export "
-                                                    "selected rows")))
+        self.export_selection = gtk.CheckButton(_((u"_Only export "
+                                                   u"selected rows")))
         self.export_selection.set_sensitive(bool(self.selected))
         vbox.pack_start(self.export_selection, False, False)
-        self.open_file = gtk.CheckButton(_(u"_Open file when finished"))
-        vbox.pack_start(self.open_file, False, False)
+        if HAVE_GNOMEVFS:
+            self.open_file = gtk.CheckButton(_(u"_Open file when finished"))
+            vbox.pack_start(self.open_file, False, False)
+        else:
+            self.open_file = None
         vbox.show_all()
         if cfg.get("editor.export.recent_folder"):
             self.set_current_folder(cfg.get("editor.export.recent_folder"))
@@ -305,7 +313,7 @@ class DataExportDialog(gtk.FileChooserDialog):
         and self.edit_export_options.get_active():
             opts.update(plugin.show_options(self.description, rows))
         plugin.export(self.description, rows, opts)
-        if self.open_file.get_active():
+        if self.open_file is not None and self.open_file.get_active():
             mime = gnomevfs.get_mime_type(opts["uri"])
             app_desc = gnomevfs.mime_get_default_application(mime)
             cmd = app_desc[2].split(" ")

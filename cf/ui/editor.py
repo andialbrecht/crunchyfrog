@@ -751,7 +751,7 @@ class ResultsView(GladeWidget):
         selected = self.grid.grid.get_selected_rows()
         statement = self.grid.query.statement
         gtk.gdk.threads_enter()
-        dlg = DataExportDialog(self.app, self.instance.widget,
+        dlg = DataExportDialog(self.app, self.instance,
                                data, selected, statement, description)
         if dlg.run() == gtk.RESPONSE_OK:
             dlg.hide()
