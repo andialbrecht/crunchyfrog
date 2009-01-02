@@ -280,7 +280,7 @@ class DatasourceManager(GladeWidget):
                 sel.select_iter(iter)
 
     def run_be_info_dialog(self):
-        dlg = BackendInfoDialog(self.app)
+        dlg = BackendInfoDialog(self.instance)
         dlg.run()
         dlg.destroy()
 
@@ -330,8 +330,9 @@ class DatasourceManager(GladeWidget):
 
 class BackendInfoDialog(GladeWidget):
 
-    def __init__(self, app):
-        GladeWidget.__init__(self, app, "crunchyfrog", "backend_info_dialog")
+    def __init__(self, instance):
+        GladeWidget.__init__(self, instance,
+                             "crunchyfrog", "backend_info_dialog")
         self.populate()
 
     def _setup_widget(self):

@@ -85,7 +85,7 @@ class GladeWidget(gobject.GObject):
         """
         self.__gobject_init__()
         self.win = win
-        if self.win:
+        if self.win and hasattr(win, 'app'):
             self.app = win.app
         else:
             self.app = None
