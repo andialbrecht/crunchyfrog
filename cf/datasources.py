@@ -200,7 +200,7 @@ class DatasourceInfo(gobject.GObject):
             return None
         sql = "select password from datasource where id = ?"
         cur = self.app.userdb.cursor
-        cur.execute(sql)
+        cur.execute(sql, (db_id,))
         res = cur.fetchone()
         if res:
             return res[0]

@@ -306,7 +306,9 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
                     for child in datasource_info.backend.schema.fetch_children(datasource_info.internal_connection, obj) or []:
                         citer = model.append(iter)
                         if child.icon:
-                            icon = gtk.icon_theme_get_default().load_icon(child.icon, gtk.ICON_SIZE_MENU, gtk.ICON_LOOKUP_FORCE_SVG)
+                            icon = self.app.load_icon(child.icon,
+                                                      gtk.ICON_SIZE_MENU,
+                                                      gtk.ICON_LOOKUP_FORCE_SVG)
                         else:
                             icon = None
                         model.set(citer,
@@ -367,13 +369,12 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             self.set_datasource_info(iter, datasource_info)
 
     def set_datasource_info(self, iter, datasource_info):
-        it = gtk.icon_theme_get_default()
         if datasource_info.get_connections():
-            ico = it.load_icon("stock_connect", gtk.ICON_SIZE_MENU,
-                               gtk.ICON_LOOKUP_FORCE_SVG)
+            ico = self.app.load_icon("gtk-connect", gtk.ICON_SIZE_MENU,
+                                      gtk.ICON_LOOKUP_FORCE_SVG)
         else:
-            ico = it.load_icon("stock_disconnect", gtk.ICON_SIZE_MENU,
-                               gtk.ICON_LOOKUP_FORCE_SVG)
+            ico = self.app.load_icon("gtk-disconnect", gtk.ICON_SIZE_MENU,
+                                     gtk.ICON_LOOKUP_FORCE_SVG)
         self.model.set(iter,
                   0, datasource_info,
                   1, datasource_info.get_label(),
