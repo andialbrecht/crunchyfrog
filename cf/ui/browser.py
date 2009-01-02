@@ -25,7 +25,11 @@ from gettext import gettext as _
 import gtk
 import gobject
 
-import sexy
+try:
+    import sexy
+    HAVE_SEXY = True
+except ImportError:
+    HAVE_SEXY = False
 
 from cf.datasources import DatasourceInfo
 from cf.backends import DBConnectError, schema
@@ -109,12 +113,18 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         self.set_shadow_type(gtk.SHADOW_ETCHED_IN)
         # Hint
         style = self.object_tree.get_style()
-        lbl = sexy.UrlLabel(_(u'<b>No active data sources</b>\n\n'
-                               '<a href="#">Click</a> to open the data '
-                               'source manager.'))
+        if HAVE_SEXY:
+            lbl = sexy.UrlLabel(_(u'<b>No active data sources</b>\n\n'
+                                  u'<a href="#">Click</a> to open the data '
+                                  u'source manager.'))
+            lbl.connect("url-activated", self.instance.on_datasource_manager)
+        else:
+            lbl = gtk.Label(_(u'<b>No active data sources</b>\n'
+                              u'Select "Edit" &gt; "Data Source Manager"\n'
+                              u'to create one.'))
+            lbl.set_use_markup(True)
         lbl.set_alignment(0.5, 0)
         lbl.set_padding(15, 15)
-        lbl.connect("url-activated", self.instance.on_datasource_manager)
         self._hint = gtk.EventBox()
         self._hint.add(lbl)
         self._hint.modify_bg(gtk.STATE_NORMAL, style.white)
