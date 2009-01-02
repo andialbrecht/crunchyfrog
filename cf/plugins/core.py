@@ -38,7 +38,7 @@ PLUGIN_TYPE_BACKEND = 1
 PLUGIN_TYPE_EXPORT = 2
 PLUGIN_TYPE_EDITOR = 3
 
-from cf import USER_PLUGIN_DIR, PLUGIN_DIR, USER_PLUGIN_URI
+from cf import USER_PLUGIN_DIR, PLUGIN_DIR
 
 from cf.plugins.mixins import InstanceMixin, MenubarMixin, EditorMixin
 from cf.plugins.mixins import UserDBMixin
@@ -420,11 +420,6 @@ class PluginManager(gobject.GObject):
 
     def init_instance_mixins(self, plugin, instance):
         plugin.init_instance(instance)
-        # XXX
-        #if isinstance(plugin, MenubarMixin):
-        #    plugin.menubar_load(instance.xml.get_widget("menubar"), instance)
-        #if isinstance(plugin, EditorMixin):
-        #    self.editor_notify(instance._editor, instance)
 
     def unload_instance_mixins(self, plugin, instance):
         if isinstance(plugin, MenubarMixin):
@@ -443,34 +438,3 @@ class PluginManager(gobject.GObject):
             if isinstance(plugin, EditorMixin):
                 plugin.set_editor(editor, instance)
 
-    def install_plugin(self, uri):
-        """Installs a plugin from URI
-
-        :Parameter:
-            uri
-                URI pointing to .egg file
-        """
-        def progress_cb(info, dlg):
-            if info.bytes_total:
-                fraction = info.total_bytes_copied/float(info.bytes_total)
-            else:
-                fraction = 0
-            dlg.set_progress(fraction)
-            return True
-        if uri is None:
-            return
-        source = gnomevfs.URI(uri)
-        dest = gnomevfs.URI(USER_PLUGIN_URI).append_file_name(source.short_name)
-        try:
-            dlg = ProgressDialog(self.app)
-            dlg.show_all()
-            dlg.set_info(_(u"Copying files..."))
-            gnomevfs.xfer_uri(source, dest, gnomevfs.XFER_DEFAULT,
-                              gnomevfs.XFER_ERROR_MODE_QUERY,
-                              gnomevfs.XFER_OVERWRITE_MODE_QUERY,
-                              progress_cb, dlg)
-            dlg.set_info(_(u"Plugin installed."))
-        except:
-            err = sys.exc_info()[1]
-            dlg.set_error(str(err))
-        dlg.set_finished(True)

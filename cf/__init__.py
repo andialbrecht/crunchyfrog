@@ -33,9 +33,6 @@ import traceback
 
 import pygtk; pygtk.require("2.0")
 
-import bonobo
-import gnome
-import gnomevfs
 import gobject
 import gtk
 import gtk.glade
@@ -64,9 +61,7 @@ if not isdir(USER_DIR):
 USER_PLUGIN_DIR = join(USER_DIR, "plugins/")
 if not isdir(USER_PLUGIN_DIR):
     makedirs(USER_PLUGIN_DIR)
-USER_PLUGIN_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_DIR)
 USER_PLUGIN_REPO = join(USER_DIR, "repo.xml")
-USER_PLUGIN_REPO_URI = gnomevfs.get_uri_from_local_path(USER_PLUGIN_REPO)
 IPC_SOCKET = join(USER_DIR, "crunchyfog.sock")
 
 
@@ -125,14 +120,14 @@ def main():
     ipc_client = ipc.get_client()
     if not is_alive(ipc_client):
         logging.info('Creating new application')
-        if isfile(abspath(join(dirname(__file__), "../setup.py"))):
-            props = {'app-datadir':
-                     abspath(join(dirname(__file__), '../data'))}
-        else:
-            props = dict()
-        props['human-readable-name'] = release.name
-        gnome.init(release.name.lower(), release.version,
-                   properties=props)
+##         if isfile(abspath(join(dirname(__file__), "../setup.py"))):
+##             props = {'app-datadir':
+##                      abspath(join(dirname(__file__), '../data'))}
+##         else:
+##             props = dict()
+##         props['human-readable-name'] = release.name
+##         gnome.init(release.name.lower(), release.version,
+##                    properties=props)
         app = CFApplication(options)
         app.init()
         instance = app.new_instance(args)
