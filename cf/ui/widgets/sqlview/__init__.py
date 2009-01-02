@@ -44,11 +44,16 @@ Example usage
 
 """
 
-import gconf
 import gtk
 import gtksourceview2
 import gobject
 import pango
+
+try:
+    import gconf
+    HAVE_GCONF = True
+except ImportError:
+    HAVE_GCONF = False
 
 from cf import sqlparse
 
@@ -126,9 +131,12 @@ class SQLView(gtksourceview2.View):
         self.set_insert_spaces_instead_of_tabs(c.get('editor.insert_spaces'))
         self.set_auto_indent(c.get('editor.auto_indent'))
         if c.get('editor.default_font'):
-            client = gconf.client_get_default()
-            default_font = '/desktop/gnome/interface/monospace_font_name'
-            font = client.get_string(default_font)
+            if HAVE_GCONF:
+                client = gconf.client_get_default()
+                default_font = '/desktop/gnome/interface/monospace_font_name'
+                font = client.get_string(default_font)
+            else:
+                font = 'Monospace 10'
         else:
             font = c.get('editor.font')
         self.modify_font(pango.FontDescription(font))

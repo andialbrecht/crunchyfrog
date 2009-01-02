@@ -22,9 +22,12 @@
 
 import gtk
 import gobject
-import gnome
-import gconf
-import gnomevfs
+
+try:
+    import gconf
+    HAVE_GCONF = True
+except ImportError:
+    HAVE_GCONF = False
 
 import os
 import sys
@@ -211,41 +214,10 @@ class PreferencesDialog(GladeWidget):
         iter = self.plugin_model.get_iter(path)
         plugin = self.plugin_model.get_value(iter, 0)
         if isinstance(plugin, etree._Element):
-            self._plugin_download_and_activate(plugin)
+            print plugin
         elif issubclass(plugin, GenericPlugin):
             self.plugin_model.set_value(iter, 1, not renderer.get_active())
             gobject.idle_add(self.app.plugins.set_active, plugin, not renderer.get_active())
-
-    def _plugin_download_and_activate(self, plugin):
-        if not dialogs.yesno(_(u"Download plugin %r?") % plugin.xpath("//*/name")[0].text) == gtk.RESPONSE_YES:
-            return
-        def progress_cb(info, dlg):
-            if info.bytes_total:
-                fraction = info.total_bytes_copied/float(info.bytes_total)
-            else:
-                fraction = 0
-            dlg.set_progress(fraction)
-            return True
-        url = os.path.join(self.app.config.get("plugins.repo_url"), plugin.xpath("//*/egg")[0].text)
-        source = gnomevfs.URI(url)
-        dest = gnomevfs.URI(os.path.join(cf.USER_PLUGIN_URI, plugin.xpath("//*/egg")[0].text))
-        try:
-            dlg = ProgressDialog(self.app)
-            dlg.show_all()
-            dlg.set_info(_(u"Downloading plugin %r...") % plugin.xpath("//*/name")[0].text)
-            gnomevfs.xfer_uri(source, dest, gnomevfs.XFER_DEFAULT,
-                              gnomevfs.XFER_ERROR_MODE_QUERY,
-                              gnomevfs.XFER_OVERWRITE_MODE_QUERY,
-                              progress_cb, dlg)
-            dlg.set_info(_(u"Plugin downloaded."))
-            self.app.plugins.refresh()
-            self.refresh_plugins_repo()
-        except:
-            err = sys.exc_info()[1]
-            log.error("Plugin download failed: %s" % err)
-            log.error("URL: %s" % url)
-            dlg.set_error(_(u"Failed to install plugin %r") % plugin.xpath("//*/name")[0].text)
-        dlg.set_finished(True)
 
     def on_plugin_added(self, manager, plugin):
         iter = self.plugin_model.get_iter_first()
@@ -388,8 +360,11 @@ class PreferencesDialog(GladeWidget):
         gw("editor_auto_indent").set_active(config.get("editor.auto_indent"))
         gw("editor_default_font").set_data("config_option", "editor.default_font")
         gw("editor_default_font").set_active(config.get("editor.default_font"))
-        client = gconf.client_get_default()
-        default_font = client.get_string("/desktop/gnome/interface/monospace_font_name")
+        if HAVE_GCONF:
+            client = gconf.client_get_default()
+            default_font = client.get_string("/desktop/gnome/interface/monospace_font_name")
+        else:
+            default_font = 'Monospace 10'
         gw("editor_default_font").set_label(gw("editor_default_font").get_label() % default_font)
         gw("editor_font_box").set_sensitive(not config.get("editor.default_font"))
         gw("editor_font").set_data("config_option", "editor.font")
@@ -491,51 +466,6 @@ class PreferencesDialog(GladeWidget):
                       2, lbl,
                       3, ico,
                       4, True)
-
-    def sync_repo_file(self, silent=False):
-        """Synchronize plugin repo.xml"""
-        def progress_cb(info, dlg):
-            if info.bytes_total:
-                fraction = info.total_bytes_copied/float(info.bytes_total)
-            else:
-                fraction = 0
-            dlg.set_progress(fraction)
-            return True
-        # XXX currently disabled, should be replaced by a Capuchin backend
-        return
-        url = os.path.join(self.app.config.get("plugins.repo_url"), "repo.xml")
-        source = gnomevfs.URI(url)
-        dest = gnomevfs.URI(cf.USER_PLUGIN_REPO_URI)
-        try:
-            if not silent:
-                dlg = ProgressDialog(self.app)
-                dlg.show_all()
-                dlg.set_info(_(u"Downloading repository data..."))
-                gnomevfs.xfer_uri(source, dest, gnomevfs.XFER_DEFAULT,
-                                  gnomevfs.XFER_ERROR_MODE_QUERY,
-                                  gnomevfs.XFER_OVERWRITE_MODE_QUERY,
-                                  progress_cb, dlg)
-                dlg.set_info(_(u"Repository data synchronized."))
-                self.refresh_plugins_repo()
-            else:
-                def fake_cb(*args):
-                    return True
-                gnomevfs.xfer_uri(source, dest, gnomevfs.XFER_DEFAULT,
-                                  gnomevfs.XFER_ERROR_MODE_QUERY,
-                                  gnomevfs.XFER_OVERWRITE_MODE_QUERY,
-                                  fake_cb)
-            retval = True
-        except:
-            err = sys.exc_info()[1]
-            log.error("Plugin synchro failed: %s" % err)
-            log.error("URL: %s" % url)
-            if not silent:
-                dlg.set_error(_(u"Failed to load repository data"))
-            self.xml.get_widget("plugin_enable_repo").set_active(False)
-            retval = False
-        if not silent:
-            dlg.set_finished(True)
-        return retval
 
     def refresh_shortcuts(self):
         model = self.shortcuts_model

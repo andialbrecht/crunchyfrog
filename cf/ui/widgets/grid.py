@@ -26,7 +26,12 @@
 import gtk
 import gobject
 import pango
-import gnomevfs
+
+try:
+    import gnomevfs
+    HAVE_GNOMEVFS = True
+except ImportError:
+    HAVE_GNOMEVFS = False
 
 import sys
 import os
@@ -137,7 +142,7 @@ class Grid(gtk.TreeView):
                 sep = gtk.SeparatorMenuItem()
                 sep.show()
                 popup.append(sep)
-            if isinstance(data, buffer):
+            if isinstance(data, buffer) and HAVE_GNOMEVFS:
                 mime = gnomevfs.get_mime_type_for_data(data)
                 item = gtk.MenuItem(_(u"Save as..."))
                 item.connect("activate", self.on_save_blob, data, mime)
