@@ -2,6 +2,7 @@ Database
 --------
 - Client encoding, e.g. for MySQL cur.execute("SET NAMES utf8;")
 
+
 User Interface
 --------------
 - Failed queries: Stop on error with continue/stop dialog.
@@ -10,16 +11,19 @@ User Interface
 - Accelerators don't work in SQL window.
 - Replace toolbar from data source manager? It's too large and looks
   ugly with some GTK themes.
+- Panes loose state when new instance was created and closed last.
+- Drag'n'Drop for editor tabs:
+  - drop inside same window -> do nothing
+  - drop into another instance -> add editor to this instance
+  - drop anywhere else -> create a new instance with this editor
+- Redesign Data Source Manager
+
 
 Editor
 ------
-- Alt-<NUMBER> should change tabs in editor
 - Search (and replace)
+- Disable export button if no filter plugin is active.
 
-Editor
-------
-- Search (and replace)
-- Disable export button if not filter plugin is active.
 
 Library
 -------
@@ -28,10 +32,12 @@ Library
 - Export/import library.
 - Optionally save current connection with statement?
 
+
 Documentation
 -------------
 - Switch to Sphinx/ReSt, it's easier to maintain.
 - Some more Plugin examples.
+
 
 Misc.
 -----
@@ -44,7 +50,11 @@ Misc.
   See: http://docs.python.org/lib/csv-fmt-params.html
 - Export filter should emit a progress signal (and of course the dialog
   should have a callback).
-- LDAP connections make no sense in editor, should be suppressed somehow.
+- LDAP connections make no sense in editor, should be suppressed
+  somehow.
+- Python shell should check for presence of ipython on startup.
+- Include VTE support.
+
 
 Software Engineering
 --------------------
