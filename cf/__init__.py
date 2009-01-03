@@ -37,6 +37,12 @@ import gobject
 import gtk
 import gtk.glade
 
+try:
+    import gnome
+    HAVE_GNOME = True
+except ImportError:
+    HAVE_GNOME = False
+
 gobject.threads_init()
 
 from cf import release
@@ -118,14 +124,15 @@ def main():
         ipc_client = None
     if ipc_client is None or not is_alive(ipc_client):
         logging.info('Creating new application')
-##         if isfile(abspath(join(dirname(__file__), "../setup.py"))):
-##             props = {'app-datadir':
-##                      abspath(join(dirname(__file__), '../data'))}
-##         else:
-##             props = dict()
-##         props['human-readable-name'] = release.name
-##         gnome.init(release.name.lower(), release.version,
-##                    properties=props)
+        if HAVE_GNOME:
+            if isfile(abspath(join(dirname(__file__), "../setup.py"))):
+                props = {'app-datadir':
+                         abspath(join(dirname(__file__), '../data'))}
+            else:
+                props = dict()
+            props['human-readable-name'] = release.name
+            gnome.init(release.name.lower(), release.version,
+                       properties=props)
         app = CFApplication(options)
         app.init()
         instance = app.new_instance(args)
