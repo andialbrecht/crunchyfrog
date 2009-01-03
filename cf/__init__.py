@@ -42,8 +42,6 @@ gobject.threads_init()
 from cf import release
 
 
-LOG_FORMAT_APP = '%(levelname)s\t%(name)s\t%(created)f\t%(message)s'
-
 try:
     from dist import DATA_DIR, LOCALE_DIR
 except ImportError:
@@ -80,23 +78,18 @@ def _parse_commandline():
     which exit immediately (e.g. --version)"""
     usage = "usage: %prog [options] FILE1, FILE2, ..."
     parser = OptionParser(usage)
-    parser.add_option("-d", "--debug",
-                      action="store_true", dest="debug",
-                      default=False,
-                      help="run in debug mode")
-    parser.add_option("--version",
-                      action="store_true", dest="show_version",
-                      default=False,
-                      help="show program's version number and exit")
     parser.add_option("-c", "--config",
                       dest="config", default=USER_CONF,
                       help="configuration file")
+    group = parser.add_option_group('Logging options')
+    group.add_option('-q', '--quiet', action='store_const', const=0,
+                     dest='verbose', help='Print errors only.')
+    group.add_option('-v', '--verbose', action='store_const', const=2,
+                     dest='verbose', default=1,
+                     help='Print info level logs (default).')
+    group.add_option('--noisy', action='store_const', const=3,
+                     dest='verbose', help='Print all logs.')
     options, args = parser.parse_args()
-    if options.show_version:
-        print "%s - %s" % (release.name, release.description)
-        print "Version %s" % release.version
-        print
-        sys.exit()
     return options, args
 
 
@@ -109,13 +102,14 @@ def is_alive(client):
 
 def main():
     global FIRST_RUN
+    logging.basicConfig(format=('%(asctime).19s %(levelname)s %(filename)s:'
+                                '%(lineno)s %(message)s '))
     options, args = _parse_commandline()
     options.first_run = not isfile(options.config)
-    if options.debug:
-        log_level = logging.DEBUG
-    else:
-        log_level = logging.WARNING
-    logging.basicConfig(format=LOG_FORMAT_APP, level=log_level)
+    if options.verbose >= 3:
+        logging.getLogger().setLevel(logging.DEBUG)
+    elif options.verbose >= 2:
+        logging.getLogger().setLevel(logging.INFO)
     try:
         from cf import ipc
         ipc_client = ipc.get_client()
