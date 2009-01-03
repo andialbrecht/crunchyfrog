@@ -77,7 +77,7 @@ def _parse_commandline():
     """Parses command line arguments and handles all arguments
     which exit immediately (e.g. --version)"""
     usage = "usage: %prog [options] FILE1, FILE2, ..."
-    parser = OptionParser(usage)
+    parser = OptionParser(usage, prog=release.appname, version=release.version)
     parser.add_option("-c", "--config",
                       dest="config", default=USER_CONF,
                       help="configuration file")
