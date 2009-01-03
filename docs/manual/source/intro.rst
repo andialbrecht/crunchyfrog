@@ -12,15 +12,12 @@ Requirements
 ------------
 
  * Python >= 2.5
- * PyGTK >= 2.12
+ * PyGTK >= 2.12 (incl. Glade)
+ * GTKSourceView2 (python-gtksourceview2)
  * python-setuptools
- * GNOME bindings, including extras (gtksourceview2, gnomekeyring)
- * GConf bindings
- * python-pysqlite2 >= 2.0.5
  * python-configobj >= 4.4.0
+ * python-pygments
  * python-lxml >= 0.9
- * gnome-extra-icons
- * python-sexy
 
 The following modules are required for specific database backends:
 
@@ -30,3 +27,25 @@ The following modules are required for specific database backends:
  * cx_Oracle (optional, required to connect to Oracle databases)
  * ldap bindings (optional, required to browse LDAP servers)
  * pymssql bindings (optional, required to connect to SQL Server)
+
+GNOME
+-----
+
+ * GNOME bindings, including extras (gtksourceview2, gnomekeyring)
+ * GConf bindings
+ * python-pysqlite2 >= 2.0.5
+ * gnome-extra-icons
+ * python-sexy
+
+
+KDE (Kubuntu)
+-------------
+
+ * python-gtk2, python-gobject
+ * python-glade2
+
+
+Windows
+-------
+
+ * GTK runtime
