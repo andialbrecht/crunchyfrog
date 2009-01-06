@@ -468,6 +468,7 @@ class MainWindow(gtk.Window):
                             (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                              gtk.STOCK_OPEN, gtk.RESPONSE_OK))
         dlg.set_current_folder(self.app.config.get("editor.recent_folder", ""))
+        dlg.set_select_multiple(True)
         filter = gtk.FileFilter()
         filter.set_name(_(u"All files (*)"))
         filter.add_pattern("*")
@@ -499,7 +500,7 @@ class MainWindow(gtk.Window):
         dlg.set_extra_widget(exp)
         recent_chooser.show()
         if dlg.run() == gtk.RESPONSE_OK:
-            self.editor_create(dlg.get_filename())
+            [self.editor_create(fname) for fname in dlg.get_filenames()]
             self.app.config.set("editor.recent_folder",
                                 dlg.get_current_folder())
         dlg.destroy()
