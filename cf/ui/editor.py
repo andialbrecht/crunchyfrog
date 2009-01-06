@@ -772,7 +772,12 @@ class ResultsView(GladeWidget):
         # Explain
         self.explain_model.clear()
         # Messages
-        self.messages.get_model().clear()
+        # Only gray out messages from previous runs, don't remove them!
+        model = self.messages.get_model()
+        iter_ = model.get_iter_first()
+        while iter_:
+            model.set_value(iter_, 2, '#cccccc')
+            iter_ = model.iter_next(iter_)
         self.set_current_page(2)
 
     def set_explain(self, data):
