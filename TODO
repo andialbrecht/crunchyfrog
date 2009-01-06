@@ -23,6 +23,11 @@ Editor
 ------
 - Search (and replace)
 - Disable export button if no filter plugin is active.
+- Messages should stay current page as long queries are running.
+  - When multiple SELECT statements are executed only the result from
+    the last executed statement will be displayed.
+- SQL statement in messages list should point to corresponding row in editor
+  when clicking on them.
 
 
 Library
