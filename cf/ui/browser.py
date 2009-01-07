@@ -70,7 +70,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         # Model
         self.model = gtk.TreeStore(gobject.TYPE_PYOBJECT, # 0 Object
                                    str, # 1 label
-                                   gtk.gdk.Pixbuf, # 2 icon
+                                   str, # 2 icon
                                    gobject.TYPE_PYOBJECT, # 3 double-click callback
                                    gobject.TYPE_PYOBJECT, # 4 popup menu callback
                                    str, # 5 tooltip
@@ -83,7 +83,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         col = gtk.TreeViewColumn()
         renderer = gtk.CellRendererPixbuf()
         col.pack_start(renderer, expand=False)
-        col.add_attribute(renderer, 'pixbuf', 2)
+        col.add_attribute(renderer, 'stock_id', 2)
         renderer = gtk.CellRendererText()
         col.pack_start(renderer, expand=True)
         col.add_attribute(renderer, 'text', 1)
@@ -314,7 +314,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
                         model.set(citer,
                                   0, child,
                                   1, child.name,
-                                  2, icon,
+                                  2, child.icon,
                                   5, child.description)
                         if child.has_children:
                             cciter = model.append(citer)
@@ -364,11 +364,9 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
 
     def set_datasource_info(self, iter, datasource_info):
         if datasource_info.get_connections():
-            ico = self.app.load_icon("gtk-connect", gtk.ICON_SIZE_MENU,
-                                      gtk.ICON_LOOKUP_FORCE_SVG)
+            ico = "gtk-connect"
         else:
-            ico = self.app.load_icon("gtk-disconnect", gtk.ICON_SIZE_MENU,
-                                     gtk.ICON_LOOKUP_FORCE_SVG)
+            ico = "gtk-disconnect"
         self.model.set(iter,
                   0, datasource_info,
                   1, datasource_info.get_label(),
