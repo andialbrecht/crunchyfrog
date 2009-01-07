@@ -35,11 +35,13 @@ from cf import release
 from cf.backends import TRANSACTION_IDLE, TRANSACTION_COMMIT_ENABLED
 from cf.backends import TRANSACTION_ROLLBACK_ENABLED
 from cf.ui import pane
+from cf.ui import utils
 from cf.ui import widgets
 from cf.ui.browser import Browser
 from cf.ui.datasources import DatasourceManager
 from cf.ui.editor import Editor
 from cf.ui.queries import QueriesNotebook
+
 
 class MainWindow(gtk.Window):
     """Application main window.
@@ -64,7 +66,7 @@ class MainWindow(gtk.Window):
         self.ui.add_ui_from_string(UI)
         self.ui.ensure_update()
         self.set_title("CrunchyFrog %s" % release.version)
-        self.set_icon_name("crunchyfrog")
+        self.set_icon_list(*utils.get_logo_icon_list())
         self._init_elements()
         self.connect('window-state-event', self.on_window_state_event)
         self.state_restore()
@@ -328,7 +330,7 @@ class MainWindow(gtk.Window):
         dlg.set_license(release.license)
         dlg.set_website(release.url)
         dlg.set_website_label(release.url)
-        dlg.set_logo_icon_name(release.appname)
+        dlg.set_logo(utils.get_logo_icon(96))
         dlg.set_program_name(release.appname)
         dlg.set_translator_credits(release.translators)
         dlg.run()
