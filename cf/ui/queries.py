@@ -39,6 +39,7 @@ class QueriesNotebook(gtk.Notebook):
         self.set_property("enable-popup", False)
         self.connect("switch-page", self.on_switch_page)
         self.connect("page-removed", self.on_page_removed)
+        self.set_group_id(1)
 
     def on_page_added(self, notebook, child, page_num):
         gobject.idle_add(self.set_current_page, page_num)
