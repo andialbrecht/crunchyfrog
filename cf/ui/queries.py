@@ -40,6 +40,11 @@ class QueriesNotebook(gtk.Notebook):
         self.connect("switch-page", self.on_switch_page)
         self.connect("page-removed", self.on_page_removed)
         self.set_group_id(1)
+        self.connect('create-window', self.on_create_window)
+
+    def on_create_window(self, nb, page, x, y):
+        editor = nb.get_editor_by_page(page)
+        editor.show_in_separate_window()
 
     def on_page_added(self, notebook, child, page_num):
         gobject.idle_add(self.set_current_page, page_num)
@@ -62,8 +67,13 @@ class QueriesNotebook(gtk.Notebook):
         self.set_current_page(self.page_num(editor.widget))
 
     def get_editor_by_pagenum(self, page_num):
+        """Return editor object by page number."""
         child = self.get_nth_page(page_num)
-        lbl = self.get_tab_label(child)
+        return self.get_editor_by_page(child)
+
+    def get_editor_by_page(self, page):
+        """Return editor object by child widget."""
+        lbl = self.get_tab_label(page)
         return lbl.editor
 
 
