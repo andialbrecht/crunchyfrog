@@ -615,9 +615,9 @@ class MainWindow(gtk.Window):
             if fname.startswith("file://") and HAVE_GNOMEVFS:
                 fname = gnomevfs.get_local_path_from_uri(fname)
             editor.set_filename(fname)
+        self.editor_append(editor)
         editor.show_all()
         editor.textview.grab_focus()
-        self.editor_append(editor)
         return editor
 
     def editor_append(self, editor):

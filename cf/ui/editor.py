@@ -152,16 +152,6 @@ class Editor(GladeWidget):
                                                   x.get_active()))
         item.show()
         popup.append(item)
-        if self.get_data("win"):
-            lbl = _(u"Show in main window")
-            cb = self.on_show_in_main_window
-        else:
-            lbl = _(u"Show in separate window")
-            cb = self.on_show_in_separate_window
-        item = gtk.MenuItem(lbl)
-        item.connect("activate", cb)
-        item.show()
-        popup.append(item)
         item = gtk.ImageMenuItem("gtk-close")
         item.show()
         item.connect("activate", self.on_close)

@@ -73,13 +73,13 @@ class QueriesNotebook(gtk.Notebook):
             self.append_page(editor.widget, TabLabel(editor))
         self.set_tab_reorderable(editor.widget, True)
         self.set_tab_detachable(editor.widget, True)
-        self.popup_disable()
-        self.set_property("enable-popup", False)
+        self.set_current_page(self.page_num(editor.widget))
 
     def get_editor_by_pagenum(self, page_num):
         child = self.get_nth_page(page_num)
         lbl = self.get_tab_label(child)
         return lbl.editor
+
 
 class TabLabel(gtk.HBox):
 
@@ -103,7 +103,6 @@ class TabLabel(gtk.HBox):
         self.pack_start(self.label, True, True)
         btn_close = gtk.Button()
         btn_close.connect("clicked", self.on_button_close_clicked)
-        btn_close.connect("button-press-event", self.on_button_press_event)
         self.add_icon_to_button(btn_close)
         btn_close.set_relief(gtk.RELIEF_NONE)
         self.pack_start(btn_close, False, False)
@@ -127,23 +126,6 @@ class TabLabel(gtk.HBox):
 
     def on_buffer_changed(self, buffer):
         gobject.idle_add(self.update_label, buffer)
-
-    def on_button_press_event(self, box, event):
-        if event.button == 3:
-            time = event.time
-            popup = gtk.Menu()
-            item = gtk.MenuItem(_(u"Show in separate window"))
-            item.connect("activate", self.on_show_in_separate_window)
-            popup.append(item)
-            sep = gtk.SeparatorMenuItem()
-            sep.show()
-            popup.append(sep)
-            item = gtk.ImageMenuItem("gtk-close")
-            item.connect("activate", self.on_close_editor)
-            item.show()
-            popup.append(item)
-            popup.show_all()
-            popup.popup( None, None, None, event.button, time)
 
     def on_close_editor(self, *args):
         self.editor.close()
