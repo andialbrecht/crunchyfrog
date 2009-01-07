@@ -102,6 +102,8 @@ class CFApplication(gobject.GObject):
           The new instance.
         """
         instance = MainWindow(self)
+        if args is None:
+            args = []
         for arg in args:
             instance.editor_create(arg)
         self._instances.append(instance)

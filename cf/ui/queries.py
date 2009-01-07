@@ -39,21 +39,6 @@ class QueriesNotebook(gtk.Notebook):
         self.set_property("enable-popup", False)
         self.connect("switch-page", self.on_switch_page)
         self.connect("page-removed", self.on_page_removed)
-        def foo(notebook, context):
-            dest_window = context.dest_window
-            if dest_window == self.instance:
-                return
-            for win in self.app.get_instances():
-                print win, dest_window
-                if win != self.instance and win == dest_window:
-                    win.editor_append(self.get_editor_by_pagenum(notebook.props.page))
-                    return
-            editor = self.get_editor_by_pagenum(notebook.props.page)
-            editor.show_in_separate_window()
-        #self.connect('drag-end', foo)
-        def bar(widget, context, x, y, timestamp):
-            print widget, context, x, y
-        self.connect('drag-drop', bar)
 
     def on_page_added(self, notebook, child, page_num):
         gobject.idle_add(self.set_current_page, page_num)
