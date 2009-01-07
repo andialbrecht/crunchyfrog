@@ -1,0 +1,3 @@
+CrunchyFrog
+ConfigObj>=4.5.2,<5
+Pygments>=0.10

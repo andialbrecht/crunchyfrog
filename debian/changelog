@@ -1,50 +1,5 @@
-crunchyfrog (0.3.1) experimental; urgency=low
+crunchyfrog (0.3.2) UNRELEASED; urgency=low
 
-  * Bug fixes.
-  * Initial printing support.
+  * Release 0.3.2
 
- -- Andi Albrecht <albrecht.andi@gmail.com>  Mon, 24 Nov 2008 09:37:58 +0100
-
-crunchyfrog (0.3.0) experimental; urgency=low
-
-  * Minor bug fixes.
-  * Version bump to 0.3.0.
-
- -- Andi Albrecht <albrecht.andi@gmail.com>  Fri, 24 Oct 2008 08:30:14 +0200
-
-crunchyfrog (0.2.90) experimental; urgency=low
-
-  * Support for gnomekeyring
-  * Support for multiple SQL statements
-  * UI cleanup
-  * Bug fixes
-
- -- Andi Albrecht <albrecht.andi@gmail.com>  Fri, 10 Oct 2008 08:53:02 +0200
-
-crunchyfrog (0.2.1-1ubuntu) experimental; urgency=low
-
-  * Support for recent files.
-  * UI improvements and fixes.
-  * SQL server and httplog backend.
-  * Improved plugin handling.
-  * New and updated translations.
-
- -- Andi Albrecht <albrecht.andi@gmail.com>  Tue, 10 Jun 2008 06:50:57 +0200
-
-crunchyfrog (0.2.0-1ubuntu) experimental; urgency=low
-
-  * First official public release.
-
- -- Andi Albrecht <albrecht.andi@gmail.com>  Tue, 08 Apr 2008 06:27:11 +0200
-
-crunchyfrog (0.2.0~beta2-1ubuntu) experimental; urgency=low
-
-  * Many bug fixes and improvements.
-
- -- Andi Albrecht <albrecht.andi@gmail.com>  Wed, 26 Mar 2008 23:46:13 +0100
-
-crunchyfrog (0.2.0-1) experimental; urgency=low
-
-  * Initial release.
-
- -- Andi Albrecht <albrecht.andi@gmail.com>  Sat, 16 Jun 2007 18:01:15 +0200
+ -- Andi Albrecht <albrecht.andi@googlemail.com>  Mon, 24 Nov 2008 20:27:44 +0100

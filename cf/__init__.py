@@ -48,11 +48,18 @@ gobject.threads_init()
 from cf import release
 
 
-try:
-    from dist import DATA_DIR, LOCALE_DIR
-except ImportError:
-    DATA_DIR = abspath(join(dirname(__file__), "../data"))
-    LOCALE_DIR = abspath(join(dirname(__file__), "../po"))
+PREFIX = '/usr/'
+
+if os.path.exists(os.path.join(os.path.dirname(__file__), '../setup.py')):
+    DATA_DIR = os.path.join(os.path.dirname(__file__), '../data/')
+    LOCALE_DIR = os.path.join(os.path.dirname(__file__), '../po/')
+else:
+    DATA_DIR = os.path.join(PREFIX, 'share/crunchyfrog/')
+    LOCALE_DIR = os.path.join(PREFIX, 'share/locale/')
+
+DATA_DIR = os.path.abspath(DATA_DIR)
+LOCALE_DIR = os.path.abspath(LOCALE_DIR)
+
 
 PLUGIN_DIR = join(DATA_DIR, "plugins")
 USER_CONFIG_DIR = abspath(expanduser("~/.config/crunchyfrog"))

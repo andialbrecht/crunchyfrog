@@ -3,6 +3,7 @@ include COPYING
 include INSTALL
 include README
 include TODO
+include CHANGES
 include Makefile
 include setup.py
 include crunchyfrog
@@ -12,4 +13,5 @@ recursive-include debian *
 recursive-include docs *
 recursive-include extras *.py
 recursive-include po *
+recursive-include utils *.py
 prune *.pyc

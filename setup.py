@@ -1,17 +1,76 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# crunchyfrog - a database schema browser and query tool
+# Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+from distutils.command.build import build
+from distutils.command.clean import clean
 from distutils.core import setup
+from glob import glob
 import os
+import shutil
 import sys
 
-if "install" in sys.argv or os.getuid() == 0:
-    print "To install CrunchyFrog run"
-    print
-    print "\tmake"
-    print "\tmake install"
-    print
-    print "See README for additional information."
-    sys.exit(1)
+from babel.messages import frontend as babel
+
+from utils.command.clean_mo import clean_mo
+#from utils.command.run import run
 
 from cf import release
+
+
+class clean_with_subcommands(clean):
+
+    def run(self):
+        for cmd_name in self.get_sub_commands():
+            self.run_command(cmd_name)
+        clean.run(self)
+
+build.sub_commands.append(('compile_catalog', None))
+
+
+DATA_FILES = []
+
+# Glade
+DATA_FILES += [('share/crunchyfrog/glade', glob('data/glade/*.glade'))]
+
+# Plugins
+DATA_FILES += [('share/crunchyfrog/plugins', [])]
+
+# Pixmaps
+DATA_FILES += [('share/crunchyfrog/pixmaps', glob('data/pixmaps/*.png'))]
+
+# Data
+DATA_FILES += [('share/applications', ['data/crunchyfrog.desktop'])]
+DATA_FILES += [('share/icons/hicolor/scalable/apps', ['data/crunchyfrog.svg'])]
+DATA_FILES += [('share/pixmaps', ['data/crunchyfrog.svg'])]
+DATA_FILES += [('share/icons/hicolor/24x24/apps', ['data/crunchyfrog.png'])]
+
+# Manpage
+DATA_FILES += [('share/man/man1', ['data/crunchyfrog.1'])]
+
+# Locales
+for lang in os.listdir('po/'):
+    path = os.path.join('po/', lang)
+    if not os.path.isdir(path) or lang[0] in ['.', '_']:
+        continue
+    DATA_FILES += [('share/locale/%s/LC_MESSAGES' % lang,
+                    ['po/%s/LC_MESSAGES/crunchyfrog.mo' % lang])]
+
 
 setup(
     name=release.appname,
@@ -20,7 +79,7 @@ setup(
     author=release.author,
     author_email=release.author_email,
     long_description=release.long_description,
-    license="GPL",
+    license='GPL',
     url=release.url,
     classifiers = [
         "Development Status :: 4 - Beta",
@@ -34,5 +93,19 @@ setup(
         "Topic :: Database :: Front-Ends",
         "Topic :: Desktop Environment :: Gnome",
     ],
-    include_package_data=True,
+    packages=['cf', 'cf/backends', 'cf/backends/schema',
+              'cf/config', 'cf/filter', 'cf/plugins',
+              'cf/shell', 'cf/sqlparse', 'cf/thirdparty',
+              'cf/ui', 'cf/ui/widgets', 'cf/ui/widgets/sqlview'],
+    package_data={'cf': ['config/default.cfg']},
+    scripts=['crunchyfrog'],
+    data_files=DATA_FILES,
+    cmdclass={
+        'compile_catalog': babel.compile_catalog,
+        'extract_messages': babel.extract_messages,
+        'init_catalog': babel.init_catalog,
+        'udpate_catalog': babel.update_catalog,
+        'clean': clean_with_subcommands,
+        'clean_mo': clean_mo,
+    }
 )

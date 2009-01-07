@@ -1,36 +1,14 @@
 Source: crunchyfrog
-Maintainer: Andi Albrecht <albrecht.andi@gmail.com>
 Section: gnome
-Priority: optional
-Build-Depends: debhelper (>= 5.0.37.2),
-			   quilt,
-			   cdbs,
-			   imagemagick,
-               python-dev,
-               python
-Build-Depends-Indep: python-central (>= 0.5.4)
+Priority: extra
+Maintainer: Andi Albrecht <albrecht.andi@googlemail.com>
+Build-Depends: python (>=2.5)
+XS-Python-Version: >=2.5
 Standards-Version: 3.7.2
-XS-Python-Version: >= 2.5
 
 Package: crunchyfrog
-Architecture: all
-Depends: ${misc:Depends},
-         ${python:Depends},
-         ${shlibs:Depends},
-         python-gnome2,
-         python-gnome2-desktop,
-         python-gnome2-extras,
-         python-gobject,
-         python-dbus,
-         python-configobj (>= 4.4.0),
-         python-lxml (>= 0.9),
-         python-sexy,
-Recommends: python-psycopg2,
-			python-mysqldb,
-			python-ldap
+Architecture: any
 XB-Python-Version: ${python:Versions}
-Description: database schema browser and query tool
- CrunchyFrog is a database browser and query tool with support for
- multiple databases.
- .
- Homepage: http://cf.andialbrecht.de
+Depends: python (>=2.5), python-central
+Description: Database front-end for Gnome
+ For more information see: http://crunchyfrog.googlecode.com

@@ -1,23 +1,23 @@
-.. CrunchyFrog Manual documentation master file, created by sphinx-quickstart on Mon Nov 24 12:12:54 2008.
+.. CrunchyFrog API documentation master file, created by sphinx-quickstart on Wed Dec  3 06:23:52 2008.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-CrunchyFrog Manual
-==================
+Welcome to CrunchyFrog API's documentation!
+===========================================
 
 Contents:
 
 .. toctree::
-
-   intro
    :maxdepth: 2
 
-   intro
+   cfpackage
+   instances
+   application
+   configuration
    datasources
-   schema
-   queries
+   widgets
    plugins
-   about
+   misc
 
 
 Indices and tables
