@@ -3,7 +3,8 @@ PKGNAME=crunchyfrog
 DESTDIR=/
 BUILDIR=mydeb
 PROJECT=crunchyfrog
-VERSION=0.3.2
+VERSION=0.3.1
+DEBFLAGS=
 
 all:
 	@echo "make install - Install on local system"
@@ -13,7 +14,7 @@ all:
 install:
 	$(PYTHON) setup.py install --root $(DESTDIR) $(COMPILE)
 
-builddeb:
+builddeb: dist-clean
 	$(PYTHON) setup.py compile_catalog
 	$(PYTHON) setup.py sdist
 	mkdir -p $(BUILDIR)/$(PROJECT)-$(VERSION)/debian
@@ -21,7 +22,13 @@ builddeb:
 	cd $(BUILDIR) && tar xfz $(PROJECT)-$(VERSION).tar.gz
 	mv $(BUILDIR)/$(PROJECT)-$(VERSION).tar.gz $(BUILDIR)/$(PROJECT)-$(VERSION)/
 	cp debian/* $(BUILDIR)/$(PROJECT)-$(VERSION)/debian/
-	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dpkg-buildpackage
+	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dpkg-buildpackage $(DEBFLAGS)
+
+builddeb-src:
+	make builddeb DEBFLAGS=-S
+
+push-ppa: builddeb-src
+	cd $(BUILDIR) && dput cf-ppa $(PROJECT)_$(VERSION)*_source.changes
 
 clean:
 	$(PYTHON) setup.py clean

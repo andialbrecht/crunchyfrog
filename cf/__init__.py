@@ -31,21 +31,9 @@ from os import makedirs
 import sys
 import traceback
 
-import pygtk; pygtk.require("2.0")
-
-import gobject
-import gtk
-import gtk.glade
-
-try:
-    import gnome
-    HAVE_GNOME = True
-except ImportError:
-    HAVE_GNOME = False
-
-gobject.threads_init()
-
 from cf import release
+
+HAVE_GNOME = False  # Note, this is set in main()
 
 
 PREFIX = '/usr/'
@@ -75,15 +63,7 @@ if not isdir(USER_PLUGIN_DIR):
 USER_PLUGIN_REPO = join(USER_DIR, "repo.xml")
 IPC_SOCKET = join(USER_DIR, "crunchyfog.sock")
 
-
-#gettext.bindtextdomain("crunchyfrog", LOCALE_DIR)
-#gettext.textdomain("crunchyfrog")
-gtk.glade.bindtextdomain("crunchyfrog", LOCALE_DIR)
-gtk.glade.textdomain("crunchyfrog")
 gettext.install('crunchyfrog', LOCALE_DIR, True)
-
-
-from cf.app import CFApplication
 
 
 def _parse_commandline():
@@ -114,7 +94,27 @@ def is_alive(client):
 
 
 def main():
-    global FIRST_RUN
+    # TODO: Move this to a separate cmdline module!
+    global FIRST_RUN, HAVE_GNOME
+    import pygtk; pygtk.require("2.0")
+    import gobject
+    import gtk
+    import gtk.glade
+
+    try:
+        import gnome
+        HAVE_GNOME = True
+    except ImportError:
+        HAVE_GNOME = False
+
+    gtk.glade.bindtextdomain("crunchyfrog", LOCALE_DIR)
+    gtk.glade.textdomain("crunchyfrog")
+
+
+    gobject.threads_init()
+
+    from cf.app import CFApplication
+
     logging.basicConfig(format=('%(asctime).19s %(levelname)s %(filename)s:'
                                 '%(lineno)s %(message)s '))
     options, args = _parse_commandline()

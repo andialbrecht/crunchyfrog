@@ -25,10 +25,9 @@ import os
 import shutil
 import sys
 
-from babel.messages import frontend as babel
-
 from utils.command.clean_mo import clean_mo
-#from utils.command.run import run
+from utils.command.clean_mo import compile_mo
+
 
 from cf import release
 
@@ -40,8 +39,24 @@ class clean_with_subcommands(clean):
             self.run_command(cmd_name)
         clean.run(self)
 
-build.sub_commands.append(('compile_catalog', None))
 
+CMD_CLASS = {
+    'compile_catalog': compile_mo,
+    'clean': clean_with_subcommands,
+    'clean_mo': clean_mo,
+    'compile_mo': compile_mo,
+}
+
+# compile_mo: We're using a msgfmt.py based compile to have no Babel dependency
+#   on buildbot like launchpad.net...
+#   So, all babel commands are optional...
+try:
+    from babel.messages import frontend as babel
+    CMD_CLASS['extract_messages'] = babel.extract_messages
+    CMD_CLASS['init_catalog'] = babel.init_catalog
+    CMD_CLASS['udpate_catalog'] = babel.update_catalog
+except ImportError:
+    pass
 
 DATA_FILES = []
 
@@ -100,12 +115,5 @@ setup(
     package_data={'cf': ['config/default.cfg']},
     scripts=['crunchyfrog'],
     data_files=DATA_FILES,
-    cmdclass={
-        'compile_catalog': babel.compile_catalog,
-        'extract_messages': babel.extract_messages,
-        'init_catalog': babel.init_catalog,
-        'udpate_catalog': babel.update_catalog,
-        'clean': clean_with_subcommands,
-        'clean_mo': clean_mo,
-    }
+    cmdclass=CMD_CLASS,
 )
