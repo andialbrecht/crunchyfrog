@@ -1,9 +1,13 @@
 Development
 -----------
 
+Release Highlights
+ * Cross-platform compatibility.
+ * Cleaner user interface.
+ * Configurable keyboard shortcuts.
+
 Other
  * Removed kiwi dependency.
- * Cross-platform compatibility.
  * Open multiple files at once.
  * Drag'n'drop SQL editors between existing application windows.
 
