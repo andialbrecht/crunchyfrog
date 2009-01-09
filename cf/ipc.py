@@ -172,3 +172,11 @@ def get_client():
     """Return a client instance."""
     client = IPCClient()
     return client
+
+
+def is_alive(client):
+    """Tries to connect to a running application."""
+    response = client.ping()
+    if not response:
+        return False
+    return True

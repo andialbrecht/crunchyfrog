@@ -1,4 +1,14 @@
 #!/usr/bin/env python
 
-import cf
-cf.main()
+import os
+
+import cf.cmdline
+
+
+if 'CF_PROFILE' in os.environ:
+    import hotshot
+    prof = hotshot.Profile("crunchyfrog.prof")
+    prof.runcall(cf.cmdline.run)
+    prof.close()
+else:
+    cf.cmdline.run()
