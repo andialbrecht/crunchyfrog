@@ -88,14 +88,6 @@ class CFShell(BottomPanePlugin, InstanceMixin):
         view = CFShellView(self.app, instance)
         instance.bottom_pane.add_item(CFShellView(self.app, instance))
         self._instances[instance] = view
-##         mn_view = instance.xml.get_widget("mn_view")
-##         item = gtk.CheckMenuItem(_(u"Shell"))
-##         item.connect("activate", self.on_toggle_shell, instance)
-##         item.show()
-##         if self.app.config.get("cfshell.visible"):
-##             item.set_active(True)
-##         mn_view.append(item)
-##         self._instances[instance] = item
 
     def shutdown(self):
         if self._shells.keys():
