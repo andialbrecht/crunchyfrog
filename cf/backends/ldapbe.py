@@ -83,6 +83,7 @@ class LDAPBackend(DBBackendPlugin):
     def on_object_details(self, menuitem, object, instance):
         res = object.get_data("connection").conn.search_s(object.get_data("dn"), ldap.SCOPE_BASE)
         view = LDAPView(res[0][1])
+        view.name = object.get_data("dn")
         instance.bottom_pane.add_item(view)
         view.show_all()
 
@@ -204,6 +205,7 @@ class LDAPSearch(GladeWidget):
         dn = model.get_value(iter, 0)
         res = self.connection.conn.search_s(dn, ldap.SCOPE_BASE)
         view = LDAPView(res[0][1])
+        view.name = dn
         self.instance.queries.attach(view)
 
     def export_data(self):
