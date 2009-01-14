@@ -20,19 +20,26 @@
 
 """Builtin plugins"""
 
+import logging
+
 from cf.filter.exportfilter import CSVExportFilter
 from cf.filter.exportfilter import OOCalcExportFilter
 
 try: from cf.backends.ldapbe import LDAPBackend
-except ImportError: pass
+except ImportError, err:
+    logging.warning('Could not import LDAPBackend: %s', err)
 try: from cf.backends.mysql import MySQLBackend
-except ImportError: pass
+except ImportError, err:
+    logging.warning('Could not import MySQLBackend: %s', err)
 try: from cf.backends.postgres import PostgresBackend
-except ImportError: pass
+except ImportError, err:
+    logging.warning('Could not import PostgresBackend: %s', err)
 try: from cf.backends.sqlite import SQLiteBackend
-except ImportError: pass
+except ImportError, err:
+    logging.warning('Could not import SQLiteBackend: %s', err)
 try: from cf.backends.mssql import MsSQLBackend
-except ImportError: pass
+except ImportError, err:
+    logging.warning('Could not import MsSQLBackend: %s', err)
 
 from cf.shell import CFShell
 from cf.library import SQLLibraryPlugin

@@ -300,12 +300,13 @@ class PluginManager(gobject.GObject):
             else:
                 try:
                     modinfo = imp.find_module(name)
-                except ImportError:
+                except ImportError, err:
+                    logging.error('Failed to load module %s: %s', name, err)
                     continue
                 try:
                     mod = imp.load_module(name, *modinfo)
-                except Exception:
-                    print str(sys.exc_info()[1])
+                except Exception, err:
+                    logging.error('Failed to load module %s: %s', name, err)
                     try: del sys.modules[name]
                     except KeyError: pass
                     continue
