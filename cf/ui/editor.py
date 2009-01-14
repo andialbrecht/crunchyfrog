@@ -38,6 +38,7 @@ from cf import sqlparse
 from cf.backends import Query
 from cf.ui import GladeWidget, dialogs
 from cf.ui.confirmsave import ConfirmSaveDialog
+from cf.ui.pane import PaneItem
 from cf.ui.toolbar import CFToolbar
 from cf.ui.widgets import DataExportDialog
 from cf.ui.widgets.grid import Grid
@@ -55,7 +56,11 @@ def to_uri(filename):
     return uri
 
 
-class Editor(GladeWidget):
+class Editor(GladeWidget, PaneItem):
+
+    name = _(u'Editor')
+    icon = gtk.STOCK_EDIT
+    detachable = True
 
     __gsignals__ = {
         "connection-changed" : (gobject.SIGNAL_RUN_LAST,
@@ -459,6 +464,7 @@ class Editor(GladeWidget):
         instance = self.app.new_instance(show=False)
         instance.editor_append(self)
         instance.show()
+    detach = show_in_separate_window  # make it compatible with PaneItem
 
     def show_in_main_window(self):
         self.instance.queries.attach(self)

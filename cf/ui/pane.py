@@ -18,9 +18,14 @@
 
 """Panes in the mainwindow"""
 
+import re
 from gettext import gettext as _
 
+import gobject
 import gtk
+import pango
+
+from cf.ui import GladeWidget
 
 
 class PaneItem(object):
@@ -48,28 +53,29 @@ class Pane(object):
         self.app = mainwin.app
         self.mainwin = mainwin
         self._merge_ui()
-        hbox = gtk.HBox()
-        hbox.set_spacing(5)
-        hbox.set_border_width(7)
+        self.header = gtk.HBox()
+        self.header.set_spacing(5)
+        self.header.set_border_width(7)
         self.top_img = gtk.Image()
-        hbox.pack_start(self.top_img, False, False)
+        self.header.pack_start(self.top_img, False, False)
         self.top_img.show()
         self.top_label = gtk.Label()
         self.top_label.set_alignment(0, 0.5)
-        hbox.pack_start(self.top_label)
+        self.header.pack_start(self.top_label)
         self.top_label.show()
         self.top_btn = gtk.Button()
         self.top_btn.add(gtk.Arrow(gtk.ARROW_DOWN, gtk.SHADOW_NONE))
         self.top_btn.set_relief(gtk.RELIEF_NONE)
         self.top_btn.connect('button-press-event', self.on_top_btn_clicked)
-        hbox.pack_start(self.top_btn, False, False)
+        self.header.pack_start(self.top_btn, False, False)
         self.top_btn.show_all()
-        self.pack_start(hbox, False, False)
-        hbox.show()
+        self.pack_start(self.header, False, False)
+        self.header.show()
         self.notebook = gtk.Notebook()
         self.notebook.set_tab_pos(gtk.POS_BOTTOM)
         self.pack_start(self.notebook, True, True)
         self.notebook.show()
+        self._autohide_tabs = True
         self.notebook.connect('switch-page', self.on_notebook_switch_page)
         self.notebook.connect('page-added',
                               self.on_notebook_pages_changed, 'added')
@@ -84,8 +90,10 @@ class Pane(object):
         for group in ui.get_action_groups():
             if group.get_name() == 'instance':
                 group.add_toggle_actions(self.get_action_entries())
-        self.mainwin.ui.add_ui_from_string(self.get_ui_description())
-        self.mainwin.ui.ensure_update()
+        ui_desc = self.get_ui_description()
+        if ui_desc:
+            self.mainwin.ui.add_ui_from_string(ui_desc)
+            self.mainwin.ui.ensure_update()
 
     def _restore(self):
         action_name = 'instance-toggle-%s' % self.__class__.__name__.lower()
@@ -95,8 +103,9 @@ class Pane(object):
         self.on_toggle(action)
 
     def on_notebook_pages_changed(self, nb, page, page_num, action_str):
-        nb.set_show_tabs(nb.get_n_pages() > 1)
-        nb.set_show_border(nb.get_n_pages() > 1)
+        if self._autohide_tabs:
+            nb.set_show_tabs(nb.get_n_pages() > 1)
+            nb.set_show_border(nb.get_n_pages() > 1)
         if not self._state_restored:  # don't do anything before state restored
             return
         action_name = 'instance-toggle-%s' % self.__class__.__name__.lower()
@@ -117,6 +126,8 @@ class Pane(object):
 
     def on_notebook_switch_page(self, nb, unusable, page_num):
         page = nb.get_nth_page(page_num)
+        if page.get_data('cf::real-object'):
+            page = page.get_data('cf::real-object')
         self.top_label.set_text(page.name)
         pb = self.app.load_icon(page.icon, gtk.ICON_SIZE_MENU,
                                 gtk.ICON_LOOKUP_FORCE_SVG)
@@ -171,7 +182,14 @@ class Pane(object):
         img.set_tooltip_text(item.name)
         img.show()
         item.show()
-        self.notebook.append_page(item, img)
+        if isinstance(item, GladeWidget):
+            item.widget.set_data('cf::real-object', item)
+            item = item.widget
+        if item.get_parent():
+            item.reparent(self.notebook)
+            self.notebook.set_tab_label(item, img)
+        else:
+            self.notebook.append_page(item, img)
 
     def remove_item(self, pane_item):
         """Remove a previously added PaneItem."""
@@ -185,9 +203,20 @@ class Pane(object):
                 self.notebook.set_current_page(i)
                 return
 
+    def set_autohide_tabs(self, autohide):
+        """Enable/disable tab autohide."""
+        self._autohide_tabs = autohide
+
     def set_hidden(self, hidden):
         """Hide/show the pane."""
         raise NotImplementedError
+
+    def set_show_header(self, visible):
+        """Show or hide the header."""
+        if visible:
+            self.header.show()
+        else:
+            self.header.hide()
 
     def state_restore(self):
         """Restore last UI state."""
@@ -236,3 +265,153 @@ class BottomPane(gtk.VBox, Pane):
              _(u'Show or hide the bottom pane in the current window'),
              self.on_toggle),
         )
+
+
+class CenterPane(gtk.VBox, Pane):
+
+    UI_DESCRIPTION = None
+
+    def __init__(self, mainwin):
+        gtk.VBox.__init__(self)
+        Pane.__init__(self, mainwin)
+        self.set_autohide_tabs(False)
+        self.set_show_header(False)
+        self.notebook.set_scrollable(True)
+        self.notebook.set_tab_pos(gtk.POS_TOP)
+        self.notebook.popup_disable()
+        self.notebook.set_show_tabs(True)
+        self.notebook.set_show_border(True)
+        self.notebook.set_property("enable-popup", False)
+        self.notebook.connect("switch-page", self.on_switch_page)
+        self.notebook.connect("page-removed", self.on_page_removed)
+        self.notebook.set_group_id(1)
+        self.notebook.connect('create-window', self.on_create_window)
+
+    def on_create_window(self, nb, page, x, y):
+        view = self.get_view_by_page(page)
+        view.detach()
+
+    def on_page_added(self, notebook, child, page_num):
+        gobject.idle_add(self.notebok.set_current_page, page_num)
+
+    def on_page_removed(self, notebook, child, page_num):
+        from cf.ui.editor import Editor  # import hook
+        if isinstance(child, Editor):
+            self.mainwin.set_editor_active(child, False)
+
+    def on_switch_page(self, notebook, page, page_num):
+        editor = self.get_nth_page(page_num).get_data("glade-widget")
+        gobject.idle_add(self.mainwin.set_editor_active, editor, True)
+
+    def add_item(self, editor):
+        super(CenterPane, self).add_item(editor)
+        self.notebook.set_tab_label(editor.widget, TabLabel(editor))
+        self.notebook.set_tab_reorderable(editor.widget, True)
+        self.notebook.set_tab_detachable(editor.widget, True)
+        self.notebook.set_current_page(self.notebook.page_num(editor.widget))
+
+    def get_view_by_pagenum(self, page_num):
+        """Return editor object by page number."""
+        child = self.notebook.get_nth_page(page_num)
+        return self.get_view_by_page(child)
+
+    def get_view_by_page(self, page):
+        """Return editor object by child widget."""
+        lbl = self.notebook.get_tab_label(page)
+        return lbl.editor
+
+    def __getattribute__(self, name):
+        """We want it to behave much like a gtk.Notebook."""
+        try:
+            attr = super(CenterPane, self).__getattribute__(name)
+        except AttributeError:
+            attr = getattr(self.notebook, name)
+        return attr
+
+    def get_action_entries(self):
+        return []
+
+
+
+class TabLabel(gtk.HBox):
+
+    def __init__(self, editor):
+        gtk.HBox.__init__(self)
+        self.label = gtk.Label(_(u"Query"))
+        self.label.set_ellipsize(pango.ELLIPSIZE_END)
+        self.label.set_width_chars(15)
+        self.label.set_single_line_mode(True)
+        self.label.set_alignment(0, 0.5)
+        # use a slightly smaller font in tabs like Empathy does...
+        font_desc = self.label.get_style().font_desc
+        font_desc.set_size(int(font_desc.get_size()*.8))
+        self.label.modify_font(font_desc)
+        self.editor = editor
+        self.editor.connect("connection-changed",
+                            self.on_editor_connection_changed)
+        buffer = self.editor.textview.get_buffer()
+        buffer.connect("changed", self.on_buffer_changed)
+        self.update_label(buffer)
+        self.pack_start(self.label, True, True)
+        btn_close = gtk.Button()
+        btn_close.connect("clicked", self.on_button_close_clicked)
+        self.add_icon_to_button(btn_close)
+        btn_close.set_relief(gtk.RELIEF_NONE)
+        self.pack_start(btn_close, False, False)
+        self.update_tooltip()
+        self.show_all()
+
+    def add_icon_to_button(self,button):
+        image = gtk.Image()
+        image.set_from_stock(gtk.STOCK_CLOSE,gtk.ICON_SIZE_MENU)
+        button.set_relief(gtk.RELIEF_NONE)
+        button.set_image(image)
+        settings = gtk.Widget.get_settings(image)
+        (w,h) = gtk.icon_size_lookup_for_settings(settings,gtk.ICON_SIZE_MENU)
+        button.set_size_request(w+12, h+6)
+        button.set_border_width(0)
+        image.show()
+        return
+
+    def on_button_close_clicked(self, button):
+        self.editor.close()
+
+    def on_buffer_changed(self, buffer):
+        gobject.idle_add(self.update_label, buffer)
+
+    def on_close_editor(self, *args):
+        self.editor.close()
+
+    def on_editor_connection_changed(self, editor, connection):
+        self.update_tooltip()
+
+    def on_show_in_separate_window(self, item):
+        gobject.idle_add(self.editor.show_in_separate_window)
+
+    def update_label(self, buffer):
+        if self.editor.get_filename():
+            fname = self.editor.get_filename()
+            txt = os.path.split(fname)[-1]
+            self.label.set_tooltip_text(fname)
+            if self.editor.file_contents_changed():
+                txt = "*"+txt
+        else:
+            self.label.set_tooltip_text("")
+            txt = buffer.get_text(*buffer.get_bounds())
+            txt = re.sub("\s+", " ", txt)
+        txt = txt.strip()
+        if not txt:
+            txt = _(u"Query")
+        self.label.set_text(txt)
+        self.update_tooltip()
+
+    def update_tooltip(self):
+        markup = "<b>Connection:</b> "
+        if self.editor.connection:
+            markup += self.editor.connection.get_label()
+        else:
+            markup += "["+_(u"Not connected")+"]"
+        if self.editor.get_filename():
+            markup += "\n<b>File:</b> "+self.editor.get_filename()
+        self.label.set_tooltip_markup(markup)
+

@@ -221,7 +221,7 @@ class MainWindow(gtk.Window):
         vpaned.show()
         hpaned.add1(self.side_pane)
         vpaned.add2(self.bottom_pane)
-        self.queries = QueriesNotebook(self.app, self)
+        self.queries = pane.CenterPane(self)
         vpaned.add1(self.queries)
         self.queries.show()
         # Connect to realize to set paned position when window is ready.
@@ -632,7 +632,7 @@ class MainWindow(gtk.Window):
         for instance in self.app.get_instances():
             if instance != self and editor in instance._editors:
                 instance._editors.remove(editor)
-        self.queries.attach(editor)
+        self.queries.add_item(editor)
         self._editors.append(editor)
 
     def get_active_editor(self):
