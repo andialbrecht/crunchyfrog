@@ -69,6 +69,7 @@ class MainWindow(gtk.Window):
         self.set_icon_list(*utils.get_logo_icon_list())
         self._init_elements()
         self.connect('window-state-event', self.on_window_state_event)
+        self.connect('delete-event', self.on_quit)
         self.state_restore()
 
     def _init_actions(self):
