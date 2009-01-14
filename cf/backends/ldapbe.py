@@ -31,7 +31,7 @@ from cf.backends.schema import SchemaProvider, Node
 from cf.plugins.core import DBBackendPlugin
 from cf.datasources import DatasourceInfo
 from cf.ui import GladeWidget
-from cf.ui.pdock import DockItem
+from cf.ui.pane import PaneItem
 from cf.ui.widgets import DataExportDialog
 
 from gettext import gettext as _
@@ -61,11 +61,7 @@ class LDAPBackend(DBBackendPlugin):
     def on_search_dn(self, menuitem, object, instance):
         search = LDAPSearch(self.app, instance, object.get_data("connection"))
         search.set_search_dn(object.get_data("dn"))
-        item = DockItem(instance.dock, "search_%s" % object.get_data("dn"),
-                        search.widget,
-                        _(u"Search: %(dn)s") % {"dn" : object.get_data("dn")},
-                       "gtk-find", None)
-        instance.dock.add_item(item)
+        instance.queries.attach(search.widget)
 
     def init_instance(self, instance):
         instance.browser.connect("object-menu-popup", self.on_object_menu_popup, instance)
@@ -87,9 +83,8 @@ class LDAPBackend(DBBackendPlugin):
     def on_object_details(self, menuitem, object, instance):
         res = object.get_data("connection").conn.search_s(object.get_data("dn"), ldap.SCOPE_BASE)
         view = LDAPView(res[0][1])
-        item = DockItem(instance.dock, object.get_data("dn"), view, object.get_data("dn"),
-                       "gtk-edit", None)
-        instance.dock.add_item(item)
+        instance.bottom_pane.add_item(view)
+        view.show_all()
 
     @classmethod
     def _get_basedn(cls, entry):
@@ -209,9 +204,7 @@ class LDAPSearch(GladeWidget):
         dn = model.get_value(iter, 0)
         res = self.connection.conn.search_s(dn, ldap.SCOPE_BASE)
         view = LDAPView(res[0][1])
-        item = DockItem(self.instance.dock, dn, view, dn,
-                       "gtk-edit", None)
-        self.instance.dock.add_item(item)
+        self.instance.queries.attach(view)
 
     def export_data(self):
         data = []
@@ -294,7 +287,11 @@ class LDAPSearch(GladeWidget):
     def set_search_dn(self, dn):
         self.xml.get_widget("ldap_search_dn").set_text(dn)
 
-class LDAPView(gtk.ScrolledWindow):
+class LDAPView(gtk.ScrolledWindow, PaneItem):
+
+    name = _(u"Details")
+    icon = "gtk-search"
+    detachable = True
 
     def __init__(self, data):
         gtk.ScrolledWindow.__init__(self)
