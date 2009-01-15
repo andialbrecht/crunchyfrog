@@ -18,6 +18,7 @@
 
 """Panes in the mainwindow"""
 
+import os
 import re
 from gettext import gettext as _
 
