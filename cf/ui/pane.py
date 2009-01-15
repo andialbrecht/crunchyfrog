@@ -305,10 +305,15 @@ class CenterPane(gtk.VBox, Pane):
 
     def add_item(self, editor):
         super(CenterPane, self).add_item(editor)
-        self.notebook.set_tab_label(editor.widget, TabLabel(editor))
-        self.notebook.set_tab_reorderable(editor.widget, True)
-        self.notebook.set_tab_detachable(editor.widget, True)
-        self.notebook.set_current_page(self.notebook.page_num(editor.widget))
+        from cf.ui.editor import Editor
+        if isinstance(editor, Editor):
+            widget = editor.widget
+        else:
+            widget = editor
+        self.notebook.set_tab_label(widget, TabLabel(editor))
+        self.notebook.set_tab_reorderable(widget, True)
+        self.notebook.set_tab_detachable(widget, True)
+        self.notebook.set_current_page(self.notebook.page_num(widget))
 
     def get_view_by_pagenum(self, page_num):
         """Return editor object by page number."""
@@ -347,11 +352,13 @@ class TabLabel(gtk.HBox):
         font_desc.set_size(int(font_desc.get_size()*.8))
         self.label.modify_font(font_desc)
         self.editor = editor
-        self.editor.connect("connection-changed",
-                            self.on_editor_connection_changed)
-        buffer = self.editor.textview.get_buffer()
-        buffer.connect("changed", self.on_buffer_changed)
-        self.update_label(buffer)
+        from cf.ui.editor import Editor
+        if isinstance(editor, Editor):
+            self.editor.connect("connection-changed",
+                                self.on_editor_connection_changed)
+            buffer = self.editor.textview.get_buffer()
+            buffer.connect("changed", self.on_buffer_changed)
+            self.update_label(buffer)
         self.pack_start(self.label, True, True)
         btn_close = gtk.Button()
         btn_close.connect("clicked", self.on_button_close_clicked)
@@ -406,12 +413,14 @@ class TabLabel(gtk.HBox):
         self.update_tooltip()
 
     def update_tooltip(self):
-        markup = "<b>Connection:</b> "
-        if self.editor.connection:
-            markup += self.editor.connection.get_label()
-        else:
-            markup += "["+_(u"Not connected")+"]"
-        if self.editor.get_filename():
-            markup += "\n<b>File:</b> "+self.editor.get_filename()
-        self.label.set_tooltip_markup(markup)
+        from cf.ui.editor import Editor
+        if isinstance(self.editor, Editor):
+            markup = "<b>Connection:</b> "
+            if self.editor.connection:
+                markup += self.editor.connection.get_label()
+            else:
+                markup += "["+_(u"Not connected")+"]"
+            if self.editor.get_filename():
+                markup += "\n<b>File:</b> "+self.editor.get_filename()
+            self.label.set_tooltip_markup(markup)
 

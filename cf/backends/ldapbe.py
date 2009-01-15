@@ -61,7 +61,7 @@ class LDAPBackend(DBBackendPlugin):
     def on_search_dn(self, menuitem, object, instance):
         search = LDAPSearch(self.app, instance, object.get_data("connection"))
         search.set_search_dn(object.get_data("dn"))
-        instance.queries.attach(search.widget)
+        instance.queries.add_item(search)
 
     def init_instance(self, instance):
         instance.browser.connect("object-menu-popup", self.on_object_menu_popup, instance)
@@ -162,10 +162,14 @@ class LDAPConnection(DBConnection):
         return r
 
 
-class LDAPSearch(GladeWidget):
+class LDAPSearch(GladeWidget, PaneItem):
+
+    name = _(u'Search')
+    icon = gtk.STOCK_FIND
 
     def __init__(self, app, instance, connection):
         GladeWidget.__init__(self, app, "crunchyfrog", "ldap_search")
+        PaneItem.__init__(self, instance)
         self.connection = connection
         self.instance = instance
 
