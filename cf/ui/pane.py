@@ -34,9 +34,6 @@ class PaneItem(object):
     icon = None
     detachable = False
 
-    def get_pane_id(self):
-        raise NotImplementedError
-
     def get_pane_icon(self):
         return gtk.STOCK_MISSING_IMAGE
 

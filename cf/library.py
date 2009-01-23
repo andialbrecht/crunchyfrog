@@ -23,23 +23,70 @@
 This module contains the SQL library plugin.
 
 :ToDo's:
-    - Management interface (reorder, delete, rename, edit, export, dump, ...)
+    - Re-order categories and statements
+    - Double-click / open in editor (drag'n'drop)
 """
 
 import gtk
 import gobject
+import pango
 
-from cf.plugins.core import GenericPlugin
-from cf.plugins.mixins import MenubarMixin, EditorMixin, UserDBMixin
-from cf.ui import GladeWidget, dialogs
-from cf.ui.widgets import CustomImageMenuItem
-from cf.ui.widgets.sqlview import SQLView
+from cf import utils
+from cf.plugins.core import BottomPanePlugin
+from cf.plugins.mixins import InstanceMixin, UserDBMixin
+from cf.ui.pane import PaneItem
 
-from gettext import gettext as _
 
-class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
-                       UserDBMixin):
+class Category(object):
+    """Data object holding a category."""
+
+    def __init__(self, id_, name, parent=None):
+        self.id = id_
+        self.name = name
+        self.parent = parent
+
+    def get_update_statement(self):
+        """Returns an update SQL."""
+        sql = ("update sqllib_cat set name = ?, parent = ? where id = ?")
+        return sql, (self.name, self.parent, self.id)
+
+    def get_insert_statement(self):
+        """Returns an insert SQL."""
+        sql = "insert into sqllib_cat (name, parent) values (?, ?)"
+        return sql, (self.name, self.parent )
+
+
+class Statement(object):
+    """Data object holding a statement."""
+
+    def __init__(self, id_, title, statement, description=None, category=None):
+        self.id = id_
+        if title is None:
+            title = utils.normalize_sql(statement)
+        self.title = title
+        self.statement = statement
+        self.description = description
+        self.category = category
+
+    def get_update_statement(self):
+        """Returns an update SQL."""
+        sql = ("update sqllib_sql set title = ?, statement = ?, "
+               "description = ?, category = ? where id = ?")
+        return sql, (self.title or self.statement, self.statement,
+                     self.description or None, self.category or None,
+                     self.id)
+
+    def get_insert_statement(self):
+        """Returns an insert SQL."""
+        sql = ("insert into sqllib_sql (title, statement, description, "
+               "category) values (?, ?, ?, ?)")
+        return sql, (self.title or self.statement, self.statement,
+                     self.description or None, self.category or None)
+
+
+class SQLLibraryPlugin(BottomPanePlugin, InstanceMixin, UserDBMixin):
     """SQL library plugin"""
+
     id = "crunchyfrog.plugin.library"
     name = _(u"Library")
     description = _(u"A personal SQL library")
@@ -50,429 +97,265 @@ class SQLLibraryPlugin(GenericPlugin, MenubarMixin, EditorMixin,
     version = "0.1"
 
     def __init__(self, app):
-        GenericPlugin.__init__(self, app)
-        self._mn_add = dict()
-        self._menu_items = dict()
+        BottomPanePlugin.__init__(self, app)
+        self._views = {}
 
-    def on_add_to_library(self, menuitem, instance):
-        editor = instance.get_editor()
-        if not editor:
+    def on_save_to_library(self, instance):
+        editor = instance.get_active_editor()
+        if editor is None:
             return
-        buffer = editor.textview.get_buffer()
-        txt = buffer.get_text(*buffer.get_bounds())
-        self.add_to_library(txt)
+        statement = editor.get_text()
+        entry = Statement(None, None, statement)
+        self.save_entry(entry)
 
-    def on_load_from_library(self, menuitem, id_, instance):
-        editor = instance.get_editor()
-        if not editor:
-            editor = instance.new_editor()
-        sql = "select statement from sqllib_sql where id = %s" % id_
-        self.userdb.cursor.execute(sql)
-        editor.textview.get_buffer().set_text(self.userdb.cursor.fetchone()[0])
-
-    def on_show_library(self, *args):
-        self.show_library()
-
-    def add_to_library(self, txt):
-        dlg = LibSaveDialog(self.app)
-        dlg.set_statement(txt)
-        if dlg.run():
-            name = dlg.xml.get_widget("libsave_name").get_text().strip()
-            description = dlg.xml.get_widget("libsave_description").get_text().strip() or None
-            cat = dlg.get_category()
-            sql = "insert into sqllib_sql (title, description, statement, category) values (?, ?, ?, ?);"
-            self.userdb.cursor.execute(sql, (name, description, txt, cat))
-            self.userdb.conn.commit()
-            gobject.idle_add(self.rebuild_menues)
-        dlg.destroy()
-
-    def menubar_load(self, menubar, instance):
-        children = menubar.get_children()
-        pos = -1
-        for i in range(len(children)):
-            if children[i].get_name() == "mn_help":
-                pos = i
+    def init_instance(self, instance):
+        """Initialize instance."""
+        view = SQLLibraryView(self.app, instance, self)
+        view.refresh()
+        instance.side_pane.add_item(view)
+        group = None
+        for group in instance.ui.get_action_groups():
+            if group.get_name() == 'editor':
                 break
-        item = gtk.MenuItem(_(u"_Library"))
-        item.set_name("library")
-        item.show()
-        menubar.insert(item, pos)
-        menu = gtk.Menu()
-        item.set_submenu(menu)
-        item = gtk.SeparatorMenuItem()
-        item.show()
-        menu.append(item)
-        self._menu_items[instance] = menu
-        item = CustomImageMenuItem("stock_book_open", _(u"_Open library"))
-        item.connect("activate", self.on_show_library)
-        item.show()
-        menu.append(item)
-        item = CustomImageMenuItem("gtk-add", _(u"_Add to library"))
-        item.set_sensitive(False)
-        item.show()
-        menu.append(item)
-        item.connect("activate", self.on_add_to_library, instance)
-        self._mn_add[instance] = item
-        self.rebuild_menues()
+        assert group is not None
+        entries = (
+            ('lib-save', None,
+             _(u'Save to library'), None,
+             _(u'Save content of the current editor to SQL library.'),
+             lambda menuitem: self.on_save_to_library(instance)),
+        )
+        group.add_actions(entries)
+        merge_id = instance.ui.add_ui_from_string(UI)
+        self._views[instance] = (view, merge_id)
 
-    def menubar_unload(self, menubar, instance):
-        for item in menubar.get_children():
-            if item.get_name() == "library":
-                menubar.remove(item)
-                return
-        del self._menu_items[instance]
-        del self._mn_add[instance]
+    def deactivate_instance(self, instance):
+        """De-activates an view."""
+        if instance in self._views:
+            view, merge_id = self._views.pop(instance)
+            instance.ui.remove_ui(merge_id)
+            for group in instance.ui.get_action_groups():
+                if group.get_name() == 'editor':
+                    action = group.get_action('lib-save')
+                    if action is not None:
+                        group.remove_action(action)
+                        break
+            view.destroy()
 
-    def set_editor(self, editor, instance):
-        if not self._mn_add.has_key(instance):
-            return
-        self._mn_add[instance].set_sensitive(bool(editor))
+    def shutdown(self):
+        """Shutdown plugin."""
+        while self._views:
+            self.deactivate_instance(self._views.keys()[0])
 
     def userdb_init(self):
+        """Initialize user db."""
         if self.userdb.get_table_version("sqllib_cat") == None:
             self.userdb.create_table("sqllib_cat", "0.1", TABLE_LIB_CAT)
         if self.userdb.get_table_version("sqllib_sql") == None:
             self.userdb.create_table("sqllib_sql", "0.1", TABLE_LIB_SQL)
 
-    def rebuild_menues(self):
-        def add_items(mitem, parent, instance):
-            sql = "select id, name from sqllib_cat where "
-            if parent:
-                sql += "parent = %s" % parent
-            else:
-                sql += "parent is null"
-            sql += " order by name"
-            self.userdb.cursor.execute(sql)
-            pos = 0
-            for entry in self.userdb.cursor.fetchall():
-                item = gtk.ImageMenuItem(gtk.STOCK_OPEN)
-                item.get_children()[0].set_label(entry[1])
-                item.show()
-                smenu = gtk.Menu()
-                item.set_submenu(smenu)
-                add_items(smenu, entry[0], instance)
-                mitem.insert(item, pos)
-                pos += 1
-            sql = "select id, title from sqllib_sql where "
-            if parent:
-                sql += "category = %s" % parent
-            else:
-                sql += "category is null"
-            self.userdb.cursor.execute(sql)
-            for entry in self.userdb.cursor.fetchall():
-                item = gtk.ImageMenuItem(gtk.STOCK_JUSTIFY_LEFT)
-                item.get_children()[0].set_label(entry[1])
-                item.connect("activate", self.on_load_from_library, entry[0], instance)
-                item.show()
-                mitem.insert(item, pos)
-                pos += 1
-        for instance, menuitem in self._menu_items.items():
-            while menuitem.get_children():
-                child = menuitem.get_children()[0]
-                if isinstance(child, gtk.SeparatorMenuItem):
-                    break
-                menuitem.remove(child)
-            add_items(menuitem, None, instance)
+    def get_entries(self, parent=None):
+        """Return rows from userdb that belong to parent (an ID).
 
-    def show_library(self):
-        dlg = SQLLibraryDialog(self.app, self)
-        dlg.run()
-        dlg.destroy()
-
-class LibSaveDialog(GladeWidget):
-    """Save statement to library dialog"""
-
-    def __init__(self, app):
-        GladeWidget.__init__(self, app, "crunchyfrog", "sqllib_save")
-        self.init_categories()
-
-    def _setup_widget(self):
-        model = gtk.TreeStore(int, str)
-        treeview = self.xml.get_widget("libsave_category")
-        treeview.set_model(model)
-        self.cat_model = model
-        renderer = gtk.CellRendererText()
-        renderer.connect("edited", self.on_cat_edited)
-        renderer.set_property("editable", True)
-        col = gtk.TreeViewColumn("", renderer, text=1)
-        treeview.append_column(col)
-        treeview.connect("button-press-event", self.on_button_press_event)
-
-    def on_add_category(self, menuitem, parent):
-        iter = self.cat_model.append(parent)
-        sql = "insert into sqllib_cat (name, parent) values (?, ?)"
-        if parent:
-            parent_id = self.cat_model.get_value(parent, 0)
+        This yields a tuple (is_category, id, title, description, statement).
+        """
+        sql = 'select id, name, parent from sqllib_cat'
+        if parent is not None:
+            sql += ' where parent = %d' % parent
         else:
-            parent_id = None
-        name = _(u"New category")
-        self.app.userdb.cursor.execute(sql, (name, parent_id))
-        id = self.app.userdb.cursor.lastrowid
-        self.app.userdb.connection.commit()
-        self.cat_model.set(iter, 0, id, 1, name)
-
-    def on_button_press_event(self, treeview, event):
-        if event.button == 3:
-            x = int(event.x)
-            y = int(event.y)
-            time = event.time
-            popup = gtk.Menu()
-            pthinfo = treeview.get_path_at_pos(x, y)
-            parent = None
-            if pthinfo is not None:
-                path, col, cellx, celly = pthinfo
-                treeview.grab_focus()
-                treeview.set_cursor( path, col, 0)
-                model = treeview.get_model()
-                parent = model.iter_parent(model.get_iter(path))
-            item = gtk.MenuItem(_(u"Add category"))
-            item.show()
-            item.connect("activate", self.on_add_category, parent)
-            popup.append(item)
-            popup.show_all()
-            popup.popup( None, None, None, event.button, time)
-            return 1
-
-    def on_cat_edited(self, renderer, path, value):
-        iter = self.cat_model.get_iter(path)
-        self.cat_model.set_value(iter, 1, value)
-        sql = "update sqllib_cat set name = ? where id = ?"
-        self.app.userdb.cursor.execute(sql, (value, self.cat_model.get_value(iter, 0)))
-        self.app.userdb.connection.commit()
-
-    def on_name_changed(self, *args):
-        txt = self.xml.get_widget("libsave_name").get_text().strip()
-        self.xml.get_widget("libsave_btn_save").set_sensitive(bool(txt))
-
-    def init_categories(self, parent=None):
-        sql = "select id, name from sqllib_cat"
-        if parent:
-            parent_id = self.cat_model.get_value(parent, 0)
-            sql += " where parent = %s" % parent_id
+            sql += ' where parent is null'
+        for row in self.userdb.cursor.execute(sql):
+            yield Category(row[0], row[1], row[2])
+        sql = ('select id, title, statement, description, category '
+               'from sqllib_sql')
+        if parent is not None:
+            sql += ' where category = %d' % parent
         else:
-            sql += " where parent is null"
-        sql += " order by name"
-        self.app.userdb.cursor.execute(sql)
-        for item in self.app.userdb.cursor.fetchall():
-            iter = self.cat_model.append(parent)
-            self.cat_model.set(iter, 0, item[0], 1, item[1])
-            sql = "select count(*) from sqllib_cat where parent = %s" % item[0]
-            self.app.userdb.cursor.execute(sql)
-            if self.app.userdb.cursor.fetchone()[0]:
-                self.init_categories(iter)
+            sql += ' where category is null'
+        for row in self.userdb.cursor.execute(sql):
+            yield Statement(row[0], row[1], row[2], row[3], row[4])
 
-    def set_statement(self, statement):
-        buffer = self.xml.get_widget("libsave_statement").get_buffer()
-        buffer.set_text(statement)
-
-    def get_category(self):
-        sel = self.xml.get_widget("libsave_category").get_selection()
-        model, iter = sel.get_selected()
-        if iter:
-            return model.get_value(iter, 0)
+    def save_entry(self, entry):
+        """Save entry back to library."""
+        if entry.id is None:
+            sql, params = entry.get_insert_statement()
         else:
-            return None
+            sql, params = entry.get_update_statement()
+        self.userdb.cursor.execute(sql, params)
+        self.userdb.conn.commit()
+        if entry.id is None:
+            entry.id = self.userdb.cursor.lastrowid
+        for _, (view, _) in self._views.iteritems():
+            view.refresh()
 
-class SQLLibraryDialog(GladeWidget):
 
-    def __init__(self, app, plugin):
-        GladeWidget.__init__(self, app, "crunchyfrog", "sqllib_manage")
-        self.plugin = plugin
-        self.refresh()
+class SQLLibraryView(gtk.ScrolledWindow, PaneItem):
 
-    def _setup_widget(self):
-        # treeview
-        self.list = self.xml.get_widget("sqlmanage_list")
-        self.list.set_reorderable(True)
-        model = gtk.TreeStore(gobject.TYPE_PYOBJECT,
-                              str,
-                              str,
-                              bool,
-                              str)
-        model.set_sort_column_id(4, gtk.SORT_ASCENDING)
-        self.list.set_model(model)
+    name = _(u'Library')
+    icon = 'stock_book_green'
+    detachable = True
+
+    def __init__(self, app, instance, library):
+        """Constructor."""
+        self.app = app
+        self.instance = instance
+        self.lib = library
+        gtk.ScrolledWindow.__init__(self)
+        PaneItem.__init__(self)
+        self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        self.model = gtk.TreeStore(gobject.TYPE_PYOBJECT,   # 0 item
+                                   str,                     # 1 stock id
+                                   str,                     # 2 label
+                                   str,                     # 3 content
+                                   bool,                    # 4 editable
+                                   )
+        self.list = gtk.TreeView(self.model)
         col = gtk.TreeViewColumn()
         renderer = gtk.CellRendererPixbuf()
         col.pack_start(renderer, expand=False)
-        col.add_attribute(renderer, 'stock-id', 2)
+        col.add_attribute(renderer, 'stock-id', 1)
         renderer = gtk.CellRendererText()
+        renderer.set_property('ellipsize', pango.ELLIPSIZE_END)
         col.pack_start(renderer, expand=True)
-        col.add_attribute(renderer, 'markup', 1)
+        col.add_attribute(renderer, 'text', 2)
+        col.add_attribute(renderer, 'editable', 4)
+        renderer.connect('edited', self.on_entry_edited)
         self.list.append_column(col)
-        # Statement
-        self.statement = SQLView(self.app)
-        self.xml.get_widget("sqlmanage_sw_statement").add(self.statement)
-        self.statement.show_all()
+        self.list.set_headers_visible(False)
+        self.add(self.list)
+        self.list.show()
+        self.list.connect("button-press-event", self.on_button_press_event)
 
-    def _setup_connections(self):
-        sel = self.list.get_selection()
-        sel.connect("changed", self.on_selection_changed)
+    def _get_entry(self, is_cat, id_, iter_=None):
+        """Returns path for an entry."""
+        if iter_ is None:
+            iter_ = self.model.get_iter_root()
+        while iter_:
+            obj = self.model.get_value(iter_, 0)
+            if isinstance(obj, Category) and is_cat and obj.id == id_:
+                return iter_
+            elif isinstance(obj, Statement) and obj.id == id_:
+                return iter_
+            if self.model.iter_has_child(iter_):
+                citer_ = self.model.iter_children(iter_)
+                result = self._get_entry(is_cat, id_, citer_)
+                if result is not None:
+                    return result
+            iter_ = self.model.iter_next(iter_)
+        return None
 
-    def on_button_pressed(self, treeview, event):
-        if event.button == 3:
-            x = int(event.x)
-            y = int(event.y)
-            time = event.time
-            popup = gtk.Menu()
-            pthinfo = treeview.get_path_at_pos(x, y)
-            if pthinfo is not None:
-                path, col, cellx, celly = pthinfo
-                model = treeview.get_model()
-                iter = model.get_iter(path)
-                if not model.get_value(iter, 3):
-                    item = gtk.MenuItem(_(u"Add category"))
-                    item.connect("activate", self.on_category_new, model.get_value(iter, 0))
-                    popup.append(item)
-                    item = gtk.MenuItem(_(u"Add query"))
-                    item.connect("activate", self.on_statement_new, model.get_value(iter,0))
-                    popup.append(item)
-            else:
-                item = gtk.MenuItem(_(u"Add category"))
-                item.connect("activate", self.on_category_new, None)
-                popup.append(item)
-                item = gtk.MenuItem(_(u"Add query"))
-                item.connect("activate", self.on_statement_new, None)
-                popup.append(item)
-            if popup.get_children():
-                popup.show_all()
-                popup.popup( None, None, None, event.button, time)
-
-    def on_category_new(self, menuitem, parent):
-        sql = "insert into sqllib_cat (name, parent) values (?, ?)"
-        self.app.userdb.cursor.execute(sql, (_(u"New category"), parent))
-        self.app.userdb.connection.commit()
-        self.plugin.rebuild_menues()
-        self.refresh()
-
-    def on_delete(self, *args):
-        selection = self.list.get_selection()
-        model, iter = selection.get_selected()
-        if not iter: return
-        if model.get_value(iter, 3):
-            id_ = model.get_value(iter, 0)
-            sql = "delete from sqllib_sql where id = %s" % id_
-            self.app.userdb.cursor.execute(sql)
-            self.app.userdb.connection.commit()
-            self.refresh()
-            self.plugin.rebuild_menues()
+    def _run_dblclick_action(self, treeview, event):
+        x = int(event.x)
+        y = int(event.y)
+        time = event.time
+        pthinfo = treeview.get_path_at_pos(x, y)
+        if pthinfo is None:
+            return
+        model = treeview.get_model()
+        obj = model.get_value(model.get_iter(pthinfo[0]), 0)
+        if isinstance(obj, Category):
+            if not treeview.row_expanded(pthinfo[0]):
+                treeview.expand_row(pthinfo[0], False)
         else:
-            id_ = model.get_value(iter, 0)
-            sql = "select id from sqllib_cat where parent = %s \
-            union select id from sqllib_sql where category = %s"
-            sql = sql % (id_, id_)
-            self.app.userdb.cursor.execute(sql)
-            if self.app.userdb.cursor.fetchall():
-                dialogs.error(_(u"Category is not empty."))
-            else:
-                sql = "delete from sqllib_cat where id = %s" % id_
-                self.app.userdb.cursor.execute(sql)
-                self.app.userdb.connection.commit()
-                self.refresh()
-                self.plugin.rebuild_menues()
+            editor = self.instance.editor_create()
+            editor.set_text(obj.statement)
 
-    def on_save(self, *args):
-        selection = self.list.get_selection()
-        model, iter = selection.get_selected()
-        if not iter: return
-        if model.get_value(iter, 3):
-            id_ = model.get_value(iter, 0)
-            sql = "update sqllib_sql set title = ?, description = ?, \
-            statement = ? where id = ?"
-            args= (self.xml.get_widget("sqllib_name").get_text(),
-                   self.xml.get_widget("sqllib_description").get_text() or None,
-                   self.statement.get_buffer().get_text(*self.statement.get_buffer().get_bounds()),
-                   id_
-                   )
-            self.app.userdb.cursor.execute(sql, args)
-            self.app.userdb.connection.commit()
-            self.refresh()
-            self.plugin.rebuild_menues()
+    def _show_popup_menu(self, treeview, event):
+        x = int(event.x)
+        y = int(event.y)
+        time = event.time
+        pthinfo = treeview.get_path_at_pos(x, y)
+        if pthinfo is not None:
+            model = treeview.get_model()
+            obj = model.get_value(model.get_iter(pthinfo[0]), 0)
         else:
-            id_ = model.get_value(iter, 0)
-            sql = "update sqllib_cat set name = ? where id = ?"
-            self.app.userdb.cursor.execute(sql,
-                                           (self.xml.get_widget("sqllib_name").get_text(),
-                                            id_))
-            self.app.userdb.connection.commit()
-            self.refresh()
-            self.plugin.rebuild_menues()
+            obj = None
+        menu = gtk.Menu()
+        if obj is not None:
+            item = gtk.MenuItem(_(u'Rename'))
+            item.connect('activate', self.on_entry_rename,
+                         treeview, pthinfo[0])
+            menu.append(item)
+        menu.show_all()
+        menu.popup( None, None, None, event.button, time)
 
-    def on_selection_changed(self, selection):
-        model, iter = selection.get_selected()
-        if iter and model.get_value(iter, 3):
-            id_ = model.get_value(iter, 0)
-            sql = "select title, description, statement from sqllib_sql \
-            where id = %s" % id_
-            self.app.userdb.cursor.execute(sql)
-            data = self.app.userdb.cursor.fetchone()
-            self.xml.get_widget("sqllib_name").set_text(data[0] or "")
-            self.xml.get_widget("sqllib_description").set_text(data[1] or "")
-            self.xml.get_widget("sqllib_description").set_sensitive(True)
-            self.statement.get_buffer().set_text(data[2] or "")
-            self.statement.set_sensitive(True)
-            self.xml.get_widget("sqllib_details_table").set_sensitive(True)
-        elif iter:
-            id_ = model.get_value(iter, 0)
-            sql = "select name from sqllib_cat where id = %s" % id_
-            self.app.userdb.cursor.execute(sql)
-            data = self.app.userdb.cursor.fetchone()
-            self.xml.get_widget("sqllib_name").set_text(data[0] or None)
-            self.xml.get_widget("sqllib_description").set_text("")
-            self.xml.get_widget("sqllib_description").set_sensitive(False)
-            self.statement.get_buffer().set_text("")
-            self.statement.set_sensitive(False)
-            self.xml.get_widget("sqllib_details_table").set_sensitive(True)
-        else:
-            self.xml.get_widget("sqllib_name").set_text("")
-            self.xml.get_widget("sqllib_description").set_text("")
-            self.statement.get_buffer().set_text("")
-            self.xml.get_widget("sqllib_details_table").set_sensitive(False)
+    # ---
+    # Callbacks
+    # ---
 
-    def on_statement_new(self, menuitem, parent):
-        sql = "insert into sqllib_sql (title, category, statement) \
-        values (?, ?, 'SELECT * FROM table;')"
-        self.app.userdb.cursor.execute(sql, (_(u"New query"), parent))
-        id = self.app.userdb.cursor.lastrowid
-        self.app.userdb.connection.commit()
-        self.plugin.rebuild_menues()
-        self.refresh()
+    def on_button_press_event(self, treeview, event):
+        if event.type == gtk.gdk._2BUTTON_PRESS \
+        and event.button == 1:
+            self._run_dblclick_action(treeview, event)
+        elif event.button == 3:
+            self._show_popup_menu(treeview, event)
+            return 1
 
-    def refresh(self):
+    def on_entry_edited(self, renderer, path, new_text):
         model = self.list.get_model()
-        model.clear()
-        self.init_items(model)
-
-    def init_items(self, model, parent=None):
-        sql = "select id, name from sqllib_cat where parent "
-        if parent:
-            sql += "= %s" % model.get_value(parent, 0)
+        model.set_value(model.get_iter(path), 2, new_text)
+        entry = model.get_value(model.get_iter(path), 0)
+        if isinstance(entry, Category):
+            entry.name = new_text
         else:
-            sql += "is null"
-        self.app.userdb.cursor.execute(sql)
-        for item in self.app.userdb.cursor.fetchall():
-            iter = model.append(parent)
-            model.set(iter, 0, item[0], 1, item[1],
-                      2, "gtk-open", 3, False,
-                      4, item[0])
-            sql = "select id, title from sqllib_sql where category = %s" % item[0]
-            self.app.userdb.cursor.execute(sql)
-            for citem in self.app.userdb.cursor.fetchall():
-                citer = model.append(iter)
-                model.set(citer, 0, citem[0], 1, citem[1],
-                          2, "gtk-edit", 3, True,
-                          4, "ZZZZZZZZZZZZZZZZZZZZ%s" % citem[1])
-            sql = "select count(*) from sqllib_cat where parent = %s" % item[0]
-            self.app.userdb.cursor.execute(sql)
-            if self.app.userdb.cursor.fetchone()[0] != 0:
-                self.init_items(model, iter)
-        if parent == None:
-            sql = "select id, title from sqllib_sql where category is null"
-            self.app.userdb.cursor.execute(sql)
-            for citem in self.app.userdb.cursor.fetchall():
-                citer = model.append(None)
-                model.set(citer, 0, citem[0], 1, citem[1],
-                          2, "gtk-edit", 3, True,
-                          4, "ZZZZZZZZZZZZZZZZZZZZ%s" % citem[1])
+            entry.title = new_text
+        self.lib.save_entry(entry)
+
+    def on_entry_rename(self, menuitem, treeview, path):
+        treeview.set_cursor(path, treeview.get_column(0), True)
+
+    # ---
+    # Public methods
+    # ---
+
+    def get_selected_item(self):
+        """Returns selected item or None."""
+        sel = self.list.get_selection()
+        model, iter_ = sel.get_selected()
+        if iter_ is not None:
+            return model.get_value(iter_, 0)
+        return None
+
+    def refresh(self, parent=None):
+        """Update all entries in the TreeView."""
+        for item in self.lib.get_entries(parent):
+            is_cat = isinstance(item, Category)
+            iter_ = self._get_entry(is_cat, item.id)
+            if iter_ is None:
+                if isinstance(item, Category):
+                    parent = item.parent
+                else:
+                    parent = item.category
+                if parent:
+                    iter_ = self.model.append(self._get_entry(True, parent))
+                else:
+                    iter_ = self.model.append(None)
+            if isinstance(item, Category):
+                lbl = item.name
+                content = None
+                ico = gtk.STOCK_OPEN
+            else:
+                lbl = item.title or item.statement.split('\n')[0]
+                content = item.statement
+                ico = gtk.STOCK_FILE
+            self.model.set_value(iter_, 0, item)
+            self.model.set_value(iter_, 1, ico)
+            self.model.set_value(iter_, 2, lbl)
+            self.model.set_value(iter_, 3, content)
+            self.model.set_value(iter_, 4, True)
+            if is_cat:
+                self.refresh(item.id)
+
+
+UI = '''
+<menubar name="MenuBar">
+  <menu name="Query" action="query-menu-action">
+    <placeholder name="query-extensions">
+      <separator />
+      <menuitem name="LibSave" action="lib-save" />
+    </placeholder>
+  </menu>
+</menubar>
+'''
 
 
 TABLE_LIB_CAT = """create table sqllib_cat (
@@ -480,6 +363,7 @@ TABLE_LIB_CAT = """create table sqllib_cat (
     name text,
     parent integer references sqllib_cat
 );"""
+
 
 TABLE_LIB_SQL = """create table sqllib_sql (
     id integer primary key not null,

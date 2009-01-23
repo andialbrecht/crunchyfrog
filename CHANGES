@@ -5,6 +5,7 @@ Release Highlights
  * Cross-platform compatibility.
  * Cleaner user interface.
  * Configurable keyboard shortcuts.
+ * Re-written SQL library plugin.
 
 Other
  * Removed kiwi dependency.

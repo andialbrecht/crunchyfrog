@@ -50,6 +50,7 @@ class InstanceMixin(object):
         """
         pass
 
+
 class MenubarMixin(InstanceMixin):
     """Modify the applications main menu
 
@@ -82,6 +83,7 @@ class MenubarMixin(InstanceMixin):
         """
         pass
 
+
 class EditorMixin(InstanceMixin):
     """Editor relation
 
@@ -98,6 +100,7 @@ class EditorMixin(InstanceMixin):
                 An instance
         """
         pass
+
 
 class UserDBMixin:
     """User database access

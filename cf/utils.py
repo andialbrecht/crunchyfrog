@@ -20,6 +20,8 @@
 
 """Nifty little helpers"""
 
+import re
+
 import gtk
 import gobject
 
@@ -33,3 +35,8 @@ def Emit(obj, *args):
         return False
     gobject.idle_add(Do_Emit, obj, *args, **{"priority" : gobject.PRIORITY_HIGH})
 #END: Emit
+
+def normalize_sql(sql):
+    """Removes duplicated whitespaces and line breaks."""
+    p = re.compile(r'\s+', re.MULTILINE)
+    return p.sub(' ', sql)

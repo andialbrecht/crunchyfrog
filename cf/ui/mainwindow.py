@@ -778,6 +778,7 @@ UI = '''
       <menuitem name="Begin" action="query-begin" />
       <menuitem name="Commit" action="query-commit" />
       <menuitem name="Rollback" action="query-rollback" />
+      <placeholder name="query-extensions" />
       <separator />
       <menuitem name="Editor1" action="activate-editor1" />
       <menuitem name="Editor2" action="activate-editor2" />
