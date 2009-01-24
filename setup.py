@@ -27,6 +27,7 @@ import sys
 
 from utils.command.build_api import build_api
 from utils.command.clean_mo import clean_mo
+from utils.command.clean_docs import clean_docs
 from utils.command.clean_mo import compile_mo
 
 
@@ -47,6 +48,7 @@ CMD_CLASS = {
     'clean_mo': clean_mo,
     'compile_mo': compile_mo,
     'build_api': build_api,
+    'clean_docs': clean_docs,
 }
 
 # compile_mo: We're using a msgfmt.py based compile to have no Babel dependency
