@@ -6,6 +6,7 @@ Release Highlights
  * Cleaner user interface.
  * Configurable keyboard shortcuts.
  * Re-written SQL library plugin.
+ * New developer documentation (incl. API).
 
 Other
  * Removed kiwi dependency.
