@@ -170,8 +170,7 @@ class PluginManager(gobject.GObject):
     An instance of this class is accessible through the ``plugins``
     attribute of an `CFApplication`_ instance.
 
-    Signals
-    =======
+    :Signals:
 
         plugin-added
             ``def callback(manager, plugin, user_param1, ...)``

@@ -267,8 +267,8 @@ class DatasourceManager(gobject.GObject):
     An instance of this class is accessible through the ``datasources``
     attribute of an `CFApplication`_ instance.
 
-    Signals
-    =======
+    :Signals:
+
         datasource-added
             ``def callback(manager, datasource_info, user_param1, ...)``
 

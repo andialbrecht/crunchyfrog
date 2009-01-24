@@ -7,7 +7,7 @@ import pydoc
 HEADER = '=-^""""""'
 PACKAGES = ["cf"]
 BASE_DIR = os.path.abspath(".")
-OUT_DIR = os.path.abspath('docs/api/source/')
+OUT_DIR = os.path.abspath('docs/devguide/source/api/')
 
 
 def _build_pkg(name, base=BASE_DIR, output=None, level=0, modname=None):
@@ -59,7 +59,9 @@ def main():
         output.append('')
         output.append('   %s_*' % pkg)
         _build_pkg(pkg, output=output, level=0)
-        f = open(os.path.join(OUT_DIR, '%s.rst' % pkg), 'w')
+        # We've just one package, so we write it out as index.rst.
+        # Replace this to '%s.rst' % pkg if we've more than one... ;-)
+        f = open(os.path.join(OUT_DIR, 'index.rst'), 'w')
         f.write('\n'.join(output))
         f.close()
 

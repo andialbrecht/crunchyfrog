@@ -41,8 +41,7 @@ class GladeWidget(gobject.GObject):
     Read the source of one of the subclasses to get an idea how
     this class works.
 
-    Instance attributes
-    ===================
+    :Instance attributes:
 
         :app: `CFApplication`_ instance
         :xml: `gtk.glade.XML`_ instance

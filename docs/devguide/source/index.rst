@@ -18,6 +18,7 @@ Contents:
    widgets
    plugins
    misc
+   api/index
 
 
 Indices and tables

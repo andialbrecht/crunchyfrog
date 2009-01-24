@@ -47,8 +47,7 @@ class UserDB(gobject.GObject):
     An instance of this class is accessible through the ``userdb``
     attribute of an `CFApplication`_ instance.
 
-    Usage example
-    =============
+    :Usage example:
 
         .. sourcecode:: python
 
@@ -65,8 +64,7 @@ class UserDB(gobject.GObject):
             >>> app.userdb.drop_table("foo")
 
 
-    Instance attributes
-    ===================
+    :Instance attributes:
 
         :conn: Database connection (sqlite connection)
         :cursor: Database cursor (sqlite cursor)

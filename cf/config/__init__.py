@@ -61,28 +61,26 @@ class Config(gobject.GObject):
         specific data here.
 
 
-    Usage example
-    =============
+    :Usage example:
 
-        .. sourcecode:: python
+    .. sourcecode:: python
 
-            >>> app.config.get("foo.bar") # Not set yet, None is default
-            None
-            >>> app.config.set("foo.bar", True)
-            >>> app.config.get("foo.bar")
-            True
-            >>> app.config.set("foo.bar", ["Completely", "different"]) # No type check!
-            >>> print " ".join(app.config.get("foo.bar"))
-            Completely different
+       >>> app.config.get("foo.bar") # Not set yet, None is default
+       None
+       >>> app.config.set("foo.bar", True)
+       >>> app.config.get("foo.bar")
+       True
+       >>> app.config.set("foo.bar", ["Completely", "different"]) # No type check!
+       >>> print " ".join(app.config.get("foo.bar"))
+       Completely different
 
 
-    Signals
-    =======
+    :Signals:
 
-        changed
-            ``def callback(config, key, value, user_oaram1, ...)``
+    changed
+      ``def callback(config, key, value, user_oaram1, ...)``
 
-            Emitted when a option has changed.
+      Emitted when a option has changed.
 
 
     .. _CFApplication: cf.app.CFApplication.html

@@ -45,8 +45,7 @@ class Grid(gtk.TreeView):
 
     The view component of the grid.
 
-    Signals
-    =======
+    :Signals:
 
         selection-changed
             ``def callback(grid, selected_cells, user_param1, ...)``
@@ -54,8 +53,7 @@ class Grid(gtk.TreeView):
             Emitted when selected cells have changed
 
 
-    Selection
-    =========
+    :Selection:
 
     This grid allows three different selections which exclude each
     other:

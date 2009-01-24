@@ -325,8 +325,7 @@ class ProgressDialog(GladeWidget):
 
     A simple window with a message, an icon and a progress bar.
 
-    Usage example
-    =============
+    :Usage example:
 
         .. sourcecode:: python
 
