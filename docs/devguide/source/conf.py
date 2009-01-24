@@ -39,7 +39,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'CrunchyFrog API'
+project = u'CrunchyFrog Developer Guide'
 copyright = u'2008, Andi Albrecht'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -92,7 +92,7 @@ pygments_style = 'sphinx'
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
-html_style = 'default.css'
+html_style = 'custom.css'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
@@ -103,12 +103,12 @@ html_style = 'default.css'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = None
+#html_logo = '.static/cf_logo.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#html_favicon = None
+html_favicon = '.static/favicon.ico'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -151,7 +151,7 @@ html_static_path = ['.static']
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'CrunchyFrogAPIdoc'
+htmlhelp_basename = 'CrunchyFrogDeveloperGuidedoc'
 
 
 # Options for LaTeX output
@@ -166,7 +166,7 @@ htmlhelp_basename = 'CrunchyFrogAPIdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, document class [howto/manual]).
 latex_documents = [
-  ('index', 'CrunchyFrogAPI.tex', ur'CrunchyFrog API Documentation',
+  ('index', 'CrunchyFrogDeveloperGuide.tex', ur'CrunchyFrog Developer Guide Documentation',
    ur'Andi Albrecht', 'manual'),
 ]
 

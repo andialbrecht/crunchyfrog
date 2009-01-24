@@ -1,0 +1,63 @@
+@import url("default.css");
+
+body {
+  background-color: #FFFFFF;
+}
+
+div.related {
+  background-color: #ffffff;
+  color: #ececec;
+  border-top: 1px solid #ececec;
+  border-bottom: 1px solid #ececec;
+}
+
+div.related a {
+  color: #777777;
+}
+
+div.document {
+  background-color: #F2F2F2;
+  color: black;
+}
+
+p.logo {
+  text-align: right;
+  margin: 0;
+  display: none;
+}
+
+div.sphinxsidebar h1,
+div.sphinxsidebar h2,
+div.sphinxsidebar h3,
+div.sphinxsidebar h4,
+div.sphinxsidebar h5,
+div.sphinxsidebar h6 {
+  color: #3c3c3c;
+}
+
+div.sphinxsidebar a {
+  color: #1c8a00;
+}
+
+div.sphinxsidebar h3 a {
+  color: #3c3c3c;
+}
+
+div.sphinxsidebar input {
+  border: 1px solid #7c7c7c;
+}
+
+div.body h1,
+div.body h2,
+div.body h3,
+div.body h4,
+div.body h5,
+div.body h6 {
+  color: #3c3c3c;
+}
+
+div.body a {
+  color: #1c8a00;
+}
+
+
