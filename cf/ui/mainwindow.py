@@ -40,7 +40,6 @@ from cf.ui import widgets
 from cf.ui.browser import Browser
 from cf.ui.datasources import DatasourceManager
 from cf.ui.editor import Editor
-from cf.ui.queries import QueriesNotebook
 
 
 class MainWindow(gtk.Window):
