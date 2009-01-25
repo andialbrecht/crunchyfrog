@@ -22,9 +22,11 @@ class clean_docs(Command):
 
     def run(self):
         for path in ['docs/devguide/build', 'docs/manual/build']:
-            if os.path.exists(path):
-                print 'Removing generated documentation %s' % path
-                shutil.rmtree(path)
+            print 'Cleaning %s' % path
+            for item in os.listdir(path):
+                if item == '.DUMMY':
+                    continue
+                shutil.rmtree(os.path.join(path, item))
 
 
 clean.sub_commands.append(('clean_docs', None))

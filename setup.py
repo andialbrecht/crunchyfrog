@@ -47,9 +47,10 @@ CMD_CLASS = {
     'clean': clean_with_subcommands,
     'clean_mo': clean_mo,
     'compile_mo': compile_mo,
-    'build_api': build_api,
     'clean_docs': clean_docs,
+    'build_api': build_api,
 }
+
 
 # compile_mo: We're using a msgfmt.py based compile to have no Babel dependency
 #   on buildbot like launchpad.net...
@@ -61,6 +62,15 @@ try:
     CMD_CLASS['udpate_catalog'] = babel.update_catalog
 except ImportError:
     pass
+
+# The same for the documentation. Currently it's not distributed, so
+#   Sphinx is optional and not needed on buildbots.
+try:
+    from sphinx.setup_command import BuildDoc
+    CMD_CLASS['build_devguide'] = BuildDoc
+except ImportError:
+    pass
+
 
 DATA_FILES = []
 
@@ -81,6 +91,10 @@ DATA_FILES += [('share/icons/hicolor/24x24/apps', ['data/crunchyfrog.png'])]
 
 # Manpage
 DATA_FILES += [('share/man/man1', ['data/crunchyfrog.1'])]
+
+# Documentation
+#DATA_FILES += [('share/docs/crunchyfrog/devguide',
+#                glob('docs/devguide/build/html/*.*'))]
 
 # Locales
 for lang in os.listdir('po/'):

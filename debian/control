@@ -19,3 +19,7 @@ XB-Python-Version: ${python:Versions}
 Depends: crunchyfrog, python-gnome2, python-gnome2-desktop, python-gnome2-extras, gnome-extra-icons
 Description: Provides GNOME related packages for CrunchyFrog.
 
+Package: crunchyfrog-docs
+Architecture: any
+Depends: crunchyfrog
+Description: Developer documentation for CrunchyFrog.
