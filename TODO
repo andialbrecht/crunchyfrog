@@ -8,7 +8,6 @@ User Interface
 - Failed queries: Stop on error with continue/stop dialog.
 - Explain view: Enhance explain view with respect to backend specific
   options and return values.
-- Accelerators don't work in SQL window.
 - Replace toolbar from data source manager? It's too large and looks
   ugly with some GTK themes.
 - Panes loose state when new instance was created and closed last.
@@ -29,7 +28,6 @@ Editor
 Library
 -------
 - Improve save to library function.
-- Improve refresh of library tree when modifying entries.
 - Export/import library.
 - Optionally save current connection with statement?
 
