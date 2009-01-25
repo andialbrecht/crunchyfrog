@@ -848,7 +848,9 @@ class ResultsView(GladeWidget):
             model.set_value(iter_, 3, weight)
             model.set_value(iter_, 5, font)
             itr = iter_
-        self.messages.scroll_to_cell(model.get_path(itr))
+        # Somehow this works smarter than treeview.scroll_to_cell(path).
+        # See: http://www.mail-archive.com/pygtk@daa.com.au/msg17059.html
+        self.messages.scroll_to_cell(str(len(model)-1))
         return model.get_path(itr)
 
     def add_error(self, msg, monospaced=False):
