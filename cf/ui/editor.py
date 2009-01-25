@@ -240,6 +240,7 @@ class Editor(GladeWidget, PaneItem):
         cur = self.connection.cursor()
         cur.execute("commit")
         cur.close()
+        self.results.add_message('COMMIT', 'info')
 
     def rollback(self):
         """Commit current transaction, if any."""
@@ -247,6 +248,7 @@ class Editor(GladeWidget, PaneItem):
         cur = self.connection.cursor()
         cur.execute("rollback")
         cur.close()
+        self.results.add_message('ROLLBACK', 'info')
 
     def begin_transaction(self):
         """Begin transaction."""
@@ -254,6 +256,7 @@ class Editor(GladeWidget, PaneItem):
         cur = self.connection.cursor()
         cur.execute("begin")
         cur.close()
+        self.results.add_message('BEGIN TRANSACTION', 'info')
 
     def execute_query(self):
         def exec_threaded(statement):
@@ -851,6 +854,7 @@ class ResultsView(GladeWidget):
         # Somehow this works smarter than treeview.scroll_to_cell(path).
         # See: http://www.mail-archive.com/pygtk@daa.com.au/msg17059.html
         self.messages.scroll_to_cell(str(len(model)-1))
+        self.widget.set_current_page(2)
         return model.get_path(itr)
 
     def add_error(self, msg, monospaced=False):
