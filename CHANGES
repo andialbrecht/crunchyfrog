@@ -9,6 +9,7 @@ Release Highlights
  * New developer documentation (incl. API).
 
 Other
+ * Connection handling optimized (issue17, thanks to Mike for the good ideas).
  * Removed kiwi dependency.
  * Open multiple files at once.
  * Drag'n'drop SQL editors between existing application windows.
