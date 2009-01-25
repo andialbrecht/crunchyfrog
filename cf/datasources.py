@@ -370,6 +370,12 @@ class DatasourceManager(gobject.GObject):
         """
         return self._cache
 
+    def get_connections(self):
+        """Returns a list of open connections."""
+        for dsinfo in self.get_all():
+            for conn in dsinfo.get_connections():
+                yield conn
+
 
 def check_userdb(userdb):
     if not userdb.get_table_version("datasource"):

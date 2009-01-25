@@ -115,46 +115,42 @@ def rebuild_connection_menu(menu, win, editor=None):
     if editor is None:
         return
 
-    def cb_new_connection(menuitem, datasource_info, editor):
+    def create_and_assign(menuitem, datasource_info, editor):
         try:
             conn = datasource_info.dbconnect()
             editor.set_connection(conn)
         except DBConnectError, err:
-            dialogs.error(_(u'Connection failed'), str(err))
+            daialogs.error(_(u'Connection failed'), str(err))
 
-    ghas_connections = False
-    dinfos = win.app.datasources.get_all()
-    dinfos.sort(lambda x, y: cmp(x.get_label().lower(),
-                                 y.get_label().lower()))
-    for datasource_info in dinfos:
-        item = gtk.MenuItem(datasource_info.get_label())
+    add_sep = False
+    for conn in win.app.datasources.get_connections():
+        add_sep = True
+        item = gtk.MenuItem(conn.get_label())
+        item.connect('activate', lambda m, c, e: e.set_connection(c),
+                     conn, editor)
         item.show()
         menu.append(item)
-        submenu = gtk.Menu()
-        has_connections = False
-        for conn in datasource_info.get_connections():
-            yitem = gtk.MenuItem((_(u'Connection')+' #%s'
-                                  % conn.conn_number))
-            yitem.connect('activate',
-                          lambda i, c: editor.set_connection(c),
-                          conn)
-            yitem.show()
-            submenu.append(yitem)
-            has_connections = True
-            ghas_connections = True
-        if has_connections:
-            sep = gtk.SeparatorMenuItem()
-            sep.show()
-            submenu.append(sep)
-        xitem = gtk.MenuItem(_(u'New connection'))
-        xitem.connect('activate', cb_new_connection,
-                      datasource_info, editor)
-        xitem.show()
-        submenu.append(xitem)
-        item.set_submenu(submenu)
-    sep = gtk.SeparatorMenuItem()
-    sep.show()
-    menu.append(sep)
+
+    if add_sep:
+        item = gtk.SeparatorMenuItem()
+        item.show()
+        menu.append(item)
+
+    item = gtk.MenuItem(_(u'_New connection'))
+    item.show()
+    menu.append(item)
+
+    dsmenu = gtk.Menu()
+    dsinfos = win.app.datasources.get_all()
+    dsinfos.sort(lambda x, y: cmp(x.get_label().lower(),
+                                  y.get_label().lower()))
+    for dsinfo in dsinfos:
+        dsitem = gtk.MenuItem(dsinfo.get_label())
+        dsitem.show()
+        dsitem.connect('activate', create_and_assign, dsinfo, editor)
+        dsmenu.append(dsitem)
+    item.set_submenu(dsmenu)
+
     action = win._get_action('query-show-connections')
     item = action.create_menu_item()
     item.show()
