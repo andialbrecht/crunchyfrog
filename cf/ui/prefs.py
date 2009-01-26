@@ -208,6 +208,9 @@ class PreferencesDialog(GladeWidget):
             nb = self.xml.get_widget("editor_notebook")
             nb.set_current_page(model.get_value(iter, 0))
 
+    def on_help(self, *args):
+        self.app.show_help()
+
     def on_plugin_active_toggled(self, renderer, path):
         iter = self.plugin_model.get_iter(path)
         plugin = self.plugin_model.get_value(iter, 0)
