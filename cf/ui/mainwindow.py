@@ -106,6 +106,9 @@ class MainWindow(gtk.Window):
             ('view-menu-action', None, _(u'_View')),
             # Help
             ('help-menu-action', None, _(u'_Help')),
+            ('help-help', gtk.STOCK_HELP,
+             None, None, _(u'Open the CrunchyFrog manual'),
+             lambda *a: self.app.show_help()),
             ('help-about', gtk.STOCK_ABOUT,
              None, None, _(u'About this application'),
              self.on_about),
@@ -791,6 +794,7 @@ UI = '''
       <menuitem name="Editor0" action="activate-editor0" />
     </menu>
     <menu name="Help" action="help-menu-action">
+      <menuitem name="HelpHelp" action="help-help" />
       <separator />
       <menuitem name="HelpAbout" action="help-about" />
     </menu>

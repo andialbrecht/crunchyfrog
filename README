@@ -23,6 +23,12 @@ For a localized version first run
 
 and then start the application as described above.
 
+To have the manual run
+
+    python setup.py build_manual
+
+and then select "Help > Help" (Ctrl+H) in the application.
+
 
 Installing CrunchyFrog
 ----------------------

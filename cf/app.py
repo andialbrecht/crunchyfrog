@@ -24,11 +24,13 @@ import logging
 import os
 import sys
 import threading
+import urlparse
+import webbrowser
 
 import gobject
 import gtk
 
-from cf import release, USER_DIR
+from cf import release, USER_DIR, MANUAL_URL
 from config import Config
 from datasources import DatasourceManager
 from plugins.core import PluginManager
@@ -168,6 +170,16 @@ class CFApplication(gobject.GObject):
         t = threading.Thread(target=self.ipc_listener.serve_forever)
         t.setDaemon(True)
         t.start()
+
+    def show_help(self, topic=None):
+        """Opens a webbrowser with a help page.
+
+        Arguments:
+          topic: If given, the URL points to the selected topic.
+        """
+        if topic is None:
+            url = urlparse.urljoin(MANUAL_URL, 'index.html')
+        webbrowser.open(url)
 
     def shutdown(self):
         """Execute all shutdown tasks and quit application
