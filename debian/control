@@ -2,7 +2,7 @@ Source: crunchyfrog
 Section: gnome
 Priority: extra
 Maintainer: Andi Albrecht <albrecht.andi@googlemail.com>
-Build-Depends: python (>=2.5), debhelper, python-central, python-sphinx (>=0.5)
+Build-Depends: python (>=2.5), debhelper, python-central, python-sphinx
 XS-Python-Version: >=2.5
 Standards-Version: 3.7.2
 
@@ -19,7 +19,3 @@ XB-Python-Version: ${python:Versions}
 Depends: crunchyfrog, python-gnome2, python-gnome2-desktop, python-gnome2-extras, gnome-extra-icons
 Description: Provides GNOME related packages for CrunchyFrog.
 
-Package: crunchyfrog-docs
-Architecture: any
-Depends: crunchyfrog
-Description: Developer documentation for CrunchyFrog.

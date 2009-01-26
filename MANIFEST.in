@@ -7,6 +7,7 @@ include CHANGES
 include Makefile
 include setup.py
 include crunchyfrog
+include MANIFEST.in
 recursive-include cf *.py *.cfg *.in
 recursive-include data *
 recursive-include debian *
@@ -15,3 +16,4 @@ recursive-include extras *.py
 recursive-include po *
 recursive-include utils *.py
 prune *.pyc
+prune .gitignore

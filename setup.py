@@ -92,6 +92,7 @@ DATA_FILES += [('share/icons/hicolor/24x24/apps', ['data/crunchyfrog.png'])]
 DATA_FILES += [('share/man/man1', ['data/crunchyfrog.1'])]
 
 # Documentation
+DATA_FILES += [('share/doc/crunchyfrog', ['README', 'CHANGES', 'COPYING'])]
 DATA_FILES += [('share/doc/crunchyfrog/manual',
                 glob('docs/manual/build/html/*.*')),
                ('share/doc/crunchyfrog/manual/_images',
