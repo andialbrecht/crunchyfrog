@@ -25,6 +25,8 @@ import os
 import shutil
 import sys
 
+from sphinx.setup_command import BuildDoc
+
 from utils.command.build_api import build_api
 from utils.command.clean_mo import clean_mo
 from utils.command.clean_docs import clean_docs
@@ -49,7 +51,12 @@ CMD_CLASS = {
     'compile_mo': compile_mo,
     'clean_docs': clean_docs,
     'build_api': build_api,
+    'build_devguide': BuildDoc,
+    'build_manual': BuildDoc,
 }
+
+
+build.sub_commands.append(('build_manual', None))
 
 
 # compile_mo: We're using a msgfmt.py based compile to have no Babel dependency
@@ -60,14 +67,6 @@ try:
     CMD_CLASS['extract_messages'] = babel.extract_messages
     CMD_CLASS['init_catalog'] = babel.init_catalog
     CMD_CLASS['udpate_catalog'] = babel.update_catalog
-except ImportError:
-    pass
-
-# The same for the documentation. Currently it's not distributed, so
-#   Sphinx is optional and not needed on buildbots.
-try:
-    from sphinx.setup_command import BuildDoc
-    CMD_CLASS['build_devguide'] = BuildDoc
 except ImportError:
     pass
 
@@ -93,8 +92,14 @@ DATA_FILES += [('share/icons/hicolor/24x24/apps', ['data/crunchyfrog.png'])]
 DATA_FILES += [('share/man/man1', ['data/crunchyfrog.1'])]
 
 # Documentation
-#DATA_FILES += [('share/docs/crunchyfrog/devguide',
-#                glob('docs/devguide/build/html/*.*'))]
+DATA_FILES += [('share/doc/crunchyfrog/manual',
+                glob('docs/manual/build/html/*.*')),
+               ('share/doc/crunchyfrog/manual/_images',
+                glob('docs/manual/build/html/_images/*.*')),
+               ('share/doc/crunchyfrog/manual/_sources',
+                glob('docs/manual/build/html/_sources/*.*')),
+               ('share/doc/crunchyfrog/manual/_static',
+                glob('docs/manual/build/html/_static/*.*'))]
 
 # Locales
 for lang in os.listdir('po/'):
