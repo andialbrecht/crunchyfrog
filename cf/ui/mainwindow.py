@@ -20,6 +20,7 @@
 
 import logging
 import os
+import webbrowser
 
 import gobject
 import gtk
@@ -109,6 +110,19 @@ class MainWindow(gtk.Window):
             ('help-help', gtk.STOCK_HELP,
              None, None, _(u'Open the CrunchyFrog manual'),
              lambda *a: self.app.show_help()),
+            ('help-translate', None,
+             _(u'Help translate...'), None,
+             _(u'Help to translate this application'),
+             lambda a:
+             webbrowser.open('https://translations.launchpad.net/crunchyfrog'),
+             ),
+            ('help-bugs', None,
+             _(u'Report a problem'), None,
+             _((u'Help to improve this application by reporting a bug '
+                u'or a feature request.')),
+             lambda a:
+             webbrowser.open(('http://code.google.com/p/crunchyfrog/'
+                              'issues/entry'))),
             ('help-about', gtk.STOCK_ABOUT,
              None, None, _(u'About this application'),
              self.on_about),
@@ -796,6 +810,8 @@ UI = '''
     <menu name="Help" action="help-menu-action">
       <menuitem name="HelpHelp" action="help-help" />
       <separator />
+      <menuitem name="HelpTranslate" action="help-translate" />
+      <menuitem name="HelpBugs" action="help-bugs" />
       <menuitem name="HelpAbout" action="help-about" />
     </menu>
   </menubar>
