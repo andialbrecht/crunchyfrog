@@ -117,9 +117,8 @@ class Pane(object):
                 action.set_sensitive(True)
                 if action.get_active():
                     self.show()
-            visopt = 'win.%s_visible' % self.__class__.__name__
-            if not action.get_active() and action_str == 'added' \
-                   and page_num == 0 and self.app.config.get(visopt, False):
+            visopt = 'win.%s_visible' % self.__class__.__name__.lower()
+            if self.app.config.get(visopt, False) and nb.get_n_pages():
                 action.set_active(True)
 
     def on_notebook_switch_page(self, nb, unusable, page_num):
