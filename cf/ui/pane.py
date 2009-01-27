@@ -49,6 +49,7 @@ class Pane(object):
 
     def __init__(self, mainwin):
         self.app = mainwin.app
+        # TODO: Rename to self.instance
         self.mainwin = mainwin
         self._merge_ui()
         self.header = gtk.HBox()
@@ -73,15 +74,15 @@ class Pane(object):
         self.notebook.set_tab_pos(gtk.POS_BOTTOM)
         self.pack_start(self.notebook, True, True)
         self.notebook.show()
-        self._autohide_tabs = True
+        self._autohide_tabs = False
         self.notebook.connect('switch-page', self.on_notebook_switch_page)
         self.notebook.connect('page-added',
                               self.on_notebook_pages_changed, 'added')
         self.notebook.connect('page-removed',
                               self.on_notebook_pages_changed, 'removed')
+        self.notebook.set_group_id(99)
         self.hide()
         self._state_restored = False
-#        self.on_notebook_pages_changed(self.notebook, None, 0, 'removed')
 
     def _merge_ui(self):
         ui = self.mainwin.ui
@@ -99,6 +100,9 @@ class Pane(object):
         action = self.mainwin._get_action(action_name)
         action.set_active(self.app.config.get(conf_name, True))
         self.on_toggle(action)
+
+    def on_move_page(self, menuitem, page, pane):
+        pane.add_item(page)
 
     def on_notebook_pages_changed(self, nb, page, page_num, action_str):
         if self._autohide_tabs:
@@ -131,9 +135,11 @@ class Pane(object):
         self.top_img.set_from_pixbuf(pb)
 
     def on_page_detach(self, menuitem, page):
+        alloc = page.get_allocation()
         def attach(window, page):
-            page.reparent(self.notebook)
+            self.add_item(page)
         w = gtk.Window()
+        w.resize(alloc.width, alloc.height)
         w.set_transient_for(self.mainwin)
         w.connect('destroy', attach, page)
         page.reparent(w)
@@ -160,6 +166,16 @@ class Pane(object):
             item.connect('activate', self.on_page_detach, page)
             menu.append(item)
             item.show()
+            if self.__class__.__name__.startswith('Bottom'):
+                other_pane = _(u'side pane')
+                other = self.mainwin.side_pane
+            else:
+                other_pane = _(u'bottom pane')
+                other = self.mainwin.bottom_pane
+            item = gtk.MenuItem(_(u'Move to %(name)s' % {'name': other_pane}))
+            item.connect('activate', self.on_move_page, page, other)
+            item.show()
+            menu.append(item)
         menu.popup(None, None, None, event.button, event.time)
 
     def get_action_entries(self):
@@ -185,6 +201,7 @@ class Pane(object):
             self.notebook.set_tab_label(item, img)
         else:
             self.notebook.append_page(item, img)
+        self.notebook.set_tab_detachable(item, True)
 
     def remove_item(self, pane_item):
         """Remove a previously added PaneItem."""
@@ -252,6 +269,7 @@ class BottomPane(gtk.VBox, Pane):
     def __init__(self, mainwin):
         gtk.VBox.__init__(self)
         Pane.__init__(self, mainwin)
+        self.notebook.set_tab_pos(gtk.POS_RIGHT)
 
     def get_action_entries(self):
         return (
@@ -310,16 +328,6 @@ class CenterPane(gtk.VBox, Pane):
         self.notebook.set_tab_detachable(widget, True)
         self.notebook.set_current_page(self.notebook.page_num(widget))
 
-    def get_view_by_pagenum(self, page_num):
-        """Return editor object by page number."""
-        child = self.notebook.get_nth_page(page_num)
-        return self.get_view_by_page(child)
-
-    def get_view_by_page(self, page):
-        """Return editor object by child widget."""
-        lbl = self.notebook.get_tab_label(page)
-        return lbl.editor
-
     def __getattribute__(self, name):
         """We want it to behave much like a gtk.Notebook."""
         try:
@@ -330,6 +338,16 @@ class CenterPane(gtk.VBox, Pane):
 
     def get_action_entries(self):
         return []
+
+    def get_view_by_pagenum(self, page_num):
+        """Return editor object by page number."""
+        child = self.notebook.get_nth_page(page_num)
+        return self.get_view_by_page(child)
+
+    def get_view_by_page(self, page):
+        """Return editor object by child widget."""
+        lbl = self.notebook.get_tab_label(page)
+        return lbl.editor
 
 
 
