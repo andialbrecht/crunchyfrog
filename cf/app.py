@@ -177,12 +177,8 @@ class CFApplication(gobject.GObject):
         Arguments:
           topic: If given, the URL points to the selected topic.
         """
-        if sys.platform.startswith('win'):
-            join = os.path.join
-        else:
-            join = urlparse.urljoin
         if topic is None:
-            url = join(MANUAL_URL, 'index.html')
+            url = os.path.join(MANUAL_URL, 'index.html')
         webbrowser.open(url)
 
     def shutdown(self):
