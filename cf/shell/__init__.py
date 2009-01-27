@@ -20,6 +20,8 @@
 
 """Python shell plugin"""
 
+import logging
+
 import gtk
 import gobject
 
@@ -28,9 +30,12 @@ from cf.plugins.core import BottomPanePlugin
 from cf.plugins.mixins import InstanceMixin
 from cf.ui.pane import PaneItem
 
-from gettext import gettext as _
-
-from ipython_view import *
+try:
+    from ipython_view import *
+    HAVE_IPYTHON = True
+except ImportError, err:
+    logging.error(err)
+    HAVE_IPYTHON = False
 
 
 class CFShell(BottomPanePlugin, InstanceMixin):
@@ -46,60 +51,22 @@ class CFShell(BottomPanePlugin, InstanceMixin):
 
     def __init__(self, app):
         BottomPanePlugin.__init__(self, app)
-        self._shells = dict()
         self._instances = dict()
-        for instance in app.get_instances():
-            self.init_instance(instance)
-
-    def on_import_table_to_shell(self, menuitem, object, view):
-        view.import_table(object)
-
-    def on_object_menu_popup(self, browser, popup, object, view):
-        if isinstance(object, Table):
-            item = gtk.MenuItem(_(u"Import to shell"))
-            item.connect("activate",
-                         self.on_import_table_to_shell, object, view)
-            item.show()
-            popup.append(item)
-
-    def on_toggle_shell(self, menuitem, instance):
-        if menuitem.get_active():
-            view = CFShellView(self.app, instance)
-            self._shells[instance] = view
-            item = DockItem(instance.dock, "cfshell", view, _(u"Shell"),
-                              "gnome-terminal", gtk.POS_BOTTOM)
-            instance.dock.add_item(item)
-            view.connect("destroy", self.on_view_destroyed, menuitem, instance)
-            tag = instance.browser.connect("object-menu-popup",
-                                           self.on_object_menu_popup, view)
-            view.set_data("object-menu-tag", tag)
-        else:
-            instance.browser.disconnect(
-                self._shells[instance].get_data("object-menu-tag"))
-            self._shells[instance].destroy()
-            del self._shells[instance]
-
-    def on_view_destroyed(self, view, menuitem, instance):
-        menuitem.set_active(False)
 
     def init_instance(self, instance):
-        if instance in self._instances.keys():
+        if instance in self._instances:
             return
         view = CFShellView(self.app, instance)
         instance.bottom_pane.add_item(CFShellView(self.app, instance))
         self._instances[instance] = view
 
     def shutdown(self):
-        if self._shells.keys():
-            self.app.config.set("cfshell.visible", True)
-        else:
-            self.app.config.set("cfshell.visible", False)
         while self._instances:
-            instance, mn_item = self._instances.popitem()
-            mn_item.destroy()
-        while self._shells:
-            instance, shell = self._shells.popitem()
-            shell.destroy()
+            instance, view = self._instances.popitem()
+            view.destroy()
+
+if not HAVE_IPYTHON:
+    CFShell.INIT_ERROR = _(u'Python module ipython is required.')
 
 
 class CFShellView(gtk.ScrolledWindow, PaneItem):

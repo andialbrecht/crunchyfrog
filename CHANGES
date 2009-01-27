@@ -8,6 +8,9 @@ Release Highlights
  * Re-written SQL library plugin.
  * New developer documentation (incl. API).
 
+Bug Fixes:
+ * Added missing check for IPython for Python shell (issue21).
+
 Other
  * Connection handling optimized (issue17, thanks to Mike for the good ideas).
  * Removed kiwi dependency.
