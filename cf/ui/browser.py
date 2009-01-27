@@ -53,7 +53,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
 
     item_id = 'navigator'
     name = _(u'Navigator')
-    icon = gtk.STOCK_CONNECT
+    icon = 'stock_connect'
     detachable = True
 
     def __init__(self, app, instance):
