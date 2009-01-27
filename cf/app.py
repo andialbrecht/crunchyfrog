@@ -199,11 +199,14 @@ class CFApplication(gobject.GObject):
             self.ipc_listener.shutdown()
         gtk.main_quit()
 
-    def load_icon(self, icon_name, size, lookup_method):
+    def load_icon(self, icon_name, size=None, lookup_method=None):
         """Wrapper for gtk.IconTheme.load_icon that catches GError."""
-        lookup_method = (gtk.ICON_LOOKUP_FORCE_SVG |
-                         gtk.ICON_LOOKUP_USE_BUILTIN |
-                         gtk.ICON_LOOKUP_GENERIC_FALLBACK)
+        if size is None:
+            size = gtk.ICON_SIZE_MENU
+        if lookup_method is None:
+            lookup_method = (gtk.ICON_LOOKUP_FORCE_SVG |
+                             gtk.ICON_LOOKUP_USE_BUILTIN |
+                             gtk.ICON_LOOKUP_GENERIC_FALLBACK)
         try:
             return self.icon_theme.load_icon(icon_name, size, lookup_method)
         except gobject.GError, err:
