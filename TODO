@@ -53,6 +53,12 @@ Misc.
 - Print preview doesn't work on windows.
 
 
+Windows
+-------
+- Missing icons.
+- SegFaults when resizing panes with missing icons.
+
+
 Software Engineering
 --------------------
 - Code cleanup... ;-)
