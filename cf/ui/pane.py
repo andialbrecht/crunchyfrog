@@ -147,8 +147,6 @@ class Pane(object):
             self.show()
         else:
             self.hide()
-        self.app.config.set('win.%s_visible' % self.__class__.__name__.lower(),
-                            toggle_action.get_active())
 
     def on_top_btn_clicked(self, btn, event):
         menu = gtk.Menu()

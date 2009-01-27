@@ -554,7 +554,8 @@ class MainWindow(gtk.Window):
                 action.set_active(is_active)
 
     def on_quit(self, *args):
-        self.state_save()
+        if len(self.app.get_instances()) <= 1:
+            self.state_save()
         self.destroy()
 
     def on_recent_item_activated(self, chooser):
@@ -744,6 +745,9 @@ class MainWindow(gtk.Window):
         w, h = self.get_size()
         c.set('gui.width', w)
         c.set('gui.height', h)
+        for pane in [self.side_pane, self.bottom_pane]:
+            c.set('win.%s_visible' % pane.__class__.__name__.lower(),
+                  pane.get_property('visible'))
         fname = os.path.join(USER_CONFIG_DIR, 'shortcuts.map')
         gtk.accel_map_save(fname)
 
