@@ -20,8 +20,6 @@
 
 """Object browser"""
 
-from gettext import gettext as _
-
 import gtk
 import gobject
 
@@ -38,16 +36,19 @@ from cf.ui import pane, dialogs
 
 
 class DummyNode(object):
-    pass
+    """Placeholder object that is replaced when a node is expanded."""
 
 
 class Browser(gtk.ScrolledWindow, pane.PaneItem):
+    """The object browser (aka navigator) class."""
 
     __gsignals__ = {
-        "object-menu-popup" : (gobject.SIGNAL_RUN_LAST,
-                               gobject.TYPE_NONE,
-                               (gobject.TYPE_PYOBJECT,
-                                gobject.TYPE_PYOBJECT)),
+        "object-menu-popup" : (
+            gobject.SIGNAL_RUN_LAST,
+            gobject.TYPE_NONE,
+            (gobject.TYPE_PYOBJECT,
+             gobject.TYPE_PYOBJECT)
+            ),
     }
 
     item_id = 'navigator'
@@ -56,6 +57,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
     detachable = True
 
     def __init__(self, app, instance):
+        """Constructor."""
         self.app = app
         self.instance = instance
         self._setup_widget()
@@ -68,13 +70,14 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.set_size_request(250, -1)
         # Model
-        self.model = gtk.TreeStore(gobject.TYPE_PYOBJECT, # 0 Object
-                                   str, # 1 label
-                                   gtk.gdk.Pixbuf, # 2 icon
-                                   gobject.TYPE_PYOBJECT, # 3 double-click callback
-                                   gobject.TYPE_PYOBJECT, # 4 popup menu callback
-                                   str, # 5 tooltip
-                                   )
+        self.model = gtk.TreeStore(
+            gobject.TYPE_PYOBJECT, # 0 Object
+            str,                   # 1 label
+            gtk.gdk.Pixbuf,        # 2 icon
+            gobject.TYPE_PYOBJECT, # 3 double-click callback
+            gobject.TYPE_PYOBJECT, # 4 popup menu callback
+            str,                   # 5 tooltip
+            )
         self.model.set_sort_column_id(1, gtk.SORT_ASCENDING)
         # TreeView
         self.object_tree = gtk.TreeView(self.model)
@@ -89,12 +92,11 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         col.add_attribute(renderer, 'text', 1)
         self.object_tree.append_column(col)
         self.object_tree.set_headers_visible(False)
-        self.object_tree.enable_model_drag_source(gtk.gdk.BUTTON1_MASK,
-                                                  (("text/plain",
-                                                    gtk.TARGET_SAME_APP, 80),
-                                                   ),
-                                                  gtk.gdk.ACTION_DEFAULT |
-                                                  gtk.gdk.ACTION_COPY)
+        self.object_tree.enable_model_drag_source(
+            gtk.gdk.BUTTON1_MASK,
+            (("text/plain", gtk.TARGET_SAME_APP, 80),),
+            gtk.gdk.ACTION_DEFAULT | gtk.gdk.ACTION_COPY
+            )
 
         def drag_data_get(treeview, context, selection, info, timestamp):
             treeselection = treeview.get_selection()
@@ -130,26 +132,33 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         self._hint.modify_bg(gtk.STATE_NORMAL, style.white)
 
     def _setup_connections(self):
-        self.app.datasources.connect("datasource-added", self.on_datasource_added)
-        self.app.datasources.connect("datasource-deleted", self.on_datasource_deleted)
-        self.app.datasources.connect("datasource-modified", self.on_datasource_modified)
-        self.object_tree.connect("button-press-event", self.on_button_press_event)
-        self.object_tree.connect("row-expanded", self.on_row_expanded)
+        self.app.datasources.connect('datasource-added',
+                                     self.on_datasource_added)
+        self.app.datasources.connect('datasource-deleted',
+                                     self.on_datasource_deleted)
+        self.app.datasources.connect('datasource-modified',
+                                     self.on_datasource_modified)
+        self.object_tree.connect('button-press-event',
+                                 self.on_button_press_event)
+        self.object_tree.connect('row-expanded', self.on_row_expanded)
         sel = self.object_tree.get_selection()
-        sel.connect("changed", self.on_object_tree_selection_changed)
+        sel.connect('changed', self.on_object_tree_selection_changed)
 
     def _create_dsinfo_menu(self, model, iter, popup):
+
         def connect(item, datasource_info):
             try:
                 datasource_info.dbconnect()
                 self.on_object_tree_selection_changed(self.object_tree.get_selection())
             except DBConnectError, err:
                 dialogs.error(_(u"Connection failed"), str(err))
+
         def disconnect(item, datasource_info):
             datasource_info.dbdisconnect()
             iter = self.get_iter_for_datasource(datasource_info)
             model = self.object_tree.get_model()
             self.object_tree.collapse_row(model.get_path(iter))
+
         datasource_info = model.get_value(iter, 0)
         if datasource_info.get_connections():
             lbl = _(u"Disconnect")
@@ -223,8 +232,8 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             treeview.grab_focus()
             treeview.set_cursor( path, col, 0)
             model = treeview.get_model()
-            iter = model.get_iter(path)
-            obj = model.get_value(iter, 0)
+            iter_ = model.get_iter(path)
+            obj = model.get_value(iter_, 0)
             if isinstance(obj, DatasourceInfo) \
             and not obj.internal_connection:
                 self.instance.statusbar.push(0, _(u"Connecting..."))
@@ -250,27 +259,28 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             return 1
 
     def on_datasource_added(self, manager, datasource_info):
-        iter = self.model.append(None)
-        self.set_datasource_info(iter, datasource_info)
+        iter_ = self.model.append(None)
+        self.set_datasource_info(iter_, datasource_info)
         self.guess_hint()
 
     def on_datasource_deleted(self, manager, datasource_info):
-        iter = self.get_iter_for_datasource(datasource_info)
-        if not iter:
+        iter_ = self.get_iter_for_datasource(datasource_info)
+        if not iter_:
             return
-        self.model.remove(iter)
+        self.model.remove(iter_)
         self.guess_hint()
 
     def on_datasource_modified(self, manager, datasource_info):
-        iter = self.get_iter_for_datasource(datasource_info)
-        if not iter:
+        iter_ = self.get_iter_for_datasource(datasource_info)
+        if not iter_:
             return
-        self.set_datasource_info(iter, datasource_info)
+        self.set_datasource_info(iter_, datasource_info)
 
     def on_object_tree_selection_changed(self, selection):
-        model, iter = selection.get_selected()
-        if not iter: return
-        obj = model.get_value(iter, 0)
+        model, iter_ = selection.get_selected()
+        if iter_ is None:
+            return
+        obj = model.get_value(iter_, 0)
         if isinstance(obj, DatasourceInfo):
             if obj.internal_connection:
                 server_info = obj.internal_connection.get_server_info()
@@ -281,7 +291,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             else:
                 self.instance.statusbar.pop(0)
         else:
-            comm = model.get_value(iter, 5) or ""
+            comm = model.get_value(iter_, 5) or ""
             self.instance.statusbar.push(0, comm)
 
     def on_refresh_node(self, menuitem, model, iter):
@@ -326,7 +336,8 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
     def on_show_details(self, menuitem, object, model, iter):
         datasource_info = self.find_datasource_info(model, iter)
         if datasource_info.backend.schema:
-            data = datasource_info.backend.schema.get_details(datasource_info.internal_connection, object)
+            data = datasource_info.backend.schema.get_details(
+                datasource_info.internal_connection, object)
             if not data:
                 return
             nb = gtk.Notebook()
@@ -349,18 +360,18 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             iter = model.iter_parent(iter)
 
     def get_iter_for_datasource(self, datasource_info):
-        iter = self.model.get_iter_first()
-        while iter:
-            if self.model.get_value(iter, 0) == datasource_info:
-                return iter
-            iter = self.model.iter_next(iter)
+        iter_ = self.model.get_iter_first()
+        while iter_:
+            if self.model.get_value(iter_, 0) == datasource_info:
+                return iter_
+            iter_ = self.model.iter_next(iter_)
         return None
 
     def reset_tree(self):
         self.model.clear()
         for datasource_info in self.app.datasources.get_all():
-            iter = self.model.append(None)
-            self.set_datasource_info(iter, datasource_info)
+            iter_ = self.model.append(None)
+            self.set_datasource_info(iter_, datasource_info)
 
     def set_datasource_info(self, iter, datasource_info):
         if datasource_info.get_connections():
