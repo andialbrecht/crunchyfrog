@@ -50,6 +50,7 @@ Misc.
   somehow.
 - Python shell should check for presence of ipython on startup.
 - Include VTE support.
+- Print preview doesn't work on windows.
 
 
 Software Engineering

@@ -30,14 +30,17 @@ PREFIX = '/usr/'
 if os.path.exists(os.path.join(os.path.dirname(__file__), '../setup.py')):
     DATA_DIR = os.path.join(os.path.dirname(__file__), '../data/')
     LOCALE_DIR = os.path.join(os.path.dirname(__file__), '../po/')
-    MANUAL_URL = os.path.join(os.path.dirname(__file__),
-                              '../docs/manual/build/html/')
+    MANUAL_URL = os.path.abspath(
+        os.path.join(os.path.dirname(__file__),
+                     '../docs/manual/build/html/')
+        )
 else:
     DATA_DIR = os.path.join(PREFIX, 'share/crunchyfrog/')
     LOCALE_DIR = os.path.join(PREFIX, 'share/locale/')
     MANUAL_URL = '/usr/share/doc/crunchyfrog/manual/'
 
-MANUAL_URL = urlparse.urlunsplit(('file', '', MANUAL_URL, '', ''))
+if not sys.platform.startswith('win'):
+    MANUAL_URL = urlparse.urlunsplit(('file', '', MANUAL_URL, '', ''))
 
 DATA_DIR = os.path.abspath(DATA_DIR)
 LOCALE_DIR = os.path.abspath(LOCALE_DIR)

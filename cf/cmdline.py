@@ -24,7 +24,6 @@ import os
 import sys
 
 import cf
-from cf import ipc
 from cf import release
 
 
