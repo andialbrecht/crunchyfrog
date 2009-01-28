@@ -22,13 +22,15 @@
 
 name = "CrunchyFrog"
 appname = name.lower()
-version = "0.3.1"
+version = "0.3.2"
 copyright = "Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>"
-description = "Database front-end for GNOME"
+description = "SQL client (not-only) for GNOME"
 author = "Andi Albrecht"
 author_email = "albrecht.andi@gmail.com"
 url = "http://crunchyfrog.googlecode.com"
-long_description = """CrunchyFrog is a database front-end for the GNOME desktop.
+long_description = """CrunchyFrog is a database navigator and SQL client.
+
+It's mainly written for GNOME but it should run in other environments too.
 
 Supported databases
 ===================

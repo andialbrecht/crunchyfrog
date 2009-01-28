@@ -3,7 +3,7 @@ PKGNAME=crunchyfrog
 DESTDIR=/
 BUILDIR=mydeb
 PROJECT=crunchyfrog
-VERSION=0.3.1
+VERSION=0.3.2
 DEBFLAGS=
 
 all:
