@@ -168,6 +168,7 @@ class Editor(GladeWidget, PaneItem):
         #    50 is a reasonable value anyway.
         #    The start time is for the UI only. The real execution time
         #    is calculated in the Query class.
+        self.instance.statusbar.pop(1)
         if self._query_timer is not None:
             gobject.source_remove(self._query_timer)
         self.results.add_separator()
@@ -197,6 +198,7 @@ class Editor(GladeWidget, PaneItem):
                          "num": query.rowcount}
             type_ = 'info'
         self.results.add_message(msg, type_, query.path_status)
+        self.instance.statusbar.push(1, msg)
         if self.connection.handler_is_connected(tag_notice):
             self.connection.disconnect(tag_notice)
         self.textview.grab_focus()
