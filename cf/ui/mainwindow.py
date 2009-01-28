@@ -49,7 +49,19 @@ class MainWindow(gtk.Window):
 
     Instance attributes:
       menubar: Menu bar.
+
+    :Signals:
+    active-editor-changed
+      ``def callback(instance, editor)``
+      Emitted when the active editor has changed. editor is either an
+      editor instance or None.
     """
+
+    __gsignals__ = {
+        'active-editor-changed': (gobject.SIGNAL_RUN_LAST,
+                                  gobject.TYPE_NONE,
+                                  (gobject.TYPE_PYOBJECT,)),
+    }
 
     def __init__(self, app):
         gtk.Window.__init__(self)
@@ -705,6 +717,7 @@ class MainWindow(gtk.Window):
         action.set_sensitive(sensitive)
         self.tb_conn_chooser.set_editor(editor)
         self.app.plugins.editor_notify(editor, self)
+        self.emit('active-editor-changed', editor)
         if editor is not None:
             editor.textview.grab_focus()
 
@@ -751,6 +764,8 @@ class MainWindow(gtk.Window):
                   pane.get_property('visible'))
         fname = os.path.join(USER_CONFIG_DIR, 'shortcuts.map')
         gtk.accel_map_save(fname)
+
+gobject.type_register(MainWindow)
 
 
 # NOTE: All menu actions MUST end with *-menu-action. That's needed by

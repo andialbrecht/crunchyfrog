@@ -231,6 +231,7 @@ class Editor(GladeWidget, PaneItem):
                 self.get_data("win").destroy()
             else:
                 self.destroy()
+            self.instance.set_editor_active(self, False)
             self.instance._editors.remove(self)
             return True
 
