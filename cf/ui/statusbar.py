@@ -16,23 +16,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# $Id$
-
 """Custom statusbar"""
 
 import gtk
-import gobject
+import pango
 
-from cf.ui import GladeWidget
 
-class CFStatusbar(GladeWidget):
+class CrunchyStatusbar(gtk.Statusbar):
 
-    def __init__(self, app, xml):
-        GladeWidget.__init__(self, app, xml, "statusbar")
-        self._editor = None
-
-    def set_editor(self, editor):
-        self._editor = editor
-
-    def set_message(self, msg):
-        self.push(0, msg)
+    def __init__(self, app, instance):
+        gtk.Statusbar.__init__(self)
+        self.app = app
+        self.instance = instance
+        self.lbl_conn = gtk.Label()
+        self.lbl_conn.set_alignment(0, 0.5)
+        self.lbl_conn.set_ellipsize(pango.ELLIPSIZE_END)
+        self.pack_start(self.lbl_conn)
+        self.lbl_curpos = gtk.Label()
+        self.lbl_curpos.set_alignment(0, 0.5)
+        self.pack_start(self.lbl_curpos, False, False)
+        self.lbl_insmode = gtk.Label()
+        self.lbl_insmode.set_width_chars(3)
+        self.pack_start(self.lbl_insmode, False, False)

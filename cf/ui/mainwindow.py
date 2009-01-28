@@ -41,6 +41,7 @@ from cf.ui import widgets
 from cf.ui.browser import Browser
 from cf.ui.datasources import DatasourceManager
 from cf.ui.editor import Editor
+from cf.ui.statusbar import CrunchyStatusbar
 
 
 class MainWindow(gtk.Window):
@@ -288,7 +289,7 @@ class MainWindow(gtk.Window):
 
     def _init_statusbar(self):
         """Create and return the statusbar."""
-        self.statusbar = gtk.Statusbar()
+        self.statusbar = CrunchyStatusbar(self.app, self)
         self.statusbar.show()
         return self.statusbar
 
