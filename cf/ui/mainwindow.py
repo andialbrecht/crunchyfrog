@@ -691,7 +691,7 @@ class MainWindow(gtk.Window):
                 self._editor.disconnect(handler_id)
                 self._editor.set_data('cf::sig_editor_buffer_changed', None)
         self._editor = editor
-        if self._editor:
+        if self._editor and isinstance(self._editor, Editor):
             self._editor_conn_tag = self._editor.connect(
                 "connection-changed", self.on_editor_connection_changed)
             self.on_editor_connection_changed(
@@ -710,7 +710,9 @@ class MainWindow(gtk.Window):
             if group.get_name() == 'editor':
                 group.set_sensitive(self._editor is not None)
                 break
-        sensitive = bool(self._editor and self._editor.props.buffer_dirty)
+        sensitive = bool((self._editor
+                          and isinstance(self._editor, Editor)
+                          and self._editor.props.buffer_dirty))
         action = self._get_action('file-save')
         action.set_sensitive(sensitive)
         action = self._get_action('file-save-as')
@@ -718,7 +720,7 @@ class MainWindow(gtk.Window):
         self.tb_conn_chooser.set_editor(editor)
         self.app.plugins.editor_notify(editor, self)
         self.emit('active-editor-changed', editor)
-        if editor is not None:
+        if editor is not None and isinstance(editor, Editor):
             editor.textview.grab_focus()
 
     def set_transaction_state(self, value):

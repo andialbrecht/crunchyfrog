@@ -321,9 +321,9 @@ class CenterPane(gtk.VBox, Pane):
         from cf.ui.editor import Editor
         if isinstance(editor, Editor):
             widget = editor.widget
+            self.notebook.set_tab_label(widget, TabLabel(editor))
         else:
-            widget = editor
-        self.notebook.set_tab_label(widget, TabLabel(editor))
+            widget = getattr(editor, 'widget', editor)  # LDAP hack
         self.notebook.set_tab_reorderable(widget, True)
         self.notebook.set_tab_detachable(widget, True)
         self.notebook.set_current_page(self.notebook.page_num(widget))

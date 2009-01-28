@@ -296,7 +296,7 @@ class LDAPSearch(GladeWidget, PaneItem):
 class LDAPView(gtk.ScrolledWindow, PaneItem):
 
     name = _(u"Details")
-    icon = "gtk-search"
+    icon = "gtk-find"
     detachable = True
 
     def __init__(self, data):

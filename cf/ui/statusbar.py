@@ -20,6 +20,8 @@
 
 import gtk
 
+from cf.ui.editor import Editor
+
 
 class CrunchyStatusbar(gtk.Statusbar):
     """An extended gtk.Statusbar."""
@@ -82,7 +84,7 @@ class CrunchyStatusbar(gtk.Statusbar):
 
     def _connect_editor_sigs(self):
         """Connect to some editor signals to track changes."""
-        if self._editor is None:
+        if self._editor is None or not isinstance(self._editor, Editor):
             return
         sig = self._editor.connect(
             'connection-changed',
@@ -116,11 +118,13 @@ class CrunchyStatusbar(gtk.Statusbar):
     def _set_overwrite_mode(self, editor, toggle_bool=True):
         if editor is None:
             lbl = ''
-        else:
+        elif isinstance(editor, Editor):
             overwrite = editor.textview.get_overwrite()
             if toggle_bool:
                 overwrite = not overwrite
             lbl = overwrite and _(u'INS') or _(u'OVR')
+        else:
+            lbl = ''
         self.lbl_insmode.set_text(lbl)
 
     # ---
@@ -152,7 +156,7 @@ class CrunchyStatusbar(gtk.Statusbar):
         self._set_overwrite_mode(self._editor)
         if self._editor is None:
             self._set_curpos(None, None)
-        else:
+        elif isinstance(self._editor, Editor):
             self.on_tv_mark_set(self._editor.textview.buffer, None, None)
         if self._editor is None:
             return

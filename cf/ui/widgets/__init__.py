@@ -79,6 +79,7 @@ class ConnectionButton(gtk.MenuToolButton):
         Arguments:
             editor: SQLEditor instance.
         """
+        from cf.ui.editor import Editor  # Import hook
         if self._editor:
             sig = self._editor.get_data('cf::connbtn::sig_conn_changed')
             if sig:
@@ -87,7 +88,7 @@ class ConnectionButton(gtk.MenuToolButton):
         self._editor = editor
         self.set_sensitive(bool(editor))
         self.rebuild_menu()
-        if editor is not None:
+        if editor is not None and isinstance(editor, Editor):
             sig = editor.connect('connection-changed',
                                  lambda *a: self.set_editor(editor))
             editor.set_data('cf::connbtn::sig_conn_changed', sig)
