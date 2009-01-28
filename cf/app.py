@@ -218,13 +218,12 @@ class CFApplication(gobject.GObject):
 class CFAppCallbacks(gobject.GObject):
     """Container for application specific signals.
 
-    Signals
-    =======
+    :Signals:
 
-        instance-created
-            ``def callback(application, instance, user_data1, ...)``
-
-            Called when a new instance was created
+    instance-created
+      ``def callback(application, instance, user_data1, ...)``
+      
+      Called when a new instance was created
     """
 
     __gsignals__ = {
