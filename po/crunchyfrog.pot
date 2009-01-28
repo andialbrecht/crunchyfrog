@@ -7,9 +7,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: crunchyfrog 0.3.1\n"
+"Project-Id-Version: crunchyfrog 0.3.2\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2009-01-23 20:27+0100\n"
+"POT-Creation-Date: 2009-01-28 15:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,20 +18,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.4\n"
 
-#: cf/shell/__init__.py:39 cf/shell/__init__.py:69 cf/shell/__init__.py:107
+#: cf/shell/__init__.py:44 cf/shell/__init__.py:74
 msgid "Shell"
 msgstr ""
 
-#: cf/shell/__init__.py:40
+#: cf/shell/__init__.py:45
 msgid "Interactive shell (mainly for debugging)"
 msgstr ""
 
-#: cf/shell/__init__.py:59
-msgid "Import to shell"
+#: cf/shell/__init__.py:69
+msgid "Python module ipython is required."
 msgstr ""
 
 #: cf/backends/__init__.py:95 cf/ui/widgets/__init__.py:98
-#: cf/ui/widgets/__init__.py:136
 msgid "Connection"
 msgstr ""
 
@@ -67,7 +66,7 @@ msgstr ""
 msgid "Export"
 msgstr ""
 
-#: cf/backends/ldapbe.py:298 cf/ui/browser.py:199
+#: cf/backends/ldapbe.py:298 cf/ui/browser.py:208
 msgid "Details"
 msgstr ""
 
@@ -271,51 +270,63 @@ msgstr ""
 msgid "Export filter"
 msgstr ""
 
-#: cf/plugins/core.py:164 cf/ui/editor.py:61 cf/ui/mainwindow.py:137
+#: cf/plugins/core.py:164 cf/ui/editor.py:61 cf/ui/mainwindow.py:166
 #: cf/ui/prefs.py:85
 msgid "Editor"
 msgstr ""
 
-#: cf/config/__init__.py:116
+#: cf/config/__init__.py:114
 msgid "Writing configuration"
 msgstr ""
 
-#: cf/instance.py:178 cf/ui/editor.py:564 cf/ui/mainwindow.py:468
+#: cf/instance.py:178 cf/ui/editor.py:570 cf/ui/mainwindow.py:497
 msgid "Select file"
 msgstr ""
 
-#: cf/instance.py:185 cf/ui/editor.py:435 cf/ui/editor.py:571
-#: cf/ui/mainwindow.py:476
+#: cf/instance.py:185 cf/ui/editor.py:441 cf/ui/editor.py:577
+#: cf/ui/mainwindow.py:505
 msgid "All files (*)"
 msgstr ""
 
-#: cf/instance.py:189 cf/instance.py:196 cf/ui/editor.py:439
-#: cf/ui/editor.py:575 cf/ui/mainwindow.py:480 cf/ui/mainwindow.py:487
+#: cf/instance.py:189 cf/instance.py:196 cf/ui/editor.py:445
+#: cf/ui/editor.py:581 cf/ui/mainwindow.py:509 cf/ui/mainwindow.py:516
 msgid "SQL files (*.sql)"
 msgstr ""
 
-#: cf/instance.py:209 cf/ui/mainwindow.py:500
+#: cf/instance.py:209 cf/ui/mainwindow.py:529
 msgid "_Recent files:"
 msgstr ""
 
-#: cf/library.py:91 cf/library.py:193
+#: cf/library.py:101 cf/library.py:214
 msgid "Library"
 msgstr ""
 
-#: cf/library.py:92
+#: cf/library.py:102
 msgid "A personal SQL library"
 msgstr ""
 
-#: cf/library.py:123
+#: cf/library.py:133
 msgid "Save to library"
 msgstr ""
 
-#: cf/library.py:124
+#: cf/library.py:134
 msgid "Save content of the current editor to SQL library."
 msgstr ""
 
-#: cf/library.py:274
+#: cf/library.py:307 cf/library.py:320
+msgid "Add category"
+msgstr ""
+
+#: cf/library.py:311
 msgid "Rename"
+msgstr ""
+
+#: cf/library.py:315
+msgid "Delete"
+msgstr ""
+
+#: cf/library.py:337 cf/ui/prefs.py:230 cf/ui/prefs.py:391 cf/ui/prefs.py:460
+msgid "Unknown"
 msgstr ""
 
 #: cf/filter/exportfilter.py:28
@@ -346,42 +357,42 @@ msgstr ""
 msgid "CrunchyFrog Data Export"
 msgstr ""
 
-#: cf/ui/browser.py:54
+#: cf/ui/browser.py:55
 msgid "Navigator"
 msgstr ""
 
-#: cf/ui/browser.py:117
+#: cf/ui/browser.py:119
 msgid ""
 "<b>No active data sources</b>\n"
 "\n"
 "<a href=\"#\">Click</a> to open the data source manager."
 msgstr ""
 
-#: cf/ui/browser.py:122
+#: cf/ui/browser.py:124
 msgid ""
 "<b>No active data sources</b>\n"
 "Select \"Edit\" &gt; \"Data Source Manager\"\n"
 "to create one."
 msgstr ""
 
-#: cf/ui/browser.py:147 cf/ui/browser.py:238 cf/ui/datasources.py:168
+#: cf/ui/browser.py:154 cf/ui/browser.py:247 cf/ui/datasources.py:168
 #: cf/ui/widgets/__init__.py:123
 msgid "Connection failed"
 msgstr ""
 
-#: cf/ui/browser.py:155
+#: cf/ui/browser.py:164
 msgid "Disconnect"
 msgstr ""
 
-#: cf/ui/browser.py:158
+#: cf/ui/browser.py:167
 msgid "Connect"
 msgstr ""
 
-#: cf/ui/browser.py:184
+#: cf/ui/browser.py:193
 msgid "Add data source"
 msgstr ""
 
-#: cf/ui/browser.py:230
+#: cf/ui/browser.py:239
 msgid "Connecting..."
 msgstr ""
 
@@ -466,249 +477,278 @@ msgstr ""
 msgid "Split statements"
 msgstr ""
 
-#: cf/ui/editor.py:185
+#: cf/ui/editor.py:186
 #, python-format
 msgid "Query failed (%(sec).3f seconds)"
 msgstr ""
 
-#: cf/ui/editor.py:189
+#: cf/ui/editor.py:190
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d rows)"
 msgstr ""
 
-#: cf/ui/editor.py:194
+#: cf/ui/editor.py:195
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d affected rows)"
 msgstr ""
 
-#: cf/ui/editor.py:355
+#: cf/ui/editor.py:361
 msgid "Select a single statement to explain."
 msgstr ""
 
-#: cf/ui/editor.py:403
+#: cf/ui/editor.py:409
 #, python-format
 msgid "Save file %(name)s before closing the editor?"
 msgstr ""
 
-#: cf/ui/editor.py:423
+#: cf/ui/editor.py:429
 msgid "Save file"
 msgstr ""
 
-#: cf/ui/editor.py:477
+#: cf/ui/editor.py:483
 #, python-format
 msgid "Query running... (%.3f seconds)"
 msgstr ""
 
-#: cf/ui/editor.py:528
+#: cf/ui/editor.py:534
 msgid "Show in main window"
 msgstr ""
 
-#: cf/ui/editor.py:651 cf/ui/editor.py:653 cf/ui/pane.py:343 cf/ui/pane.py:409
+#: cf/ui/editor.py:657 cf/ui/editor.py:659 cf/ui/pane.py:358 cf/ui/pane.py:424
 msgid "Query"
 msgstr ""
 
-#: cf/ui/editor.py:751
+#: cf/ui/editor.py:757
 msgid "Data copied to clipboard"
 msgstr ""
 
-#: cf/ui/editor.py:897
+#: cf/ui/editor.py:906
 msgid "Variables"
 msgstr ""
 
-#: cf/ui/mainwindow.py:77
+#: cf/ui/mainwindow.py:90
 msgid "Application"
 msgstr ""
 
-#: cf/ui/mainwindow.py:80
+#: cf/ui/mainwindow.py:93
 msgid "_File"
 msgstr ""
 
-#: cf/ui/mainwindow.py:82
+#: cf/ui/mainwindow.py:95
 msgid "Quit the program"
 msgstr ""
 
-#: cf/ui/mainwindow.py:84
+#: cf/ui/mainwindow.py:97
 msgid "_New"
 msgstr ""
 
-#: cf/ui/mainwindow.py:86 cf/ui/mainwindow.py:143
+#: cf/ui/mainwindow.py:99 cf/ui/mainwindow.py:172
 msgid "_Query"
 msgstr ""
 
-#: cf/ui/mainwindow.py:86
+#: cf/ui/mainwindow.py:99
 msgid "New SQL editor"
 msgstr ""
 
-#: cf/ui/mainwindow.py:89
+#: cf/ui/mainwindow.py:102
 msgid "_Instance"
 msgstr ""
 
-#: cf/ui/mainwindow.py:90
+#: cf/ui/mainwindow.py:103
 msgid "New application window."
 msgstr ""
 
-#: cf/ui/mainwindow.py:93
+#: cf/ui/mainwindow.py:106
 msgid "Open a file"
 msgstr ""
 
-#: cf/ui/mainwindow.py:96
+#: cf/ui/mainwindow.py:109
 msgid "_Edit"
 msgstr ""
 
-#: cf/ui/mainwindow.py:98
+#: cf/ui/mainwindow.py:111
 msgid "_Plugins"
 msgstr ""
 
-#: cf/ui/mainwindow.py:98
+#: cf/ui/mainwindow.py:111
 msgid "Configure plugins"
 msgstr ""
 
-#: cf/ui/mainwindow.py:100
+#: cf/ui/mainwindow.py:113
 msgid "_Data source manager"
 msgstr ""
 
-#: cf/ui/mainwindow.py:101
+#: cf/ui/mainwindow.py:114
 msgid "Add, edit and delete data sources"
 msgstr ""
 
-#: cf/ui/mainwindow.py:104
+#: cf/ui/mainwindow.py:117
 msgid "Configure the application"
 msgstr ""
 
-#: cf/ui/mainwindow.py:107
+#: cf/ui/mainwindow.py:120
 msgid "_View"
 msgstr ""
 
-#: cf/ui/mainwindow.py:109
+#: cf/ui/mainwindow.py:122
 msgid "_Help"
 msgstr ""
 
-#: cf/ui/mainwindow.py:111
-msgid "About this application"
+#: cf/ui/mainwindow.py:124
+msgid "Open the CrunchyFrog manual"
 msgstr ""
 
-#: cf/ui/mainwindow.py:117
-msgid "_Toolbar"
+#: cf/ui/mainwindow.py:127
+msgid "Help translate..."
 msgstr ""
 
-#: cf/ui/mainwindow.py:118
-msgid "Show or hide the toolbar in the current window"
+#: cf/ui/mainwindow.py:128
+msgid "Help to translate this application"
 msgstr ""
 
-#: cf/ui/mainwindow.py:121
-msgid "_Statusbar"
-msgstr ""
-
-#: cf/ui/mainwindow.py:122
-msgid "Show or hide the statusbar in the current window"
+#: cf/ui/mainwindow.py:133
+msgid "Report a problem"
 msgstr ""
 
 #: cf/ui/mainwindow.py:140
-msgid "Close the current editor"
+msgid "About this application"
 msgstr ""
 
-#: cf/ui/mainwindow.py:144
-msgid "_Connection"
+#: cf/ui/mainwindow.py:146
+msgid "_Toolbar"
 msgstr ""
 
 #: cf/ui/mainwindow.py:147
-msgid "Disconnect current editor"
+msgid "Show or hide the toolbar in the current window"
 msgstr ""
 
 #: cf/ui/mainwindow.py:150
-msgid "Show connections"
+msgid "_Statusbar"
 msgstr ""
 
 #: cf/ui/mainwindow.py:151
-msgid "Open or close connections in a dialog"
+msgid "Show or hide the statusbar in the current window"
 msgstr ""
 
-#: cf/ui/mainwindow.py:154
-msgid "Save the current file"
+#: cf/ui/mainwindow.py:169
+msgid "Close the current editor"
 msgstr ""
 
-#: cf/ui/mainwindow.py:158
-msgid "Save the current file with a different name"
+#: cf/ui/mainwindow.py:173
+msgid "_Connection"
 msgstr ""
 
-#: cf/ui/mainwindow.py:161
-msgid "Print the current page"
+#: cf/ui/mainwindow.py:176
+msgid "Disconnect current editor"
 msgstr ""
 
-#: cf/ui/mainwindow.py:164
-msgid "Print preview"
-msgstr ""
-
-#: cf/ui/mainwindow.py:174
-msgid "Cut the selection"
-msgstr ""
-
-#: cf/ui/mainwindow.py:177
-msgid "Copy the selection"
+#: cf/ui/mainwindow.py:179
+msgid "Show connections"
 msgstr ""
 
 #: cf/ui/mainwindow.py:180
-msgid "Paste the clipboard"
+msgid "Open or close connections in a dialog"
 msgstr ""
 
-#: cf/ui/mainwindow.py:186
-msgid "Queries"
+#: cf/ui/mainwindow.py:183
+msgid "Save the current file"
 msgstr ""
 
-#: cf/ui/mainwindow.py:189
-msgid "Execute statements in SQL editor"
+#: cf/ui/mainwindow.py:187
+msgid "Save the current file with a different name"
 msgstr ""
 
-#: cf/ui/mainwindow.py:192
-msgid "Transaction"
+#: cf/ui/mainwindow.py:190
+msgid "Print the current page"
 msgstr ""
 
 #: cf/ui/mainwindow.py:193
+msgid "Print preview"
+msgstr ""
+
+#: cf/ui/mainwindow.py:203
+msgid "Cut the selection"
+msgstr ""
+
+#: cf/ui/mainwindow.py:206
+msgid "Copy the selection"
+msgstr ""
+
+#: cf/ui/mainwindow.py:209
+msgid "Paste the clipboard"
+msgstr ""
+
+#: cf/ui/mainwindow.py:215
+msgid "Queries"
+msgstr ""
+
+#: cf/ui/mainwindow.py:218
+msgid "Execute statements in SQL editor"
+msgstr ""
+
+#: cf/ui/mainwindow.py:221
+msgid "Transaction"
+msgstr ""
+
+#: cf/ui/mainwindow.py:222
 msgid "Begin transaction on current connection"
 msgstr ""
 
-#: cf/ui/mainwindow.py:196
+#: cf/ui/mainwindow.py:225
 msgid "Commit"
 msgstr ""
 
-#: cf/ui/mainwindow.py:197
+#: cf/ui/mainwindow.py:226
 msgid "Commit current transaction"
 msgstr ""
 
-#: cf/ui/mainwindow.py:200
+#: cf/ui/mainwindow.py:229
 msgid "Rollback"
 msgstr ""
 
-#: cf/ui/mainwindow.py:201
+#: cf/ui/mainwindow.py:230
 msgid "Rollback current transaction"
 msgstr ""
 
-#: cf/ui/mainwindow.py:253
+#: cf/ui/mainwindow.py:282
 msgid "_Recent Files"
 msgstr ""
 
-#: cf/ui/pane.py:162
+#: cf/ui/pane.py:165
 #, python-format
 msgid "Detach %(name)s"
 msgstr ""
 
-#: cf/ui/pane.py:241
+#: cf/ui/pane.py:170
+msgid "side pane"
+msgstr ""
+
+#: cf/ui/pane.py:173
+msgid "bottom pane"
+msgstr ""
+
+#: cf/ui/pane.py:175
+#, python-format
+msgid "Move to %(name)sname"
+msgstr ""
+
+#: cf/ui/pane.py:255
 msgid "Side _Pane"
 msgstr ""
 
-#: cf/ui/pane.py:242
+#: cf/ui/pane.py:256
 msgid "Show or hide the side pane in the current window"
 msgstr ""
 
-#: cf/ui/pane.py:262
+#: cf/ui/pane.py:277
 msgid "_Bottom Pane"
 msgstr ""
 
-#: cf/ui/pane.py:263
+#: cf/ui/pane.py:278
 msgid "Show or hide the bottom pane in the current window"
 msgstr ""
 
-#: cf/ui/pane.py:420 cf/ui/widgets/__init__.py:101
+#: cf/ui/pane.py:435 cf/ui/widgets/__init__.py:101
 msgid "Not connected"
 msgstr ""
 
@@ -726,83 +766,92 @@ msgid ""
 "Shortcuts"
 msgstr ""
 
-#: cf/ui/prefs.py:227 cf/ui/prefs.py:388 cf/ui/prefs.py:457
-msgid "Unknown"
-msgstr ""
-
-#: cf/ui/prefs.py:246
+#: cf/ui/prefs.py:249
 msgid "Install plugin"
 msgstr ""
 
-#: cf/ui/prefs.py:251
+#: cf/ui/prefs.py:254
 msgid "CrunchyFrog plugins (*.zip, *.py)"
 msgstr ""
 
-#: cf/ui/prefs.py:393
+#: cf/ui/prefs.py:396
 msgid "ERROR"
 msgstr ""
 
-#: cf/ui/refviewer.py:39
+#: cf/ui/refviewer.py:41
 msgid "Reference Browser"
 msgstr ""
 
-#: cf/ui/refviewer.py:40
+#: cf/ui/refviewer.py:42
 msgid "A tiny webbrowser to view references"
 msgstr ""
 
 #: cf/ui/refviewer.py:71
-msgid "Reference"
+msgid "References"
 msgstr ""
 
-#: cf/ui/refviewer.py:79
-msgid "Reference Viewer"
+#: cf/ui/statusbar.py:105
+msgid "[Not connected]"
+msgstr ""
+
+#: cf/ui/statusbar.py:112
+#, python-format
+msgid "Ln %(line)d, Col %(column)dline"
+msgstr ""
+
+#: cf/ui/statusbar.py:123
+msgid "INS"
+msgstr ""
+
+#: cf/ui/statusbar.py:123
+msgid "OVR"
 msgstr ""
 
 #: cf/ui/widgets/__init__.py:102
 msgid "Click to open a connection"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:149
-msgid "New connection"
+#: cf/ui/widgets/__init__.py:139
+msgid "_New connection"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:226
+#: cf/ui/widgets/__init__.py:222
 msgid "Export data"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:244
+#: cf/ui/widgets/__init__.py:240
 msgid "_Edit export options"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:251
+#: cf/ui/widgets/__init__.py:247
 msgid "_Open file when finished"
 msgstr ""
 
-#: cf/ui/widgets/grid.py:138
+#: cf/ui/widgets/grid.py:136
 msgid "Copy value to clipboard"
 msgstr ""
 
-#: cf/ui/widgets/grid.py:147 cf/ui/widgets/grid.py:249
+#: cf/ui/widgets/grid.py:145 cf/ui/widgets/grid.py:247
 msgid "Save as..."
 msgstr ""
 
-#: cf/ui/widgets/grid.py:154
+#: cf/ui/widgets/grid.py:152
 msgid "Open with..."
 msgstr ""
 
-#: cf/ui/widgets/grid.py:165
+#: cf/ui/widgets/grid.py:163
 msgid "View value"
 msgstr ""
 
-#: cf/ui/widgets/grid.py:170
+#: cf/ui/widgets/grid.py:168
 msgid "This cell contains a 'NULL' value."
 msgstr ""
 
-#: cf/ui/widgets/grid.py:261
+#: cf/ui/widgets/grid.py:259
 msgid "All files"
 msgstr ""
 
-#: cf/ui/widgets/grid.py:646
+#: cf/ui/widgets/grid.py:644
 msgid "Data"
 msgstr ""
 
