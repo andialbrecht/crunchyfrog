@@ -85,6 +85,8 @@ class CFApplication(gobject.GObject):
         version_file = os.path.join(USER_DIR, 'VERSION')
         if os.path.isfile(version_file):
             dir_version = open(version_file).read()
+        else:
+            dir_version = None
         if dir_version != release.version:
             # Do upgrades here
             f = open(version_file, "w")
@@ -105,7 +107,8 @@ class CFApplication(gobject.GObject):
         Returns:
           The new instance.
         """
-        instance = MainWindow(self)
+        create_editor = not args
+        instance = MainWindow(self, create_editor=create_editor)
         if args is None:
             args = []
         for arg in args:
@@ -209,6 +212,10 @@ class CFApplication(gobject.GObject):
             lookup_method = (gtk.ICON_LOOKUP_FORCE_SVG |
                              gtk.ICON_LOOKUP_USE_BUILTIN |
                              gtk.ICON_LOOKUP_GENERIC_FALLBACK)
+        if sys.platform.startswith('win'):
+            lookup_method = (gtk.ICON_LOOKUP_NO_SVG |
+                             gtk.ICON_LOOKUP_USE_BUILTIN |
+                             gtk.ICON_LOOKUP_GENERIC_FALLBACK)
         try:
             return self.icon_theme.load_icon(icon_name, size, lookup_method)
         except gobject.GError, err:
@@ -224,7 +231,7 @@ class CFAppCallbacks(gobject.GObject):
 
     instance-created
       ``def callback(application, instance, user_data1, ...)``
-      
+
       Called when a new instance was created
     """
 

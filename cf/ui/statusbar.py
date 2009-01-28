@@ -111,8 +111,8 @@ class CrunchyStatusbar(gtk.Statusbar):
         if line is None or offset is None:
             lbl = ''
         else:
-            lbl = _(u'Ln %(line)d, Col %(column)d' % {'line': line,
-                                                      'column': offset})
+            lbl = _(u'Ln %(line)d, Col %(column)d') % {'line': line,
+                                                       'column': offset}
         self.lbl_curpos.set_text(lbl)
 
     def _set_overwrite_mode(self, editor, toggle_bool=True):

@@ -63,7 +63,7 @@ class MainWindow(gtk.Window):
                                   (gobject.TYPE_PYOBJECT,)),
     }
 
-    def __init__(self, app):
+    def __init__(self, app, create_editor=True):
         gtk.Window.__init__(self)
         self.app = app
         self._editor = None
@@ -83,6 +83,8 @@ class MainWindow(gtk.Window):
         self._init_elements()
         self.connect('window-state-event', self.on_window_state_event)
         self.connect('delete-event', self.on_quit)
+        if create_editor:
+            self.editor_create()
         self.state_restore()
 
     def _init_actions(self):

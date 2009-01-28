@@ -2,19 +2,21 @@ Development
 -----------
 
 Release Highlights
- * Cross-platform compatibility.
  * Cleaner user interface.
  * Configurable keyboard shortcuts.
  * Re-written SQL library plugin.
- * New developer documentation (incl. API).
+ * Initial support for cross-platform compatibility.
+ * Connection handling optimized (first part of issue17, thanks to
+   Mike for his good ideas).
 
-Bug Fixes:
- * Added missing check for IPython for Python shell (issue21).
+Bug Fixes
+ * Added missing check for IPython in Python shell (issue21).
+ * ...and a bunch of smaller issues.
 
 Other
- * Connection handling optimized (issue17, thanks to Mike for the good ideas).
- * Removed kiwi dependency.
- * Open multiple files at once.
+ * Removed a few obsolete dependencies, others are now optional.
+ * It's now ok to open multiple files at once.
+ * More documentation.
  * Drag'n'drop SQL editors between existing application windows.
 
 

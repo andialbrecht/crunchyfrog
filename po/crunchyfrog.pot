@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: crunchyfrog 0.3.2\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2009-01-28 15:28+0100\n"
+"POT-Creation-Date: 2009-01-28 16:10+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Python module ipython is required."
 msgstr ""
 
-#: cf/backends/__init__.py:95 cf/ui/widgets/__init__.py:98
+#: cf/backends/__init__.py:95 cf/ui/widgets/__init__.py:99
 msgid "Connection"
 msgstr ""
 
@@ -376,7 +376,7 @@ msgid ""
 msgstr ""
 
 #: cf/ui/browser.py:154 cf/ui/browser.py:247 cf/ui/datasources.py:168
-#: cf/ui/widgets/__init__.py:123
+#: cf/ui/widgets/__init__.py:124
 msgid "Connection failed"
 msgstr ""
 
@@ -729,7 +729,7 @@ msgstr ""
 
 #: cf/ui/pane.py:175
 #, python-format
-msgid "Move to %(name)sname"
+msgid "Move to %(name)s"
 msgstr ""
 
 #: cf/ui/pane.py:255
@@ -748,7 +748,7 @@ msgstr ""
 msgid "Show or hide the bottom pane in the current window"
 msgstr ""
 
-#: cf/ui/pane.py:435 cf/ui/widgets/__init__.py:101
+#: cf/ui/pane.py:435 cf/ui/widgets/__init__.py:102
 msgid "Not connected"
 msgstr ""
 
@@ -790,40 +790,40 @@ msgstr ""
 msgid "References"
 msgstr ""
 
-#: cf/ui/statusbar.py:105
+#: cf/ui/statusbar.py:107
 msgid "[Not connected]"
 msgstr ""
 
-#: cf/ui/statusbar.py:112
+#: cf/ui/statusbar.py:114
 #, python-format
-msgid "Ln %(line)d, Col %(column)dline"
+msgid "Ln %(line)d, Col %(column)d"
 msgstr ""
 
-#: cf/ui/statusbar.py:123
+#: cf/ui/statusbar.py:125
 msgid "INS"
 msgstr ""
 
-#: cf/ui/statusbar.py:123
+#: cf/ui/statusbar.py:125
 msgid "OVR"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:102
+#: cf/ui/widgets/__init__.py:103
 msgid "Click to open a connection"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:139
+#: cf/ui/widgets/__init__.py:140
 msgid "_New connection"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:222
+#: cf/ui/widgets/__init__.py:223
 msgid "Export data"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:240
+#: cf/ui/widgets/__init__.py:241
 msgid "_Edit export options"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:247
+#: cf/ui/widgets/__init__.py:248
 msgid "_Open file when finished"
 msgstr ""
 

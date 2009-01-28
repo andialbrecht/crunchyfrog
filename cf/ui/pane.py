@@ -172,7 +172,7 @@ class Pane(object):
             else:
                 other_pane = _(u'bottom pane')
                 other = self.mainwin.bottom_pane
-            item = gtk.MenuItem(_(u'Move to %(name)s' % {'name': other_pane}))
+            item = gtk.MenuItem(_(u'Move to %(name)s') % {'name': other_pane})
             item.connect('activate', self.on_move_page, page, other)
             item.show()
             menu.append(item)
