@@ -38,10 +38,10 @@ class CrunchyStatusbar(gtk.Statusbar):
         self.lbl_conn.show()
         self._add_item(self.lbl_conn, False, True)
         self.lbl_curpos = gtk.Label()
-        self.lbl_curpos.set_alignment(0, 0.5)
+        self.lbl_curpos.set_alignment(1, 0.5)
         self.lbl_curpos.set_width_chars(15)
         self.lbl_curpos.show()
-        self._add_item(self.lbl_curpos, False, False)
+        self._add_item(self.lbl_curpos, False, True)
         self.lbl_insmode = gtk.Label()
         self.lbl_insmode.set_width_chars(4)
         self.lbl_insmode.show()
@@ -112,7 +112,6 @@ class CrunchyStatusbar(gtk.Statusbar):
         else:
             lbl = _(u'Ln %(line)d, Col %(column)d' % {'line': line,
                                                       'column': offset})
-        self.lbl_curpos.set_width_chars(len(lbl))
         self.lbl_curpos.set_text(lbl)
 
     def _set_overwrite_mode(self, editor, toggle_bool=True):
