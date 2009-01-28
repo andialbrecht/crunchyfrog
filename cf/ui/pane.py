@@ -18,6 +18,7 @@
 
 """Panes in the mainwindow"""
 
+import logging
 import os
 import re
 from gettext import gettext as _
@@ -27,6 +28,21 @@ import gtk
 import pango
 
 from cf.ui import GladeWidget
+
+
+try:
+    # Let's see if we have additional items.
+    # This is a dirty hack...
+    it = gtk.icon_theme_get_default()
+    info = it.load_icon('stock_book_green', gtk.ICON_SIZE_MENU,
+                        gtk.ICON_LOOKUP_FORCE_SVG)
+    HAVE_ICONS = True
+except gobject.GError, err:
+    # Some special icons are not present. Let's set HAVE_ICONS to False.
+    # This causes the tab widgets to display the name of the pane item.
+    # It's better than empty tab labels... ;-)
+    logging.warning('Failed to load additional icons (%s)', err)
+    HAVE_ICONS = False
 
 
 class PaneItem(object):
@@ -72,6 +88,7 @@ class Pane(object):
         self.header.show()
         self.notebook = gtk.Notebook()
         self.notebook.set_tab_pos(gtk.POS_BOTTOM)
+        self.notebook.set_scrollable(True)
         self.pack_start(self.notebook, True, True)
         self.notebook.show()
         self._autohide_tabs = False
@@ -189,18 +206,26 @@ class Pane(object):
         assert isinstance(item, PaneItem)
         pb = self.app.load_icon(item.icon, gtk.ICON_SIZE_MENU,
                                 gtk.ICON_LOOKUP_FORCE_SVG)
+        box = gtk.HBox()
+        box.set_spacing(3)
         img = gtk.image_new_from_pixbuf(pb)
         img.set_tooltip_text(item.name)
         img.show()
+        box.pack_start(img, False, False)
+        if not HAVE_ICONS:
+            lbl = gtk.Label(item.name)
+            lbl.set_alignment(0, 0.5)
+            lbl.show()
+            box.pack_start(lbl)
         item.show()
         if isinstance(item, GladeWidget):
             item.widget.set_data('cf::real-object', item)
             item = item.widget
         if item.get_parent():
             item.reparent(self.notebook)
-            self.notebook.set_tab_label(item, img)
+            self.notebook.set_tab_label(item, box)
         else:
-            self.notebook.append_page(item, img)
+            self.notebook.append_page(item, box)
         self.notebook.set_tab_detachable(item, True)
 
     def remove_item(self, pane_item):
