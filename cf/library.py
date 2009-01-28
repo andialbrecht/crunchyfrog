@@ -55,6 +55,11 @@ class Category(object):
         sql = "insert into sqllib_cat (name, parent) values (?, ?)"
         return sql, (self.name, self.parent )
 
+    def get_delete_statement(self):
+        """Returns a delete SQL."""
+        sql = 'delete from sqllib_cat where id = ?'
+        return sql, (self.id,)
+
 
 class Statement(object):
     """Data object holding a statement."""
@@ -82,6 +87,11 @@ class Statement(object):
                "category) values (?, ?, ?, ?)")
         return sql, (self.title or self.statement, self.statement,
                      self.description or None, self.category or None)
+
+    def get_delete_statement(self):
+        """Returns a delete SQL."""
+        sql = 'delete from sqllib_sql where id = ?'
+        return sql, (self.id,)
 
 
 class SQLLibraryPlugin(BottomPanePlugin, InstanceMixin, UserDBMixin):
@@ -158,21 +168,23 @@ class SQLLibraryPlugin(BottomPanePlugin, InstanceMixin, UserDBMixin):
 
         This yields a tuple (is_category, id, title, description, statement).
         """
+        ret = []
         sql = 'select id, name, parent from sqllib_cat'
         if parent is not None:
             sql += ' where parent = %d' % parent
         else:
             sql += ' where parent is null'
-        for row in self.userdb.cursor.execute(sql):
-            yield Category(row[0], row[1], row[2])
+        [ret.append(Category(row[0], row[1], row[2]))
+         for row in self.userdb.cursor.execute(sql)]
         sql = ('select id, title, statement, description, category '
                'from sqllib_sql')
         if parent is not None:
             sql += ' where category = %d' % parent
         else:
             sql += ' where category is null'
-        for row in self.userdb.cursor.execute(sql):
-            yield Statement(row[0], row[1], row[2], row[3], row[4])
+        [ret.append(Statement(row[0], row[1], row[2], row[3], row[4]))
+         for row in self.userdb.cursor.execute(sql)]
+        return ret
 
     def save_entry(self, entry):
         """Save entry back to library."""
@@ -184,8 +196,17 @@ class SQLLibraryPlugin(BottomPanePlugin, InstanceMixin, UserDBMixin):
         self.userdb.conn.commit()
         if entry.id is None:
             entry.id = self.userdb.cursor.lastrowid
-        for _, (view, _) in self._views.iteritems():
+        for instance, (view, merge_id) in self._views.iteritems():
             view.refresh()
+        return entry.id
+
+    def delete_entry(self, entry):
+        """Deletes entry in library."""
+        sql, params = entry.get_delete_statement()
+        self.userdb.cursor.execute(sql, params)
+        self.userdb.conn.commit()
+        for instance, (view, merge_id) in self._views.iteritems():
+            view.remove_entry(entry)
 
 
 class SQLLibraryView(gtk.ScrolledWindow, PaneItem):
@@ -271,9 +292,23 @@ class SQLLibraryView(gtk.ScrolledWindow, PaneItem):
             obj = None
         menu = gtk.Menu()
         if obj is not None:
+            if isinstance(obj, Category):
+                item = gtk.MenuItem(_(u'Add category'))
+                item.connect('activate', self.on_add_category, obj)
+                item.show()
+                menu.append(item)
             item = gtk.MenuItem(_(u'Rename'))
             item.connect('activate', self.on_entry_rename,
                          treeview, pthinfo[0])
+            menu.append(item)
+            item = gtk.MenuItem(_(u'Delete'))
+            item.connect('activate', self.on_entry_delete, obj)
+            item.show()
+            menu.append(item)
+        else:
+            item = gtk.MenuItem(_(u'Add category'))
+            item.connect('activate', self.on_add_category)
+            item.show()
             menu.append(item)
         menu.show_all()
         menu.popup( None, None, None, event.button, time)
@@ -281,6 +316,18 @@ class SQLLibraryView(gtk.ScrolledWindow, PaneItem):
     # ---
     # Callbacks
     # ---
+
+    def on_add_category(self, menuitem, parent=None):
+        model = self.list.get_model()
+        if parent is not None:
+            iter_ = self._get_entry(True, parent.id)
+        else:
+            iter_ = model.append(None)
+        obj = Category(None, _(u'Unknown'))
+        model.set(iter_, 0, obj, 1, gtk.STOCK_OPEN,
+                  2, obj.name, 3, None, 4, True)
+        self.list.set_cursor(model.get_path(iter_), self.list.get_column(0),
+                             True)
 
     def on_button_press_event(self, treeview, event):
         if event.type == gtk.gdk._2BUTTON_PRESS \
@@ -290,6 +337,9 @@ class SQLLibraryView(gtk.ScrolledWindow, PaneItem):
             self._show_popup_menu(treeview, event)
             return 1
 
+    def on_entry_delete(self, menuitem, entry):
+        self.lib.delete_entry(entry)
+
     def on_entry_edited(self, renderer, path, new_text):
         model = self.list.get_model()
         model.set_value(model.get_iter(path), 2, new_text)
@@ -298,7 +348,7 @@ class SQLLibraryView(gtk.ScrolledWindow, PaneItem):
             entry.name = new_text
         else:
             entry.title = new_text
-        self.lib.save_entry(entry)
+        entry.id = self.lib.save_entry(entry)
 
     def on_entry_rename(self, menuitem, treeview, path):
         treeview.set_cursor(path, treeview.get_column(0), True)
@@ -344,6 +394,11 @@ class SQLLibraryView(gtk.ScrolledWindow, PaneItem):
             self.model.set_value(iter_, 4, True)
             if is_cat:
                 self.refresh(item.id)
+
+    def remove_entry(self, entry):
+        """Removes an entry form the list."""
+        iter_ = self._get_entry(isinstance(entry, Category), entry.id)
+        self.list.get_model().remove(iter_)
 
 
 UI = '''
