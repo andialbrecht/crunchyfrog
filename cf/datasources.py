@@ -265,27 +265,24 @@ class DatasourceManager(gobject.GObject):
     """Datasource manager
 
     An instance of this class is accessible through the ``datasources``
-    attribute of an `CFApplication`_ instance.
+    attribute of an :class:`~cf.app.CFApplication` instance.
 
     :Signals:
 
-        datasource-added
-            ``def callback(manager, datasource_info, user_param1, ...)``
+    datasource-added
+      ``def callback(manager, datasource_info, user_param1, ...)``
 
-            Emitted when a datsource was added
+      Emitted when a datsource was added
 
-        datasource-deleted
-            ``def callback(manager, datasource_info, user_param1, ...)``
+    datasource-deleted
+      ``def callback(manager, datasource_info, user_param1, ...)``
 
-            Emitted when a datasource was removed
+      Emitted when a datasource was removed
 
-        datasource-modified
-            ``def callback(manager, datasource_info, user_param1, ...)``
+    datasource-modified
+      ``def callback(manager, datasource_info, user_param1, ...)``
 
-            Emitted when a datasource was modified
-
-    .. _CFApplication: cf.app.CFApplication.html
-
+      Emitted when a datasource was modified
     """
 
     __gsignals__ = {

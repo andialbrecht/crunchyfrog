@@ -2,28 +2,46 @@
 
 body {
   background-color: #FFFFFF;
+  font-family: Arial, "Bitstream Vera Sans", sans-serif;
+  font-size: 11pt;
+  line-height: 1.5em;
+}
+
+div.document, div.related {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 div.related {
-  background-color: #ffffff;
-  color: #ececec;
-  border-top: 1px solid #ececec;
-  border-bottom: 1px solid #ececec;
+  background-color: #FFFFFF;
+  border-top: 1px solid #dddddd;
+  color: #babdb6;
 }
 
 div.related a {
-  color: #777777;
+  color: #babdb6;
 }
 
 div.document {
-  background-color: #F2F2F2;
-  color: black;
+  background-color: #ffffff;
+  color: #2e3436;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 p.logo {
   text-align: right;
   margin: 0;
   display: none;
+}
+
+div.sphinxsidebar {
+  font-size: .8em;
+  background-color: #eeeeec;
+  padding-bottom: 1em;
+  border-top: 2px solid #babdb6;
+  border-bottom: 2px solid #babdb6;
 }
 
 div.sphinxsidebar h1,
@@ -33,6 +51,16 @@ div.sphinxsidebar h4,
 div.sphinxsidebar h5,
 div.sphinxsidebar h6 {
   color: #3c3c3c;
+  font-family: Arial, sans;
+}
+
+div.sphinxsidebar ul {
+  padding: 0;
+  margin: 0;
+}
+
+div.sphinxsidebar ul ul {
+  margin-left: 1.2em;
 }
 
 div.sphinxsidebar a {
@@ -47,17 +75,29 @@ div.sphinxsidebar input {
   border: 1px solid #7c7c7c;
 }
 
+div.bodywrapper {
+  margin-left: 245px;
+}
+
 div.body h1,
 div.body h2,
 div.body h3,
 div.body h4,
 div.body h5,
 div.body h6 {
-  color: #3c3c3c;
+  color: #3465a4;
+  background-color: transparent;
+  border: none;
+  font-family: "Times New Roman", serif;
+  font-weight: normal;
+  border-bottom: 1px solid #babdb6;
+  padding-left: 0;
 }
 
 div.body a {
   color: #1c8a00;
 }
 
-
+div.body dl {
+  font-size: .9em;
+}
