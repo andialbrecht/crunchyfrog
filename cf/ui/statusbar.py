@@ -19,12 +19,13 @@
 """Custom statusbar"""
 
 import gtk
-import pango
 
 
 class CrunchyStatusbar(gtk.Statusbar):
+    """An extended gtk.Statusbar."""
 
     def __init__(self, app, instance):
+        """Constructor."""
         gtk.Statusbar.__init__(self)
         self.app = app
         self.instance = instance
@@ -85,13 +86,11 @@ class CrunchyStatusbar(gtk.Statusbar):
             return
         sig = self._editor.connect(
             'connection-changed',
-            lambda e, c: self._set_connection_label(e)
-            )
+            lambda e, c: self._set_connection_label(e))
         self._editor_sigs['connections-changed'] = sig
         sig = self._editor.textview.connect(
             'toggle-overwrite',
-            lambda tv: self._set_overwrite_mode(self._editor, False)
-            )
+            lambda tv: self._set_overwrite_mode(self._editor, False))
         self._editor_sigs['toggle.overwrite'] = sig
         sig = self._editor.textview.buffer.connect('mark-set',
                                                    self.on_tv_mark_set)
@@ -138,6 +137,14 @@ class CrunchyStatusbar(gtk.Statusbar):
     # ---
 
     def set_editor(self, editor):
+        """Associates an editor with the statusbar.
+
+        This method is (loosely) connected to the instance's
+        'active-editor-changed' signal.
+
+        Arguments:
+          editor: Editor instance or None.
+        """
         self._disconnect_editor_sigs()
         self.instance.statusbar.pop(1)
         self._editor = editor
