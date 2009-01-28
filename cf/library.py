@@ -245,6 +245,17 @@ class SQLLibraryView(gtk.ScrolledWindow, PaneItem):
         self.add(self.list)
         self.list.show()
         self.list.connect("button-press-event", self.on_button_press_event)
+        # Drag'n'drop
+        targets = [
+            ('MY_TREE_MODEL_ROW', gtk.TARGET_SAME_WIDGET, 0),
+            ('text/plain', 0, 1),
+        ]
+        self.list.enable_model_drag_source(gtk.gdk.BUTTON1_MASK, targets,
+                                           gtk.gdk.ACTION_DEFAULT|
+                                           gtk.gdk.ACTION_MOVE)
+        self.list.enable_model_drag_dest(targets, gtk.gdk.ACTION_DEFAULT)
+        self.list.connect('drag_data_get', self.on_drag_data_get)
+        self.list.connect('drag_data_received', self.on_drag_data_received)
 
     def _get_entry(self, is_cat, id_, iter_=None):
         """Returns path for an entry."""
@@ -336,6 +347,63 @@ class SQLLibraryView(gtk.ScrolledWindow, PaneItem):
         elif event.button == 3:
             self._show_popup_menu(treeview, event)
             return 1
+
+    def on_drag_data_get(self, treeview, context, selection, target_id, etime):
+        treeselection = treeview.get_selection()
+        model, iter_ = treeselection.get_selected()
+        obj = model.get_value(iter_, 0)
+        if target_id == 0:  # drag'n'drop in treeview
+            data = '%s::%s' % ((isinstance(obj, Category) and '1' or ''),
+                               obj.id)
+        elif isinstance(obj, Statement):
+            data = obj.statement or obj.title
+        else:
+            data = ''
+        selection.set(selection.target, 8, data)
+
+    def on_drag_data_received(self, treeview, context, x, y, selection,
+                              target_id, etime):
+        model = treeview.get_model()
+        data = selection.data
+        drop_info = treeview.get_dest_row_at_pos(x, y)
+        tbd = []
+        if drop_info is not None:
+            path, position = drop_info
+            if position in [gtk.TREE_VIEW_DROP_BEFORE,
+                            gtk.TREE_VIEW_DROP_AFTER]:
+                return
+            iter_ = model.get_iter(path)
+            obj = model.get_value(iter_, 0)
+            if target_id == 1:
+                if (isinstance(obj, Statement)
+                    and (position == gtk.TREE_VIEW_DROP_INTO_OR_AFTER
+                         or position == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE)):
+                    obj.statement = data
+                    tbd.append(obj)
+                elif (position == gtk.TREE_VIEW_DROP_INTO_OR_AFTER
+                      or position == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE):
+                    tbd.append(
+                        Statement(None, data, data, category=obj.id))
+            else:
+                x1, x2 = data.split('::', 1)
+                oiter = self._get_entry(bool(x1), int(x2))
+                other_obj = model.get_value(oiter, 0)
+                if (isinstance(obj, Category)
+                    and (position == gtk.TREE_VIEW_DROP_INTO_OR_AFTER
+                         or position == gtk.TREE_VIEW_DROP_INTO_OR_BEFORE)):
+                    if isinstance(other_obj, Statement):
+                        other_obj.category = obj.id
+                    else:
+                        other_obj.parent = obj.id
+                    tbd.append(other_obj)
+        elif target_id == 1:  # drop from editor
+            stmt = Statement(None, data, data)
+            tbd.append(stmt)
+        if context.action == gtk.gdk.ACTION_MOVE:
+            context.finish(True, True, etime)
+        for item in tbd:
+            self.lib.save_entry(item)
+        return
 
     def on_entry_delete(self, menuitem, entry):
         self.lib.delete_entry(entry)
