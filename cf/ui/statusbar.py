@@ -139,6 +139,7 @@ class CrunchyStatusbar(gtk.Statusbar):
 
     def set_editor(self, editor):
         self._disconnect_editor_sigs()
+        self.instance.statusbar.pop(1)
         self._editor = editor
         self._set_connection_label(self._editor)
         self._set_overwrite_mode(self._editor)
