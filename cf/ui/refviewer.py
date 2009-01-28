@@ -29,12 +29,14 @@ Todo
 import gtk
 import gobject
 
-from cf.plugins.core import GenericPlugin
+from cf.plugins.core import BottomPanePlugin
+from cf.plugins.mixins import InstanceMixin
 from cf.ui import GladeWidget
+from cf.ui.pane import PaneItem
 
-from gettext import gettext as _
 
-class ReferenceViewer(GenericPlugin):
+class ReferenceViewer(BottomPanePlugin, InstanceMixin):
+
     id = "crunchyfrog.plugin.refbrowser"
     name = _(u"Reference Browser")
     description = _(u"A tiny webbrowser to view references")
@@ -45,64 +47,39 @@ class ReferenceViewer(GenericPlugin):
     version = "0.1"
 
     def __init__(self, app):
-        GenericPlugin.__init__(self, app)
-        self._viewer = dict()
-        self.app.cb.connect("instance-created", self.on_instance_created)
-        for instance in app.get_instances():
-            self.init_instance(instance)
-
-    def on_instance_created(self, app, instance):
-        self.init_instance(instance)
-
-    def on_toggle_viewer(self, menuitem, instance):
-        if menuitem.get_active():
-            gobject.idle_add(self.create_view, menuitem, instance)
-        else:
-            gobject.idle_add(self.remove_view, instance)
-
-    def on_view_destroyed(self, view, menuitem, instance):
-        menuitem.set_active(False)
-
-    def create_view(self, menuitem, instance):
-        # XXX
-        return
-        view = RefView(self.app, instance)
-        self._viewer[instance] = view
-        item = DockItem(instance.dock, "refview", view.widget, _(u"Reference"),
-                          self.icon, gtk.POS_BOTTOM)
-        instance.dock.add_item(item)
-        instance.set_data("refviewer", view)
-        view.widget.connect("destroy", self.on_view_destroyed, menuitem, instance)
+        BottomPanePlugin.__init__(self, app)
+        self._views = {}
 
     def init_instance(self, instance):
-        mn_view = instance.xml.get_widget("mn_view")
-        item = gtk.CheckMenuItem(_(u"Reference Viewer"))
-        item.connect("activate", self.on_toggle_viewer, instance)
-        item.show()
-        if self.app.config.get("refviewer.visible"):
-            item.set_active(True)
-        mn_view.append(item)
+        view = RefView(instance)
+        self._views[instance] = view
+        instance.bottom_pane.add_item(view)
 
-    def remove_view(self, instance):
-        view = self._viewer.pop(instance)
-        instance.set_data("refviewer", None)
-        view.destroy()
+    def deactivate_instance(self, instance):
+        if instance in self._views:
+            self._views[instance].destroy()
+            del self._views[instance]
 
     def shutdown(self):
-        if self._viewer.keys():
-            self.app.config.set("refviewer.visible", True)
-        else:
-            self.app.config.set("refviewer.visible", False)
+        while self._views:
+            instance, view = self._views.popitem()
+            view.destroy()
 
-class RefView(GladeWidget):
 
-    def __init__(self, app, instance):
-        GladeWidget.__init__(self, app, "crunchyfrog", "reference_viewer")
+class RefView(GladeWidget, PaneItem):
+
+    name = _(u'References')
+    icon = 'stock_help-book'
+    detachable = True
+
+    def __init__(self, instance):
+        GladeWidget.__init__(self, instance, "crunchyfrog", "reference_viewer")
         self.instance = instance
 
     def _setup_widget(self):
         import gtkmozembed
         self.browser = gtkmozembed.MozEmbed()
+        self.browser.show()
         self.xml.get_widget("refviewer_box_moz").pack_start(self.browser, True, True)
         self.list_bookmarks = self.xml.get_widget("refviewer_bookmarks")
         model = gtk.TreeStore(gobject.TYPE_PYOBJECT, str, str) # backend, url, label
