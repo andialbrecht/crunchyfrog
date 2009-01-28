@@ -83,11 +83,13 @@ class CFApplication(gobject.GObject):
     def _check_version(self):
         """Run possible version updates."""
         version_file = os.path.join(USER_DIR, 'VERSION')
-        if not os.path.isfile(version_file):
+        if os.path.isfile(version_file):
+            dir_version = open(version_file).read()
+        if dir_version != release.version:
+            # Do upgrades here
             f = open(version_file, "w")
-            f.write("0.3.0")
+            f.write(release.version)
             f.close()
-        # That's it for now, it's for future use.
 
     # ---
     # Instance handling
