@@ -1,16 +1,16 @@
-# Danish translation for crunchyfrog
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# English (United Kingdom) translation for crunchyfrog
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the crunchyfrog package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: crunchyfrog\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-01-28 16:10+0100\n"
-"PO-Revision-Date: 2008-07-29 20:03+0000\n"
-"Last-Translator: Jeppe Toustrup <launchpad@tenzer.dk>\n"
-"Language-Team: Danish <da@li.org>\n"
+"PO-Revision-Date: 2009-01-26 12:10+0000\n"
+"Last-Translator: Jen Ockwell <jenfraggleubuntu@googlemail.com>\n"
+"Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,11 +19,11 @@ msgstr ""
 
 #: cf/shell/__init__.py:44 cf/shell/__init__.py:74
 msgid "Shell"
-msgstr ""
+msgstr "Shell"
 
 #: cf/shell/__init__.py:45
 msgid "Interactive shell (mainly for debugging)"
-msgstr ""
+msgstr "Interactive shell (mainly for debugging)"
 
 #: cf/shell/__init__.py:69
 msgid "Python module ipython is required."
@@ -31,191 +31,191 @@ msgstr ""
 
 #: cf/backends/__init__.py:95 cf/ui/widgets/__init__.py:99
 msgid "Connection"
-msgstr ""
+msgstr "Connection"
 
 #: cf/backends/dbapi2helper.py:95
 msgid "An error occured"
-msgstr ""
+msgstr "An error occured"
 
 #: cf/backends/ldapbe.py:46
 msgid "LDAP Plugin"
-msgstr ""
+msgstr "LDAP Plugin"
 
 #: cf/backends/ldapbe.py:47
 msgid "Provides access to LDAP/ActiveDirectory servers"
-msgstr ""
+msgstr "Provides access to LDAP/ActiveDirectory servers"
 
 #: cf/backends/ldapbe.py:78
 msgid "_Details"
-msgstr ""
+msgstr "_Details"
 
 #: cf/backends/ldapbe.py:99
 msgid "Base DN:"
-msgstr ""
+msgstr "Base DN:"
 
 #: cf/backends/ldapbe.py:115
 msgid "Python module ldap is not installed."
-msgstr ""
+msgstr "Python module ldap is not installed."
 
 #: cf/backends/ldapbe.py:167
 msgid "Search"
-msgstr ""
+msgstr "Search"
 
 #: cf/backends/ldapbe.py:192
 msgid "Export"
-msgstr ""
+msgstr "Export"
 
 #: cf/backends/ldapbe.py:298 cf/ui/browser.py:208
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: cf/backends/ldapbe.py:307
 msgid "Attribute"
-msgstr ""
+msgstr "Attribute"
 
 #: cf/backends/ldapbe.py:310
 msgid "Value"
-msgstr ""
+msgstr "Value"
 
 #: cf/backends/ldapbe.py:345
 msgid "Python module ldap required."
-msgstr ""
+msgstr "Python module ldap required."
 
 #: cf/backends/mssql.py:40
 msgid "MS-SQL Plugin"
-msgstr ""
+msgstr "MS-SQL Plugin"
 
 #: cf/backends/mssql.py:41
 msgid "Provides access to MS-SQL databases"
-msgstr ""
+msgstr "Provides access to MS-SQL databases"
 
 #: cf/backends/mssql.py:75 cf/backends/mysql.py:79 cf/backends/postgres.py:93
 msgid "No password given."
-msgstr ""
+msgstr "No password given."
 
 #: cf/backends/mssql.py:159
 msgid "Python module pymssql not found."
-msgstr ""
+msgstr "Python module pymssql not found."
 
 #: cf/backends/mysql.py:42
 msgid "MySQL Plugin"
-msgstr ""
+msgstr "MySQL Plugin"
 
 #: cf/backends/mysql.py:43
 msgid "Provides access to MySQL databases"
-msgstr ""
+msgstr "Provides access to MySQL databases"
 
 #: cf/backends/mysql.py:84
 msgid "Python module MySQLdb is not installed."
-msgstr ""
+msgstr "Python module MySQLdb is not installed."
 
 #: cf/backends/mysql.py:167
 msgid "MySQL Reference"
-msgstr ""
+msgstr "MySQL Reference"
 
 #: cf/backends/mysql.py:179
 msgid "Python module MySQLdb required."
-msgstr ""
+msgstr "Python module MySQLdb required."
 
 #: cf/backends/postgres.py:45
 msgid "PostgreSQL Reference"
-msgstr ""
+msgstr "PostgreSQL Reference"
 
 #: cf/backends/postgres.py:56
 msgid "PostgreSQL Plugin"
-msgstr ""
+msgstr "PostgreSQL Plugin"
 
 #: cf/backends/postgres.py:57
 msgid "Provides access to PostgreSQL databases"
-msgstr ""
+msgstr "Provides access to PostgreSQL databases"
 
 #: cf/backends/postgres.py:98
 msgid "Python module psycopg2 is not installed."
-msgstr ""
+msgstr "Python module psycopg2 is not installed."
 
 #: cf/backends/postgres.py:172
 msgid "Languages"
-msgstr ""
+msgstr "Languages"
 
 #: cf/backends/postgres.py:175
 msgid "Language"
-msgstr ""
+msgstr "Language"
 
 #: cf/backends/postgres.py:306
 msgid "Definition"
-msgstr ""
+msgstr "Definition"
 
 #: cf/backends/postgres.py:314
 msgid "Python module psycopg2 required."
-msgstr ""
+msgstr "Python module psycopg2 required."
 
 #: cf/backends/sqlite.py:41
 msgid "SQLite3 Plugin"
-msgstr ""
+msgstr "SQLite3 Plugin"
 
 #: cf/backends/sqlite.py:42
 msgid "Provides access to SQLite3 databases"
-msgstr ""
+msgstr "Provides access to SQLite3 databases"
 
 #: cf/backends/sqlite.py:59
 msgid "Database file:"
-msgstr ""
+msgstr "Database file:"
 
 #: cf/backends/sqlite.py:61
 msgid "Select database file"
-msgstr ""
+msgstr "Select database file"
 
 #: cf/backends/sqlite.py:75
 msgid "Python module sqlite3 is not installed."
-msgstr ""
+msgstr "Python module sqlite3 is not installed."
 
 #: cf/backends/sqlite.py:133
 msgid "SQLite Reference"
-msgstr ""
+msgstr "SQLite Reference"
 
 #: cf/backends/sqlite.py:143
 msgid "Python module sqlite3 required."
-msgstr ""
+msgstr "Python module sqlite3 required."
 
 #: cf/backends/schema/__init__.py:59
 msgid "Schemata"
-msgstr ""
+msgstr "Schemata"
 
 #: cf/backends/schema/__init__.py:62
 msgid "Schema"
-msgstr ""
+msgstr "Schema"
 
 #: cf/backends/schema/__init__.py:66
 msgid "Tables"
-msgstr ""
+msgstr "Tables"
 
 #: cf/backends/schema/__init__.py:70
 msgid "Table"
-msgstr ""
+msgstr "Table"
 
 #: cf/backends/schema/__init__.py:74
 msgid "Columns"
-msgstr ""
+msgstr "Columns"
 
 #: cf/backends/schema/__init__.py:77
 msgid "Column"
-msgstr ""
+msgstr "Column"
 
 #: cf/backends/schema/__init__.py:82
 msgid "Views"
-msgstr ""
+msgstr "Views"
 
 #: cf/backends/schema/__init__.py:86 cf/ui/prefs.py:84
 msgid "View"
-msgstr "Vis"
+msgstr "View"
 
 #: cf/backends/schema/__init__.py:90
 msgid "Sequences"
-msgstr ""
+msgstr "Sequences"
 
 #: cf/backends/schema/__init__.py:94
 msgid "Sequence"
-msgstr ""
+msgstr "Sequence"
 
 #: cf/backends/schema/__init__.py:99
 msgid "Functions"
@@ -272,7 +272,7 @@ msgstr ""
 #: cf/plugins/core.py:164 cf/ui/editor.py:61 cf/ui/mainwindow.py:166
 #: cf/ui/prefs.py:85
 msgid "Editor"
-msgstr "Tekstbehandler"
+msgstr ""
 
 #: cf/config/__init__.py:114
 msgid "Writing configuration"
@@ -306,7 +306,7 @@ msgstr ""
 
 #: cf/library.py:133
 msgid "Save to library"
-msgstr "Gem til bibliotek"
+msgstr ""
 
 #: cf/library.py:134
 msgid "Save content of the current editor to SQL library."
@@ -515,7 +515,7 @@ msgstr ""
 
 #: cf/ui/editor.py:657 cf/ui/editor.py:659 cf/ui/pane.py:358 cf/ui/pane.py:424
 msgid "Query"
-msgstr "Forespørgsel"
+msgstr ""
 
 #: cf/ui/editor.py:757
 msgid "Data copied to clipboard"
@@ -531,7 +531,7 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:93
 msgid "_File"
-msgstr "Fil"
+msgstr ""
 
 #: cf/ui/mainwindow.py:95
 msgid "Quit the program"
@@ -539,11 +539,11 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:97
 msgid "_New"
-msgstr "Ny"
+msgstr ""
 
 #: cf/ui/mainwindow.py:99 cf/ui/mainwindow.py:172
 msgid "_Query"
-msgstr "Forespørgsel"
+msgstr ""
 
 #: cf/ui/mainwindow.py:99
 msgid "New SQL editor"
@@ -551,7 +551,7 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:102
 msgid "_Instance"
-msgstr "Instans"
+msgstr ""
 
 #: cf/ui/mainwindow.py:103
 msgid "New application window."
@@ -563,11 +563,11 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:109
 msgid "_Edit"
-msgstr "Redigér"
+msgstr ""
 
 #: cf/ui/mainwindow.py:111
 msgid "_Plugins"
-msgstr "Udvidelser"
+msgstr ""
 
 #: cf/ui/mainwindow.py:111
 msgid "Configure plugins"
@@ -587,11 +587,11 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:120
 msgid "_View"
-msgstr "Vis"
+msgstr ""
 
 #: cf/ui/mainwindow.py:122
 msgid "_Help"
-msgstr "Hjælp"
+msgstr ""
 
 #: cf/ui/mainwindow.py:124
 msgid "Open the CrunchyFrog manual"
@@ -695,7 +695,7 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:225
 msgid "Commit"
-msgstr "Udfør"
+msgstr ""
 
 #: cf/ui/mainwindow.py:226
 msgid "Commit current transaction"
@@ -703,7 +703,7 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:229
 msgid "Rollback"
-msgstr "Tilbagerulning"
+msgstr ""
 
 #: cf/ui/mainwindow.py:230
 msgid "Rollback current transaction"
@@ -711,7 +711,7 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:282
 msgid "_Recent Files"
-msgstr "Nylige filer"
+msgstr ""
 
 #: cf/ui/pane.py:165
 #, python-format
@@ -753,7 +753,7 @@ msgstr ""
 
 #: cf/ui/prefs.py:83
 msgid "General"
-msgstr "Generelt"
+msgstr ""
 
 #: cf/ui/prefs.py:86
 msgid "Fonts & Colors"
