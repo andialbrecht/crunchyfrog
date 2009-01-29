@@ -1,3 +1,9 @@
+crunchyfrog (0.3.2-4) jaunty; urgency=low
+
+  * Updated translations.
+
+ -- Andi Albrecht <albrecht.andi@googlemail.com>  Thu, 29 Jan 2009 15:35:05 +0100
+
 crunchyfrog (0.3.2-3) jaunty; urgency=low
 
   * Added missing pygments dependency.
