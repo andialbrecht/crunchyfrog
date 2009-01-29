@@ -1,8 +1,9 @@
-crunchyfrog (0.3.2-4) jaunty; urgency=low
+crunchyfrog (0.3.2-5) jaunty; urgency=low
 
   * Updated translations.
+  * Tagged release version.
 
- -- Andi Albrecht <albrecht.andi@googlemail.com>  Thu, 29 Jan 2009 15:35:05 +0100
+ -- Andi Albrecht <albrecht.andi@googlemail.com>  Thu, 29 Jan 2009 22:24:43 +0100
 
 crunchyfrog (0.3.2-3) jaunty; urgency=low
 
