@@ -25,7 +25,7 @@ builddeb: dist-clean
 	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dpkg-buildpackage $(DEBFLAGS)
 
 builddeb-src:
-	make builddeb DEBFLAGS=-S
+	make builddeb DEBFLAGS="-S -k090D660E"
 
 push-ppa: builddeb-src
 	cd $(BUILDIR) && dput cf-ppa $(PROJECT)_$(VERSION)*_source.changes

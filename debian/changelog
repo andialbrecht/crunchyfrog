@@ -1,17 +1,22 @@
-crunchyfrog (0.3.2-0ubuntu3) jaunty; urgency=low
+crunchyfrog (0.3.2-3) jaunty; urgency=low
+
+  * Added missing pygments dependency.
+
+ -- Andi Albrecht <albrecht.andi@googlemail.com>  Thu, 29 Jan 2009 08:39:43 +0100
+
+crunchyfrog (0.3.2-2) jaunty; urgency=low
 
   * Moved recommended dependencies to suggested.
 
  -- Andi Albrecht <albrecht.andi@googlemail.com>  Thu, 29 Jan 2009 07:03:39 +0100
 
-
-crunchyfrog (0.3.2-0ubuntu2) jaunty; urgency=low
+crunchyfrog (0.3.2-1) jaunty; urgency=low
 
   * Added missing dependencies.
 
  -- Andi Albrecht <albrecht.andi@googlemail.com>  Thu, 29 Jan 2009 06:18:30 +0100
 
-crunchyfrog (0.3.2-0ubuntu1) jaunty; urgency=low
+crunchyfrog (0.3.2-0) jaunty; urgency=low
 
   * Release 0.3.2
 
