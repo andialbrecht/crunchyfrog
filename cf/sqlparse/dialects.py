@@ -43,7 +43,7 @@ class DefaultDialect(Dialect):
         if unified == 'BEGIN':
             if self._in_declare:
                 return tokentype, text, 0
-            return tokentype, text, 1
+            return tokentype, text, 0
         if unified == 'END':
             return tokentype, text, -1
         if unified in ('IF', 'FOR'):
