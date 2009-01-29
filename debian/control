@@ -2,20 +2,23 @@ Source: crunchyfrog
 Section: gnome
 Priority: extra
 Maintainer: Andi Albrecht <albrecht.andi@googlemail.com>
-Build-Depends: python (>=2.5), debhelper, python-central, python-sphinx
+Build-Depends: python (>=2.5), debhelper, python-central, python-sphinx,
 XS-Python-Version: >=2.5
 Standards-Version: 3.7.2
 
 Package: crunchyfrog
 Architecture: any
 XB-Python-Version: ${python:Versions}
-Depends: python (>=2.5), python-central, python-gtk2, python-configobj
-Description: Database front-end for Gnome
+Depends: python (>=2.5), python-central, python-gtk2, python-configobj,
+    python-glade2, python-gtksourceview2
+Suggests: python-psycopg2, python-mysqldb, python-gnome2,
+    python-gnome2-extras, gnome-extra-icons
+Description: SQL client for GNOME
  For more information see: http://crunchyfrog.googlecode.com
 
 Package: crunchyfrog-gnome
 Architecture: any
 XB-Python-Version: ${python:Versions}
 Depends: crunchyfrog, python-gnome2, python-gnome2-desktop, python-gnome2-extras, gnome-extra-icons
-Description: Provides GNOME related packages for CrunchyFrog.
+Description: GNOME related packages for CrunchyFrog.
 
