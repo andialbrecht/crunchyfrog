@@ -83,7 +83,8 @@ class MainWindow(gtk.Window):
         self._init_elements()
         self.connect('window-state-event', self.on_window_state_event)
         self.connect('delete-event', self.on_quit)
-        if create_editor:
+        # XXX disabled: it results in unexpected behavior...
+        if create_editor and 1 == 2:
             self.editor_create()
         self.state_restore()
 
