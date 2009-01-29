@@ -26,6 +26,8 @@ Todo
  * SEGFAULT when closing an re-opening RefView
 """
 
+import logging
+
 import gtk
 import gobject
 
@@ -38,7 +40,7 @@ from cf.ui.pane import PaneItem
 class ReferenceViewer(BottomPanePlugin, InstanceMixin):
 
     id = "crunchyfrog.plugin.refbrowser"
-    name = _(u"Reference Browser")
+    name = "%s (Deprecated)" % _(u"Reference Browser")
     description = _(u"A tiny webbrowser to view references")
     icon = "stock_help-book"
     author = "Andi Albrecht"
@@ -51,6 +53,8 @@ class ReferenceViewer(BottomPanePlugin, InstanceMixin):
         self._views = {}
 
     def init_instance(self, instance):
+        logging.warning(('RefViewer plugin is deprecated and will be '
+                         'removed in the next major release.'))
         view = RefView(instance)
         self._views[instance] = view
         instance.bottom_pane.add_item(view)
