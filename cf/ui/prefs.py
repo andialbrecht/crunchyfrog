@@ -20,6 +20,9 @@
 
 """Preferences"""
 
+from inspect import isclass
+from xml.etree import ElementTree as etree
+
 import gtk
 import gobject
 
@@ -37,12 +40,7 @@ from gettext import gettext as _
 import logging
 log = logging.getLogger("PREFS")
 
-from inspect import isclass
 
-try:
-    from xml.etree import ElementTree as etree
-except ImportError:
-    from lxml import etree
 
 import cf
 from cf.ui import GladeWidget, dialogs
