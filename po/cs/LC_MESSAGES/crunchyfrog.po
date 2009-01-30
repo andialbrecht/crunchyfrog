@@ -7,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CrunchyFrog 0.3\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-03 21:00+0100\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2009-01-28 16:10+0100\n"
 "PO-Revision-Date: 2008-11-05 10:16+0100\n"
 "Last-Translator: Martin Picek <picek.martin@gnome-cesko.cz>\n"
 "Language-Team: Martin Picek <picek.martin@gnome-cesko.cz>\n"
@@ -16,6 +16,23 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: cf/shell/__init__.py:44 cf/shell/__init__.py:74
+msgid "Shell"
+msgstr "Shell"
+
+#: cf/shell/__init__.py:45
+msgid "Interactive shell (mainly for debugging)"
+msgstr "Interaktivní shell (hlavně pro ladění)"
+
+#: cf/shell/__init__.py:69
+#, fuzzy
+msgid "Python module ipython is required."
+msgstr "Modul Pythonu psycopg2 je vyžadován."
+
+#: cf/backends/__init__.py:95 cf/ui/widgets/__init__.py:99
+msgid "Connection"
+msgstr "Spojení"
 
 #: cf/backends/dbapi2helper.py:95
 msgid "An error occured"
@@ -29,36 +46,40 @@ msgstr "Přídavný modul LDAP"
 msgid "Provides access to LDAP/ActiveDirectory servers"
 msgstr "Poskytuje přístup na servery LDAP a ActiveDirectory"
 
-#: cf/backends/ldapbe.py:66
-#, python-format
-msgid "Search: %(dn)s"
-msgstr "Hledat: %(dn)s"
-
-#: cf/backends/ldapbe.py:82
+#: cf/backends/ldapbe.py:78
 msgid "_Details"
 msgstr "_Detaily"
 
-#: cf/backends/ldapbe.py:103
+#: cf/backends/ldapbe.py:99
 msgid "Base DN:"
 msgstr "DN základu:"
 
-#: cf/backends/ldapbe.py:119
+#: cf/backends/ldapbe.py:115
 msgid "Python module ldap is not installed."
 msgstr "Není nainstalován modul Pythonu ldap."
+
+#: cf/backends/ldapbe.py:167
+#, fuzzy
+msgid "Search"
+msgstr "Pro_hledat DN:"
 
 #: cf/backends/ldapbe.py:192
 msgid "Export"
 msgstr "Exportovat"
 
-#: cf/backends/ldapbe.py:304
+#: cf/backends/ldapbe.py:298 cf/ui/browser.py:208
+msgid "Details"
+msgstr "Detaily"
+
+#: cf/backends/ldapbe.py:307
 msgid "Attribute"
 msgstr "Atribut"
 
-#: cf/backends/ldapbe.py:307
+#: cf/backends/ldapbe.py:310
 msgid "Value"
 msgstr "Hodnota"
 
-#: cf/backends/ldapbe.py:342
+#: cf/backends/ldapbe.py:345
 msgid "Python module ldap required."
 msgstr "Modul Pythonu ldap je vyžadován."
 
@@ -70,10 +91,7 @@ msgstr "Přídavný modul MS-SQL"
 msgid "Provides access to MS-SQL databases"
 msgstr "Poskytuje přístup k databázím MS-SQL"
 
-#: cf/backends/mssql.py:75
-#: cf/backends/mysql.py:79
-#: cf/backends/postgres.py:93
-#: data/plugins/backend_oracle/__init__.py:74
+#: cf/backends/mssql.py:75 cf/backends/mysql.py:79 cf/backends/postgres.py:93
 msgid "No password given."
 msgstr "Nebylo zadáno heslo."
 
@@ -93,11 +111,11 @@ msgstr "Poskytuje přístup k databázím MySQL"
 msgid "Python module MySQLdb is not installed."
 msgstr "Není nainstalován modul Pythonu MySQLdb."
 
-#: cf/backends/mysql.py:161
+#: cf/backends/mysql.py:167
 msgid "MySQL Reference"
 msgstr "Dokumentace MySQL"
 
-#: cf/backends/mysql.py:173
+#: cf/backends/mysql.py:179
 msgid "Python module MySQLdb required."
 msgstr "Modul Pythonu MySQLdb je vyžadován."
 
@@ -117,24 +135,53 @@ msgstr "Poskytuje přístup k databázím PostgreSQL"
 msgid "Python module psycopg2 is not installed."
 msgstr "Není nainstalován modul Pythonu psycopg2."
 
-#: cf/backends/postgres.py:170
+#: cf/backends/postgres.py:172
 msgid "Languages"
 msgstr "Jazyky"
 
-#: cf/backends/postgres.py:173
+#: cf/backends/postgres.py:175
 msgid "Language"
 msgstr "Jazyk"
 
-#: cf/backends/postgres.py:304
+#: cf/backends/postgres.py:306
 msgid "Definition"
 msgstr "Definice"
 
-#: cf/backends/postgres.py:312
+#: cf/backends/postgres.py:314
 msgid "Python module psycopg2 required."
 msgstr "Modul Pythonu psycopg2 je vyžadován."
 
+#: cf/backends/sqlite.py:41
+msgid "SQLite3 Plugin"
+msgstr "Přídavný modul SQLite3"
+
+#: cf/backends/sqlite.py:42
+msgid "Provides access to SQLite3 databases"
+msgstr "Poskytuje přístup k databázím SQLite3"
+
+#: cf/backends/sqlite.py:59
+msgid "Database file:"
+msgstr "Soubor s databází:"
+
+#: cf/backends/sqlite.py:61
+msgid "Select database file"
+msgstr "Vyberte soubor s databází"
+
+#: cf/backends/sqlite.py:75
+msgid "Python module sqlite3 is not installed."
+msgstr "Není nainstalován modul Pythonu sqlite3."
+
+#: cf/backends/sqlite.py:133
+msgid "SQLite Reference"
+msgstr "Dokumentace SQLite"
+
+#: cf/backends/sqlite.py:143
+msgid "Python module sqlite3 required."
+msgstr "Modul Pythonu sqlite3 je vyžadován."
+
 #: cf/backends/schema/__init__.py:59
-msgid "Schematas"
+#, fuzzy
+msgid "Schemata"
 msgstr "Schémata"
 
 #: cf/backends/schema/__init__.py:62
@@ -161,9 +208,7 @@ msgstr "Sloupec"
 msgid "Views"
 msgstr "Pohledy"
 
-#: cf/backends/schema/__init__.py:86
-#: cf/ui/prefs.py:82
-#: data/crunchyfrog.glade.h:78
+#: cf/backends/schema/__init__.py:86 cf/ui/prefs.py:84
 msgid "View"
 msgstr "Zobrazit"
 
@@ -207,38 +252,85 @@ msgstr "Indexy"
 msgid "Index"
 msgstr "Index"
 
-#: cf/backends/sqlite.py:41
-msgid "SQLite3 Plugin"
-msgstr "Přídavný modul SQLite3"
+#: cf/plugins/core.py:156
+msgid "Password required"
+msgstr "Vyžadováno heslo"
 
-#: cf/backends/sqlite.py:42
-msgid "Provides access to SQLite3 databases"
-msgstr "Poskytuje přístup k databázím SQLite3"
+#: cf/plugins/core.py:156
+msgid "Enter the password to connect to this database."
+msgstr "Zadejte heslo pro připojení k této databázi."
 
-#: cf/backends/sqlite.py:59
-msgid "Database file:"
-msgstr "Soubor s databází:"
+#: cf/plugins/core.py:161
+msgid "Miscellaneous"
+msgstr "Různé"
 
-#: cf/backends/sqlite.py:61
-msgid "Select database file"
-msgstr "Vyberte soubor s databází"
+#: cf/plugins/core.py:162
+msgid "Database backends"
+msgstr "Podpůrné vrstvy pro databáze"
 
-#: cf/backends/sqlite.py:75
-msgid "Python module sqlite3 is not installed."
-msgstr "Není nainstalován modul Pythonu sqlite3."
+#: cf/plugins/core.py:163
+msgid "Export filter"
+msgstr "Exportní filtry"
 
-#: cf/backends/sqlite.py:133
-msgid "SQLite Reference"
-msgstr "Dokumentace SQLite"
+#: cf/plugins/core.py:164 cf/ui/editor.py:61 cf/ui/mainwindow.py:166
+#: cf/ui/prefs.py:85
+msgid "Editor"
+msgstr "Editor"
 
-#: cf/backends/sqlite.py:143
-#: data/plugins/backend_httplog/__init__.py:168
-msgid "Python module sqlite3 required."
-msgstr "Modul Pythonu sqlite3 je vyžadován."
-
-#: cf/config/__init__.py:116
+#: cf/config/__init__.py:114
 msgid "Writing configuration"
 msgstr "Probíhá zápis nastavení"
+
+#: cf/instance.py:178 cf/ui/editor.py:570 cf/ui/mainwindow.py:497
+msgid "Select file"
+msgstr "Vyberte soubor"
+
+#: cf/instance.py:185 cf/ui/editor.py:441 cf/ui/editor.py:577
+#: cf/ui/mainwindow.py:505
+msgid "All files (*)"
+msgstr "Všechny soubory (*)"
+
+#: cf/instance.py:189 cf/instance.py:196 cf/ui/editor.py:445
+#: cf/ui/editor.py:581 cf/ui/mainwindow.py:509 cf/ui/mainwindow.py:516
+msgid "SQL files (*.sql)"
+msgstr "Soubory SQL (*.sql)"
+
+#: cf/instance.py:209 cf/ui/mainwindow.py:529
+msgid "_Recent files:"
+msgstr "Nedávné _soubory:"
+
+#: cf/library.py:101 cf/library.py:214
+msgid "Library"
+msgstr "Knihovna"
+
+#: cf/library.py:102
+msgid "A personal SQL library"
+msgstr "Osobní knihovna SQL"
+
+#: cf/library.py:133
+msgid "Save to library"
+msgstr "Uložit do knihovny"
+
+#: cf/library.py:134
+msgid "Save content of the current editor to SQL library."
+msgstr ""
+
+#: cf/library.py:307 cf/library.py:320
+msgid "Add category"
+msgstr "Přidat kategorii"
+
+#: cf/library.py:311
+msgid "Rename"
+msgstr ""
+
+#: cf/library.py:315
+#, fuzzy
+msgid "Delete"
+msgstr "gtk-delete"
+
+#: cf/library.py:337 cf/ui/prefs.py:230 cf/ui/prefs.py:391 cf/ui/prefs.py:460
+msgid "Unknown"
+msgstr "Neznámý"
 
 #: cf/filter/exportfilter.py:28
 msgid "CSV Export"
@@ -268,138 +360,11 @@ msgstr "Sešit OpenDocument (.ods)"
 msgid "CrunchyFrog Data Export"
 msgstr "Export dat CrunchyFrog"
 
-#: cf/instance.py:81
-msgid "Queries"
-msgstr "Dotazy"
-
-#: cf/instance.py:87
+#: cf/ui/browser.py:55
 msgid "Navigator"
 msgstr "Navigátor"
 
-#: cf/instance.py:208
-#: cf/ui/editor.py:507
-msgid "Select file"
-msgstr "Vyberte soubor"
-
-#: cf/instance.py:215
-#: cf/ui/editor.py:406
-#: cf/ui/editor.py:514
-msgid "All files (*)"
-msgstr "Všechny soubory (*)"
-
-#: cf/instance.py:219
-#: cf/instance.py:226
-#: cf/ui/editor.py:410
-#: cf/ui/editor.py:518
-msgid "SQL files (*.sql)"
-msgstr "Soubory SQL (*.sql)"
-
-#: cf/instance.py:239
-msgid "_Recent files:"
-msgstr "Nedávné _soubory:"
-
-#: cf/library.py:46
-msgid "Library"
-msgstr "Knihovna"
-
-#: cf/library.py:47
-msgid "A personal SQL library"
-msgstr "Osobní knihovna SQL"
-
-#: cf/library.py:98
-msgid "_Library"
-msgstr "_Knihovna"
-
-#: cf/library.py:108
-msgid "_Open library"
-msgstr "_Otevřít knihovnu"
-
-#: cf/library.py:112
-msgid "_Add to library"
-msgstr "_Přidat do knihovny"
-
-#: cf/library.py:210
-#: cf/library.py:344
-msgid "New category"
-msgstr "Nová kategorie"
-
-#: cf/library.py:230
-#: cf/library.py:325
-#: cf/library.py:332
-msgid "Add category"
-msgstr "Přidat kategorii"
-
-#: cf/library.py:328
-#: cf/library.py:335
-msgid "Add query"
-msgstr "Přidat dotaz"
-
-#: cf/library.py:367
-msgid "Category is not empty."
-msgstr "Kategorie není prázdná."
-
-#: cf/library.py:436
-msgid "New query"
-msgstr "Nový dotaz"
-
-#: cf/plugins/core.py:147
-msgid "Password required"
-msgstr "Vyžadováno heslo"
-
-#: cf/plugins/core.py:147
-msgid "Enter the password to connect to this database."
-msgstr "Zadejte heslo pro připojení k této databázi."
-
-#: cf/plugins/core.py:152
-msgid "Miscellaneous"
-msgstr "Různé"
-
-#: cf/plugins/core.py:153
-msgid "Database backends"
-msgstr "Podpůrné vrstvy pro databáze"
-
-#: cf/plugins/core.py:154
-msgid "Export filter"
-msgstr "Exportní filtry"
-
-#: cf/plugins/core.py:155
-#: cf/ui/prefs.py:83
-#: data/crunchyfrog.glade.h:36
-msgid "Editor"
-msgstr "Editor"
-
-#: cf/plugins/core.py:216
-msgid "Closing plugins"
-msgstr ""
-
-#: cf/plugins/core.py:462
-msgid "Copying files..."
-msgstr "Kopírují se soubory…"
-
-#: cf/plugins/core.py:467
-msgid "Plugin installed."
-msgstr "Modul je nainstalován."
-
-#: cf/shell/__init__.py:37
-#: cf/shell/__init__.py:66
-#: cf/shell/__init__.py:84
-msgid "Shell"
-msgstr "Shell"
-
-#: cf/shell/__init__.py:38
-msgid "Interactive shell (mainly for debugging)"
-msgstr "Interaktivní shell (hlavně pro ladění)"
-
-#: cf/shell/__init__.py:57
-msgid "Import to shell"
-msgstr "Importovat do shellu"
-
-#: cf/shell/__init__.py:137
-#, python-format
-msgid "Table %(tablename)r imported as %(varname)r to shell"
-msgstr "Tabulka %(tablename)r byla importována jako %(varname)r do shellu"
-
-#: cf/ui/browser.py:95
+#: cf/ui/browser.py:119
 msgid ""
 "<b>No active data sources</b>\n"
 "\n"
@@ -409,40 +374,39 @@ msgstr ""
 "\n"
 "<a href=\"#\">Klikněte</a> pro otevření správce zdrojů dat."
 
-#: cf/ui/browser.py:120
-#: cf/ui/browser.py:211
-#: cf/ui/datasources.py:169
-#: cf/ui/widgets/__init__.py:72
+#: cf/ui/browser.py:124
+#, fuzzy
+msgid ""
+"<b>No active data sources</b>\n"
+"Select \"Edit\" &gt; \"Data Source Manager\"\n"
+"to create one."
+msgstr ""
+"<b>Žádné aktivní zdroje dat</b>\n"
+"\n"
+"<a href=\"#\">Klikněte</a> pro otevření správce zdrojů dat."
+
+#: cf/ui/browser.py:154 cf/ui/browser.py:247 cf/ui/datasources.py:168
+#: cf/ui/widgets/__init__.py:124
 msgid "Connection failed"
 msgstr "Spojení selhalo"
 
-#: cf/ui/browser.py:128
+#: cf/ui/browser.py:164
 msgid "Disconnect"
 msgstr "Odpojit"
 
-#: cf/ui/browser.py:131
+#: cf/ui/browser.py:167
 msgid "Connect"
 msgstr "Připojit"
 
-#: cf/ui/browser.py:157
+#: cf/ui/browser.py:193
 msgid "Add data source"
 msgstr "Přidat zdroj dat"
 
-#: cf/ui/browser.py:172
-msgid "Details"
-msgstr "Detaily"
-
-#: cf/ui/browser.py:203
+#: cf/ui/browser.py:239
 msgid "Connecting..."
 msgstr "Probíhá připojování…"
 
-#: cf/ui/browser.py:315
-#, python-format
-msgid "Details: %(objname)s"
-msgstr "Detaily: %(objname)s"
-
-#: cf/ui/confirmsave.py:73
-#: cf/ui/confirmsave.py:97
+#: cf/ui/confirmsave.py:73 cf/ui/confirmsave.py:97
 #, python-format
 msgid "Unsaved Query %(num)s"
 msgstr "Neuložený dotaz %(num)s"
@@ -454,845 +418,907 @@ msgstr "Uložit před zavřením změny v dokumentu „%(filename)s“?"
 
 #: cf/ui/confirmsave.py:102
 #, python-format
-msgid "There are %(num)d documents with unsaved changes. Save changes before closing?"
-msgstr "V %(num)d dokumentech jsou neuložené změny. Uložit změny před zavřením?"
+msgid ""
+"There are %(num)d documents with unsaved changes. Save changes before "
+"closing?"
+msgstr ""
+"V %(num)d dokumentech jsou neuložené změny. Uložit změny před zavřením?"
 
-#: cf/ui/datasources.py:75
+#: cf/ui/datasources.py:74
 msgid "_Connections"
 msgstr "_Spojení"
 
-#: cf/ui/datasources.py:81
+#: cf/ui/datasources.py:80
 msgid "No active database backends."
 msgstr "Žádné aktivní podpůrné moduly pro datbáze."
 
-#: cf/ui/datasources.py:82
+#: cf/ui/datasources.py:81
 msgid "Open preferences and activate at least one database backend plugin."
-msgstr "Otevřete nastavení a aktivujte alespoň jeden podpůrný modul pro databáze."
+msgstr ""
+"Otevřete nastavení a aktivujte alespoň jeden podpůrný modul pro databáze."
 
-#: cf/ui/datasources.py:92
+#: cf/ui/datasources.py:91
 msgid "Other..."
 msgstr "Jiná…"
 
-#: cf/ui/datasources.py:108
+#: cf/ui/datasources.py:107
 msgid "Database:"
 msgstr "Databáze:"
 
-#: cf/ui/datasources.py:115
+#: cf/ui/datasources.py:114
 msgid "DSN:"
 msgstr "DSN:"
 
-#: cf/ui/datasources.py:122
+#: cf/ui/datasources.py:121
 msgid "Host:"
 msgstr "Hostitel:"
 
-#: cf/ui/datasources.py:132
+#: cf/ui/datasources.py:131
 msgid "Port:"
 msgstr "Port:"
 
-#: cf/ui/datasources.py:139
+#: cf/ui/datasources.py:138
 msgid "User:"
 msgstr "Uživatel:"
 
-#: cf/ui/datasources.py:149
+#: cf/ui/datasources.py:148
 msgid "_Ask for password"
 msgstr "Ptát se na _heslo"
 
-#: cf/ui/datasources.py:157
+#: cf/ui/datasources.py:156 cf/ui/dialogs.py:76
 msgid "Password:"
 msgstr "Heslo:"
 
-#: cf/ui/datasources.py:171
+#: cf/ui/datasources.py:170
 msgid "Successful."
 msgstr "Úspěšné."
 
-#: cf/ui/datasources.py:201
-#: cf/ui/datasources.py:360
+#: cf/ui/datasources.py:200 cf/ui/datasources.py:360
 msgid "Plugin not active"
 msgstr "Modul není aktivní."
 
-#: cf/ui/datasources.py:202
+#: cf/ui/datasources.py:201
 msgid "Please activate the following plugin to use this data source: "
-msgstr "Prosím, aktivujte následující přídavný modul, abyste mohli používat tento zdroj dat:"
+msgstr ""
+"Prosím, aktivujte následující přídavný modul, abyste mohli používat tento "
+"zdroj dat:"
 
-#: cf/ui/datasources.py:275
+#: cf/ui/datasources.py:274
 msgid "Plugin not active."
 msgstr "Modul není aktivní."
 
-#: cf/ui/editor.py:119
+#: cf/ui/editor.py:154
 msgid "Split statements"
 msgstr "Rozdělit výrazy"
 
-#: cf/ui/editor.py:126
-#: cf/ui/editor.py:471
-msgid "Show in main window"
-msgstr "Zobrazovat v hlavním okně"
-
-#: cf/ui/editor.py:129
-#: cf/ui/queries.py:115
-msgid "Show in separate window"
-msgstr "Zobrazovat v samostatném okně"
-
-#: cf/ui/editor.py:160
+#: cf/ui/editor.py:186
 #, python-format
 msgid "Query failed (%(sec).3f seconds)"
 msgstr "Dotaz selhal (%(sec).3f sekund)"
 
-#: cf/ui/editor.py:164
+#: cf/ui/editor.py:190
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d rows)"
 msgstr "Dotaz byl dokončen (%(sec).3f sekund, %(num)d řádků)"
 
-#: cf/ui/editor.py:169
+#: cf/ui/editor.py:195
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d affected rows)"
 msgstr "Dotaz byl dokončen (%(sec).3f sekund, %(num)d ovlivněných řádků)"
 
-#: cf/ui/editor.py:326
+#: cf/ui/editor.py:361
 msgid "Select a single statement to explain."
 msgstr "Vyberte jeden výraz k vysvětlení."
 
-#: cf/ui/editor.py:374
+#: cf/ui/editor.py:409
 #, python-format
 msgid "Save file %(name)s before closing the editor?"
 msgstr "Uložit soubor „%(name)s“ před zavřením editoru?"
 
-#: cf/ui/editor.py:394
+#: cf/ui/editor.py:429
 msgid "Save file"
 msgstr "Uložit soubor"
 
-#: cf/ui/editor.py:448
+#: cf/ui/editor.py:483
 #, python-format
 msgid "Query running... (%.3f seconds)"
 msgstr "Probíhá dotaz… (%.3f sekundy)"
 
-#: cf/ui/editor.py:594
-#: cf/ui/editor.py:596
-#: cf/ui/queries.py:68
-#: cf/ui/queries.py:150
-#: data/crunchyfrog.glade.h:55
+#: cf/ui/editor.py:534
+msgid "Show in main window"
+msgstr "Zobrazovat v hlavním okně"
+
+#: cf/ui/editor.py:657 cf/ui/editor.py:659 cf/ui/pane.py:358 cf/ui/pane.py:424
 msgid "Query"
 msgstr "Dotaz"
 
-#: cf/ui/editor.py:694
+#: cf/ui/editor.py:757
 msgid "Data copied to clipboard"
 msgstr "Data byla zkopírována do schránky"
 
-#: cf/ui/editor.py:835
+#: cf/ui/editor.py:906
 msgid "Variables"
 msgstr "Proměnné"
 
-#: cf/ui/prefs.py:81
-#: data/crunchyfrog.glade.h:42
-msgid "General"
-msgstr "Obecné"
-
-#: cf/ui/prefs.py:84
-msgid "Fonts & Colors"
-msgstr "Písma a barvy"
-
-#: cf/ui/prefs.py:183
-#, python-format
-msgid "Download plugin %r?"
-msgstr "Stáhnout přídavný modul %r?"
-
-#: cf/ui/prefs.py:198
-#, python-format
-msgid "Downloading plugin %r..."
-msgstr "Probíhá stahování modulu %r…"
-
-#: cf/ui/prefs.py:203
-msgid "Plugin downloaded."
-msgstr "Přídavný modul byl stažen."
-
-#: cf/ui/prefs.py:210
-#, python-format
-msgid "Failed to install plugin %r"
-msgstr "Nepodařilo se nainstalovat modul %r"
-
-#: cf/ui/prefs.py:221
-#: cf/ui/prefs.py:377
-#: cf/ui/prefs.py:444
-msgid "Unknown"
-msgstr "Neznámý"
-
-#: cf/ui/prefs.py:238
-msgid "Install plugin"
-msgstr "Instalovat modul"
-
-#: cf/ui/prefs.py:243
-msgid "CrunchyFrog plugins (*.zip, *.py)"
-msgstr "Přídavné moduly CrunchyFrog (*.zip, *.py)"
-
-#: cf/ui/prefs.py:382
-msgid "ERROR"
-msgstr "CHYBA"
-
-#: cf/ui/prefs.py:475
-msgid "Downloading repository data..."
-msgstr "Probíhá stahování dat z repozitáře…"
-
-#: cf/ui/prefs.py:480
-msgid "Repository data synchronized."
-msgstr "Data z repozitáře byla synchronizována."
-
-#: cf/ui/prefs.py:495
-msgid "Failed to load repository data"
-msgstr "Nepodařilo se načíst data z repozitáře."
-
-#: cf/ui/queries.py:159
-#: cf/ui/widgets/__init__.py:144
-msgid "Not connected"
-msgstr "Nespojeno"
-
-#: cf/ui/refviewer.py:40
-msgid "Reference Browser"
-msgstr "Prohlížeč dokumentace"
-
-#: cf/ui/refviewer.py:41
-msgid "A tiny webbrowser to view references"
-msgstr "Malý webový prohlížeč pro prohlížení dokumentace"
-
-#: cf/ui/refviewer.py:70
-msgid "Reference"
-msgstr "Dokumentace"
-
-#: cf/ui/refviewer.py:78
-msgid "Reference Viewer"
-msgstr "Prohlížeč dokumentace"
-
-#: cf/ui/widgets/__init__.py:104
-#: cf/ui/widgets/__init__.py:141
-msgid "Connection"
-msgstr "Spojení"
-
-#: cf/ui/widgets/__init__.py:115
-msgid "New connection"
-msgstr "Nové spojení"
-
-#: cf/ui/widgets/__init__.py:123
-msgid "Show connections"
-msgstr "Zobrazit spojení"
-
-#: cf/ui/widgets/__init__.py:145
-msgid "Click to open a connection"
-msgstr "Klikněte pro otevření spojení"
-
-#: cf/ui/widgets/__init__.py:211
-msgid "Export data"
-msgstr "Exportovat data"
-
-#: cf/ui/widgets/__init__.py:229
-msgid "_Edit export options"
-msgstr "_Upravit volby exportu"
-
-#: cf/ui/widgets/__init__.py:235
-msgid "_Open file when finished"
-msgstr "_Otevřít soubor po dokončení"
-
-#: cf/ui/widgets/grid.py:133
-msgid "Copy value to clipboard"
-msgstr "Kopírovat hodnotu do schránky"
-
-#: cf/ui/widgets/grid.py:142
-#: cf/ui/widgets/grid.py:244
-msgid "Save as..."
-msgstr "Uložit jako…"
-
-#: cf/ui/widgets/grid.py:149
-msgid "Open with..."
-msgstr "Otevřít s…"
-
-#: cf/ui/widgets/grid.py:160
-msgid "View value"
-msgstr "Hodnota pohledu"
-
-#: cf/ui/widgets/grid.py:165
-msgid "This cell contains a 'NULL' value."
-msgstr "Tato buňka obsahuje hodnotu „NULL“."
-
-#: cf/ui/widgets/grid.py:256
-msgid "All files"
-msgstr "Všechny soubory"
-
-#: cf/ui/widgets/grid.py:641
-msgid "Data"
-msgstr "Data"
-
-#: data/plugins/backend_httplog/__init__.py:55
-msgid "HTTP log file backend"
-msgstr "Podpůrná vrstva pro soubory s protokoly HTTP"
-
-#: data/plugins/backend_httplog/__init__.py:56
-msgid "Analyse HTTP log files with SQL"
-msgstr "Analýza souborů s protokoly HTTP pomocí SQL"
-
-#: data/plugins/backend_httplog/__init__.py:77
-msgid "Log file:"
-msgstr "Soubor s protokolem:"
-
-#: data/plugins/backend_httplog/__init__.py:79
-msgid "Select HTTP log file"
-msgstr "Vyberte soubor s protokolem HTTP"
-
-#: data/plugins/backend_oracle/__init__.py:39
-msgid "Oracle Plugin"
-msgstr "Přídavný modul Oracle"
-
-#: data/plugins/backend_oracle/__init__.py:40
-msgid "Provides access to Oracle databases"
-msgstr "Poskytuje přístup k databázím Oracle"
-
-#: data/plugins/backend_oracle/__init__.py:79
-msgid "Python module cx_Oracle is not installed."
-msgstr "Není nainstalován modul Pythonu cx_Oracle."
-
-#: data/plugins/backend_oracle/__init__.py:216
-msgid "Python module cx_Oracle required."
-msgstr "Modul Pythonu cx_Oracle je vyžadován."
-
-#: data/crunchyfrog.glade.h:1
-msgid "    "
-msgstr "    "
-
-#: data/crunchyfrog.glade.h:2
-msgid "(objectclass=*)"
-msgstr "(objectclass=*)"
-
-#: data/crunchyfrog.glade.h:3
-msgid "<b>Automatic Indentation</b>"
-msgstr "<b>Automatické odsazování</b>"
-
-#: data/crunchyfrog.glade.h:4
-msgid "<b>Bracket Matching</b>"
-msgstr "<b>Odpovídající závorky</b>"
-
-#: data/crunchyfrog.glade.h:5
-msgid "<b>Current Line</b>"
-msgstr "<b>Aktuální řádek</b>"
-
-#: data/crunchyfrog.glade.h:6
-msgid "<b>Font</b>"
-msgstr "<b>Písmo</b>"
-
-#: data/crunchyfrog.glade.h:7
-msgid "<b>Installed backends</b>"
-msgstr "<b>Instalované podpůrné vrstvy</b>"
-
-#: data/crunchyfrog.glade.h:8
-msgid "<b>Line Numbers</b>"
-msgstr "<b>Čísla řádků</b>"
-
-#: data/crunchyfrog.glade.h:9
-msgid "<b>New editors</b>"
-msgstr "<b>Nové editory</b>"
-
-#: data/crunchyfrog.glade.h:10
-msgid "<b>Right Margin</b>"
-msgstr "<b>Pravý okraj</b>"
-
-#: data/crunchyfrog.glade.h:11
-msgid "<b>SQL Splitting</b>"
-msgstr "<b>Rozdělování SQL</b>"
-
-#: data/crunchyfrog.glade.h:12
-msgid "<b>Select an instance</b>"
-msgstr "<b>Vyberte instanci</b>"
-
-#: data/crunchyfrog.glade.h:13
-msgid "<b>Tab Stops</b>"
-msgstr "<b>Tabulátory</b>"
-
-#: data/crunchyfrog.glade.h:14
-msgid "<b>Text Wrapping</b>"
-msgstr "<b>Zalamování textu</b>"
-
-#: data/crunchyfrog.glade.h:15
-msgid "<b>Variables</b>"
-msgstr "<b>Proměnné</b>"
-
-#: data/crunchyfrog.glade.h:17
-#, no-c-format
-msgid "<span size=\"large\"><b>%s</b></span>"
-msgstr "<span size=\"large\"><b>%s</b></span>"
-
-#: data/crunchyfrog.glade.h:18
-msgid "<span weight=\"bold\">Color Scheme</span>"
-msgstr "<span weight=\"bold\">Schéma barev</span>"
-
-#: data/crunchyfrog.glade.h:19
-msgid "Activate to split statements in a SQL editor before execution."
-msgstr "V editoru SQL aktivovat rozdělování výrazů před spouštěním."
-
-#: data/crunchyfrog.glade.h:20
-msgid "Begin transaction"
-msgstr "Začít transakci"
-
-#: data/crunchyfrog.glade.h:21
-msgid "Close _without Saving"
-msgstr "_Zavřít bez uložení"
-
-#: data/crunchyfrog.glade.h:22
-msgid "Commit"
-msgstr "Potvrdit"
-
-#: data/crunchyfrog.glade.h:23
-msgid "Configure plugins"
-msgstr "Nastavit přídavné moduly"
-
-#: data/crunchyfrog.glade.h:24
-msgid "Connections"
-msgstr "Spojení"
-
-#: data/crunchyfrog.glade.h:25
-msgid "Copy to clipboard"
-msgstr "Kopírovat do schránky"
-
-#: data/crunchyfrog.glade.h:26
-msgid "Create a new application instance"
-msgstr "Vytvořit novou instanci aplikace"
-
-#: data/crunchyfrog.glade.h:27
-msgid "CrunchyFrog"
-msgstr "CrunchyFrog"
-
-#: data/crunchyfrog.glade.h:28
-msgid ""
-"CrunchyFrog is already running.\n"
-"Open selected files..."
+#: cf/ui/mainwindow.py:90
+msgid "Application"
 msgstr ""
-"CrunchyFrog již běží.\n"
-"Otevřete vybrané soubory…"
 
-#: data/crunchyfrog.glade.h:30
-msgid "D_atasource:"
-msgstr "_Zdroj dat:"
-
-#: data/crunchyfrog.glade.h:31
-msgid "Datasource Manager"
-msgstr "Správce zdrojů dat"
-
-#: data/crunchyfrog.glade.h:32
-msgid "Developer _Pages"
-msgstr "_Stránky vývojářů"
-
-#: data/crunchyfrog.glade.h:33
-msgid "Display right _margin"
-msgstr "Zobrazovat pravý _okraj"
-
-#: data/crunchyfrog.glade.h:34
-msgid "Do not _split words over two lines"
-msgstr "Nerozdělovat _slova na dva řádky"
-
-#: data/crunchyfrog.glade.h:35
-msgid "E_xplain"
-msgstr "Vysvě_tlení"
-
-#: data/crunchyfrog.glade.h:37
-msgid "Editor _font: "
-msgstr "_Písmo editoru: "
-
-#: data/crunchyfrog.glade.h:38
-msgid "Enable text _wrapping"
-msgstr "Povolit zalamování _textu"
-
-#: data/crunchyfrog.glade.h:39
-msgid "Execute"
-msgstr "Spustit"
-
-#: data/crunchyfrog.glade.h:40
-msgid "Execute query"
-msgstr "Spustit dotaz"
-
-#: data/crunchyfrog.glade.h:41
-msgid "Font & Colors"
-msgstr "Písma a barvy"
-
-#: data/crunchyfrog.glade.h:43
-msgid "Highlight current _line"
-msgstr "Zvýrazňovat _aktuální řádek"
-
-#: data/crunchyfrog.glade.h:44
-msgid "Highlight matching _bracket"
-msgstr "Zvýrazňovat odpovídající závor_ku"
-
-#: data/crunchyfrog.glade.h:45
-msgid "If you don't save, all your changes will be permanently lost."
-msgstr "Pokud je neuložíte, budou všechny změny navždy ztraceny."
-
-#: data/crunchyfrog.glade.h:46
-msgid "Insert _spaces instead of tabs"
-msgstr "Vkládat _mezery místo tabulátorů"
-
-#: data/crunchyfrog.glade.h:47
-msgid "Installed backends"
-msgstr "Instalované podpůrné vrstvy"
-
-#: data/crunchyfrog.glade.h:48
-msgid "New"
-msgstr "Vytvořit"
-
-#: data/crunchyfrog.glade.h:49
-msgid "Open"
-msgstr "Otevřít"
-
-#: data/crunchyfrog.glade.h:50
-msgid "Open a new query window"
-msgstr "Otevřít okno s novým dotazem"
-
-#: data/crunchyfrog.glade.h:51
-msgid "Open editor in _separate window"
-msgstr "Otevírat editory v samostatných _oknech"
-
-#: data/crunchyfrog.glade.h:52
-msgid "Pick the editor font"
-msgstr "Zvolte písmo editoru"
-
-#: data/crunchyfrog.glade.h:53
-msgid "Preferences"
-msgstr "Nastavení"
-
-#: data/crunchyfrog.glade.h:54
-msgid "Progress"
-msgstr "Průběh"
-
-#: data/crunchyfrog.glade.h:56
-msgid "Refresh"
-msgstr "Obnovit"
-
-#: data/crunchyfrog.glade.h:57
-msgid "Replace _variables (e.g. '$MyVar')"
-msgstr "Nahrazovat _proměnné (například „$mojeProměnná“)"
-
-#: data/crunchyfrog.glade.h:58
-msgid "Rollback"
-msgstr "Vrátit"
-
-#: data/crunchyfrog.glade.h:59
-msgid "SQL library"
-msgstr "Knihovna SQL"
-
-#: data/crunchyfrog.glade.h:60
-msgid "S_elect the documents you want to save:"
-msgstr "_Vyberte dokumenty, které chcete uložit:"
-
-#: data/crunchyfrog.glade.h:61
-msgid "S_tatement"
-msgstr "_Výraz"
-
-#: data/crunchyfrog.glade.h:62
-msgid "S_ub-tree level"
-msgstr "Úroveň _podstromů"
-
-#: data/crunchyfrog.glade.h:63
-msgid "Save files"
-msgstr "Uložit soubory"
-
-#: data/crunchyfrog.glade.h:64
-msgid "Save to library"
-msgstr "Uložit do knihovny"
-
-#: data/crunchyfrog.glade.h:65
-msgid "Search s_cope:"
-msgstr "_Rozsah vyhledávání:"
-
-#: data/crunchyfrog.glade.h:66
-msgid "Select instance"
-msgstr "Vyberte instanci"
-
-#: data/crunchyfrog.glade.h:67
-msgid "Separate attributes by commas"
-msgstr "Oddělovat atributy čárkami"
-
-#: data/crunchyfrog.glade.h:68
-msgid "Show in _main window"
-msgstr "Zobrazovat v _hlavním okně"
-
-#: data/crunchyfrog.glade.h:69
-msgid "St_ored connections"
-msgstr "_Uložená spojení"
-
-#: data/crunchyfrog.glade.h:70
-msgid "Synchronize with plugin repository"
-msgstr "Synchronizovat s repozitářem s moduly"
-
-#: data/crunchyfrog.glade.h:71
-msgid "TODO"
-msgstr "TODO"
-
-#: data/crunchyfrog.glade.h:72
-msgid ""
-"The following backends are installed on your system.\n"
-"Plugins currently not available, e.g. because of missing requirements, are marked with a warning sign."
-msgstr ""
-"Na vašem systému jsou instalovány následující podpůrné vrstvy.\n"
-"Aktuálně nedostupné přídavné moduly (nedostupné například kvůli nesplněným závislostem) jsou označeny symbolem varování."
-
-#: data/crunchyfrog.glade.h:74
-msgid "Toggle favorites"
-msgstr "Přepnout oblíbené"
-
-#: data/crunchyfrog.glade.h:75
-msgid "Toggle navigation bar"
-msgstr "Přepnout lištu navigátoru"
-
-#: data/crunchyfrog.glade.h:76
-msgid "Transaction"
-msgstr "Transakce"
-
-#: data/crunchyfrog.glade.h:77
-msgid "Use SQL s_plitting"
-msgstr "Používat _rozdělování SQL"
-
-#: data/crunchyfrog.glade.h:79
-msgid "_About this plugin"
-msgstr "O tomto _modulu"
-
-#: data/crunchyfrog.glade.h:80
-msgid "_Attributes:"
-msgstr "_Atributy:"
-
-#: data/crunchyfrog.glade.h:81
-msgid "_Backend:"
-msgstr "Podpůrná _vrstva:"
-
-#: data/crunchyfrog.glade.h:82
-msgid "_Category:"
-msgstr "_Kategorie:"
-
-#: data/crunchyfrog.glade.h:83
-msgid "_Configure plugin"
-msgstr "Na_stavit modul"
-
-#: data/crunchyfrog.glade.h:84
-msgid "_Data Source"
-msgstr "_Zdroj dat"
-
-#: data/crunchyfrog.glade.h:85
-msgid "_Datasource Manager"
-msgstr "Správce _zdrojů dat"
-
-#: data/crunchyfrog.glade.h:86
-msgid "_Datasources"
-msgstr "_Zdroje dat"
-
-#: data/crunchyfrog.glade.h:87
-msgid "_Description:"
-msgstr "_Popis:"
-
-#: data/crunchyfrog.glade.h:88
-msgid "_Display line numbers"
-msgstr "Zobrazovat čísla řá_dků"
-
-#: data/crunchyfrog.glade.h:89
-msgid "_Edit"
-msgstr "_Upravit"
-
-#: data/crunchyfrog.glade.h:90
-msgid "_Editor"
-msgstr "_Editor"
-
-#: data/crunchyfrog.glade.h:91
-msgid "_Enable automatic indentation"
-msgstr "Povolit automatické _odsazování"
-
-#: data/crunchyfrog.glade.h:92
-msgid "_Enable repository"
-msgstr "Povolit _repozitář"
-
-#: data/crunchyfrog.glade.h:93
+#: cf/ui/mainwindow.py:93
 msgid "_File"
 msgstr "_Soubor"
 
-#: data/crunchyfrog.glade.h:94
-msgid "_Filter:"
-msgstr "_Filtr:"
+#: cf/ui/mainwindow.py:95
+msgid "Quit the program"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:95
-msgid "_General"
-msgstr "_Obecné"
-
-#: data/crunchyfrog.glade.h:96
-msgid "_Help"
-msgstr "_Nápověda"
-
-#: data/crunchyfrog.glade.h:97
-msgid "_Install plugin"
-msgstr "_Instalovat modul"
-
-#: data/crunchyfrog.glade.h:98
-msgid "_Instance"
-msgstr "_Instance"
-
-#: data/crunchyfrog.glade.h:99
-msgid "_Messages"
-msgstr "_Zprávy"
-
-#: data/crunchyfrog.glade.h:100
-msgid "_Name:"
-msgstr "Náz_ev:"
-
-#: data/crunchyfrog.glade.h:101
-msgid "_Navigator"
-msgstr "_Navigátor"
-
-#: data/crunchyfrog.glade.h:102
+#: cf/ui/mainwindow.py:97
 msgid "_New"
 msgstr "_Vytvořit"
 
-#: data/crunchyfrog.glade.h:103
-msgid "_One level"
-msgstr "_Jedna úroveň"
-
-#: data/crunchyfrog.glade.h:104
-msgid "_Online Resources"
-msgstr "_Informace na Internetu"
-
-#: data/crunchyfrog.glade.h:105
-msgid "_Open plugin folder"
-msgstr "_Otevřít adresář s moduly"
-
-#: data/crunchyfrog.glade.h:106
-msgid "_Plugins"
-msgstr "Přídavné _moduly"
-
-#: data/crunchyfrog.glade.h:107
+#: cf/ui/mainwindow.py:99 cf/ui/mainwindow.py:172
 msgid "_Query"
 msgstr "_Dotaz"
 
-#: data/crunchyfrog.glade.h:108
-msgid "_Recent Files"
-msgstr "Nedávné _soubory"
+#: cf/ui/mainwindow.py:99
+#, fuzzy
+msgid "New SQL editor"
+msgstr "<b>Nové editory</b>"
 
-#: data/crunchyfrog.glade.h:109
-msgid "_Remove plugin"
-msgstr "_Odstranit modul"
+#: cf/ui/mainwindow.py:102
+msgid "_Instance"
+msgstr "_Instance"
 
-#: data/crunchyfrog.glade.h:110
-msgid "_Report a Problem"
-msgstr "_Nahlásit problém"
+#: cf/ui/mainwindow.py:103
+#, fuzzy
+msgid "New application window."
+msgstr "Zobrazovat v hlavním okně"
 
-#: data/crunchyfrog.glade.h:111
-msgid "_Results"
-msgstr "_Výsledky"
+#: cf/ui/mainwindow.py:106
+#, fuzzy
+msgid "Open a file"
+msgstr "Uložit soubor"
 
-#: data/crunchyfrog.glade.h:112
-msgid "_Right margin at column:"
-msgstr "_Pravý okraj ve sloupci:"
+#: cf/ui/mainwindow.py:109
+msgid "_Edit"
+msgstr "_Upravit"
 
-#: data/crunchyfrog.glade.h:113
-msgid "_Search DN:"
-msgstr "Pro_hledat DN:"
+#: cf/ui/mainwindow.py:111
+msgid "_Plugins"
+msgstr "Přídavné _moduly"
 
-#: data/crunchyfrog.glade.h:114
-msgid "_Statement:"
-msgstr "_Výraz:"
+#: cf/ui/mainwindow.py:111
+msgid "Configure plugins"
+msgstr "Nastavit přídavné moduly"
 
-#: data/crunchyfrog.glade.h:115
-msgid "_Synchronize"
-msgstr "_Synchronizovat"
+#: cf/ui/mainwindow.py:113
+#, fuzzy
+msgid "_Data source manager"
+msgstr "Správce _zdrojů dat"
 
-#: data/crunchyfrog.glade.h:116
-msgid "_Tab width:"
-msgstr "Šířka _tabulátorů:"
+#: cf/ui/mainwindow.py:114
+#, fuzzy
+msgid "Add, edit and delete data sources"
+msgstr "Přidat zdroj dat"
 
-#: data/crunchyfrog.glade.h:117
-msgid "_Test connection"
-msgstr "Vyzkoušet _spojení"
+#: cf/ui/mainwindow.py:117
+#, fuzzy
+msgid "Configure the application"
+msgstr "Nastavit přídavné moduly"
 
-#: data/crunchyfrog.glade.h:118
-msgid "_Translate CrunchyFrog"
-msgstr "_Přeložit CrunchyFrog"
-
-#: data/crunchyfrog.glade.h:119
-msgid "_URL:"
-msgstr "_URL:"
-
-#: data/crunchyfrog.glade.h:120
+#: cf/ui/mainwindow.py:120
 msgid "_View"
 msgstr "_Zobrazit"
 
-#: data/crunchyfrog.glade.h:121
-msgid "gtk-about"
-msgstr "gtk-about"
+#: cf/ui/mainwindow.py:122
+msgid "_Help"
+msgstr "_Nápověda"
 
-#: data/crunchyfrog.glade.h:122
-msgid "gtk-cancel"
-msgstr "gtk-cancel"
+#: cf/ui/mainwindow.py:124
+#, fuzzy
+msgid "Open the CrunchyFrog manual"
+msgstr "_Přeložit CrunchyFrog"
 
-#: data/crunchyfrog.glade.h:123
-msgid "gtk-close"
-msgstr "gtk-close"
+#: cf/ui/mainwindow.py:127
+msgid "Help translate..."
+msgstr ""
 
-#: data/crunchyfrog.glade.h:124
-msgid "gtk-connect"
-msgstr "gtk-connect"
+#: cf/ui/mainwindow.py:128
+msgid "Help to translate this application"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:125
-msgid "gtk-copy"
-msgstr "gtk-copy"
+#: cf/ui/mainwindow.py:133
+#, fuzzy
+msgid "Report a problem"
+msgstr "_Nahlásit problém"
 
-#: data/crunchyfrog.glade.h:126
-msgid "gtk-cut"
-msgstr "gtk-cut"
+#: cf/ui/mainwindow.py:140
+#, fuzzy
+msgid "About this application"
+msgstr "O tomto _modulu"
 
-#: data/crunchyfrog.glade.h:127
-msgid "gtk-delete"
-msgstr "gtk-delete"
+#: cf/ui/mainwindow.py:146
+msgid "_Toolbar"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:128
-msgid "gtk-disconnect"
-msgstr "gtk-disconnect"
+#: cf/ui/mainwindow.py:147
+msgid "Show or hide the toolbar in the current window"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:129
-msgid "gtk-find"
-msgstr "gtk-find"
+#: cf/ui/mainwindow.py:150
+msgid "_Statusbar"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:130
-msgid "gtk-help"
-msgstr "gtk-help"
+#: cf/ui/mainwindow.py:151
+msgid "Show or hide the statusbar in the current window"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:131
-msgid "gtk-new"
-msgstr "gtk-new"
+#: cf/ui/mainwindow.py:169
+msgid "Close the current editor"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:132
-msgid "gtk-ok"
-msgstr "gtk-ok"
+#: cf/ui/mainwindow.py:173
+#, fuzzy
+msgid "_Connection"
+msgstr "_Spojení"
 
-#: data/crunchyfrog.glade.h:133
-msgid "gtk-open"
-msgstr "gtk-open"
+#: cf/ui/mainwindow.py:176
+msgid "Disconnect current editor"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:134
-msgid "gtk-paste"
-msgstr "gtk-paste"
+#: cf/ui/mainwindow.py:179
+msgid "Show connections"
+msgstr "Zobrazit spojení"
 
-#: data/crunchyfrog.glade.h:135
-msgid "gtk-preferences"
-msgstr "gtk-preferences"
+#: cf/ui/mainwindow.py:180
+msgid "Open or close connections in a dialog"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:136
-msgid "gtk-quit"
-msgstr "gtk-quit"
+#: cf/ui/mainwindow.py:183
+#, fuzzy
+msgid "Save the current file"
+msgstr "Vyberte soubor"
 
-#: data/crunchyfrog.glade.h:137
-msgid "gtk-save"
-msgstr "gtk-save"
+#: cf/ui/mainwindow.py:187
+msgid "Save the current file with a different name"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:138
-msgid "gtk-save-as"
-msgstr "gtk-save-as"
+#: cf/ui/mainwindow.py:190
+msgid "Print the current page"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:139
-msgid "in an _existing instance"
-msgstr "v _existující instanci"
+#: cf/ui/mainwindow.py:193
+msgid "Print preview"
+msgstr ""
 
-#: data/crunchyfrog.glade.h:140
-msgid "in an _new instance"
-msgstr "v _nové instanci"
+#: cf/ui/mainwindow.py:203
+msgid "Cut the selection"
+msgstr ""
+
+#: cf/ui/mainwindow.py:206
+msgid "Copy the selection"
+msgstr ""
+
+#: cf/ui/mainwindow.py:209
+#, fuzzy
+msgid "Paste the clipboard"
+msgstr "Data byla zkopírována do schránky"
+
+#: cf/ui/mainwindow.py:215
+msgid "Queries"
+msgstr "Dotazy"
+
+#: cf/ui/mainwindow.py:218
+msgid "Execute statements in SQL editor"
+msgstr ""
+
+#: cf/ui/mainwindow.py:221
+msgid "Transaction"
+msgstr "Transakce"
+
+#: cf/ui/mainwindow.py:222
+#, fuzzy
+msgid "Begin transaction on current connection"
+msgstr "Začít transakci"
+
+#: cf/ui/mainwindow.py:225
+msgid "Commit"
+msgstr "Potvrdit"
+
+#: cf/ui/mainwindow.py:226
+#, fuzzy
+msgid "Commit current transaction"
+msgstr "Začít transakci"
+
+#: cf/ui/mainwindow.py:229
+msgid "Rollback"
+msgstr "Vrátit"
+
+#: cf/ui/mainwindow.py:230
+#, fuzzy
+msgid "Rollback current transaction"
+msgstr "Začít transakci"
+
+#: cf/ui/mainwindow.py:282
+msgid "_Recent Files"
+msgstr "Nedávné _soubory"
+
+#: cf/ui/pane.py:165
+#, fuzzy, python-format
+msgid "Detach %(name)s"
+msgstr "Detaily: %(objname)s"
+
+#: cf/ui/pane.py:170
+msgid "side pane"
+msgstr ""
+
+#: cf/ui/pane.py:173
+msgid "bottom pane"
+msgstr ""
+
+#: cf/ui/pane.py:175
+#, fuzzy, python-format
+msgid "Move to %(name)s"
+msgstr "Detaily: %(objname)s"
+
+#: cf/ui/pane.py:255
+msgid "Side _Pane"
+msgstr ""
+
+#: cf/ui/pane.py:256
+msgid "Show or hide the side pane in the current window"
+msgstr ""
+
+#: cf/ui/pane.py:277
+msgid "_Bottom Pane"
+msgstr ""
+
+#: cf/ui/pane.py:278
+msgid "Show or hide the bottom pane in the current window"
+msgstr ""
+
+#: cf/ui/pane.py:435 cf/ui/widgets/__init__.py:102
+msgid "Not connected"
+msgstr "Nespojeno"
+
+#: cf/ui/prefs.py:83
+msgid "General"
+msgstr "Obecné"
+
+#: cf/ui/prefs.py:86
+msgid "Fonts & Colors"
+msgstr "Písma a barvy"
+
+#: cf/ui/prefs.py:87
+msgid ""
+"Keyboard\n"
+"Shortcuts"
+msgstr ""
+
+#: cf/ui/prefs.py:249
+msgid "Install plugin"
+msgstr "Instalovat modul"
+
+#: cf/ui/prefs.py:254
+msgid "CrunchyFrog plugins (*.zip, *.py)"
+msgstr "Přídavné moduly CrunchyFrog (*.zip, *.py)"
+
+#: cf/ui/prefs.py:396
+msgid "ERROR"
+msgstr "CHYBA"
+
+#: cf/ui/refviewer.py:41
+msgid "Reference Browser"
+msgstr "Prohlížeč dokumentace"
+
+#: cf/ui/refviewer.py:42
+msgid "A tiny webbrowser to view references"
+msgstr "Malý webový prohlížeč pro prohlížení dokumentace"
+
+#: cf/ui/refviewer.py:71
+#, fuzzy
+msgid "References"
+msgstr "Dokumentace"
+
+#: cf/ui/statusbar.py:107
+#, fuzzy
+msgid "[Not connected]"
+msgstr "Nespojeno"
+
+#: cf/ui/statusbar.py:114
+#, python-format
+msgid "Ln %(line)d, Col %(column)d"
+msgstr ""
+
+#: cf/ui/statusbar.py:125
+msgid "INS"
+msgstr ""
+
+#: cf/ui/statusbar.py:125
+msgid "OVR"
+msgstr ""
+
+#: cf/ui/widgets/__init__.py:103
+msgid "Click to open a connection"
+msgstr "Klikněte pro otevření spojení"
+
+#: cf/ui/widgets/__init__.py:140
+#, fuzzy
+msgid "_New connection"
+msgstr "Nové spojení"
+
+#: cf/ui/widgets/__init__.py:223
+msgid "Export data"
+msgstr "Exportovat data"
+
+#: cf/ui/widgets/__init__.py:241
+msgid "_Edit export options"
+msgstr "_Upravit volby exportu"
+
+#: cf/ui/widgets/__init__.py:248
+msgid "_Open file when finished"
+msgstr "_Otevřít soubor po dokončení"
+
+#: cf/ui/widgets/grid.py:136
+msgid "Copy value to clipboard"
+msgstr "Kopírovat hodnotu do schránky"
+
+#: cf/ui/widgets/grid.py:145 cf/ui/widgets/grid.py:247
+msgid "Save as..."
+msgstr "Uložit jako…"
+
+#: cf/ui/widgets/grid.py:152
+msgid "Open with..."
+msgstr "Otevřít s…"
+
+#: cf/ui/widgets/grid.py:163
+msgid "View value"
+msgstr "Hodnota pohledu"
+
+#: cf/ui/widgets/grid.py:168
+msgid "This cell contains a 'NULL' value."
+msgstr "Tato buňka obsahuje hodnotu „NULL“."
+
+#: cf/ui/widgets/grid.py:259
+msgid "All files"
+msgstr "Všechny soubory"
+
+#: cf/ui/widgets/grid.py:644
+msgid "Data"
+msgstr "Data"
+
+#~ msgid "Search: %(dn)s"
+#~ msgstr "Hledat: %(dn)s"
+
+#~ msgid "_Library"
+#~ msgstr "_Knihovna"
+
+#~ msgid "_Open library"
+#~ msgstr "_Otevřít knihovnu"
+
+#~ msgid "_Add to library"
+#~ msgstr "_Přidat do knihovny"
+
+#~ msgid "New category"
+#~ msgstr "Nová kategorie"
+
+#~ msgid "Add query"
+#~ msgstr "Přidat dotaz"
+
+#~ msgid "Category is not empty."
+#~ msgstr "Kategorie není prázdná."
+
+#~ msgid "New query"
+#~ msgstr "Nový dotaz"
+
+#~ msgid "Copying files..."
+#~ msgstr "Kopírují se soubory…"
+
+#~ msgid "Plugin installed."
+#~ msgstr "Modul je nainstalován."
+
+#~ msgid "Import to shell"
+#~ msgstr "Importovat do shellu"
+
+#~ msgid "Table %(tablename)r imported as %(varname)r to shell"
+#~ msgstr "Tabulka %(tablename)r byla importována jako %(varname)r do shellu"
+
+#~ msgid "Show in separate window"
+#~ msgstr "Zobrazovat v samostatném okně"
+
+#~ msgid "Download plugin %r?"
+#~ msgstr "Stáhnout přídavný modul %r?"
+
+#~ msgid "Downloading plugin %r..."
+#~ msgstr "Probíhá stahování modulu %r…"
+
+#~ msgid "Plugin downloaded."
+#~ msgstr "Přídavný modul byl stažen."
+
+#~ msgid "Failed to install plugin %r"
+#~ msgstr "Nepodařilo se nainstalovat modul %r"
+
+#~ msgid "Downloading repository data..."
+#~ msgstr "Probíhá stahování dat z repozitáře…"
+
+#~ msgid "Repository data synchronized."
+#~ msgstr "Data z repozitáře byla synchronizována."
+
+#~ msgid "Failed to load repository data"
+#~ msgstr "Nepodařilo se načíst data z repozitáře."
+
+#~ msgid "Reference Viewer"
+#~ msgstr "Prohlížeč dokumentace"
+
+#~ msgid "HTTP log file backend"
+#~ msgstr "Podpůrná vrstva pro soubory s protokoly HTTP"
+
+#~ msgid "Analyse HTTP log files with SQL"
+#~ msgstr "Analýza souborů s protokoly HTTP pomocí SQL"
+
+#~ msgid "Log file:"
+#~ msgstr "Soubor s protokolem:"
+
+#~ msgid "Select HTTP log file"
+#~ msgstr "Vyberte soubor s protokolem HTTP"
+
+#~ msgid "Oracle Plugin"
+#~ msgstr "Přídavný modul Oracle"
+
+#~ msgid "Provides access to Oracle databases"
+#~ msgstr "Poskytuje přístup k databázím Oracle"
+
+#~ msgid "Python module cx_Oracle is not installed."
+#~ msgstr "Není nainstalován modul Pythonu cx_Oracle."
+
+#~ msgid "Python module cx_Oracle required."
+#~ msgstr "Modul Pythonu cx_Oracle je vyžadován."
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#~ msgid "(objectclass=*)"
+#~ msgstr "(objectclass=*)"
+
+#~ msgid "<b>Automatic Indentation</b>"
+#~ msgstr "<b>Automatické odsazování</b>"
+
+#~ msgid "<b>Bracket Matching</b>"
+#~ msgstr "<b>Odpovídající závorky</b>"
+
+#~ msgid "<b>Current Line</b>"
+#~ msgstr "<b>Aktuální řádek</b>"
+
+#~ msgid "<b>Font</b>"
+#~ msgstr "<b>Písmo</b>"
+
+#~ msgid "<b>Installed backends</b>"
+#~ msgstr "<b>Instalované podpůrné vrstvy</b>"
+
+#~ msgid "<b>Line Numbers</b>"
+#~ msgstr "<b>Čísla řádků</b>"
+
+#~ msgid "<b>Right Margin</b>"
+#~ msgstr "<b>Pravý okraj</b>"
+
+#~ msgid "<b>SQL Splitting</b>"
+#~ msgstr "<b>Rozdělování SQL</b>"
+
+#~ msgid "<b>Select an instance</b>"
+#~ msgstr "<b>Vyberte instanci</b>"
+
+#~ msgid "<b>Tab Stops</b>"
+#~ msgstr "<b>Tabulátory</b>"
+
+#~ msgid "<b>Text Wrapping</b>"
+#~ msgstr "<b>Zalamování textu</b>"
+
+#~ msgid "<b>Variables</b>"
+#~ msgstr "<b>Proměnné</b>"
+
+#~ msgid "<span size=\"large\"><b>%s</b></span>"
+#~ msgstr "<span size=\"large\"><b>%s</b></span>"
+
+#~ msgid "<span weight=\"bold\">Color Scheme</span>"
+#~ msgstr "<span weight=\"bold\">Schéma barev</span>"
+
+#~ msgid "Activate to split statements in a SQL editor before execution."
+#~ msgstr "V editoru SQL aktivovat rozdělování výrazů před spouštěním."
+
+#~ msgid "Close _without Saving"
+#~ msgstr "_Zavřít bez uložení"
+
+#~ msgid "Connections"
+#~ msgstr "Spojení"
+
+#~ msgid "Copy to clipboard"
+#~ msgstr "Kopírovat do schránky"
+
+#~ msgid "Create a new application instance"
+#~ msgstr "Vytvořit novou instanci aplikace"
+
+#~ msgid "CrunchyFrog"
+#~ msgstr "CrunchyFrog"
+
+#~ msgid ""
+#~ "CrunchyFrog is already running.\n"
+#~ "Open selected files..."
+#~ msgstr ""
+#~ "CrunchyFrog již běží.\n"
+#~ "Otevřete vybrané soubory…"
+
+#~ msgid "D_atasource:"
+#~ msgstr "_Zdroj dat:"
+
+#~ msgid "Datasource Manager"
+#~ msgstr "Správce zdrojů dat"
+
+#~ msgid "Developer _Pages"
+#~ msgstr "_Stránky vývojářů"
+
+#~ msgid "Display right _margin"
+#~ msgstr "Zobrazovat pravý _okraj"
+
+#~ msgid "Do not _split words over two lines"
+#~ msgstr "Nerozdělovat _slova na dva řádky"
+
+#~ msgid "E_xplain"
+#~ msgstr "Vysvě_tlení"
+
+#~ msgid "Editor _font: "
+#~ msgstr "_Písmo editoru: "
+
+#~ msgid "Enable text _wrapping"
+#~ msgstr "Povolit zalamování _textu"
+
+#~ msgid "Execute"
+#~ msgstr "Spustit"
+
+#~ msgid "Execute query"
+#~ msgstr "Spustit dotaz"
+
+#~ msgid "Font & Colors"
+#~ msgstr "Písma a barvy"
+
+#~ msgid "Highlight current _line"
+#~ msgstr "Zvýrazňovat _aktuální řádek"
+
+#~ msgid "Highlight matching _bracket"
+#~ msgstr "Zvýrazňovat odpovídající závor_ku"
+
+#~ msgid "If you don't save, all your changes will be permanently lost."
+#~ msgstr "Pokud je neuložíte, budou všechny změny navždy ztraceny."
+
+#~ msgid "Insert _spaces instead of tabs"
+#~ msgstr "Vkládat _mezery místo tabulátorů"
+
+#~ msgid "Installed backends"
+#~ msgstr "Instalované podpůrné vrstvy"
+
+#~ msgid "New"
+#~ msgstr "Vytvořit"
+
+#~ msgid "Open"
+#~ msgstr "Otevřít"
+
+#~ msgid "Open a new query window"
+#~ msgstr "Otevřít okno s novým dotazem"
+
+#~ msgid "Open editor in _separate window"
+#~ msgstr "Otevírat editory v samostatných _oknech"
+
+#~ msgid "Pick the editor font"
+#~ msgstr "Zvolte písmo editoru"
+
+#~ msgid "Preferences"
+#~ msgstr "Nastavení"
+
+#~ msgid "Progress"
+#~ msgstr "Průběh"
+
+#~ msgid "Refresh"
+#~ msgstr "Obnovit"
+
+#~ msgid "Replace _variables (e.g. '$MyVar')"
+#~ msgstr "Nahrazovat _proměnné (například „$mojeProměnná“)"
+
+#~ msgid "SQL library"
+#~ msgstr "Knihovna SQL"
+
+#~ msgid "S_elect the documents you want to save:"
+#~ msgstr "_Vyberte dokumenty, které chcete uložit:"
+
+#~ msgid "S_tatement"
+#~ msgstr "_Výraz"
+
+#~ msgid "S_ub-tree level"
+#~ msgstr "Úroveň _podstromů"
+
+#~ msgid "Save files"
+#~ msgstr "Uložit soubory"
+
+#~ msgid "Search s_cope:"
+#~ msgstr "_Rozsah vyhledávání:"
+
+#~ msgid "Select instance"
+#~ msgstr "Vyberte instanci"
+
+#~ msgid "Separate attributes by commas"
+#~ msgstr "Oddělovat atributy čárkami"
+
+#~ msgid "Show in _main window"
+#~ msgstr "Zobrazovat v _hlavním okně"
+
+#~ msgid "St_ored connections"
+#~ msgstr "_Uložená spojení"
+
+#~ msgid "Synchronize with plugin repository"
+#~ msgstr "Synchronizovat s repozitářem s moduly"
+
+#~ msgid "TODO"
+#~ msgstr "TODO"
+
+#~ msgid ""
+#~ "The following backends are installed on your system.\n"
+#~ "Plugins currently not available, e.g. because of missing requirements, "
+#~ "are marked with a warning sign."
+#~ msgstr ""
+#~ "Na vašem systému jsou instalovány následující podpůrné vrstvy.\n"
+#~ "Aktuálně nedostupné přídavné moduly (nedostupné například kvůli "
+#~ "nesplněným závislostem) jsou označeny symbolem varování."
+
+#~ msgid "Toggle favorites"
+#~ msgstr "Přepnout oblíbené"
+
+#~ msgid "Toggle navigation bar"
+#~ msgstr "Přepnout lištu navigátoru"
+
+#~ msgid "Use SQL s_plitting"
+#~ msgstr "Používat _rozdělování SQL"
+
+#~ msgid "_Attributes:"
+#~ msgstr "_Atributy:"
+
+#~ msgid "_Backend:"
+#~ msgstr "Podpůrná _vrstva:"
+
+#~ msgid "_Category:"
+#~ msgstr "_Kategorie:"
+
+#~ msgid "_Configure plugin"
+#~ msgstr "Na_stavit modul"
+
+#~ msgid "_Data Source"
+#~ msgstr "_Zdroj dat"
+
+#~ msgid "_Datasources"
+#~ msgstr "_Zdroje dat"
+
+#~ msgid "_Description:"
+#~ msgstr "_Popis:"
+
+#~ msgid "_Display line numbers"
+#~ msgstr "Zobrazovat čísla řá_dků"
+
+#~ msgid "_Editor"
+#~ msgstr "_Editor"
+
+#~ msgid "_Enable automatic indentation"
+#~ msgstr "Povolit automatické _odsazování"
+
+#~ msgid "_Enable repository"
+#~ msgstr "Povolit _repozitář"
+
+#~ msgid "_Filter:"
+#~ msgstr "_Filtr:"
+
+#~ msgid "_General"
+#~ msgstr "_Obecné"
+
+#~ msgid "_Install plugin"
+#~ msgstr "_Instalovat modul"
+
+#~ msgid "_Messages"
+#~ msgstr "_Zprávy"
+
+#~ msgid "_Name:"
+#~ msgstr "Náz_ev:"
+
+#~ msgid "_Navigator"
+#~ msgstr "_Navigátor"
+
+#~ msgid "_One level"
+#~ msgstr "_Jedna úroveň"
+
+#~ msgid "_Online Resources"
+#~ msgstr "_Informace na Internetu"
+
+#~ msgid "_Open plugin folder"
+#~ msgstr "_Otevřít adresář s moduly"
+
+#~ msgid "_Remove plugin"
+#~ msgstr "_Odstranit modul"
+
+#~ msgid "_Results"
+#~ msgstr "_Výsledky"
+
+#~ msgid "_Right margin at column:"
+#~ msgstr "_Pravý okraj ve sloupci:"
+
+#~ msgid "_Statement:"
+#~ msgstr "_Výraz:"
+
+#~ msgid "_Synchronize"
+#~ msgstr "_Synchronizovat"
+
+#~ msgid "_Tab width:"
+#~ msgstr "Šířka _tabulátorů:"
+
+#~ msgid "_Test connection"
+#~ msgstr "Vyzkoušet _spojení"
+
+#~ msgid "_URL:"
+#~ msgstr "_URL:"
+
+#~ msgid "gtk-about"
+#~ msgstr "gtk-about"
+
+#~ msgid "gtk-cancel"
+#~ msgstr "gtk-cancel"
+
+#~ msgid "gtk-close"
+#~ msgstr "gtk-close"
+
+#~ msgid "gtk-connect"
+#~ msgstr "gtk-connect"
+
+#~ msgid "gtk-copy"
+#~ msgstr "gtk-copy"
+
+#~ msgid "gtk-cut"
+#~ msgstr "gtk-cut"
+
+#~ msgid "gtk-disconnect"
+#~ msgstr "gtk-disconnect"
+
+#~ msgid "gtk-find"
+#~ msgstr "gtk-find"
+
+#~ msgid "gtk-help"
+#~ msgstr "gtk-help"
+
+#~ msgid "gtk-new"
+#~ msgstr "gtk-new"
+
+#~ msgid "gtk-ok"
+#~ msgstr "gtk-ok"
+
+#~ msgid "gtk-open"
+#~ msgstr "gtk-open"
+
+#~ msgid "gtk-paste"
+#~ msgstr "gtk-paste"
+
+#~ msgid "gtk-preferences"
+#~ msgstr "gtk-preferences"
+
+#~ msgid "gtk-quit"
+#~ msgstr "gtk-quit"
+
+#~ msgid "gtk-save"
+#~ msgstr "gtk-save"
+
+#~ msgid "gtk-save-as"
+#~ msgstr "gtk-save-as"
+
+#~ msgid "in an _existing instance"
+#~ msgstr "v _existující instanci"
+
+#~ msgid "in an _new instance"
+#~ msgstr "v _nové instanci"
 
 #~ msgid "Contraint"
 #~ msgstr "Omezení"
+
 #~ msgid "Cancel query"
 #~ msgstr "Zrušit dotaz"
-

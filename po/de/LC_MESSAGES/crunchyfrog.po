@@ -1,13 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2009-01-28 16:10+0100\n"
 "PO-Revision-Date: 2009-01-28 16:01+0000\n"
 "Last-Translator: andialbrecht <Unknown>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2009-01-29 14:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
@@ -18,11 +18,11 @@ msgstr "Shell"
 
 #: cf/shell/__init__.py:45
 msgid "Interactive shell (mainly for debugging)"
-msgstr "Interaktive Shell (hauptsächlich zum Debuggen)"
+msgstr "Interaktive Shell (hauptsÃ¤chlich zum Debuggen)"
 
 #: cf/shell/__init__.py:69
 msgid "Python module ipython is required."
-msgstr "Python-Modul ipython wird benötigt."
+msgstr "Python-Modul ipython wird benÃ¶tigt."
 
 #: cf/backends/__init__.py:95 cf/ui/widgets/__init__.py:99
 msgid "Connection"
@@ -74,7 +74,7 @@ msgstr "Wert"
 
 #: cf/backends/ldapbe.py:345
 msgid "Python module ldap required."
-msgstr "Python-Modul ldap wird benötigt."
+msgstr "Python-Modul ldap wird benÃ¶tigt."
 
 #: cf/backends/mssql.py:40
 msgid "MS-SQL Plugin"
@@ -110,7 +110,7 @@ msgstr "MySQL-Referenz"
 
 #: cf/backends/mysql.py:179
 msgid "Python module MySQLdb required."
-msgstr "Python-Modul MySQLdb wird benötigt."
+msgstr "Python-Modul MySQLdb wird benÃ¶tigt."
 
 #: cf/backends/postgres.py:45
 msgid "PostgreSQL Reference"
@@ -142,7 +142,7 @@ msgstr "Definition"
 
 #: cf/backends/postgres.py:314
 msgid "Python module psycopg2 required."
-msgstr "Python-Modul psycopg2 wird benötigt."
+msgstr "Python-Modul psycopg2 wird benÃ¶tigt."
 
 #: cf/backends/sqlite.py:41
 msgid "SQLite3 Plugin"
@@ -158,7 +158,7 @@ msgstr "Datenbank-Datei:"
 
 #: cf/backends/sqlite.py:61
 msgid "Select database file"
-msgstr "Datenbank-Datei auswählen"
+msgstr "Datenbank-Datei auswÃ¤hlen"
 
 #: cf/backends/sqlite.py:75
 msgid "Python module sqlite3 is not installed."
@@ -170,7 +170,7 @@ msgstr "SQLite-Referenz"
 
 #: cf/backends/sqlite.py:143
 msgid "Python module sqlite3 required."
-msgstr "Python-Modul sqlite3 wird benötigt."
+msgstr "Python-Modul sqlite3 wird benÃ¶tigt."
 
 #: cf/backends/schema/__init__.py:59
 msgid "Schemata"
@@ -234,7 +234,7 @@ msgstr "Constraints"
 
 #: cf/backends/schema/__init__.py:118
 msgid "Constraint"
-msgstr "Einschränkung"
+msgstr "EinschrÃ¤nkung"
 
 #: cf/backends/schema/__init__.py:122
 msgid "Indexes"
@@ -275,7 +275,7 @@ msgstr "Schreibe Konfiguration"
 
 #: cf/instance.py:178 cf/ui/editor.py:570 cf/ui/mainwindow.py:497
 msgid "Select file"
-msgstr "Datei wählen"
+msgstr "Datei wÃ¤hlen"
 
 #: cf/instance.py:185 cf/ui/editor.py:441 cf/ui/editor.py:577
 #: cf/ui/mainwindow.py:505
@@ -297,7 +297,7 @@ msgstr "Bibliothek"
 
 #: cf/library.py:102
 msgid "A personal SQL library"
-msgstr "Eine persönliche SQL-Bibliothek"
+msgstr "Eine persÃ¶nliche SQL-Bibliothek"
 
 #: cf/library.py:133
 msgid "Save to library"
@@ -309,7 +309,7 @@ msgstr "Inhalt des aktiven Editor in der SQL-Bibliothek speichern"
 
 #: cf/library.py:307 cf/library.py:320
 msgid "Add category"
-msgstr "Kategorie hinzufügen"
+msgstr "Kategorie hinzufÃ¼gen"
 
 #: cf/library.py:311
 msgid "Rename"
@@ -317,7 +317,7 @@ msgstr "Umbenennen"
 
 #: cf/library.py:315
 msgid "Delete"
-msgstr "Löschen"
+msgstr "LÃ¶schen"
 
 #: cf/library.py:337 cf/ui/prefs.py:230 cf/ui/prefs.py:391 cf/ui/prefs.py:460
 msgid "Unknown"
@@ -362,7 +362,7 @@ msgid ""
 "<a href=\"#\">Click</a> to open the data source manager."
 msgstr ""
 "<b>Keine aktiven Datenquellen</b>\n"
-"<a href=\"#\">Hier klicken</a>, um die Datenquellenverwaltung zu öffnen."
+"<a href=\"#\">Hier klicken</a>, um die Datenquellenverwaltung zu Ã¶ffnen."
 
 #: cf/ui/browser.py:124
 msgid ""
@@ -371,7 +371,7 @@ msgid ""
 "to create one."
 msgstr ""
 "<b>Keine Datenquellen aktiv</b>\n"
-"Wählen Sie \"Bearbeiten\" &gt; \"Datenquellenverwaltung\", um eine neue "
+"WÃ¤hlen Sie \"Bearbeiten\" &gt; \"Datenquellenverwaltung\", um eine neue "
 "Datenquelle zu definieren."
 
 #: cf/ui/browser.py:154 cf/ui/browser.py:247 cf/ui/datasources.py:168
@@ -389,7 +389,7 @@ msgstr "Verbinden"
 
 #: cf/ui/browser.py:193
 msgid "Add data source"
-msgstr "Datenquelle hinzufügen"
+msgstr "Datenquelle hinzufÃ¼gen"
 
 #: cf/ui/browser.py:239
 msgid "Connecting..."
@@ -403,7 +403,7 @@ msgstr "Ungespeicherte Abfrage %(num)s"
 #: cf/ui/confirmsave.py:98
 #, python-format
 msgid "Save the changes to document \"%(filename)s\" before closing?"
-msgstr "Änderungen an Dokument \"%(filename)s\" vor dem Schließen speichern?"
+msgstr "Ã„nderungen an Dokument \"%(filename)s\" vor dem SchlieÃŸen speichern?"
 
 #: cf/ui/confirmsave.py:102
 #, python-format
@@ -411,7 +411,7 @@ msgid ""
 "There are %(num)d documents with unsaved changes. Save changes before "
 "closing?"
 msgstr ""
-"Es gibt %(num)d Dokumente mit ungespeicherten Änderungen. Änderungen vor dem "
+"Es gibt %(num)d Dokumente mit ungespeicherten Ã„nderungen. Ã„nderungen vor dem "
 "Beenden speichern?"
 
 #: cf/ui/datasources.py:74
@@ -424,7 +424,7 @@ msgstr "Keine aktiven Datenbank-Backends,"
 
 #: cf/ui/datasources.py:81
 msgid "Open preferences and activate at least one database backend plugin."
-msgstr "Einstellungen öffnen und zumindest ein Datenbank-Plugin aktivieren."
+msgstr "Einstellungen Ã¶ffnen und zumindest ein Datenbank-Plugin aktivieren."
 
 #: cf/ui/datasources.py:91
 msgid "Other..."
@@ -468,8 +468,7 @@ msgstr "Plugin nicht aktiv"
 
 #: cf/ui/datasources.py:201
 msgid "Please activate the following plugin to use this data source: "
-msgstr ""
-"Bitte folgendes Plugin aktivieren, um diese Datenquelle zu verwenden: "
+msgstr "Bitte folgendes Plugin aktivieren, um diese Datenquelle zu verwenden: "
 
 #: cf/ui/datasources.py:274
 msgid "Plugin not active."
@@ -496,12 +495,12 @@ msgstr "Abfrage beendet (%(sec).3f Sekunden, %(num)d betroffene Zeilen)"
 
 #: cf/ui/editor.py:361
 msgid "Select a single statement to explain."
-msgstr "Nur eine Abfrage für \"explain\" auswählen."
+msgstr "Nur eine Abfrage fÃ¼r \"explain\" auswÃ¤hlen."
 
 #: cf/ui/editor.py:409
 #, python-format
 msgid "Save file %(name)s before closing the editor?"
-msgstr "Datei %(name)s vor dem Schließen des Editors speichern?"
+msgstr "Datei %(name)s vor dem SchlieÃŸen des Editors speichern?"
 
 #: cf/ui/editor.py:429
 msgid "Save file"
@@ -510,7 +509,7 @@ msgstr "Datei speichern"
 #: cf/ui/editor.py:483
 #, python-format
 msgid "Query running... (%.3f seconds)"
-msgstr "Abfrage läuft... (%.3f Sekunden)"
+msgstr "Abfrage lÃ¤uft... (%.3f Sekunden)"
 
 #: cf/ui/editor.py:534
 msgid "Show in main window"
@@ -562,7 +561,7 @@ msgstr "Neues Anwendungsfenster"
 
 #: cf/ui/mainwindow.py:106
 msgid "Open a file"
-msgstr "Eine Datei öffnen"
+msgstr "Eine Datei Ã¶ffnen"
 
 #: cf/ui/mainwindow.py:109
 msgid "_Edit"
@@ -582,7 +581,7 @@ msgstr "_Datenquellenverwaltung"
 
 #: cf/ui/mainwindow.py:114
 msgid "Add, edit and delete data sources"
-msgstr "Datenquellen hinzufügen, bearbeiten und löschen"
+msgstr "Datenquellen hinzufÃ¼gen, bearbeiten und lÃ¶schen"
 
 #: cf/ui/mainwindow.py:117
 msgid "Configure the application"
@@ -598,15 +597,15 @@ msgstr "_Hilfe"
 
 #: cf/ui/mainwindow.py:124
 msgid "Open the CrunchyFrog manual"
-msgstr "CrunchyFrog-Handbuch öffnen"
+msgstr "CrunchyFrog-Handbuch Ã¶ffnen"
 
 #: cf/ui/mainwindow.py:127
 msgid "Help translate..."
-msgstr "Diese Anwendung übersetzen..."
+msgstr "Diese Anwendung Ã¼bersetzen..."
 
 #: cf/ui/mainwindow.py:128
 msgid "Help to translate this application"
-msgstr "Helfen Sie, diese Anwendung zu übersetzen"
+msgstr "Helfen Sie, diese Anwendung zu Ã¼bersetzen"
 
 #: cf/ui/mainwindow.py:133
 msgid "Report a problem"
@@ -614,7 +613,7 @@ msgstr "Problem berichten"
 
 #: cf/ui/mainwindow.py:140
 msgid "About this application"
-msgstr "Über diese Anwendung"
+msgstr "Ãœber diese Anwendung"
 
 #: cf/ui/mainwindow.py:146
 msgid "_Toolbar"
@@ -634,7 +633,7 @@ msgstr "Die Statusleiste in diesem Fenster anzeigen/verbergen"
 
 #: cf/ui/mainwindow.py:169
 msgid "Close the current editor"
-msgstr "Aktiven Editor schließen"
+msgstr "Aktiven Editor schlieÃŸen"
 
 #: cf/ui/mainwindow.py:173
 msgid "_Connection"
@@ -651,15 +650,15 @@ msgstr "Verbindungen anzeigen"
 #: cf/ui/mainwindow.py:180
 msgid "Open or close connections in a dialog"
 msgstr ""
-"Verbindungsdialog zum Öffnen oder Schließen von Datenbankverbindungen öffnen"
+"Verbindungsdialog zum Ã–ffnen oder SchlieÃŸen von Datenbankverbindungen Ã¶ffnen"
 
 #: cf/ui/mainwindow.py:183
 msgid "Save the current file"
-msgstr "Die momentan geöffnete Datei speichern"
+msgstr "Die momentan geÃ¶ffnete Datei speichern"
 
 #: cf/ui/mainwindow.py:187
 msgid "Save the current file with a different name"
-msgstr "Die momentan geöffnete Datei unter einem anderen Namen speichern"
+msgstr "Die momentan geÃ¶ffnete Datei unter einem anderen Namen speichern"
 
 #: cf/ui/mainwindow.py:190
 msgid "Print the current page"
@@ -679,7 +678,7 @@ msgstr "Den markierten Text kopieren"
 
 #: cf/ui/mainwindow.py:209
 msgid "Paste the clipboard"
-msgstr "Aus der Zwischenablage einfügen"
+msgstr "Aus der Zwischenablage einfÃ¼gen"
 
 #: cf/ui/mainwindow.py:215
 msgid "Queries"
@@ -687,7 +686,7 @@ msgstr "Abfragen"
 
 #: cf/ui/mainwindow.py:218
 msgid "Execute statements in SQL editor"
-msgstr "Abfragen im SQL-Editor ausführen"
+msgstr "Abfragen im SQL-Editor ausfÃ¼hren"
 
 #: cf/ui/mainwindow.py:221
 msgid "Transaction"
@@ -703,7 +702,7 @@ msgstr "Commit"
 
 #: cf/ui/mainwindow.py:226
 msgid "Commit current transaction"
-msgstr "Aktuelle Transaktion abschließen"
+msgstr "Aktuelle Transaktion abschlieÃŸen"
 
 #: cf/ui/mainwindow.py:229
 msgid "Rollback"
@@ -711,16 +710,16 @@ msgstr "Rolback"
 
 #: cf/ui/mainwindow.py:230
 msgid "Rollback current transaction"
-msgstr "Aktuelle Transaktion zurückrollen"
+msgstr "Aktuelle Transaktion zurÃ¼ckrollen"
 
 #: cf/ui/mainwindow.py:282
 msgid "_Recent Files"
-msgstr "_Zuletzt geöffnet"
+msgstr "_Zuletzt geÃ¶ffnet"
 
 #: cf/ui/pane.py:165
 #, python-format
 msgid "Detach %(name)s"
-msgstr "%(name)s ablösen"
+msgstr "%(name)s ablÃ¶sen"
 
 #: cf/ui/pane.py:170
 msgid "side pane"
@@ -745,11 +744,11 @@ msgstr "Die Seitenleiste in diesem Fenster anzeigen/verbergen"
 
 #: cf/ui/pane.py:277
 msgid "_Bottom Pane"
-msgstr "_Fußleiste"
+msgstr "_FuÃŸleiste"
 
 #: cf/ui/pane.py:278
 msgid "Show or hide the bottom pane in the current window"
-msgstr "Die Fußleiste in diesem Fenster anzeigen/verbergen"
+msgstr "Die FuÃŸleiste in diesem Fenster anzeigen/verbergen"
 
 #: cf/ui/pane.py:435 cf/ui/widgets/__init__.py:102
 msgid "Not connected"
@@ -767,7 +766,7 @@ msgstr "Schriften & Farben"
 msgid ""
 "Keyboard\n"
 "Shortcuts"
-msgstr "Tastaturkürzel"
+msgstr "TastaturkÃ¼rzel"
 
 #: cf/ui/prefs.py:249
 msgid "Install plugin"
@@ -808,11 +807,11 @@ msgstr "EIN"
 
 #: cf/ui/statusbar.py:125
 msgid "OVR"
-msgstr "ÜBS"
+msgstr "ÃœBS"
 
 #: cf/ui/widgets/__init__.py:103
 msgid "Click to open a connection"
-msgstr "Klicken, um Verbindung zu öffnen"
+msgstr "Klicken, um Verbindung zu Ã¶ffnen"
 
 #: cf/ui/widgets/__init__.py:140
 msgid "_New connection"
@@ -828,7 +827,7 @@ msgstr "_Export-Einstellungen bearbeiten"
 
 #: cf/ui/widgets/__init__.py:248
 msgid "_Open file when finished"
-msgstr "_Datei nach Export öffnen"
+msgstr "_Datei nach Export Ã¶ffnen"
 
 #: cf/ui/widgets/grid.py:136
 msgid "Copy value to clipboard"
@@ -840,7 +839,7 @@ msgstr "Speichern unter..."
 
 #: cf/ui/widgets/grid.py:152
 msgid "Open with..."
-msgstr "Öffnen mit..."
+msgstr "Ã–ffnen mit..."
 
 #: cf/ui/widgets/grid.py:163
 msgid "View value"
@@ -848,7 +847,7 @@ msgstr "Wert anzeigen"
 
 #: cf/ui/widgets/grid.py:168
 msgid "This cell contains a 'NULL' value."
-msgstr "Die Datenzelle enthält einen NULL-Wert."
+msgstr "Die Datenzelle enthÃ¤lt einen NULL-Wert."
 
 #: cf/ui/widgets/grid.py:259
 msgid "All files"
@@ -868,7 +867,7 @@ msgstr "Daten"
 #~ msgstr "<b>Automatischer Einzug</b>"
 
 #~ msgid "<b>Bracket Matching</b>"
-#~ msgstr "<b>Klammerübereinstimmung</b>"
+#~ msgstr "<b>KlammerÃ¼bereinstimmung</b>"
 
 #~ msgid "<b>Current Line</b>"
 #~ msgstr "<b>Aktuelle Zeile</b>"
@@ -925,7 +924,7 @@ msgstr "Daten"
 #~ msgstr "E_xplain"
 
 #~ msgid "Execute query"
-#~ msgstr "Abfrage ausführen"
+#~ msgstr "Abfrage ausfÃ¼hren"
 
 #~ msgid "Font & Colors"
 #~ msgstr "Schrift und Farben"
@@ -934,19 +933,19 @@ msgstr "Daten"
 #~ msgstr "Aktuelle Zeile _hervorheben"
 
 #~ msgid "Highlight matching _bracket"
-#~ msgstr "Übereinstimmende _Klammern hervorheben"
+#~ msgstr "Ãœbereinstimmende _Klammern hervorheben"
 
 #~ msgid "Insert _spaces instead of tabs"
-#~ msgstr "An Stelle von Tabulatoren _Leerzeichen einfügen"
+#~ msgstr "An Stelle von Tabulatoren _Leerzeichen einfÃ¼gen"
 
 #~ msgid "New Query"
 #~ msgstr "Neue Abfrage"
 
 #~ msgid "Open a new query window"
-#~ msgstr "In neuem Abfragefenster öffnen"
+#~ msgstr "In neuem Abfragefenster Ã¶ffnen"
 
 #~ msgid "Open editor in _separate window"
-#~ msgstr "Editor in separatem Fenster öffnen"
+#~ msgstr "Editor in separatem Fenster Ã¶ffnen"
 
 #~ msgid "Preferences"
 #~ msgstr "Einstellungen"
@@ -1048,7 +1047,7 @@ msgstr "Daten"
 #~ msgstr "_Online-Quellen"
 
 #~ msgid "_Open plugin folder"
-#~ msgstr "Plugin-_Verzeichnis öffnen"
+#~ msgstr "Plugin-_Verzeichnis Ã¶ffnen"
 
 #~ msgid "_Remove plugin"
 #~ msgstr "Plugin _entfernen"
@@ -1078,7 +1077,7 @@ msgstr "Daten"
 #~ msgstr "Verbindung _testen"
 
 #~ msgid "_Translate CrunchyFrog"
-#~ msgstr "CrunchyFrog übersetzen"
+#~ msgstr "CrunchyFrog Ã¼bersetzen"
 
 #~ msgid "_URL:"
 #~ msgstr "_URL:"
@@ -1141,17 +1140,17 @@ msgstr "Daten"
 #~ msgstr "_Datenquellenverwaltung"
 
 #~ msgid "<b>Select an instance</b>"
-#~ msgstr "<b>Instanz wählen</b>"
+#~ msgstr "<b>Instanz wÃ¤hlen</b>"
 
 #~ msgid ""
 #~ "CrunchyFrog is already running.\n"
 #~ "Open selected files..."
 #~ msgstr ""
-#~ "CrunchyFrog läuft bereits.\n"
-#~ "Dateien öffnen..."
+#~ "CrunchyFrog lÃ¤uft bereits.\n"
+#~ "Dateien Ã¶ffnen..."
 
 #~ msgid "Select instance"
-#~ msgstr "Instanz wählen"
+#~ msgstr "Instanz wÃ¤hlen"
 
 #~ msgid "in an _existing instance"
 #~ msgstr "in einer _laufenden Instanz"
@@ -1162,28 +1161,27 @@ msgstr "Daten"
 #~ msgid "<b>Installed backends</b>"
 #~ msgstr "<b>Installierte Datenbank-Plugins</b>"
 
-#, no-c-format
 #~ msgid "<span size=\"large\"><b>%s</b></span>"
 #~ msgstr "<span size=\"large\"><b>%s</b></span>"
 
 #~ msgid "If you don't save, all your changes will be permanently lost."
-#~ msgstr "Wenn Sie nicht speichern, gehen alle Änderungen endgültig verloren."
+#~ msgstr "Wenn Sie nicht speichern, gehen alle Ã„nderungen endgÃ¼ltig verloren."
 
 #~ msgid "Installed backends"
 #~ msgstr "Installierte Datenbank-Plugins"
 
 #~ msgid "S_elect the documents you want to save:"
-#~ msgstr "_Wählen Sie die zu speichernden Dokumente:"
+#~ msgstr "_WÃ¤hlen Sie die zu speichernden Dokumente:"
 
 #~ msgid "Save files"
 #~ msgstr "Dateien speichern"
 
 #~ msgid ""
 #~ "The following backends are installed on your system.\n"
-#~ "Plugins currently not available, e.g. because of missing requirements, are "
-#~ "marked with a warning sign."
+#~ "Plugins currently not available, e.g. because of missing requirements, "
+#~ "are marked with a warning sign."
 #~ msgstr ""
-#~ "Die nachfolgend aufgeführten Datenbank-Plugins sind auf Ihrem System "
+#~ "Die nachfolgend aufgefÃ¼hrten Datenbank-Plugins sind auf Ihrem System "
 #~ "installiert.\n"
-#~ "Plugins, die momentan nicht verfügbar sind, da beispielsweise nicht alle "
-#~ "Abhängigkeiten erfüllt sind, sind mit einem Warnzeichen markiert."
+#~ "Plugins, die momentan nicht verfÃ¼gbar sind, da beispielsweise nicht alle "
+#~ "AbhÃ¤ngigkeiten erfÃ¼llt sind, sind mit einem Warnzeichen markiert."

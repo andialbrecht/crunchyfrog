@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: crunchyfrog\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2009-01-28 16:10+0100\n"
 "PO-Revision-Date: 2008-10-15 00:10+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"

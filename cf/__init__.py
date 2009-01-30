@@ -74,9 +74,10 @@ if not os.path.isdir(USER_PLUGIN_DIR):
 USER_PLUGIN_REPO = os.path.join(USER_DIR, "repo.xml")
 IPC_SOCKET = os.path.join(USER_DIR, "crunchyfog.sock")
 
-gettext.install('crunchyfrog', LOCALE_DIR, True)
+gettext.bindtextdomain('crunchyfrog', LOCALE_DIR)
 gettext.textdomain('crunchyfrog')
-gtk.glade.bindtextdomain('crunchyfrog', LOCALE_DIR)
+gettext.install('crunchyfrog', LOCALE_DIR, True)
 gtk.glade.textdomain('crunchyfrog')
+gtk.glade.bindtextdomain('crunchyfrog', LOCALE_DIR)
 
 

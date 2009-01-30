@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: crunchyfrog\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2009-01-28 16:10+0100\n"
 "PO-Revision-Date: 2009-01-28 20:56+0000\n"
 "Last-Translator: David A Páez <Unknown>\n"
@@ -346,8 +346,7 @@ msgstr "Exportar a OpenDocument"
 
 #: cf/filter/exportfilter.py:52
 msgid "Export query results as OpenDocument Spreadsheets"
-msgstr ""
-"Exportar resultados de consulta como hojas de cálculo de OpenDocument"
+msgstr "Exportar resultados de consulta como hojas de cálculo de OpenDocument"
 
 #: cf/filter/exportfilter.py:58
 msgid "OpenDocument Spreadsheet (.ods)"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: crunchyfrog\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2009-01-28 16:10+0100\n"
 "PO-Revision-Date: 2008-11-16 10:15+0000\n"
 "Last-Translator: Guybrush88 <Unknown>\n"
@@ -403,8 +403,7 @@ msgstr "Richiesta Non Salvata %(num)s"
 #: cf/ui/confirmsave.py:98
 #, python-format
 msgid "Save the changes to document \"%(filename)s\" before closing?"
-msgstr ""
-"Salvare i cambiamenti al documento \"%(filename)s\" prima di chiudere?"
+msgstr "Salvare i cambiamenti al documento \"%(filename)s\" prima di chiudere?"
 
 #: cf/ui/confirmsave.py:102
 #, python-format
