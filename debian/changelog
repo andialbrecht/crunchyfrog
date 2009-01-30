@@ -1,3 +1,9 @@
+crunchyfrog (0.3.2-6) jaunty; urgency=low
+
+  * Added a workaround to guess environment.
+
+ -- Andi Albrecht <albrecht.andi@googlemail.com>  Fri, 30 Jan 2009 09:08:48 +0100
+
 crunchyfrog (0.3.2-5) jaunty; urgency=low
 
   * Updated translations.

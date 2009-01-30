@@ -27,7 +27,18 @@ import urlparse
 
 PREFIX = '/usr/'
 
-if os.path.exists(os.path.join(os.path.dirname(__file__), '../setup.py')):
+def _is_source_dir():
+    """Checks if the application is started from source checkout/dist."""
+    anchor = os.path.dirname(__file__)
+    setup_py = os.path.join(anchor, '../setup.py')
+    # Look into setup.py. It's not enough to check for the presence of
+    # setup.py. Some modules (e.g. virtualenv) install a setup.py directly
+    # in site-packages :-(
+    if os.path.exists(setup_py) and 'crunchyfrog' in open(setup_py).read():
+        return True
+    return False
+
+if _is_source_dir():
     DATA_DIR = os.path.join(os.path.dirname(__file__), '../data/')
     LOCALE_DIR = os.path.join(os.path.dirname(__file__), '../po/')
     MANUAL_URL = os.path.abspath(
