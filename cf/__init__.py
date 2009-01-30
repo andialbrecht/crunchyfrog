@@ -24,9 +24,6 @@ import os.path
 import sys
 import urlparse
 
-import gtk
-import gtk.glade
-
 
 PREFIX = '/usr/'
 
@@ -77,7 +74,13 @@ IPC_SOCKET = os.path.join(USER_DIR, "crunchyfog.sock")
 gettext.bindtextdomain('crunchyfrog', LOCALE_DIR)
 gettext.textdomain('crunchyfrog')
 gettext.install('crunchyfrog', LOCALE_DIR, True)
-gtk.glade.textdomain('crunchyfrog')
-gtk.glade.bindtextdomain('crunchyfrog', LOCALE_DIR)
+try:
+    import gtk
+    import gtk.glade
+    gtk.glade.textdomain('crunchyfrog')
+    gtk.glade.bindtextdomain('crunchyfrog', LOCALE_DIR)
+except ImportError:
+    # We don't need it on buildbots, so let's die silently.
+    pass
 
 
