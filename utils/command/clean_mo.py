@@ -11,10 +11,12 @@ from utils import msgfmt
 
 
 def _get_languages():
+    ret = []
     for lang in os.listdir('po'):
         if lang.endswith('.pot') or lang[0] in ['.', '_']:
                 continue
-        yield lang
+        ret.append(lang)
+    return ret
 
 class clean_mo(Command):
 
@@ -50,6 +52,8 @@ class compile_mo(Command):
 
     def run(self):
         for lang in _get_languages():
+            # Reset MESSAGES before each run!
+            msgfmt.MESSAGES = {}
             mofile = os.path.join('po/%s/LC_MESSAGES/crunchyfrog.mo' % lang)
             pofile = os.path.join('po/%s/LC_MESSAGES/crunchyfrog.po' % lang)
             msgfmt.make(pofile, mofile)

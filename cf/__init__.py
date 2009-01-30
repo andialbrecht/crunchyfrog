@@ -24,6 +24,9 @@ import os.path
 import sys
 import urlparse
 
+import gtk
+import gtk.glade
+
 
 PREFIX = '/usr/'
 
@@ -72,5 +75,8 @@ USER_PLUGIN_REPO = os.path.join(USER_DIR, "repo.xml")
 IPC_SOCKET = os.path.join(USER_DIR, "crunchyfog.sock")
 
 gettext.install('crunchyfrog', LOCALE_DIR, True)
+gettext.textdomain('crunchyfrog')
+gtk.glade.bindtextdomain('crunchyfrog', LOCALE_DIR)
+gtk.glade.textdomain('crunchyfrog')
 
 
