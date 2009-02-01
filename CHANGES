@@ -5,6 +5,7 @@ Bug Fixes
  * Statement splitting with SQLite and explain view for all RDBMs works
    again (issue27).
  * Use F1 instead of Ctrl-H for Help (issue26).
+ * Oracle plugin now installs properly (issue28).
 
 
 2009-01-30 CrunchyFrog 0.3.2
