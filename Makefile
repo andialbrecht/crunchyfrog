@@ -15,7 +15,6 @@ install:
 	$(PYTHON) setup.py install --root $(DESTDIR) $(COMPILE)
 
 builddeb: dist-clean
-	$(PYTHON) setup.py compile_catalog
 	$(PYTHON) setup.py sdist
 	mkdir -p $(BUILDIR)/$(PROJECT)-$(VERSION)/debian
 	cp dist/$(PROJECT)-$(VERSION).tar.gz $(BUILDIR)
