@@ -54,18 +54,6 @@ CMD_CLASS = {
 build.sub_commands.append(('build_manual', None))
 
 
-# compile_mo: We're using a msgfmt.py based compile to have no Babel dependency
-#   on buildbot like launchpad.net...
-#   So, all babel commands are optional...
-try:
-    from babel.messages import frontend as babel
-    CMD_CLASS['extract_messages'] = babel.extract_messages
-    CMD_CLASS['init_catalog'] = babel.init_catalog
-    CMD_CLASS['udpate_catalog'] = babel.update_catalog
-except ImportError:
-    pass
-
-
 # Package discovery copied from the Python wiki:
 # http://wiki.python.org/moin/Distutils/Cookbook/AutoPackageDiscovery
 def isPackage( filename ):

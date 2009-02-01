@@ -31,7 +31,7 @@ builddeb-src:
 push-ppa: builddeb-src
 	cd $(BUILDIR) && dput cf-ppa $(PROJECT)_$(VERSION)*_source.changes
 
-clean:
+clean: msg-clean
 	$(PYTHON) setup.py clean
 	rm -rf build/ MANIFEST $(BUILDIR)
 	rm -rf crunchyfrog.egg-info
