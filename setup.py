@@ -28,7 +28,7 @@ import sys
 from sphinx.setup_command import BuildDoc
 
 from utils.command.build_api import build_api
-#from utils.command.clean_mo import clean_mo
+from utils.command.clean_mo import clean_mo
 from utils.command.clean_docs import clean_docs
 #from utils.command.clean_mo import compile_mo
 
@@ -47,7 +47,7 @@ class clean_with_subcommands(clean):
 CMD_CLASS = {
 #    'compile_catalog': compile_mo,
     'clean': clean_with_subcommands,
-#    'clean_mo': clean_mo,
+    'clean_mo': clean_mo,
 #    'compile_mo': compile_mo,
     'clean_docs': clean_docs,
     'build_api': build_api,
