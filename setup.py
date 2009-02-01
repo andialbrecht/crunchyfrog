@@ -28,7 +28,9 @@ import sys
 from sphinx.setup_command import BuildDoc
 
 from utils.command.build_api import build_api
+from utils.command.build_mo import build_mo
 from utils.command.clean_docs import clean_docs
+from utils.command.clean_mo import clean_mo
 
 
 from cf import release
@@ -48,6 +50,8 @@ CMD_CLASS = {
     'build_api': build_api,
     'build_devguide': BuildDoc,
     'build_manual': BuildDoc,
+    'build_mo': build_mo,
+    'clean_mo': clean_mo,
 }
 
 

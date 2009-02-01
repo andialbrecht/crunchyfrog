@@ -16,7 +16,6 @@ install:
 	$(PYTHON) setup.py install --root $(DESTDIR) $(COMPILE)
 
 builddeb: dist-clean
-	make msg-compile
 	$(PYTHON) setup.py sdist
 	mkdir -p $(BUILDIR)/$(PROJECT)-$(VERSION)/debian
 	cp dist/$(PROJECT)-$(VERSION).tar.gz $(BUILDIR)
@@ -31,7 +30,7 @@ builddeb-src:
 push-ppa: builddeb-src
 	cd $(BUILDIR) && dput cf-ppa $(PROJECT)_$(VERSION)*_source.changes
 
-clean: msg-clean
+clean:
 	$(PYTHON) setup.py clean
 	rm -rf build/ MANIFEST $(BUILDIR)
 	rm -rf crunchyfrog.egg-info
@@ -48,9 +47,6 @@ msg-compile:
 	 do msgfmt po/$$lang/LC_MESSAGES/crunchyfrog.po \
 	    -o po/$$lang/LC_MESSAGES/crunchyfrog.mo; \
 	 done
-
-msg-clean:
-	find po/ -type f -name *.mo | xargs --no-run-if-empty rm
 
 msg-extract:
 	@for i in `find data/glade/ -type f -name "*.glade"`; do \

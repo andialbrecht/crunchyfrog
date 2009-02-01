@@ -25,7 +25,6 @@ build-stamp: configure-stamp
 
 	# Add here commands to compile the package.
 	$(MAKE)
-	$(MAKE) msg-compile
 	python setup.py build
 
 	touch $@
