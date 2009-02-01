@@ -89,10 +89,9 @@ class DbAPI2Connection(DBConnection):
             cur = self._conn.cursor()
             cur.execute(sql)
             data = cur.fetchall()
-            cur.close()
         except:
-            gtk.gdk.threads_enter()
             dialogs.error(_(u"An error occured"), str(sys.exc_info()[1]))
-            gtk.gdk.threads_leave()
-            return []
+            data = []
+        finally:
+            cur.close()
         return data

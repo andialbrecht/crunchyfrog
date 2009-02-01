@@ -2,6 +2,8 @@ Development
 -----------
 
 Bug Fixes
+ * Statement splitting with SQLite and explain view for all RDBMs works
+   again (issue27).
  * Use F1 instead of Ctrl-H for Help (issue26).
 
 

@@ -130,7 +130,7 @@ class Editor(GladeWidget, PaneItem):
         self.set_connection(None)
 
     def on_explain(self, *args):
-        gobject.idle_add(self.explain)
+        self.explain()
 
     def on_populate_popup(self, textview, popup):
         cfg = self.app.config
@@ -335,7 +335,8 @@ class Editor(GladeWidget, PaneItem):
                     dialect = self.connection.sqlparse_dialect
                 else:
                     dialect = None
-                stmts = sqlparse.sqlsplit(statement, dialect=dialect)
+                stmts = [unicode(x)
+                         for x in sqlparse.parse(statement, dialect=dialect)]
             else:
                 stms = [statement]
             for stmt in stmts:
@@ -348,16 +349,16 @@ class Editor(GladeWidget, PaneItem):
                 query.execute()
 
     def explain(self):
-        buffer = self.textview.get_buffer()
-        bounds = buffer.get_selection_bounds()
+        buf = self.textview.get_buffer()
+        bounds = buf.get_selection_bounds()
         if not bounds:
-            bounds = buffer.get_bounds()
-        statement = buffer.get_text(*bounds)
+            bounds = buf.get_bounds()
+        statement = buf.get_text(*bounds)
         if self.connection:
             dialect = self.connection.sqlparse_dialect
         else:
             dialect = None
-        if len(sqlparse.sqlsplit(statement, dialect=dialect)) > 1:
+        if len(sqlparse.parse(statement, dialect=dialect)) > 1:
             dialogs.error(_(u"Select a single statement to explain."))
             return
         data = []
