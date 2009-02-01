@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CrunchyFrog 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-01 13:34+0100\n"
+"POT-Creation-Date: 2009-02-01 16:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,7 +120,7 @@ msgstr ""
 msgid "Show or hide the statusbar in the current window"
 msgstr ""
 
-#: cf/ui/mainwindow.py:169 cf/ui/editor.py:61 cf/ui/prefs.py:83
+#: cf/ui/mainwindow.py:169 cf/ui/editor.py:61 cf/ui/prefs.py:82
 #: cf/plugins/core.py:164 data/glade/preferences.glade.h:18
 msgid "Editor"
 msgstr ""
@@ -209,21 +209,20 @@ msgstr ""
 msgid "_Recent Files"
 msgstr ""
 
-#: cf/ui/mainwindow.py:500 cf/ui/editor.py:571 cf/instance.py:178
+#: cf/ui/mainwindow.py:500 cf/ui/editor.py:570
 msgid "Select file"
 msgstr ""
 
-#: cf/ui/mainwindow.py:508 cf/ui/editor.py:442 cf/ui/editor.py:578
-#: cf/instance.py:185
+#: cf/ui/mainwindow.py:508 cf/ui/editor.py:441 cf/ui/editor.py:577
 msgid "All files (*)"
 msgstr ""
 
-#: cf/ui/mainwindow.py:512 cf/ui/mainwindow.py:519 cf/ui/editor.py:446
-#: cf/ui/editor.py:582 cf/instance.py:189 cf/instance.py:196
+#: cf/ui/mainwindow.py:512 cf/ui/mainwindow.py:519 cf/ui/editor.py:445
+#: cf/ui/editor.py:581
 msgid "SQL files (*.sql)"
 msgstr ""
 
-#: cf/ui/mainwindow.py:532 cf/instance.py:209
+#: cf/ui/mainwindow.py:532
 msgid "_Recent files:"
 msgstr ""
 
@@ -309,92 +308,92 @@ msgstr ""
 msgid "OVR"
 msgstr ""
 
-#: cf/ui/editor.py:154
+#: cf/ui/editor.py:153
 msgid "Split statements"
 msgstr ""
 
-#: cf/ui/editor.py:186
+#: cf/ui/editor.py:185
 #, python-format
 msgid "Query failed (%(sec).3f seconds)"
 msgstr ""
 
-#: cf/ui/editor.py:190
+#: cf/ui/editor.py:189
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d rows)"
 msgstr ""
 
-#: cf/ui/editor.py:195
+#: cf/ui/editor.py:194
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d affected rows)"
 msgstr ""
 
-#: cf/ui/editor.py:362
+#: cf/ui/editor.py:361
 msgid "Select a single statement to explain."
 msgstr ""
 
-#: cf/ui/editor.py:410
+#: cf/ui/editor.py:409
 #, python-format
 msgid "Save file %(name)s before closing the editor?"
 msgstr ""
 
-#: cf/ui/editor.py:430
+#: cf/ui/editor.py:429
 msgid "Save file"
 msgstr ""
 
-#: cf/ui/editor.py:484
+#: cf/ui/editor.py:483
 #, python-format
 msgid "Query running... (%.3f seconds)"
 msgstr ""
 
-#: cf/ui/editor.py:535
+#: cf/ui/editor.py:534
 msgid "Show in main window"
 msgstr ""
 
-#: cf/ui/editor.py:658 cf/ui/editor.py:660 cf/ui/pane.py:383 cf/ui/pane.py:449
+#: cf/ui/editor.py:657 cf/ui/editor.py:659 cf/ui/pane.py:383 cf/ui/pane.py:449
 #: data/glade/editor.glade.h:3
 msgid "Query"
 msgstr ""
 
-#: cf/ui/editor.py:758
+#: cf/ui/editor.py:757
 msgid "Data copied to clipboard"
 msgstr ""
 
-#: cf/ui/editor.py:907
+#: cf/ui/editor.py:906
 msgid "Variables"
 msgstr ""
 
-#: cf/ui/prefs.py:81 data/glade/preferences.glade.h:22
+#: cf/ui/prefs.py:80 data/glade/preferences.glade.h:22
 msgid "General"
 msgstr ""
 
-#: cf/ui/prefs.py:82 cf/backends/schema/__init__.py:86
+#: cf/ui/prefs.py:81 cf/backends/schema/__init__.py:86
 #: data/glade/preferences.glade.h:34
 msgid "View"
 msgstr ""
 
-#: cf/ui/prefs.py:84
+#: cf/ui/prefs.py:83
 msgid "Fonts & Colors"
 msgstr ""
 
-#: cf/ui/prefs.py:85
+#: cf/ui/prefs.py:84
 msgid ""
 "Keyboard\n"
 "Shortcuts"
 msgstr ""
 
-#: cf/ui/prefs.py:228 cf/ui/prefs.py:389 cf/ui/prefs.py:458 cf/library.py:337
+#: cf/ui/prefs.py:227 cf/ui/prefs.py:388 cf/ui/prefs.py:457 cf/library.py:337
 msgid "Unknown"
 msgstr ""
 
-#: cf/ui/prefs.py:247
+#: cf/ui/prefs.py:246
 msgid "Install plugin"
 msgstr ""
 
-#: cf/ui/prefs.py:252
+#: cf/ui/prefs.py:251
 msgid "CrunchyFrog plugins (*.zip, *.py)"
 msgstr ""
 
-#: cf/ui/prefs.py:394
+#: cf/ui/prefs.py:393
 msgid "ERROR"
 msgstr ""
 
@@ -880,7 +879,8 @@ msgstr ""
 msgid "_Assign to editor"
 msgstr ""
 
-#: data/glade/connectionsdialog.glade.h:3 data/glade/preferences.glade.h:49
+#: data/glade/connectionsdialog.glade.h:3 data/glade/crunchyfrog.glade.h:28
+#: data/glade/preferences.glade.h:49
 msgid "gtk-close"
 msgstr ""
 
@@ -890,6 +890,128 @@ msgstr ""
 
 #: data/glade/connectionsdialog.glade.h:5
 msgid "gtk-disconnect"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:1
+msgid "(objectclass=*)"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:2
+msgid "<b>Installed backends</b>"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:3
+msgid "<b>Select an instance</b>"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:5
+#, no-c-format
+msgid "<span size=\"large\"><b>%s</b></span>"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:6
+msgid "Close _without Saving"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:7
+msgid ""
+"CrunchyFrog is already running.\n"
+"Open selected files..."
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:9
+msgid "If you don't save, all your changes will be permanently lost."
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:10
+msgid "Installed backends"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:11
+msgid "Progress"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:12
+msgid "S_elect the documents you want to save:"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:13
+msgid "S_ub-tree level"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:14
+msgid "Save files"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:15
+msgid "Search s_cope:"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:16
+msgid "Select instance"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:17
+msgid "Separate attributes by commas"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:18
+msgid ""
+"The following backends are installed on your system.\n"
+"Plugins currently not available, e.g. because of missing requirements, are "
+"marked with a warning sign."
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:20
+msgid "Toggle favorites"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:21
+msgid "Toggle navigation bar"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:22
+msgid "_Attributes:"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:23
+msgid "_Filter:"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:24
+msgid "_One level"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:25
+msgid "_Search DN:"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:26
+msgid "_URL:"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:27
+msgid "gtk-cancel"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:29
+msgid "gtk-find"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:30 data/glade/datasourcemanager.glade.h:9
+msgid "gtk-ok"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:31
+msgid "gtk-save"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:32
+msgid "in an _existing instance"
+msgstr ""
+
+#: data/glade/crunchyfrog.glade.h:33
+msgid "in an _new instance"
 msgstr ""
 
 #: data/glade/datasourcemanager.glade.h:1
@@ -922,10 +1044,6 @@ msgstr ""
 
 #: data/glade/datasourcemanager.glade.h:8 data/glade/preferences.glade.h:50
 msgid "gtk-help"
-msgstr ""
-
-#: data/glade/datasourcemanager.glade.h:9
-msgid "gtk-ok"
 msgstr ""
 
 #: data/glade/editor.glade.h:1
