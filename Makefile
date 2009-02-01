@@ -49,6 +49,9 @@ msg-compile:
 	    -o po/$$lang/LC_MESSAGES/crunchyfrog.mo; \
 	 done
 
+msg-clean:
+	find po/ -type f -name *.mo | xargs --no-run-if-empty rm
+
 msg-extract:
 	@for i in `find data/glade/ -type f -name "*.glade"`; do \
 	 intltool-extract --type=gettext/glade $$i; \
