@@ -37,10 +37,6 @@ The following modules are required for specific database backends:
  * ldap bindings (optional, required to browse LDAP servers)
  * pymssql bindings (optional, required to connect to SQL Server)
 
-Additional requirements for development:
-
- * Babel and BabelGladeExtractor (see http://babel.edgewal.org)
-
 
 .. _getting-started:
 
