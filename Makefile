@@ -54,6 +54,9 @@ msg-extract:
 	 intltool-extract --type=gettext/glade $$i; \
 	 done
 	xgettext --from-code=UTF-8 -k_ -kN_ \
+	  --copyright-holder="Andi Albrecht" \
+	  --package-name="CrunchyFrog" \
+	  --package-version=$(VERSION) \
 	  -o po/crunchyfrog.pot `find cf/ -type f -name "*.py"` \
 	  `find data/plugins/ -type f -name "*.py"` \
 	  data/glade/*.h
