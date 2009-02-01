@@ -1,3 +1,10 @@
+Development
+-----------
+
+Bug Fixes
+ * Use F1 instead of Ctrl-H for Help (issue26).
+
+
 2009-01-30 CrunchyFrog 0.3.2
 ----------------------------
 

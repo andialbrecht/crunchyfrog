@@ -124,7 +124,7 @@ class MainWindow(gtk.Window):
             # Help
             ('help-menu-action', None, _(u'_Help')),
             ('help-help', gtk.STOCK_HELP,
-             None, None, _(u'Open the CrunchyFrog manual'),
+             None, 'F1', _(u'Open the CrunchyFrog manual'),
              lambda *a: self.app.show_help()),
             ('help-translate', None,
              _(u'Help translate...'), None,
