@@ -19,15 +19,16 @@ See requirements.txt for a complete list of requirements.
 
 For a localized version first run
 
-    python setup.py compile_mo
+    make msg-compile
 
 and then start the application as described above.
+This command required gettext installed on your system.
 
 To have the manual run
 
     python setup.py build_manual
 
-and then select "Help > Help" (Ctrl+H) in the application.
+and then select "Help > Help" (F1) in the application.
 
 
 Installing CrunchyFrog
