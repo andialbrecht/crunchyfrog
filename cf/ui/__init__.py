@@ -91,7 +91,7 @@ class GladeWidget(gobject.GObject):
         if isinstance(xml, basestring):
             if not xml.endswith(".glade"):
                 xml += ".glade"
-            glade_file = join(cf.DATA_DIR, xml)
+            glade_file = join(cf.DATA_DIR, 'glade/', xml)
             logging.info('Loading Glade file %r' % glade_file)
             self.xml = gtk.glade.XML(glade_file, widget_name)
         else:

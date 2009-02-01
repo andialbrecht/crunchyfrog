@@ -50,8 +50,7 @@ from cf.plugins.core import GenericPlugin
 class PreferencesDialog(GladeWidget):
 
     def __init__(self, win, mode="editor"):
-        GladeWidget.__init__(self, win, "glade/preferences",
-                             "preferences_dialog")
+        GladeWidget.__init__(self, win, "preferences", "preferences_dialog")
         self.refresh()
         if mode == "editor":
             curr_page = 1

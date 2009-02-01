@@ -35,7 +35,7 @@ class DatasourceManager(GladeWidget):
 
     def __init__(self, win):
         self.instance = win
-        GladeWidget.__init__(self, win, "glade/datasourcemanager",
+        GladeWidget.__init__(self, win, "datasourcemanager",
                              "datasourcemanager")
         from cf.plugins.core import PLUGIN_TYPE_BACKEND
         if not self.app.plugins.get_plugins(PLUGIN_TYPE_BACKEND, True):

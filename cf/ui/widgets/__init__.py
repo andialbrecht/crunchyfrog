@@ -393,7 +393,7 @@ class ProgressDialog(GladeWidget):
 class ConnectionsWidget(GladeWidget):
     """Lists datasources and active connections"""
 
-    def __init__(self, win, xml="glade/connectionsdialog"):
+    def __init__(self, win, xml="connectionsdialog"):
         GladeWidget.__init__(self, win, xml, "connections_widget")
         self.refresh()
 
@@ -558,7 +558,7 @@ class ConnectionsDialog(GladeWidget):
     """Dialog displaying connections"""
 
     def __init__(self, win):
-        GladeWidget.__init__(self, win, "glade/connectionsdialog",
+        GladeWidget.__init__(self, win, "connectionsdialog",
                              "connectionsdialog")
         self.win = win
 

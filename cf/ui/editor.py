@@ -85,8 +85,7 @@ class Editor(GladeWidget, PaneItem):
         self._query_timer = None
         self._filename = None
         self._filecontent_read = ""
-        GladeWidget.__init__(self, self.instance, "glade/editor",
-                             "box_editor")
+        GladeWidget.__init__(self, self.instance, "editor", "box_editor")
         self.set_data("win", None)
         self.show_all()
 
