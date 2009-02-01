@@ -29,7 +29,7 @@ def _run_dialog(short, long=None, parent=None, buttons=gtk.BUTTONS_NONE,
         dlg_type2 = gtk.MESSAGE_ERROR
     elif dlg_type == gtk.STOCK_DIALOG_WARNING:
         dlg_type2 = gtk.MESSAGE_WARNING
-    elif dlg_type == gtk.STOCK_DIALOG_QUERSTION:
+    elif dlg_type == gtk.STOCK_DIALOG_QUESTION:
         dlg_type2 = gtk.MESSAGE_QUESTION
     else:
         dlg_type2 = gtk.MESSAGE_INFO
@@ -55,8 +55,7 @@ def warning(short, long=None, parent=None, buttons=gtk.BUTTONS_OK):
     return _run_dialog(short, long, parent, buttons, gtk.STOCK_DIALOG_WARNING)
 
 def yesno(short, long=None, parent=None, buttons=gtk.BUTTONS_YES_NO):
-    return _run_dialog(short, long, parent, buttons,
-                       gtk.STOCK_DIALOG_QUERSTION)
+    return _run_dialog(short, long, parent, buttons, gtk.STOCK_DIALOG_QUESTION)
 
 def password(title, msg=None, parent=None):
     dlg = gtk.MessageDialog(parent,
