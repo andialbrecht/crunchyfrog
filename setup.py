@@ -54,49 +54,6 @@ CMD_CLASS = {
 build.sub_commands.append(('build_manual', None))
 
 
-# Package discovery copied from the Python wiki:
-# http://wiki.python.org/moin/Distutils/Cookbook/AutoPackageDiscovery
-def isPackage( filename ):
-    return (
-        os.path.isdir(filename) and
-        os.path.isfile(os.path.join(filename,'__init__.py'))
-    )
-
-def packagesFor( filename, basePackage="" ):
-    """Find all packages in filename"""
-    set = {}
-    for item in os.listdir(filename):
-        dir = os.path.join(filename, item)
-        if isPackage( dir ):
-            if basePackage:
-                moduleName = basePackage+'.'+item
-            else:
-                moduleName = item
-            set[ moduleName] = dir
-            set.update( packagesFor( dir, moduleName))
-    return set
-
-# again, from the Python wiki - with some modifications...
-def npFilesFor( dirname ):
-    """Return all non-python-file filenames in dir"""
-    result = []
-    allResults = []
-    for name in os.listdir(dirname):
-        path = os.path.join( dirname, name )
-        if (
-            os.path.isfile( path) and
-            os.path.splitext( name )[1] not in
-                ('.pyc','.pyo')
-        ):
-            result.append( path )
-        elif os.path.isdir( path ) and name.lower() !='cvs':
-            allResults.extend( npFilesFor(path))
-    if result:
-        allResults.append( (dirname, result))
-    return allResults
-
-
-
 DATA_FILES = []
 
 # Glade
