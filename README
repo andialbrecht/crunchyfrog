@@ -22,13 +22,14 @@ For a localized version first run
     make msg-compile
 
 and then start the application as described above.
-This command required gettext installed on your system.
+This command requires gettext installed on your system.
 
 To have the manual run
 
     python setup.py build_manual
 
 and then select "Help > Help" (F1) in the application.
+This command requires Sphinx (>=0.5) installed on your system.
 
 
 Installing CrunchyFrog

@@ -2,8 +2,8 @@ Source: crunchyfrog
 Section: gnome
 Priority: extra
 Maintainer: Andi Albrecht <albrecht.andi@googlemail.com>
-Build-Depends: python (>=2.5), debhelper, python-central, python-sphinx,
-    intltool, gettext
+Build-Depends: python (>=2.5), debhelper, python-central,
+    python-sphinx (>=0.5), intltool, gettext
 XS-Python-Version: >=2.5
 Standards-Version: 3.7.2
 
