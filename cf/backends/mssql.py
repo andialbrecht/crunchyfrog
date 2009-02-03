@@ -76,8 +76,8 @@ class MsSQLBackend(DBBackendPlugin):
             opts["password"] = pwd
         try:
             real_conn = pymssql.connect(**opts)
-        except StandardError, err:
-            raise DBConnectError(str(err))
+        except (StandardError, pymssql._mssql.error), err:
+            raise DBConnectError(str(err).decode('utf-8', 'replace'))
         conn = MsSQLConnection(self, self.app, real_conn)
         conn.threadsafety = pymssql.threadsafety
         return conn
