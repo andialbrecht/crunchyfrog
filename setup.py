@@ -25,7 +25,12 @@ import os
 import shutil
 import sys
 
-from sphinx.setup_command import BuildDoc
+try:
+    # Try to import the original one first (Sphinx >= 0.5)
+    from sphinx.setup_command import BuildDoc
+except ImportError:
+    # ok, it failed... try the local copy
+    from utils.command.sphinx_build import BuildDoc
 
 from utils.command.build_api import build_api
 from utils.command.build_mo import build_mo
