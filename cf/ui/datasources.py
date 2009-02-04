@@ -29,7 +29,7 @@ from cf.ui import GladeWidget, dialogs
 from cf.ui.widgets import ConnectionsWidget
 from cf.datasources import DatasourceInfo
 
-COMMON_OPTIONS = ["dsn", "database", "host", "port", "user", "password"]
+COMMON_OPTIONS = ["dsn", "host", "port", "database", "user", "password"]
 
 class DatasourceManager(GladeWidget):
 

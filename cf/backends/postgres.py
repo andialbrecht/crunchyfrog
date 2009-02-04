@@ -77,7 +77,7 @@ class PostgresBackend(DBBackendPlugin):
 
     @classmethod
     def get_datasource_options_widgets(cls, data_widgets, initial_data=None):
-        return data_widgets, ["database", "host", "port", "user", "password"]
+        return data_widgets, ["host", "port", "database", "user", "password"]
 
     @classmethod
     def get_label(cls, datasource_info):
