@@ -95,9 +95,6 @@ class MainWindow(gtk.Window):
         entries = (
             # File
             ('file-menu-action', None, _(u'_File')),
-            ('editor-close-all', None,
-             _(u'Close _all'), '<control><shift>W', _(u'Close all editors'),
-             lambda action: self.close_all_editors()),
             ('instance-quit', gtk.STOCK_QUIT,
              None, '<control>Q', _(u'Quit the program'),
              self.on_quit),
@@ -175,6 +172,9 @@ class MainWindow(gtk.Window):
             ('editor-close', gtk.STOCK_CLOSE,
              None, '<control>W', _(u'Close the current editor'),
              self.on_editor_close),
+            ('editor-close-all', None,
+             _(u'Close _all'), '<control><shift>W', _(u'Close all editors'),
+             lambda action: self.close_all_editors()),
             # Query
             ('query-menu-action', None, _(u'_Query')),
             ('query-connection-menu-action', None, _(u'_Connection')),
@@ -664,7 +664,7 @@ class MainWindow(gtk.Window):
             if proceed == 0:
                 return False
         for item in self.queries.get_all_editors():
-            item.destroy()
+            item.close(force=True)
         return True
 
     def editor_create(self, fname=None):

@@ -213,9 +213,13 @@ class Editor(GladeWidget, PaneItem):
 
     # Public methods
 
-    def close(self):
-        """Close editor, displays a confirmation dialog for unsaved files."""
-        if self.contents_changed():
+    def close(self, force=False):
+        """Close editor, displays a confirmation dialog for unsaved files.
+
+        Args:
+          force: If True, the method doesn't check for changed contents.
+        """
+        if self.contents_changed() and not force:
             dlg = ConfirmSaveDialog(self.instance, [self])
             resp = dlg.run()
             if resp == 1:
