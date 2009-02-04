@@ -78,6 +78,13 @@ class DBConnection(gobject.GObject):
         self._transaction_state = TRANSACTION_IDLE
         self.__gobject_init__()
 
+    @property
+    def db_id(self):
+        # Propagate datasource info's db id.
+        if self.datasource_info is None:
+            return None
+        return self.datasource_info.db_id
+
     def do_set_property(self, property, value):
         if property.name == "transaction-state":
             self._transaction_state = value
