@@ -33,7 +33,7 @@ MODE_MULTIPLE = 2
 class ConfirmSaveDialog(GladeWidget):
 
     def __init__(self, instance, changed_editors):
-        GladeWidget.__init__(self, instance, "crunchyfrog",
+        GladeWidget.__init__(self, instance, "saveconfirm",
                              "saveconfirm_dialog")
         self.changed_editors = changed_editors
         if len(changed_editors) == 1:
