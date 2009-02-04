@@ -1,6 +1,9 @@
 Development
 -----------
 
+New Features
+ * Close all action added.
+
 Bug Fixes
  * Statement splitting with SQLite and explain view for all RDBMs works
    again (issue27).

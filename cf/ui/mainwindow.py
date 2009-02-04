@@ -95,6 +95,9 @@ class MainWindow(gtk.Window):
         entries = (
             # File
             ('file-menu-action', None, _(u'_File')),
+            ('editor-close-all', None,
+             _(u'Close _all'), '<control><shift>W', _(u'Close all editors'),
+             lambda action: self.close_all_editors()),
             ('instance-quit', gtk.STOCK_QUIT,
              None, '<control>Q', _(u'Quit the program'),
              self.on_quit),
@@ -571,19 +574,8 @@ class MainWindow(gtk.Window):
                 action.set_active(is_active)
 
     def on_quit(self, *args):
-        changed = []
-        for item in self.queries.get_all_editors():
-            if isinstance(item, Editor) and item.contents_changed():
-                changed.append(item)
-        if changed:
-            dlg = ConfirmSaveDialog(self, changed)
-            proceed = dlg.run()
-            if proceed == 1:
-                if not dlg.save_files():
-                    proceed = 0
-            dlg.destroy()
-            if proceed == 0:
-                return False
+        if not self.close_all_editors():
+            return False
         if len(self.app.get_instances()) <= 1:
             self.state_save()
         self.destroy()
@@ -650,6 +642,30 @@ class MainWindow(gtk.Window):
     # ---
     # Public methods
     # ---
+
+    def close_all_editors(self):
+        """Closes all editors but checks for changes first.
+
+        Returns:
+          False if action was cancelled, otherwise True.
+        """
+        changed = []
+        for item in self.queries.get_all_editors():
+            if isinstance(item, Editor) and item.contents_changed():
+                changed.append(item)
+        if changed:
+            dlg = ConfirmSaveDialog(self, changed)
+            proceed = dlg.run()
+            if proceed == 1:
+                dlg.hide()
+                if not dlg.save_files():
+                    proceed = 0
+            dlg.destroy()
+            if proceed == 0:
+                return False
+        for item in self.queries.get_all_editors():
+            item.destroy()
+        return True
 
     def editor_create(self, fname=None):
         """Creates a new SQL editor.
@@ -807,6 +823,7 @@ UI = '''
       <menuitem name="PrintPreview" action="editor-printpreview" />
       <separator />
       <menuitem name="Close" action="editor-close" />
+      <menuitem name="CloseAll" action="editor-close-all" />
       <menuitem name="Quit" action="instance-quit" />
     </menu>
     <menu name="Edit" action="edit-menu-action">
