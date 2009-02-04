@@ -353,6 +353,13 @@ class CenterPane(gtk.VBox, Pane):
         self.notebook.set_tab_detachable(widget, True)
         self.notebook.set_current_page(self.notebook.page_num(widget))
 
+    def get_all_editors(self):
+        """Return a list of all editors."""
+        ret = []
+        for i in range(self.notebook.get_n_pages()):
+            ret.append(self.get_view_by_pagenum(i))
+        return ret
+
     def __getattribute__(self, name):
         """We want it to behave much like a gtk.Notebook."""
         try:

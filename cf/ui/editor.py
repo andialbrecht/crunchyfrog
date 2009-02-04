@@ -425,7 +425,7 @@ class Editor(GladeWidget, PaneItem):
 
     def save_file_as(self, parent=None, default_name=None):
         if not parent:
-            parent = self.instance.widget
+            parent = self.instance
         dlg = gtk.FileChooserDialog(_(u"Save file"),
                             parent,
                             gtk.FILE_CHOOSER_ACTION_SAVE,

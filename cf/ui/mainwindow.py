@@ -39,6 +39,7 @@ from cf.ui import pane
 from cf.ui import utils
 from cf.ui import widgets
 from cf.ui.browser import Browser
+from cf.ui.confirmsave import ConfirmSaveDialog
 from cf.ui.datasources import DatasourceManager
 from cf.ui.editor import Editor
 from cf.ui.statusbar import CrunchyStatusbar
@@ -570,6 +571,19 @@ class MainWindow(gtk.Window):
                 action.set_active(is_active)
 
     def on_quit(self, *args):
+        changed = []
+        for item in self.queries.get_all_editors():
+            if isinstance(item, Editor) and item.contents_changed():
+                changed.append(item)
+        if changed:
+            dlg = ConfirmSaveDialog(self, changed)
+            proceed = dlg.run()
+            if proceed == 1:
+                if not dlg.save_files():
+                    proceed = 0
+            dlg.destroy()
+            if proceed == 0:
+                return False
         if len(self.app.get_instances()) <= 1:
             self.state_save()
         self.destroy()

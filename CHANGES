@@ -7,6 +7,7 @@ Bug Fixes
  * Use F1 instead of Ctrl-H for Help (issue26).
  * Oracle plugin now installs properly (issue28).
  * Show an error dialog when connecting to SQL Server fails.
+ * Confirm save dialog works again when instance is closed.
 
 
 2009-01-30 CrunchyFrog 0.3.2
