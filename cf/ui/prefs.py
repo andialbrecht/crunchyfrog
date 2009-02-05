@@ -145,15 +145,13 @@ class PreferencesDialog(GladeWidget):
                                              gobject.TYPE_PYOBJECT,# 5 action
                                              )
         self.list_shortcuts = self.xml.get_widget('list_shortcuts')
-        col = gtk.TreeViewColumn('', gtk.CellRendererText(), text=0)
+        col = gtk.TreeViewColumn(_('Action'), gtk.CellRendererText(), text=0)
         self.list_shortcuts.append_column(col)
         renderer = gtk.CellRendererAccel()
         renderer.connect('accel-edited', self.on_accel_edited)
-        col = gtk.TreeViewColumn('', renderer,
+        col = gtk.TreeViewColumn(_(u'Shortcut'), renderer,
                                  accel_key=1, accel_mods=2, visible=3,
                                  editable=3)
-        self.list_shortcuts.append_column(col)
-        col = gtk.TreeViewColumn('', gtk.CellRendererText(), text=4)
         self.list_shortcuts.append_column(col)
         self.shortcuts_model.set_sort_column_id(0, gtk.SORT_ASCENDING)
         self.list_shortcuts.set_model(self.shortcuts_model)
