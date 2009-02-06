@@ -8,8 +8,6 @@ CrunchyFrog Manual
 Contents:
 
 .. toctree::
-
-   intro
    :maxdepth: 2
 
    intro
