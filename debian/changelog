@@ -1,3 +1,9 @@
+crunchyfrog (0.3.3-1) intrepid; urgency=low
+
+  * Minor bug fixes.
+
+ -- Andi Albrecht <albrecht.andi@googlemail.com>  Fri, 06 Feb 2009 12:26:39 +0100
+
 crunchyfrog (0.3.2-8~7) intrepid; urgency=low
 
   * Fixed translations.

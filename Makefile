@@ -3,7 +3,7 @@ PKGNAME=crunchyfrog
 DESTDIR=/
 BUILDIR=mydeb
 PROJECT=crunchyfrog
-VERSION=0.3.2
+VERSION=0.3.3
 DEBFLAGS=
 PO=`find po/* -maxdepth 0 -name .svn -prune -o -type d|sed 's/po\///g'`
 
