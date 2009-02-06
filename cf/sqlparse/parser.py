@@ -16,6 +16,19 @@ from filters import IfFilter
 import formatter
 
 
+# TODO: Use constants and move somewhere else
+_STATEMENT_TYPES = {
+    'SELECT': 1,
+    'INSERT': 2,
+    'DELETE': 3,
+    'UPDATE': 4,
+    'DROP': 5,
+    'CREATE': 6,
+    'ALTER': 7,
+}
+
+
+
 class Parser(object):
 
     def __init__(self, dialect=None):
@@ -37,11 +50,15 @@ class Parser(object):
         tokens = []
         splitlevel = 0
         statements = []
+        self._dialect.set_statement_type(None)
         for tokentype, text in self._lexer.get_tokens(sql):
             tokentype, text, lvlchange = self._dialect.handle_token(tokentype,
                                                                     text)
             tokens.append((tokentype, text))
             splitlevel += lvlchange
+            if (tokentype == pygments.token.Keyword
+                and self._dialect.get_statement_type() is None):
+                self._dialect.set_statement_type(_STATEMENT_TYPES.get(text.upper(), None))
             if not splitlevel and tokentype == pygments.token.Punctuation \
             and text == ';':
                 statements.append(Statement(tokens))

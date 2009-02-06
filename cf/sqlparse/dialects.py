@@ -32,6 +32,13 @@ class DefaultDialect(Dialect):
 
     def __init__(self):
         self._in_declare = False
+        self._stmt_type = None
+
+    def get_statement_type(self):
+        return self._stmt_type
+
+    def set_statement_type(self, type_):
+        self._stmt_type = type_
 
     def handle_token(self, tokentype, text):
         if not tokentype == pygments.token.Keyword:
@@ -46,7 +53,8 @@ class DefaultDialect(Dialect):
             return tokentype, text, 0
         if unified == 'END':
             return tokentype, text, -1
-        if unified in ('IF', 'FOR'):
+        # TODO: Use a constant here
+        if unified in ('IF', 'FOR') and self._stmt_type == 6:
             return tokentype, text, 1
         return tokentype, text, 0
 
