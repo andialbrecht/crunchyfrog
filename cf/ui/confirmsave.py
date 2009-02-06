@@ -101,8 +101,8 @@ class ConfirmSaveDialog(GladeWidget):
             self.xml.get_widget("sw_filelist").show()
             msg_header = _(u"There are %(num)d documents with unsaved changes. Save changes before closing?")
             msg_header = msg_header % {"num" : len(self.changed_editors)}
-        lbl = self.xml.get_widget("lbl_header").get_label()
-        self.xml.get_widget("lbl_header").set_markup(lbl % msg_header)
+        markup = '<span size="large"><b>%s</b></span>' % msg_header
+        self.xml.get_widget("lbl_header").set_markup(markup)
 
     def save_files(self):
         model = self.filelist.get_model()
