@@ -6,9 +6,9 @@ New Features
 
 Bug Fixes
  * Statement splitting with SQLite and explain view for all RDBMs works
-   again (issue27).
- * Use F1 instead of Ctrl-H for Help (issue26).
- * Oracle plugin now installs properly (issue28).
+   again (issue27, reported by abduleczek, robertknight and many others...).
+ * Use F1 instead of Ctrl-H for Help (issue26, thanks to Dave Neary).
+ * Oracle plugin now installs properly (issue28, abduleczek).
  * Show an error dialog when connecting to SQL Server fails.
  * Confirm save dialog works again when instance is closed.
 
@@ -48,11 +48,12 @@ New Features
 
 Bug Fixes
  * MySQL browser has changed the default database when browsing the
-   database objects (issue13).
+   database objects (issue13, thanks to lostsector).
  * Removed some old code that caused the editor to display some IDs
-   instead of table names when dragging from browser (issue15).
- * Improved SQL parsing (incl. issue14).
- * Replaced dbus_manager.py by ipc.py (issue12).
+   instead of table names when dragging from browser (issue15, thanks
+   to lostsector).
+ * Improved SQL parsing (incl. issue14, thanks to lostsector).
+ * Replaced dbus_manager.py by ipc.py (issue12, thanks to Frank Mersmann).
  * Confirmation dialog when closing editors without changes fixed.
 
 Other
@@ -74,7 +75,7 @@ Translation
 New Features
  * query splitting
  * gnomekeyring support
- * UI cleanup (incl. issue8)
+ * UI cleanup (incl. issue8, thanks to Paul Kishimoto)
 
 Bug Fixes
  * Errors when a plugin isn't activated but a data source used fixed.
