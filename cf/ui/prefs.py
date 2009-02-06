@@ -167,6 +167,8 @@ class PreferencesDialog(GladeWidget):
         action = model.get_value(iter_, 5)
         if not action:
             return
+        if accel_key == gtk.keysyms.Delete and not accel_mods:
+            accel_key = accel_mods = 0
         model.set_value(iter_, 1, accel_key)
         model.set_value(iter_, 2, accel_mods)
         gtk.accel_map_change_entry(action.get_accel_path(),
