@@ -121,7 +121,7 @@ def rebuild_connection_menu(menu, win, editor=None):
             conn = datasource_info.dbconnect()
             editor.set_connection(conn)
         except DBConnectError, err:
-            daialogs.error(_(u'Connection failed'), str(err))
+            dialogs.error(_(u'Connection failed'), str(err))
 
     add_sep = False
     for conn in win.app.datasources.get_connections():
