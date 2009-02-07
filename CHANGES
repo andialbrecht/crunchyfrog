@@ -1,3 +1,11 @@
+Development
+-----------
+
+Bug Fixes
+ * Fixed invalid category in crunchyfrog.desktop (issue37 reported
+   by ivazqueznet).
+
+
 2009-02-06 CrunchyFrog 0.3.3
 ----------------------------
 

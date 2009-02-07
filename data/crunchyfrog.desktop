@@ -1,12 +1,12 @@
 [Desktop Entry]
-Version=0.2
+Version=0.3.3
 Name=CrunchyFrog
-Comment=Database schema browser and query tool
+Comment=SQL Client and Schema Browser
 Exec=crunchyfrog %U
 StartupNotify=true
 StartupWMClass=crunchyfrog
 Icon=crunchyfrog
 Terminal=false
 Type=Application
-Categories=GNOME;GTK;Development;Databases;
+Categories=GNOME;GTK;Development;Database;
 MimeType=text/x-sql
