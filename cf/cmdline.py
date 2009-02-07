@@ -103,8 +103,6 @@ def run():
         app = CFApplication(opts)
         app.init()
         instance = app.new_instance(args)
-        for fname in args:
-            instance.new_editor(fname)
         logging.info('Entering GTK main loop')
         gtk.main()
         logging.info('Leaving GTK main loop')

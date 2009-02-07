@@ -4,6 +4,7 @@ Development
 Bug Fixes
  * Fixed invalid category in crunchyfrog.desktop (issue37 reported
    by ivazqueznet).
+ * Open files given as command line arguments works again (issue38).
 
 
 2009-02-06 CrunchyFrog 0.3.3
