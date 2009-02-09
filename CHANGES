@@ -6,6 +6,10 @@ Bug Fixes
    by ivazqueznet).
  * Open files given as command line arguments works again (issue38).
 
+Other
+ * Some more UI clean up (incl. issue34, thanks to robertknight for the
+   suggestions).
+
 
 2009-02-06 CrunchyFrog 0.3.3
 ----------------------------
