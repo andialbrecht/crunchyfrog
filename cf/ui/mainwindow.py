@@ -120,6 +120,8 @@ class MainWindow(gtk.Window):
             ('instance-preferences', gtk.STOCK_PREFERENCES,
              None, None, _(u'Configure the application'),
              lambda action: self.app.preferences_show(self)),
+            # Query
+            ('query-menu-action', None, _(u'_Query')),
             # View
             ('view-menu-action', None, _(u'_View')),
             # Help
@@ -176,7 +178,6 @@ class MainWindow(gtk.Window):
              _(u'Close _all'), '<control><shift>W', _(u'Close all editors'),
              lambda action: self.close_all_editors()),
             # Query
-            ('query-menu-action', None, _(u'_Query')),
             ('query-connection-menu-action', None, _(u'_Connection')),
             ('query-connection-disconnect', gtk.STOCK_DISCONNECT,
              None, '<shift>F8',
