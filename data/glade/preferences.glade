@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Thu Feb  5 17:17:06 2009 -->
+<!--Generated with glade3 3.4.5 on Tue Feb 10 21:44:39 2009 -->
 <glade-interface>
   <widget class="GtkDialog" id="preferences_dialog">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -105,7 +105,7 @@
                               <widget class="GtkLabel" id="label14">
                                 <property name="visible">True</property>
                                 <property name="xalign">0</property>
-                                <property name="label" translatable="yes">&lt;b&gt;New editors&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">&lt;b&gt;New Editors&lt;/b&gt;</property>
                                 <property name="use_markup">True</property>
                               </widget>
                               <packing>
@@ -131,15 +131,16 @@
                                     <property name="visible">True</property>
                                     <property name="spacing">6</property>
                                     <child>
-                                      <widget class="GtkCheckButton" id="editor_open_separate">
+                                      <widget class="GtkCheckButton" id="editor_reuse_connection">
                                         <property name="visible">True</property>
                                         <property name="can_focus">True</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                        <property name="label" translatable="yes">Open editor in _separate window</property>
+                                        <property name="tooltip" translatable="yes">If activated the connection of the active editor is used when a new editor is opened.</property>
+                                        <property name="label" translatable="yes">_Use active connection as default</property>
                                         <property name="use_underline">True</property>
                                         <property name="response_id">0</property>
                                         <property name="draw_indicator">True</property>
-                                        <signal name="toggled" handler="on_editor_open_in_window_toggled"/>
+                                        <signal name="toggled" handler="on_editor_reuse_conn_toggled"/>
                                       </widget>
                                       <packing>
                                         <property name="expand">False</property>

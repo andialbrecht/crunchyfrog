@@ -677,7 +677,14 @@ class MainWindow(gtk.Window):
         Returns:
           An Editor instance.
         """
+        last_conn = None
+        if self.app.config.get('editor.reuse_connection'):
+            cur_editor = self.get_active_editor()
+            if cur_editor is not None:
+                last_conn = cur_editor.get_connection()
         editor = Editor(self)
+        if last_conn is not None:
+            editor.set_connection(last_conn)
         if fname:
             if fname.startswith("file://") and HAVE_GNOMEVFS:
                 fname = gnomevfs.get_local_path_from_uri(fname)

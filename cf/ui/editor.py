@@ -16,8 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# $Id$
-
 """SQL editor and results view"""
 
 from gettext import gettext as _
@@ -380,6 +378,10 @@ class Editor(GladeWidget, PaneItem):
         else:
             self._conn_close_tag = None
         self.emit("connection-changed", conn)
+
+    def get_connection(self):
+        """Returns the connection assigned to the editor."""
+        return self.connection
 
     def set_filename(self, filename):
         self._filename = filename

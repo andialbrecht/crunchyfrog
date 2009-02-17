@@ -174,8 +174,8 @@ class PreferencesDialog(GladeWidget):
         gtk.accel_map_change_entry(action.get_accel_path(),
                                    accel_key, accel_mods, True)
 
-    def on_editor_open_in_window_toggled(self, toggle):
-        self.app.config.set("editor.open_in_window", toggle.get_active())
+    def on_editor_reuse_conn_toggled(self, toggle):
+        self.app.config.set("editor.reuse_connection", toggle.get_active())
 
     def on_editor_option_changed(self, widget, *args):
         option = widget.get_data("config_option")
@@ -330,7 +330,10 @@ class PreferencesDialog(GladeWidget):
     def refresh_editor(self):
         config = self.app.config
         gw = self.xml.get_widget
-        gw("editor_open_separate").set_active(config.get("editor.open_in_window"))
+        gw('editor_reuse_connection').set_data('config_option',
+                                               'editor.reuse_connection')
+        gw("editor_reuse_connection").set_active(
+            config.get("editor.reuse_connection"))
         gw("editor_replace_variables").set_data("config_option", "editor.replace_variables")
         gw("editor_replace_variables").set_active(config.get("editor.replace_variables"))
         gw("sqlparse_enabled").set_data("config_option", "sqlparse.enabled")
