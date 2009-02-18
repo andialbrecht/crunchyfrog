@@ -187,6 +187,11 @@ class MainWindow(gtk.Window):
              _(u'Show connections'), '<shift>F5',
              _(u'Open or close connections in a dialog'),
              lambda *a: self.app.manage_connections(self)),
+            ('query-frmt-menu', None, _(u'_Format')),
+            ('query-frmt-comment', None,
+             _(u'_Comment / Uncomment'), '<shift><control>c',
+             _(u'Comment / uncomment selected lines'),
+             self.on_frmt_comment),
             ('file-save', gtk.STOCK_SAVE,
              None, '<control>S', _(u'Save the current file'),
              self.on_file_save),
@@ -479,6 +484,12 @@ class MainWindow(gtk.Window):
         self.queries.set_current_page(queries_idx)
         editor = self.queries.get_nth_page(queries_idx)
         editor.get_child1().get_children()[0].grab_focus()
+
+    def on_frmt_comment(self, action):
+        editor = self.get_active_editor()
+        if editor is None:
+            return
+        editor.selected_lines_toggle_comment()
 
     def on_file_save(self, *args):
         editor = self.get_active_editor()
@@ -858,6 +869,10 @@ UI = '''
       <menuitem name="Begin" action="query-begin" />
       <menuitem name="Commit" action="query-commit" />
       <menuitem name="Rollback" action="query-rollback" />
+      <separator />
+      <menu name="QueryFormat" action="query-frmt-menu">
+        <menuitem name="QueryFormatComment" action="query-frmt-comment" />
+      </menu>
       <placeholder name="query-extensions" />
       <separator />
       <menuitem name="Editor1" action="activate-editor1" />

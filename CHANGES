@@ -4,6 +4,7 @@ Development
 New Features
  * Option to use the foreground editor's connection as default for new
    editors (issue17, thanks to Michael Gratton).
+ * Comment / uncomment selected lines in editor.
 
 Bug Fixes
  * Fixed invalid category in crunchyfrog.desktop (issue37 reported

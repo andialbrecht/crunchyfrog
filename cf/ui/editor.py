@@ -524,6 +524,27 @@ class Editor(GladeWidget, PaneItem):
             action = gtk.PRINT_OPERATION_ACTION_PRINT_DIALOG
         operation.run(action)
 
+    def selected_lines_toggle_comment(self):
+        """Comments/uncomments selected lines."""
+        buffer_ = self.textview.get_buffer()
+        res = buffer_.get_selection_bounds()
+        if not res:
+            return
+        start, end = res
+        lno_start = start.get_line()
+        lno_end = end.get_line()
+        for line_no in xrange(lno_start, lno_end+1):
+            lstart = buffer_.get_iter_at_line(line_no)
+            lend = lstart.copy()
+            lend.forward_to_line_end()
+            line = buffer_.get_text(lstart, lend)
+            if not line.startswith('-- '):
+                line = '-- %s' % line
+            else:
+                line = re.sub(r'^\s*-- ', '', line)
+            buffer_.delete(lstart, lend)
+            buffer_.insert(lstart, line)
+
 
 class EditorWindow(GladeWidget):
 
