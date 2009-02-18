@@ -21,9 +21,11 @@
 """Nifty little helpers"""
 
 import re
+import urlparse
 
 import gtk
 import gobject
+
 
 # found here: http://www.mail-archive.com/pygtk@daa.com.au/msg12556.html
 def Emit(obj, *args):
@@ -40,3 +42,14 @@ def normalize_sql(sql):
     """Removes duplicated whitespaces and line breaks."""
     p = re.compile(r'\s+', re.MULTILINE)
     return p.sub(' ', sql)
+
+
+def to_uri(filename):
+    """Converts a filename to URI. It's ok to pass in a URI here."""
+    scheme, netloc, path, params, query, fragment = urlparse.urlparse(filename)
+    if not scheme:
+        uri = urlparse.urlunparse(('file', netloc, path, params,
+                                   query, fragment))
+    else:
+        uri = filename
+    return uri

@@ -40,20 +40,19 @@ from cf.ui.pane import PaneItem
 from cf.ui.widgets import DataExportDialog
 from cf.ui.widgets.grid import Grid
 from cf.ui.widgets.sqlview import SQLView
-
-
-def to_uri(filename):
-    """Converts a filename to URI. It's ok to pass in a URI here."""
-    scheme, netloc, path, params, query, fragment = urlparse.urlparse(filename)
-    if not scheme:
-        uri = urlparse.urlunparse(('file', netloc, path, params,
-                                   query, fragment))
-    else:
-        uri = filename
-    return uri
+from cf.utils import to_uri
 
 
 class Editor(GladeWidget, PaneItem):
+    """SQL editor widget.
+
+    :Signals:
+
+    connection-changed
+      ``def callback(editor, connection)``
+
+      Emitted when a connection was assigned to this editor.
+    """
 
     name = _(u'Editor')
     icon = gtk.STOCK_EDIT
@@ -74,15 +73,20 @@ class Editor(GladeWidget, PaneItem):
         }
 
     def __init__(self, win):
+        """Constructor.
+
+        :Args:
+          win: A MainWindow instance.
+        """
         self.app = win.app
-        self.instance = win
+        self.win = win
         self.connection = None
         self._buffer_dirty = False
         self.__conn_close_tag = None
         self._query_timer = None
         self._filename = None
         self._filecontent_read = ""
-        GladeWidget.__init__(self, self.instance, "editor", "box_editor")
+        GladeWidget.__init__(self, self.win, "editor", "box_editor")
         self.set_data("win", None)
         self.show_all()
 
@@ -107,7 +111,7 @@ class Editor(GladeWidget, PaneItem):
         self.textview.buffer.connect('changed', self.on_buffer_changed)
 
     def _setup_resultsgrid(self):
-        self.results = ResultsView(self.instance, self.xml)
+        self.results = ResultsView(self.win, self.xml)
 
     def _setup_connections(self):
         self.textview.connect("populate-popup", self.on_populate_popup)
@@ -134,7 +138,7 @@ class Editor(GladeWidget, PaneItem):
         sep.show()
         popup.append(sep)
         if self.connection and self.connection.provider.reference:
-            refviewer = self.instance.get_data("refviewer")
+            refviewer = self.win.get_data("refviewer")
             buffer = self.textview.get_buffer()
             bounds = buffer.get_selection_bounds()
             if bounds:
@@ -164,7 +168,7 @@ class Editor(GladeWidget, PaneItem):
         #    50 is a reasonable value anyway.
         #    The start time is for the UI only. The real execution time
         #    is calculated in the Query class.
-        self.instance.statusbar.pop(1)
+        self.win.statusbar.pop(1)
         if self._query_timer is not None:
             gobject.source_remove(self._query_timer)
         self.results.add_separator()
@@ -194,7 +198,7 @@ class Editor(GladeWidget, PaneItem):
                          "num": query.rowcount}
             type_ = 'info'
         self.results.add_message(msg, type_, query.path_status)
-        self.instance.statusbar.push(1, msg)
+        self.win.statusbar.push(1, msg)
         if self.connection.handler_is_connected(tag_notice):
             self.connection.disconnect(tag_notice)
         self.textview.grab_focus()
@@ -217,7 +221,7 @@ class Editor(GladeWidget, PaneItem):
           force: If True, the method doesn't check for changed contents.
         """
         if self.contents_changed() and not force:
-            dlg = ConfirmSaveDialog(self.instance, [self])
+            dlg = ConfirmSaveDialog(self.win, [self])
             resp = dlg.run()
             if resp == 1:
                 ret = dlg.save_files()
@@ -233,8 +237,8 @@ class Editor(GladeWidget, PaneItem):
                 self.get_data("win").destroy()
             else:
                 self.destroy()
-            self.instance.set_editor_active(self, False)
-            self.instance.editor_remove(self)
+            self.win.set_editor_active(self, False)
+            self.win.editor_remove(self)
             return True
 
     def commit(self):
@@ -430,7 +434,7 @@ class Editor(GladeWidget, PaneItem):
 
     def save_file_as(self, parent=None, default_name=None):
         if not parent:
-            parent = self.instance
+            parent = self.win
         dlg = gtk.FileChooserDialog(_(u"Save file"),
                             parent,
                             gtk.FILE_CHOOSER_ACTION_SAVE,
@@ -478,7 +482,7 @@ class Editor(GladeWidget, PaneItem):
     detach = show_in_separate_window  # make it compatible with PaneItem
 
     def show_in_main_window(self):
-        self.instance.queries.attach(self)
+        self.win.queries.attach(self)
         win = self.get_data("win")
         if win:
             win.destroy()
