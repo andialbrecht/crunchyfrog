@@ -62,6 +62,7 @@ class PostgresBackend(DBBackendPlugin):
         log.info("Activating PostgreSQL backend")
         self.schema = PgSchema()
         self.reference = PgReferenceProvider()
+        self.features.transactions = True
 
     def _get_conn_opts_from_opts(self, opts):
         conn_opts = dict()

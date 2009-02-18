@@ -416,7 +416,7 @@ class MainWindow(gtk.Window):
     def on_connection_notify(self, connection, property):
         if property.name == 'transaction-state':
             value = connection.get_property(property.name)
-            gobject.idle_add(self.set_transaction_state, value)
+            gobject.idle_add(self.set_transaction_state, value, connection)
 
     def on_datasource_manager(self, *args):
         dlg = DatasourceManager(self)
@@ -455,7 +455,7 @@ class MainWindow(gtk.Window):
                                              self.on_connection_notify)
             self._tracked_conn.set_data('cf::mainwin::notify', sig)
             state = connection.get_property('transaction-state')
-            self.set_transaction_state(state)
+            self.set_transaction_state(state, connection)
 
     def on_editor_disconnect(self, action):
         editor = self.get_active_editor()
@@ -751,7 +751,7 @@ class MainWindow(gtk.Window):
             conn = self._editor.connection
             if conn:
                 prop =conn.get_property('transaction-state')
-                self.set_transaction_state(prop)
+                self.set_transaction_state(prop, conn)
             handler_id = self._editor.connect('notify::buffer-dirty',
                                               self.on_editor_buffer_dirty)
             self._editor.set_data('cf::sig_editor_buffer_dirty', handler_id)
@@ -775,18 +775,24 @@ class MainWindow(gtk.Window):
         if editor is not None and isinstance(editor, Editor):
             editor.textview.grab_focus()
 
-    def set_transaction_state(self, value):
+    def set_transaction_state(self, value, connection):
+        """Adjusts the transactions state in the UI."""
         # A regression: If value is None that means we have no connection,
         # but this is already handled by setting the whole action group
         # insensitive.
-        if value is None:
+        if value is None or connection is None:
             return
         commit = self._get_action('query-commit')
         rollback = self._get_action('query-rollback')
         begin = self._get_action('query-begin')
-        commit.set_sensitive((value & TRANSACTION_COMMIT_ENABLED) != 0)
-        rollback.set_sensitive((value & TRANSACTION_ROLLBACK_ENABLED) != 0)
-        begin.set_sensitive((value & TRANSACTION_IDLE) != 0)
+        if connection.provider.features.transactions:
+            commit.set_sensitive((value & TRANSACTION_COMMIT_ENABLED) != 0)
+            rollback.set_sensitive((value & TRANSACTION_ROLLBACK_ENABLED) != 0)
+            begin.set_sensitive((value & TRANSACTION_IDLE) != 0)
+        else:
+            commit.set_sensitive(False)
+            rollback.set_sensitive(False)
+            begin.set_sensitive(False)
 
     def state_restore(self):
         """Restore window state."""

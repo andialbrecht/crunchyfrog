@@ -48,6 +48,7 @@ class MySQLBackend(DBBackendPlugin):
         log.info("Activating MySQL backend")
         self.schema = MySQLSchema()
         self.reference = MySQLReferenceProvider()
+        self.features.transactions = True
 
     def _get_conn_opts_from_opts(self, opts):
         conn_opts = dict()

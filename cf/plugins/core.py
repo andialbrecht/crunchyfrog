@@ -45,6 +45,7 @@ PLUGIN_TYPE_EDITOR = 3
 
 from cf import USER_PLUGIN_DIR, PLUGIN_DIR
 
+from cf.backends import DBFeatures
 from cf.plugins.mixins import InstanceMixin, MenubarMixin, EditorMixin
 from cf.plugins.mixins import UserDBMixin
 from cf.ui import dialogs
@@ -134,6 +135,7 @@ class DBBackendPlugin(GenericPlugin):
         GenericPlugin.__init__(self, app)
         self.schema = None
         self.reference = None
+        self.features = DBFeatures()
 
     @classmethod
     def get_datasource_options_widgets(cls, data_widgets, initial_data=None):

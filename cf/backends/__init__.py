@@ -49,6 +49,11 @@ class DBConnectError(DBError):
     """Errors on opening a connection"""
 
 
+class DBFeatures(object):
+    """Defines available database features."""
+    transactions = False
+
+
 class DBConnection(gobject.GObject):
 
     __gsignals__ = {

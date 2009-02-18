@@ -43,6 +43,7 @@ class OracleBackend(DBBackendPlugin):
         DBBackendPlugin.__init__(self, app)
         log.info("Activating Oracle backend")
         self.schema = OracleSchema()
+        self.features.transactions = True
 
     def _get_conn_opts_from_opts(self, opts):
         conn_opts = dict()

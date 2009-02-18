@@ -46,6 +46,7 @@ class SQLiteBackend(DBBackendPlugin):
         log.info("Activating SQLite3 backend")
         self.schema = SQLiteSchema()
         self.reference = SQLiteReferenceProvider()
+        self.features.transactions = True
 
     @classmethod
     def _get_filename(cls, chooser):
