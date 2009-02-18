@@ -157,7 +157,7 @@ class ConsoleView(gtk.TextView):
     self.set_cursor_visible(True)
     self.text_buffer = self.get_buffer()
     self.text_buffer.set_text(('"app": application, '
-			       '"instance": current instance\n'))
+			       '"window": current window\n'))
     self.mark = self.text_buffer.create_mark('scroll_mark',
                                              self.text_buffer.get_end_iter(),
                                              False)

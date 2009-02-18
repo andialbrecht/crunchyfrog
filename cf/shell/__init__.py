@@ -83,7 +83,7 @@ class CFShellView(gtk.ScrolledWindow, PaneItem):
         self.instance = instance
         self.iview = IPythonView()
         self.iview.updateNamespace({"app": self.app,
-                                    "instance": self.instance})
+                                    "window": self.instance})
         self.add(self.iview)
         self.set_size_request(-1, 100)
         self.show_all()
