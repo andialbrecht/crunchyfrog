@@ -3,18 +3,26 @@
 # This module is part of python-sqlparse and is released under
 # the BSD License: http://www.opensource.org/licenses/bsd-license.php.
 
-"""pygments filter"""
+"""filter"""
 
 import logging
 
-import pygments.token
-from pygments.filter import Filter
+from sqlparse.tokens import *
 
 # Create our custom groups
-grp = pygments.token.Token.Group
-pygments.token.Group = pygments.token.Token.Group
-grpc = pygments.token.Token.Group.Comment
-grpl = pygments.token.Token.Group.Literal
+grp = Token.Group
+Group = Token.Group
+grpc = Token.Group.Comment
+grpl = Token.Group.Literal
+
+
+class Filter(object):
+
+    def __init__(self, **options):
+        self.options = options
+
+    def filter(self, lexer, stream):
+        raise NotImplementedError
 
 
 class GroupFilter(Filter):
@@ -24,15 +32,15 @@ class GroupFilter(Filter):
         cached = []
         comment_in_cache = False
         for ttype, value in stream:
-            if pygments.token.Whitespace in ttype or ttype in pygments.token.Comment:
+            if Whitespace in ttype or ttype in Comment:
                 cached.append((ttype, value))
-                if ttype in pygments.token.Comment:
+                if ttype in Comment:
                     comment_in_cache = True
                 continue
             else:
                 if cached and comment_in_cache:
                     new_value = ''.join(x[1] for x in cached)
-                    yield pygments.token.Group.Comment, new_value
+                    yield Group.Comment, new_value
                 elif cached:
                     for item in cached:
                         yield item
@@ -45,7 +53,7 @@ class UngroupFilter(Filter):
 
     def filter(self, lexer, stream):
         for ttype, value in stream:
-            if ttype in pygments.token.Group:
+            if ttype in Group:
                 from parser import Parser
                 # use sqlparse instead of the lexer to handle lb at the end
                 p = Parser()
@@ -60,8 +68,8 @@ class IfFilter(Filter):
 
     def filter(self, lexer, stream):
         for ttype, value in stream:
-            if ttype is pygments.token.Name and value.upper() == 'IF':
-                ttype = pygments.token.Keyword
+            if ttype is Name and value.upper() == 'IF':
+                ttype = Keyword
             yield ttype, value
 
 
@@ -73,18 +81,18 @@ class StripWhitespaceFilter(Filter):
         in_comment = False
         last = None
         for ttype, value in stream:
-            if pygments.token.Comment in ttype.split() and not in_comment:
+            if Comment in ttype.split() and not in_comment:
                 in_comment = True
-            if pygments.token.Text.Whitespace in ttype.split() \
+            if Text.Whitespace in ttype.split() \
             and value in (' ', '\t') and not in_comment:
                 cached.append((ttype, value))
                 continue
-            if in_comment and (pygments.token.Comment not in ttype.split()
-                               and pygments.token.Whitespace \
+            if in_comment and (Comment not in ttype.split()
+                               and Whitespace \
                                not in ttype.split()):
                 in_comment = False
             if cached:
-                yield pygments.token.Text.Whitespace, ' '
+                yield Text.Whitespace, ' '
                 cached = []
             last = (ttype, value)
             yield ttype, value
@@ -95,10 +103,10 @@ class LTrimFilter(Filter):
     def filter(self, lexer, stream):
         other_token_found = True
         for ttype, value in stream:
-            if pygments.token.Text.Whitespace in ttype.split() \
+            if Text.Whitespace in ttype.split() \
             and value == '\n':
                 other_token_found = False
-            elif pygments.token.Text.Whitespace in ttype.split() \
+            elif Text.Whitespace in ttype.split() \
             and not other_token_found:
                 continue
             else:
@@ -113,7 +121,7 @@ class IdentifierCaseFilter(Filter):
 
     def filter(self, lexer, stream):
         for ttype, value in stream:
-            if ttype is pygments.token.Name:
+            if ttype is Name:
                 if self.case == 'upper':
                     value = value.upper()
                 elif self.case == 'capitalize':
@@ -127,7 +135,7 @@ class StripCommentsFilter(Filter):
 
     def filter(self, lexer, stream):
         for ttype, value in stream:
-            if ttype in pygments.token.Group.Comment:
+            if ttype in Group.Comment:
                 continue
             yield ttype, value
 
@@ -139,13 +147,13 @@ class CleanupWSCommaFilter(Filter):
         cached = []
         last_yielded = None
         for ttype, value in stream:
-            if pygments.token.Text.Whitespace in ttype.split():
+            if Text.Whitespace in ttype.split():
                 cached.append((ttype, value))
                 continue
-            elif pygments.token.Punctuation in ttype.split() \
+            elif Punctuation in ttype.split() \
             and value == ',':
                 if last_yielded \
-                and pygments.token.Comment in last_yielded[0].split():
+                and Comment in last_yielded[0].split():
                     while cached:
                         yield cached.pop(0)
                     last_yielded = None
@@ -187,30 +195,21 @@ class IndentFilter(Filter):
         for ttype, value in stream:
             before, after = self.indents.get(value.upper(), (0, 0))
             level += before
-            if pygments.token.Keyword in ttype.split() \
+            if Keyword in ttype.split() \
             and value.upper() in self.split_words:
                 if not wait_until_join:
-                    yield pygments.token.Text.Whitespace, '\n'
+                    yield Text.Whitespace, '\n'
                     for i in range(level):
                         for j in range(self.n_indents):
-                            yield pygments.token.Text.Whitespace, ' '
+                            yield Text.Whitespace, ' '
                 if value.upper() in ('LEFT', 'OUTER', 'INNER'):
                     wait_until_join = True
                 elif value.upper() == 'JOIN':
                     wait_until_join = False
-            elif ttype in pygments.token.Group.Comment:
+            elif ttype in Group.Comment:
                 value = self._reindent_comment(value)
             yield ttype, value
             level += after
-
-
-class StripCommentsFilter(Filter):
-
-    def filter(self, lexer, stream):
-        for ttype, value in stream:
-            if ttype in pygments.token.Group.Comment:
-                continue
-            yield ttype, value
 
 
 class RightMarginFilter(Filter):
@@ -227,7 +226,7 @@ class RightMarginFilter(Filter):
         append_to_rest = False
         for ttype, value in line:
             if not append_to_rest \
-            and pygments.token.Text.Whitespace in ttype.split() \
+            and Text.Whitespace in ttype.split() \
             and value in (' ', '\t'):
                 indentation.append((ttype, value))
             else:
@@ -239,13 +238,13 @@ class RightMarginFilter(Filter):
         line = []
         in_literal = False
         for ttype, value in stream:
-            if pygments.token.Literal in ttype.split():
+            if Literal in ttype.split():
                 in_literal = True
-            if in_literal and pygments.token.Literal not in ttype.split() \
-            and pygments.token.Text.Whitespace not in ttype.split():
+            if in_literal and Literal not in ttype.split() \
+            and Text.Whitespace not in ttype.split():
                 in_literal = False
             if not in_literal \
-            and pygments.token.Text.Whitespace in ttype.split() \
+            and Text.Whitespace in ttype.split() \
             and value == '\n':
                 yield line
                 line = []
@@ -268,14 +267,14 @@ class RightMarginFilter(Filter):
             if new_line == []:
                 new_line += indentation
             new_line.append((ttype, value))
-            if pygments.token.Literal in ttype.split():
+            if Literal in ttype.split():
                 in_literal = True
-            if in_literal and pygments.token.Literal not in ttype.split() \
-            and pygments.token.Text.Whitespace not in ttype.split():
+            if in_literal and Literal not in ttype.split() \
+            and Text.Whitespace not in ttype.split():
                 in_literal = False
             if not in_literal \
-            and pygments.token.Text.Whitespace in ttype.split() \
-            or (pygments.token.Punctuation in ttype.split() \
+            and Text.Whitespace in ttype.split() \
+            or (Punctuation in ttype.split() \
                 and value in (';', ',', ')')):
                 # TODO(andi): -10 is a dirty hack, it'd much better to have
                 #  some better look ahead algorithm.
@@ -283,12 +282,14 @@ class RightMarginFilter(Filter):
                     for item in new_line:
                         yield item
                     new_line = []
-                    yield pygments.token.Text.Whitespace, '\n'
+                    yield Text.Whitespace, '\n'
         if new_line:
             for item in new_line:
                 yield item
-            yield pygments.token.Text.Whitespace, '\n'
+            yield Text.Whitespace, '\n'
 
     def filter(self, lexer, stream):
         for ttype, value in self._fold(stream):
             yield ttype, value
+
+

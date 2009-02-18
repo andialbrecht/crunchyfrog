@@ -14,6 +14,7 @@ Bug Fixes
 Other
  * Some more UI clean up (incl. issue34, thanks to robertknight for the
    suggestions).
+ * Pygments is not required anymore.
 
 Translations
  * Swedish is now complete (thanks to Daniel Nylander).

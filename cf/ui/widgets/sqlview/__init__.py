@@ -55,7 +55,7 @@ try:
 except ImportError:
     HAVE_GCONF = False
 
-from cf import sqlparse
+import sqlparse
 
 
 class SQLView(gtksourceview2.View):

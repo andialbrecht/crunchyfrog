@@ -74,6 +74,10 @@ IPC_SOCKET = os.path.join(USER_DIR, "crunchyfog.sock")
 gettext.bindtextdomain('crunchyfrog', LOCALE_DIR)
 gettext.textdomain('crunchyfrog')
 gettext.install('crunchyfrog', LOCALE_DIR, True)
+
+# Add sqlparse to PYTHONPATH
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
+
 try:
     import gtk
     import gtk.glade

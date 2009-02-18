@@ -29,8 +29,9 @@ from cf.backends.schema import *
 from cf.backends import ReferenceProvider
 from cf.datasources import DatasourceInfo
 from cf.plugins.core import DBBackendPlugin
-from cf import sqlparse
 from cf.utils import Emit
+
+import sqlparse
 
 import time
 from urllib import quote_plus

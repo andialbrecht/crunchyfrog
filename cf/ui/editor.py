@@ -32,7 +32,6 @@ import gtk
 import gtksourceview2
 import pango
 
-from cf import sqlparse
 from cf.backends import Query
 from cf.ui import GladeWidget, dialogs
 from cf.ui.confirmsave import ConfirmSaveDialog
@@ -41,6 +40,8 @@ from cf.ui.widgets import DataExportDialog
 from cf.ui.widgets.grid import Grid
 from cf.ui.widgets.sqlview import SQLView
 from cf.utils import to_uri
+
+import sqlparse
 
 
 class Editor(GladeWidget, PaneItem):

@@ -5,7 +5,7 @@
 
 """This module contains classes that represent SQL dialects."""
 
-import pygments.token
+from tokens import *
 
 
 class Dialect(object):
@@ -41,7 +41,7 @@ class DefaultDialect(Dialect):
         self._stmt_type = type_
 
     def handle_token(self, tokentype, text):
-        if not tokentype == pygments.token.Keyword:
+        if not tokentype == Keyword:
             return tokentype, text, 0
         unified = text.upper()
         if unified == 'DECLARE':
@@ -70,7 +70,7 @@ class PSQLDialect(DefaultDialect):
         self._in_dbldollar = False
 
     def handle_token(self, tokentype, text):
-        if tokentype == pygments.token.Error and text == '$':
+        if tokentype == Error and text == '$':
             if not self._dollar_started:
                 self._dollar_started = True
                 return tokentype, text, 0

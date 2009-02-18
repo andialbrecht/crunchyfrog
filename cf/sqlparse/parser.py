@@ -7,13 +7,11 @@
 
 import re
 
-import pygments.token
-from pygments.util import get_bool_opt
-from pygments.lexers import SqlLexer
-
+import formatter
 from dialects import Dialect, DefaultDialect
 from filters import IfFilter
-import formatter
+from lexer import Lexer
+from tokens import *
 
 
 # TODO: Use constants and move somewhere else
@@ -33,9 +31,8 @@ class Parser(object):
 
     def __init__(self, dialect=None):
         self._dialect = None
-        self._lexer = SqlLexer()
+        self._lexer = Lexer()
         self._lexer.add_filter(IfFilter())
-        self._lexer.add_filter('whitespace')
         self.set_dialect(dialect)
 
     def set_dialect(self, dialect):
@@ -56,10 +53,10 @@ class Parser(object):
                                                                     text)
             tokens.append((tokentype, text))
             splitlevel += lvlchange
-            if (tokentype == pygments.token.Keyword
+            if (tokentype == Keyword
                 and self._dialect.get_statement_type() is None):
                 self._dialect.set_statement_type(_STATEMENT_TYPES.get(text.upper(), None))
-            if not splitlevel and tokentype == pygments.token.Punctuation \
+            if not splitlevel and tokentype == Punctuation \
             and text == ';':
                 statements.append(Statement(tokens))
                 splitlevel = 0
@@ -70,7 +67,7 @@ class Parser(object):
         if statements:
             last = statements.pop()
             tokentype, text = last.tokens[-1]
-            if tokentype == pygments.token.Text.Whitespace and text == '\n' \
+            if tokentype == Text.Whitespace and text == '\n' \
             and not sql.endswith('\n'):  # pygments adds a \n
                 last.tokens = last.tokens[:-1]
             if last.tokens:

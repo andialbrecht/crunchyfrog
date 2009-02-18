@@ -7,18 +7,17 @@
 
 import logging
 
-from pygments.lexers import SqlLexer
-
 import filters
+from lexer import Lexer
 
 
 def format(statement, options=None):
     if options is None:
         options = {}
     logging.info('OPTIONS %r', options)
-    lexer = SqlLexer()
+    lexer = Lexer()
     lexer.add_filter(filters.IfFilter())
-    lexer.add_filter('whitespace')
+#    lexer.add_filter('whitespace')
     lexer.add_filter(filters.GroupFilter())
     if options.get('reindent', False):
         lexer.add_filter(filters.StripWhitespaceFilter())
