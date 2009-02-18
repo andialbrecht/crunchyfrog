@@ -234,7 +234,7 @@ class Editor(GladeWidget, PaneItem):
             else:
                 self.destroy()
             self.instance.set_editor_active(self, False)
-            self.instance._editors.remove(self)
+            self.instance.editor_remove(self)
             return True
 
     def commit(self):

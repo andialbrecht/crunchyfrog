@@ -718,6 +718,11 @@ class MainWindow(gtk.Window):
         self.queries.add_item(editor)
         self._editors.append(editor)
 
+    def editor_remove(self, editor):
+        """Removes an editor from this instance."""
+        if editor in self._editors:
+            self._editors.remove(editor)
+
     def get_active_editor(self):
         """Returns the active editor.
 
