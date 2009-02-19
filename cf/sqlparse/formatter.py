@@ -28,7 +28,7 @@ def format(statement, options=None):
     keyword_case = options.get('keyword_case', None)
     if keyword_case is not None:
         assert keyword_case in ('lower', 'upper', 'capitalize')
-        lexer.add_filter('keywordcase', case=keyword_case)
+        lexer.add_filter(filters.KeywordCaseFilter(case=keyword_case))
     identifier_case = options.get('identifier_case', None)
     if identifier_case is not None:
         assert identifier_case in ('lower', 'upper', 'capitalize')

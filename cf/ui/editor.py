@@ -44,6 +44,15 @@ from cf.utils import to_uri
 import sqlparse
 
 
+FORMATTER_DEFAULT_OPTIONS = {
+    'reindent': True,
+    'n_indents': 4,
+    'keyword_case': 'upper',
+    'identifier_case': 'lower',
+    'right_margin': 79
+}
+
+
 class Editor(GladeWidget, PaneItem):
     """SQL editor widget.
 
@@ -539,6 +548,7 @@ class Editor(GladeWidget, PaneItem):
             start, end = res
             lno_start = start.get_line()
             lno_end = end.get_line()
+        buffer_.begin_user_action()
         for line_no in xrange(lno_start, lno_end+1):
             lstart = buffer_.get_iter_at_line(line_no)
             lend = lstart.copy()
@@ -550,6 +560,24 @@ class Editor(GladeWidget, PaneItem):
                 line = re.sub(r'^\s*-- ', '', line)
             buffer_.delete(lstart, lend)
             buffer_.insert(lstart, line)
+        buffer_.end_user_action()
+
+    def selected_lines_quick_format(self):
+        """Runs format without any other options than the default ones."""
+        buffer_ = self.textview.get_buffer()
+        res = buffer_.get_selection_bounds()
+        if not res:
+            start, end = buffer_.get_bounds()
+        else:
+            start, end = res
+        orig = buffer_.get_text(start, end)
+        formatted = []
+        for stmt in sqlparse.parse(orig):
+            formatted.append(stmt.format(**FORMATTER_DEFAULT_OPTIONS))
+        buffer_.begin_user_action()
+        buffer_.delete(start, end)
+        buffer_.insert(start, ''.join(unicode(x) for x in formatted))
+        buffer_.end_user_action()
 
 
 class ResultsView(GladeWidget):

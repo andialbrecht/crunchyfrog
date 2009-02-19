@@ -192,6 +192,10 @@ class MainWindow(gtk.Window):
              _(u'_Comment / Uncomment'), '<shift><control>space',
              _(u'Comment / uncomment selected lines'),
              self.on_frmt_comment),
+            ('query-frmt-format', None,
+             _(u'_Format'), '<shift><control>f',
+             _(u'Beautify selected lines or whole buffer'),
+             self.on_frmt_format),
             ('file-save', gtk.STOCK_SAVE,
              None, '<control>S', _(u'Save the current file'),
              self.on_file_save),
@@ -490,6 +494,12 @@ class MainWindow(gtk.Window):
         if editor is None:
             return
         editor.selected_lines_toggle_comment()
+
+    def on_frmt_format(self, action):
+        editor = self.get_active_editor()
+        if editor is None:
+            return
+        editor.selected_lines_quick_format()
 
     def on_file_save(self, *args):
         editor = self.get_active_editor()
@@ -883,6 +893,7 @@ UI = '''
       <separator />
       <menu name="QueryFormat" action="query-frmt-menu">
         <menuitem name="QueryFormatComment" action="query-frmt-comment" />
+        <menuitem name="QueryFormatFormat" action="query-frmt-format" />
       </menu>
       <placeholder name="query-extensions" />
       <separator />

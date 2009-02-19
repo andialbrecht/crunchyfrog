@@ -170,7 +170,7 @@ class IndentFilter(Filter):
 
     split_words = ('SELECT', 'FROM', 'WHERE', 'ORDER', 'JOIN', 'LIMIT',
                    'BEGIN', 'END', 'FOR', 'IF', 'LEFT', 'OUTER', 'INNER',
-                   'UNION', 'GROUP', 'AND', 'OR', 'ON', 'CASE', 'WHEN',
+                   'UNION', 'GROUP', 'AND', 'OR', 'CASE', 'WHEN',
                    'THEN', 'ELSE', 'VALUES')
     indents = {'(': (1, 0), ')': (-1, 0),
                'AND': (1, -1), 'OR': (1, -1),
@@ -292,4 +292,18 @@ class RightMarginFilter(Filter):
         for ttype, value in self._fold(stream):
             yield ttype, value
 
+
+class KeywordCaseFilter(Filter):
+
+    def __init__(self, case=None):
+        if case is None:
+            case = 'upper'
+        assert case in ['lower', 'upper', 'capitalize']
+        self.convert = getattr(unicode, case)
+
+    def filter(self, lexer, stream):
+        for ttype, value in stream:
+            if ttype is Keyword:
+                value = self.convert(value)
+            yield ttype, value
 

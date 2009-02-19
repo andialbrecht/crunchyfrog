@@ -45,8 +45,103 @@ def apply_filters(stream, filters, lexer=None):
     return stream
 
 
+class LexerMeta(type):
+    """
+    Metaclass for Lexer, creates the self._tokens attribute from
+    self.tokens on the first instantiation.
+    """
+
+    def _process_state(cls, unprocessed, processed, state):
+        assert type(state) is str, "wrong state name %r" % state
+        assert state[0] != '#', "invalid state name %r" % state
+        if state in processed:
+            return processed[state]
+        tokens = processed[state] = []
+        rflags = cls.flags
+        for tdef in unprocessed[state]:
+            if isinstance(tdef, include):
+                # it's a state reference
+                assert tdef != state, "circular state reference %r" % state
+                tokens.extend(cls._process_state(unprocessed, processed, str(tdef)))
+                continue
+
+            assert type(tdef) is tuple, "wrong rule def %r" % tdef
+
+            try:
+                rex = re.compile(tdef[0], rflags).match
+            except Exception, err:
+                raise ValueError("uncompilable regex %r in state %r of %r: %s" %
+                                 (tdef[0], state, cls, err))
+
+            assert type(tdef[1]) is _TokenType or callable(tdef[1]), \
+                   'token type must be simple type or callable, not %r' % (tdef[1],)
+
+            if len(tdef) == 2:
+                new_state = None
+            else:
+                tdef2 = tdef[2]
+                if isinstance(tdef2, str):
+                    # an existing state
+                    if tdef2 == '#pop':
+                        new_state = -1
+                    elif tdef2 in unprocessed:
+                        new_state = (tdef2,)
+                    elif tdef2 == '#push':
+                        new_state = tdef2
+                    elif tdef2[:5] == '#pop:':
+                        new_state = -int(tdef2[5:])
+                    else:
+                        assert False, 'unknown new state %r' % tdef2
+                elif isinstance(tdef2, combined):
+                    # combine a new state from existing ones
+                    new_state = '_tmp_%d' % cls._tmpname
+                    cls._tmpname += 1
+                    itokens = []
+                    for istate in tdef2:
+                        assert istate != state, 'circular state ref %r' % istate
+                        itokens.extend(cls._process_state(unprocessed,
+                                                          processed, istate))
+                    processed[new_state] = itokens
+                    new_state = (new_state,)
+                elif isinstance(tdef2, tuple):
+                    # push more than one state
+                    for state in tdef2:
+                        assert (state in unprocessed or
+                                state in ('#pop', '#push')), \
+                               'unknown new state ' + state
+                    new_state = tdef2
+                else:
+                    assert False, 'unknown new state def %r' % tdef2
+            tokens.append((rex, tdef[1], new_state))
+        return tokens
+
+    def process_tokendef(cls):
+        cls._all_tokens = {}
+        cls._tmpname = 0
+        processed = cls._all_tokens[cls.__name__] = {}
+        #tokendefs = tokendefs or cls.tokens[name]
+        for state in cls.tokens.keys():
+            cls._process_state(cls.tokens, processed, state)
+        return processed
+
+    def __call__(cls, *args, **kwds):
+        if not hasattr(cls, '_tokens'):
+            cls._all_tokens = {}
+            cls._tmpname = 0
+            if hasattr(cls, 'token_variants') and cls.token_variants:
+                # don't process yet
+                pass
+            else:
+                cls._tokens = cls.process_tokendef()
+
+        return type.__call__(cls, *args, **kwds)
+
+
+
 
 class Lexer:
+
+    __metaclass__ = LexerMeta
 
     encoding = 'utf-8'
     stripall = False
@@ -155,90 +250,12 @@ class Lexer:
     }
 
     def __init__(self):
-        self._tokens = self.process_tokendef()
         self.filters = []
 
     def add_filter(self, filter_, **options):
         if not isinstance(filter_, Filter):
-            print filter_, Filter, isinstance(filter_, Filter)
             filter_ = filter_(**options)
         self.filters.append(filter_)
-
-    @classmethod
-    def _process_state(cls, unprocessed, processed, state):
-        assert type(state) is str, "wrong state name %r" % state
-        assert state[0] != '#', "invalid state name %r" % state
-        if state in processed:
-            return processed[state]
-        tokens = processed[state] = []
-        rflags = cls.flags
-        for tdef in unprocessed[state]:
-            if isinstance(tdef, include):
-                # it's a state reference
-                assert tdef != state, "circular state reference %r" % state
-                tokens.extend(cls._process_state(unprocessed, processed, str(tdef)))
-                continue
-
-            assert type(tdef) is tuple, "wrong rule def %r" % tdef
-
-            try:
-                rex = re.compile(tdef[0], rflags).match
-            except Exception, err:
-                raise ValueError("uncompilable regex %r in state %r of %r: %s" %
-                                 (tdef[0], state, cls, err))
-
-            assert type(tdef[1]) is _TokenType or callable(tdef[1]), \
-                   'token type must be simple type or callable, not %r' % (tdef[1],)
-
-            if len(tdef) == 2:
-                new_state = None
-            else:
-                tdef2 = tdef[2]
-                if isinstance(tdef2, str):
-                    # an existing state
-                    if tdef2 == '#pop':
-                        new_state = -1
-                    elif tdef2 in unprocessed:
-                        new_state = (tdef2,)
-                    elif tdef2 == '#push':
-                        new_state = tdef2
-                    elif tdef2[:5] == '#pop:':
-                        new_state = -int(tdef2[5:])
-                    else:
-                        assert False, 'unknown new state %r' % tdef2
-                elif isinstance(tdef2, combined):
-                    # combine a new state from existing ones
-                    new_state = '_tmp_%d' % cls._tmpname
-                    cls._tmpname += 1
-                    itokens = []
-                    for istate in tdef2:
-                        assert istate != state, 'circular state ref %r' % istate
-                        itokens.extend(cls._process_state(unprocessed,
-                                                          processed, istate))
-                    processed[new_state] = itokens
-                    new_state = (new_state,)
-                elif isinstance(tdef2, tuple):
-                    # push more than one state
-                    for state in tdef2:
-                        assert (state in unprocessed or
-                                state in ('#pop', '#push')), \
-                               'unknown new state ' + state
-                    new_state = tdef2
-                else:
-                    assert False, 'unknown new state def %r' % tdef2
-            tokens.append((rex, tdef[1], new_state))
-        return tokens
-
-    @classmethod
-    def process_tokendef(cls):
-        cls._all_tokens = {}
-        cls._tmpname = 0
-        processed = cls._all_tokens[cls.__name__] = {}
-        #tokendefs = tokendefs or cls.tokens[name]
-        for state in cls.tokens.keys():
-            cls._process_state(cls.tokens, processed, state)
-        return processed
-
 
     def get_tokens(self, text, unfiltered=False):
         """
