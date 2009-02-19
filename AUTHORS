@@ -1,1 +1,14 @@
-albrecht.andi: Andi Albrecht <albrecht.andi@gmail.com>
+CrunchyFrog is written and maintained by Andi Albrecht <albrecht.andi@gmail.com>.
+
+The OpenOffice export plugin uses ooolib-python written
+by Joseph Colton <josephcolton@gmail.com>. ooolib-python is licensed
+under the LGPL2.1.
+ooolib-python's homepage: http://ooolib.sourceforge.net/.
+
+The Python shell plugin uses code written by Eitan Isaacson found on
+http://ipython.scipy.org/moin/Cookbook/EmbeddingInGTK. The embedded
+IPython shell is licensed under the BSD license.
+
+Translators are noted in cf/release.py.
+
+Many thanks for all contributions!

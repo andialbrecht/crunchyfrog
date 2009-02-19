@@ -2,8 +2,10 @@ About CrunchyFrog
 =================
 
 CrunchyFrog was written by Andi Albrecht <albrecht.andi@gmail.com>.
+
 To find more information about CrunchyFrog, please visit the
-`project page <http://crunchyfrog.googlecode.com>`_.
+`project page <http://crunchyfrog.googlecode.com>`_ or post a message
+on the `discussion group <http://groups.google.com/group/crunchyfrog>`_.
 
 To report a bug or make a suggestion regarding this application or
 this manual, file an issue on the

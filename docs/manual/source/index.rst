@@ -5,8 +5,6 @@
 CrunchyFrog Manual
 ==================
 
-Contents:
-
 .. toctree::
    :maxdepth: 2
 
@@ -16,12 +14,16 @@ Contents:
    queries
    plugins
    about
+   changes
+
+.. Note::
+   :kbd:`Keyboard shortcuts` mentioned in this manual always reflect
+   the default setting.
 
 
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 
