@@ -7,6 +7,9 @@ A data source tells :program:`CrunchyFrog` how to connect to a database.
 Depending on the database a data source needs provider specific information.
 
 
+.. index::
+   single: Data Sources; Editing
+
 .. _datasources_defining:
 
 Configure Data Sources
@@ -70,6 +73,9 @@ click :guilabel:`Delete`.
 Connecting to a Database
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. index::
+   single: Data Sources; Connecting
+
 To connect to a database use one of the following methods:
 
 Datasource Manager
@@ -97,6 +103,9 @@ Toolbar
    select a connection. The connection chooser is bound
    to the currently active SQL editor.
 
+
+.. index::
+   pair: Editor; Connections
 
 Default Connection for New Editors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

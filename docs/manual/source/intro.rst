@@ -54,6 +54,7 @@ This section explains how :ref:`start <crunchyfrog-start>` and how the
 
 .. _crunchyfrog-start:
 
+
 To Start CrunchyFrog
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -72,6 +73,9 @@ Command line
    a dialog where you can choose, if you want to open the
    specified files in an existing or a new instance of CrunchyFrog.
 
+
+.. index::
+   single: User Interface; Main Window
 
 .. _crunchyfrog-mainwindow:
 

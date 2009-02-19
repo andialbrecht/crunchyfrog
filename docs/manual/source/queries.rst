@@ -3,6 +3,10 @@
 Database Queries
 ================
 
+.. index::
+   single: Editor
+   single: User Interface; Editor
+
 .. _sqleditor:
 
 SQL Editor
@@ -14,17 +18,13 @@ Menubar
    Choose :menuselection:`File --> New --> Query`
 
 Toolbar
-   Click on the first button
+   Click on the button labeled :guilabel:`Query`
 
 Shortcut Key
    Press :kbd:`Ctrl+N`
 
 Navigator
    Double click on any datasource
-
-.. tip::
-   Except when opening an editor by double-clicking on a datasource
-   in the navigator, a new SQL editor is not bound to a connection.
 
 
 A SQL editor has two parts:
@@ -37,6 +37,9 @@ Results Panel
    tabs :guilabel:`Results`, :guilabel:`Explain` and :guilabel:`Messages`.
 
 
+.. index::
+   single: Query; Execute
+
 .. _queries_execute:
 
 Executing Queries
@@ -46,15 +49,6 @@ To execute a query press :kbd:`F5` or
 click on the execute button in the toolbar. The result of
 a query will be displayed in the results panel, when the
 query has finished.
-
-.. caution::
-   Unfortunately the SQL editor has no integrated SQL parser
-   for now. If the SQL editor or the selected text has more
-   then one statement, all statements are executed by the
-   current connection at once.
-   But only the return value or the result of the last query
-   will be displayed in the results pane.
-
 
 .. tip::
    Statements can contain placholders. Placeholders begin with
@@ -66,6 +60,10 @@ query has finished.
    :menuselection:`Editor --> General --> Replace variables`
 
 
+
+.. index::
+   single: Results
+   single: User Interface; Query Results
 
 .. _queries_results:
 
@@ -109,6 +107,10 @@ button in the toolbar. If you have made a selection before,
 the export dialog gives you an option to export only the selected data.
 
 
+.. index::
+   pair: Query; Transactions
+   pair: Connection; Transactions
+
 .. _queries_transactions:
 
 Transactions
@@ -117,3 +119,59 @@ Transactions
 If it's supported by the database backend, transactions can be
 used using the buttons in the toolbar. The transaction state
 can be changed by statements executed in the editor, too.
+
+
+Editing SQL Statements
+----------------------
+
+The editor provides features for editing SQL statements.
+
+
+.. index::
+   single: Editor; Splitting Statements
+
+SQL Splitting
+^^^^^^^^^^^^^
+
+By default the editor tries to split it's content into separate SQL
+statements. The beginning of a statement is marked with an arrow beside
+the line numbers. You may receive better results when a connection is assigned
+to the editor. When no connection is assigned the content of an editor is
+treated as ANSI-SQL.
+
+To disable query splitting either deactivate the appropriate option in
+the preferences dialog to disable it globally or disable it opening the
+popup menu in an editor and uncheck :guilabel:`SQL Splitting`.
+
+When SQL splitting is activated each recognized SQL in the editor is
+executed separately. Otherwise the whole content of the editor or the
+selected text is executed as it were one statement.
+
+
+.. index::
+   single: Editor; Comments
+
+Comment/Uncomment Lines
+^^^^^^^^^^^^^^^^^^^^^^^
+
+To comment or uncomment parts of a SQL statement either select
+:menuselection:`Query --> Format --> Comment / Uncomment` or press
+:kbd:`Ctrl+Shift+Space`. If no text is selected, the current line is commented
+or uncommented. Otherwise all selected lines are toggled.
+
+
+.. index::
+   single: Editor; Formatting Statements
+
+Format SQL Statements
+^^^^^^^^^^^^^^^^^^^^^
+
+To beautify the content of an editor or the selected text either select
+:menuselection:`Query --> Format --> Format` or press
+:kbd:`Ctrl+Shift+F`.
+
+.. Note::
+   This is an experimental feature. The results might differ from
+   your expectations. ;-)
+
+
