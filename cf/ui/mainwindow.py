@@ -189,7 +189,7 @@ class MainWindow(gtk.Window):
              lambda *a: self.app.manage_connections(self)),
             ('query-frmt-menu', None, _(u'_Format')),
             ('query-frmt-comment', None,
-             _(u'_Comment / Uncomment'), '<shift><control>c',
+             _(u'_Comment / Uncomment'), '<shift><control>space',
              _(u'Comment / uncomment selected lines'),
              self.on_frmt_comment),
             ('file-save', gtk.STOCK_SAVE,

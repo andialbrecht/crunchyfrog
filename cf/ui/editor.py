@@ -533,10 +533,12 @@ class Editor(GladeWidget, PaneItem):
         buffer_ = self.textview.get_buffer()
         res = buffer_.get_selection_bounds()
         if not res:
-            return
-        start, end = res
-        lno_start = start.get_line()
-        lno_end = end.get_line()
+            start = buffer_.get_iter_at_mark(buffer_.get_insert())
+            lno_start = lno_end = start.get_line()
+        else:
+            start, end = res
+            lno_start = start.get_line()
+            lno_end = end.get_line()
         for line_no in xrange(lno_start, lno_end+1):
             lstart = buffer_.get_iter_at_line(line_no)
             lend = lstart.copy()
