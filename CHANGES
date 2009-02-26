@@ -1,5 +1,5 @@
-Development
------------
+Release 0.3.4 (in development)
+------------------------------
 
 New Features
  * Option to use the foreground editor's connection as default for new
@@ -25,7 +25,7 @@ Translations
  * Swedish is now complete (thanks to Daniel Nylander).
 
 
-2009-02-06 CrunchyFrog 0.3.3
+Release 0.3.3 (Feb 6, 20096)
 ----------------------------
 
 New Features
@@ -40,7 +40,7 @@ Bug Fixes
  * Confirm save dialog works again when instance is closed.
 
 
-2009-01-30 CrunchyFrog 0.3.2
+Release 0.3.2 (Jan 30, 2009)
 ----------------------------
 
 Release Highlights
@@ -67,7 +67,7 @@ Translations
  * Thanks to all contributors!
 
 
-2008-11-24 CrunchyFrog 0.3.1
+Release 0.3.1 (Nov 24, 2008)
 ----------------------------
 
 New Features
@@ -96,7 +96,7 @@ Translation
  * Thanks to all contributors!
 
 
-2008-10-24 CrunchyFrog 0.3.0
+Release 0.3.0 (Oct 24, 2008)
 ----------------------------
 
 New Features
@@ -128,7 +128,7 @@ Translations
 Thanks to all Launchpad contributors!
 
 
-2008-06-10 CrunchyFrog 0.2.1
+Release 0.2.1 (Jun 10, 2008)
 ----------------------------
 
 New Features
@@ -154,8 +154,8 @@ Translations
 Thanks to all launchpad contributors!
 
 
-2008-04-04 CrunchyFrog 0.2.0
-----------------------------
+Release 0.2.0 (Apr 4, 2008)
+---------------------------
 
 New Features
  * navigator: refresh action
