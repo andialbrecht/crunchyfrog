@@ -438,6 +438,7 @@ class Editor(GladeWidget, PaneItem):
         f = open(self._filename, "w")
         f.write(a)
         f.close()
+        self.app.recent_manager.add_item(to_uri(self._filename))
         self._filecontent_read = a
         gobject.idle_add(buffer.emit, "changed")
         return True
@@ -467,7 +468,7 @@ class Editor(GladeWidget, PaneItem):
         dlg.set_filter(filter)
         if dlg.run() == gtk.RESPONSE_OK:
             self._filename = dlg.get_filename()
-            gobject.idle_add(self.save_file)
+            self.save_file()
             self.app.config.set("editor.recent_folder", dlg.get_current_folder())
             ret = True
         else:

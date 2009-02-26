@@ -8,6 +8,7 @@ New Features
  * Simple formatting of SQL statements (experimental).
 
 Bug Fixes
+ * Prevent files from being saved over and over again (fixes 40 too).
  * Fixed invalid category in crunchyfrog.desktop (issue37 reported
    by ivazqueznet).
  * Open files given as command line arguments works again (issue38).
@@ -16,9 +17,6 @@ Other
  * Some more UI clean up (incl. issue34, thanks to robertknight for the
    suggestions).
  * Pygments is not required anymore.
-
-Translations
- * Swedish is now complete (thanks to Daniel Nylander).
 
 Translations
  * Swedish is now complete (thanks to Daniel Nylander).
