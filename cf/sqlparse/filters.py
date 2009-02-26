@@ -307,3 +307,58 @@ class KeywordCaseFilter(Filter):
                 value = self.convert(value)
             yield ttype, value
 
+
+class OutputPythonFilter(Filter):
+
+    def __init__(self, varname='sql'):
+        self.varname = varname
+
+    def filter(self, lexer, stream):
+        yield Name, self.varname
+        yield Whitespace, ' '
+        yield Operator, '='
+        yield Whitespace, ' '
+        yield Operator, '('
+        yield Text, "'"
+        for ttype, value in stream:
+            if value == '\n':
+                yield Text, "'"
+                yield ttype, value
+                for i in range(len(self.varname)+4):
+                    yield Whitespace, ' '
+                yield Text, "'"
+                continue
+            elif "'" in value:
+                value = value.replace("'", "\\'")
+            yield Text, value
+        yield Text, "'"
+        yield Operator, ')'
+
+
+class OutputPHPFilter(Filter):
+
+    def __init__(self, varname='sql'):
+        self.varname = '$%s' % varname
+
+    def filter(self, lexer, stream):
+        yield Name, self.varname
+        yield Whitespace, ' '
+        yield Operator, '='
+        yield Whitespace, ' '
+        yield Text, '"'
+        for ttype, value in stream:
+            if value == '\n':
+                yield Text, '"'
+                yield Operator, ';'
+                yield ttype, value
+                yield Name, self.varname
+                yield Whitespace, ' '
+                yield Punctuation, '.'
+                yield Operator, '='
+                yield Whitespace, ' '
+                yield Text, '"'
+                continue
+            elif '"' in value:
+                value = value.replace('"', '\\"')
+            yield Text, value
+        yield Text, '"'

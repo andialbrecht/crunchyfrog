@@ -562,21 +562,32 @@ class Editor(GladeWidget, PaneItem):
             buffer_.insert(lstart, line)
         buffer_.end_user_action()
 
-    def selected_lines_quick_format(self):
+    def selected_lines_quick_format(self, **options):
         """Runs format without any other options than the default ones."""
+        if not options:
+            options = FORMATTER_DEFAULT_OPTIONS
         buffer_ = self.textview.get_buffer()
         res = buffer_.get_selection_bounds()
         if not res:
             start, end = buffer_.get_bounds()
+            select_range = False
         else:
             start, end = res
+            select_range = True
         orig = buffer_.get_text(start, end)
         formatted = []
         for stmt in sqlparse.parse(orig):
-            formatted.append(stmt.format(**FORMATTER_DEFAULT_OPTIONS))
+            formatted.append(stmt.format(**options))
+        # Modify buffer
         buffer_.begin_user_action()
         buffer_.delete(start, end)
-        buffer_.insert(start, ''.join(unicode(x) for x in formatted))
+        new_content = ''.join(unicode(x) for x in formatted)
+        buffer_.insert(start, new_content)
+        # Set selection again
+        if select_range:
+            end = start.copy()
+            end.backward_chars(len(new_content))
+            buffer_.select_range(end, start)
         buffer_.end_user_action()
 
 

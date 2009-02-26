@@ -100,4 +100,4 @@ class Statement(object):
         pass
 
     def format(self, **options):
-        return formatter.format(self, options)
+        return formatter.format(self, **options)

@@ -196,6 +196,10 @@ class MainWindow(gtk.Window):
              _(u'_Format'), '<shift><control>f',
              _(u'Beautify selected lines or whole buffer'),
              self.on_frmt_format),
+            ('query-frm-uppercase-kw', None,
+             _(u'_Uppercase Keywords'), '<shift><control>u',
+             _(u'Uppercase keywords in selected lines or in whole buffer'),
+             self.on_frmt_uppercase_kw),
             ('file-save', gtk.STOCK_SAVE,
              None, '<control>S', _(u'Save the current file'),
              self.on_file_save),
@@ -500,6 +504,12 @@ class MainWindow(gtk.Window):
         if editor is None:
             return
         editor.selected_lines_quick_format()
+
+    def on_frmt_uppercase_kw(self, action):
+        editor = self.get_active_editor()
+        if editor is None:
+            return
+        editor.selected_lines_quick_format(keyword_case='upper')
 
     def on_file_save(self, *args):
         editor = self.get_active_editor()
@@ -894,6 +904,7 @@ UI = '''
       <menu name="QueryFormat" action="query-frmt-menu">
         <menuitem name="QueryFormatComment" action="query-frmt-comment" />
         <menuitem name="QueryFormatFormat" action="query-frmt-format" />
+        <menuitem name="QueryFormatKwUpper" action="query-frm-uppercase-kw" />
       </menu>
       <placeholder name="query-extensions" />
       <separator />

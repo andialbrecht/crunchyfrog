@@ -11,9 +11,7 @@ import filters
 from lexer import Lexer
 
 
-def format(statement, options=None):
-    if options is None:
-        options = {}
+def format(statement, **options):
     logging.info('OPTIONS %r', options)
     lexer = Lexer()
     lexer.add_filter(filters.IfFilter())
@@ -41,6 +39,13 @@ def format(statement, options=None):
         assert right_margin > 0
         lexer.add_filter(filters.RightMarginFilter(margin=right_margin))
     lexer.add_filter(filters.UngroupFilter())
+    if options.get('output_format', None):
+        ofrmt = options['output_format']
+        assert ofrmt in ('sql', 'python', 'php')
+        if ofrmt == 'python':
+            lexer.add_filter(filters.OutputPythonFilter())
+        elif ofrmt == 'php':
+            lexer.add_filter(filters.OutputPHPFilter())
     tokens = []
     for ttype, value in lexer.get_tokens(unicode(statement)):
         tokens.append((ttype, value))
