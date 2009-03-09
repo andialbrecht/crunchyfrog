@@ -1,299 +1,56 @@
-# Copyright (C) 2008 Andi Albrecht, albrecht.andi@gmail.com
-#
-# This module is part of python-sqlparse and is released under
-# the BSD License: http://www.opensource.org/licenses/bsd-license.php.
+# -*- coding: utf-8 -*-
 
-"""filter"""
+import re
 
-import logging
-
-from sqlparse.tokens import *
-
-# Create our custom groups
-grp = Token.Group
-Group = Token.Group
-grpc = Token.Group.Comment
-grpl = Token.Group.Literal
+from sqlparse.engine import grouping
+from sqlparse import tokens as T
 
 
 class Filter(object):
 
-    def __init__(self, **options):
-        self.options = options
-
-    def filter(self, lexer, stream):
+    def process(self, *args):
         raise NotImplementedError
 
 
-class GroupFilter(Filter):
-    """Groups some elements back together."""
+class TokenFilter(Filter):
 
-    def filter(self, lexer, stream):
-        cached = []
-        comment_in_cache = False
-        for ttype, value in stream:
-            if Whitespace in ttype or ttype in Comment:
-                cached.append((ttype, value))
-                if ttype in Comment:
-                    comment_in_cache = True
-                continue
-            else:
-                if cached and comment_in_cache:
-                    new_value = ''.join(x[1] for x in cached)
-                    yield Group.Comment, new_value
-                elif cached:
-                    for item in cached:
-                        yield item
-                cached = []
-                comment_in_cache = False
-            yield ttype, value
+    def process(self, stack, stream):
+        raise NotImplementedError
 
 
-class UngroupFilter(Filter):
-
-    def filter(self, lexer, stream):
-        for ttype, value in stream:
-            if ttype in Group:
-                from parser import Parser
-                # use sqlparse instead of the lexer to handle lb at the end
-                p = Parser()
-                for item in p.parse(value)[0].tokens:
-                    yield item
-            else:
-                yield ttype, value
-
-
-class IfFilter(Filter):
-    """Marks IF as keyword."""
-
-    def filter(self, lexer, stream):
-        for ttype, value in stream:
-            if ttype is Name and value.upper() == 'IF':
-                ttype = Keyword
-            yield ttype, value
-
-
-class StripWhitespaceFilter(Filter):
-    """Strips duplicate whitespaces."""
-
-    def filter(self, lexer, stream):
-        cached = []
-        in_comment = False
-        last = None
-        for ttype, value in stream:
-            if Comment in ttype.split() and not in_comment:
-                in_comment = True
-            if Text.Whitespace in ttype.split() \
-            and value in (' ', '\t') and not in_comment:
-                cached.append((ttype, value))
-                continue
-            if in_comment and (Comment not in ttype.split()
-                               and Whitespace \
-                               not in ttype.split()):
-                in_comment = False
-            if cached:
-                yield Text.Whitespace, ' '
-                cached = []
-            last = (ttype, value)
-            yield ttype, value
+def rstrip(stream):
+    buff = []
+    for token in stream:
+        if token.is_whitespace() and '\n' in token.value:
+            # assuming there's only one \n in value
+            before, rest = token.value.split('\n', 1)
+            token.value = '\n%s' % rest
+            buff = []
+            yield token
+        elif token.is_whitespace():
+            buff.append(token)
+        elif token.is_group():
+            token.tokens = list(rstrip(token.tokens))
+            # process group and look if it starts with a nl
+            if token.tokens and token.tokens[0].is_whitespace():
+                before, rest = token.tokens[0].value.split('\n', 1)
+                token.tokens[0].value = '\n%s' % rest
+                buff = []
+            while buff:
+                yield buff.pop(0)
+            yield token
+        else:
+            while buff:
+                yield buff.pop(0)
+            yield token
 
 
-class LTrimFilter(Filter):
+# --------------------------
+# token process
 
-    def filter(self, lexer, stream):
-        other_token_found = True
-        for ttype, value in stream:
-            if Text.Whitespace in ttype.split() \
-            and value == '\n':
-                other_token_found = False
-            elif Text.Whitespace in ttype.split() \
-            and not other_token_found:
-                continue
-            else:
-                other_token_found = True
-            yield ttype, value
+class _CaseFilter(TokenFilter):
 
-
-class IdentifierCaseFilter(Filter):
-
-    def __init__(self, case='lower'):
-        self.case = case
-
-    def filter(self, lexer, stream):
-        for ttype, value in stream:
-            if ttype is Name:
-                if self.case == 'upper':
-                    value = value.upper()
-                elif self.case == 'capitalize':
-                    value = value.capitalize()
-                elif self.case == 'lower':
-                    value = value.lower()
-            yield ttype, value
-
-
-class StripCommentsFilter(Filter):
-
-    def filter(self, lexer, stream):
-        for ttype, value in stream:
-            if ttype in Group.Comment:
-                continue
-            yield ttype, value
-
-
-class CleanupWSCommaFilter(Filter):
-    """Cleanup whitespaces around comments."""
-
-    def filter(self, lexer, stream):
-        cached = []
-        last_yielded = None
-        for ttype, value in stream:
-            if Text.Whitespace in ttype.split():
-                cached.append((ttype, value))
-                continue
-            elif Punctuation in ttype.split() \
-            and value == ',':
-                if last_yielded \
-                and Comment in last_yielded[0].split():
-                    while cached:
-                        yield cached.pop(0)
-                    last_yielded = None
-                else:
-                    cached = []
-            else:
-                while cached:
-                    yield cached.pop(0)
-            last_yielded = (ttype, value)
-            yield ttype, value
-
-
-class IndentFilter(Filter):
-
-    split_words = ('SELECT', 'FROM', 'WHERE', 'ORDER', 'JOIN', 'LIMIT',
-                   'BEGIN', 'END', 'FOR', 'IF', 'LEFT', 'OUTER', 'INNER',
-                   'UNION', 'GROUP', 'AND', 'OR', 'CASE', 'WHEN',
-                   'THEN', 'ELSE', 'VALUES')
-    indents = {'(': (1, 0), ')': (-1, 0),
-               'AND': (1, -1), 'OR': (1, -1),
-               'ON': (1, -1),
-               'CASE': (1, 0), 'END': (-1, 0),
-               'VALUES': (1, -1)}
-
-    def __init__(self, n_indents=2):
-        self.n_indents = n_indents
-
-    def _reindent_comment(self, comment):
-        # XXX
-        return comment
-        new_lines = []
-        for line in comment.splitlines():
-            new_lines.append(line.lstrip(' \t'))
-        return '\n'.join(new_lines)
-
-    def filter(self, lexer, stream):
-        wait_until_join = False
-        level = 0
-        for ttype, value in stream:
-            before, after = self.indents.get(value.upper(), (0, 0))
-            level += before
-            if Keyword in ttype.split() \
-            and value.upper() in self.split_words:
-                if not wait_until_join:
-                    yield Text.Whitespace, '\n'
-                    for i in range(level):
-                        for j in range(self.n_indents):
-                            yield Text.Whitespace, ' '
-                if value.upper() in ('LEFT', 'OUTER', 'INNER'):
-                    wait_until_join = True
-                elif value.upper() == 'JOIN':
-                    wait_until_join = False
-            elif ttype in Group.Comment:
-                value = self._reindent_comment(value)
-            yield ttype, value
-            level += after
-
-
-class RightMarginFilter(Filter):
-
-    def __init__(self, margin):
-        self.margin = margin
-
-    def _get_line_length(self, tokens):
-        return len(''.join(t[1] for t in tokens))
-
-    def _get_indentation(self, line):
-        indentation = []
-        rest = []
-        append_to_rest = False
-        for ttype, value in line:
-            if not append_to_rest \
-            and Text.Whitespace in ttype.split() \
-            and value in (' ', '\t'):
-                indentation.append((ttype, value))
-            else:
-                append_to_rest = True
-                rest.append((ttype, value))
-        return indentation, rest
-
-    def _split_lines(self, stream):
-        line = []
-        in_literal = False
-        for ttype, value in stream:
-            if Literal in ttype.split():
-                in_literal = True
-            if in_literal and Literal not in ttype.split() \
-            and Text.Whitespace not in ttype.split():
-                in_literal = False
-            if not in_literal \
-            and Text.Whitespace in ttype.split() \
-            and value == '\n':
-                yield line
-                line = []
-                in_literal = False
-                continue
-            line.append((ttype, value))
-        if line:
-            yield line
-
-    def _fold(self, stream):
-        for line in self._split_lines(stream):
-            for new_line in self._fold_line(line):
-                yield new_line
-
-    def _fold_line(self, line):
-        indentation, rest = self._get_indentation(line)
-        new_line = []
-        in_literal = False
-        for ttype, value in rest:
-            if new_line == []:
-                new_line += indentation
-            new_line.append((ttype, value))
-            if Literal in ttype.split():
-                in_literal = True
-            if in_literal and Literal not in ttype.split() \
-            and Text.Whitespace not in ttype.split():
-                in_literal = False
-            if not in_literal \
-            and Text.Whitespace in ttype.split() \
-            or (Punctuation in ttype.split() \
-                and value in (';', ',', ')')):
-                # TODO(andi): -10 is a dirty hack, it'd much better to have
-                #  some better look ahead algorithm.
-                if self._get_line_length(new_line) > self.margin-10:
-                    for item in new_line:
-                        yield item
-                    new_line = []
-                    yield Text.Whitespace, '\n'
-        if new_line:
-            for item in new_line:
-                yield item
-            yield Text.Whitespace, '\n'
-
-    def filter(self, lexer, stream):
-        for ttype, value in self._fold(stream):
-            yield ttype, value
-
-
-class KeywordCaseFilter(Filter):
+    ttype = None
 
     def __init__(self, case=None):
         if case is None:
@@ -301,64 +58,403 @@ class KeywordCaseFilter(Filter):
         assert case in ['lower', 'upper', 'capitalize']
         self.convert = getattr(unicode, case)
 
-    def filter(self, lexer, stream):
+    def process(self, stack, stream):
         for ttype, value in stream:
-            if ttype is Keyword:
+            if ttype in self.ttype:
                 value = self.convert(value)
             yield ttype, value
+
+
+class KeywordCaseFilter(_CaseFilter):
+    ttype = T.Keyword
+
+
+class IdentifierCaseFilter(_CaseFilter):
+    ttype = (T.Name, T.String.Symbol)
+
+
+# ----------------------
+# statement process
+
+class StripCommentsFilter(Filter):
+
+    def _process(self, stream):
+        token_before = None
+        stripped_single = False
+        for token in stream:
+            if token.is_group():
+                token.tokens = self._process(token.tokens)
+            if isinstance(token, grouping.CommentMulti):
+                continue
+            elif token.ttype is T.Comment.Single:
+                stripped_single = True
+                continue
+            if (stripped_single and not token_before.is_whitespace()
+                and token.ttype is not T.Whitespace):
+                yield grouping.Token(T.Whitespace, ' ')
+            if not token.is_whitespace():
+                stripped_single = False
+            yield token
+            token_before = token
+
+    def process(self, stack, group):
+        group.tokens = self._process(group.tokens)
+
+
+class StripWhitespaceFilter(Filter):
+
+    def _handle_group(self, stmt, group):
+        def streamer(s, stream):
+            for item in stream:
+                yield item
+        func_name = '_group_%s' % group.__class__.__name__.lower()
+        func = getattr(self, func_name, streamer)
+        return func(stmt, group.tokens)
+
+    def _group_comment(self, stmt, stream):
+        # Comments have trainling whitespaces. So yield either nothing
+        # or a new line afterwards.
+        yield_new_line = False
+        for token in stream:
+            if token.is_whitespace():
+                if value == '\n':
+                    yield_new_line = True
+            elif token.is_group():
+                token.tokens = self._handle_group(stmt, token)
+                yield token
+            else:
+                yield token
+        if yield_new_line:
+            yield grouping.Token(T.Whitespace, '\n')
+
+    def _group_parenthesis(self, stmt, stream):
+        at_start = False
+        buffered_ws = []
+        for token in stream:
+            if token.match(T.Punctuation, '('):
+                at_start = True
+                yield token
+            elif at_start:
+                if token.is_whitespace():
+                    continue
+                at_start = False
+                yield token
+            elif token.is_whitespace():
+                buffered_ws.append(token)
+            else:
+                if not token.match(T.Punctuation, ')') and buffered_ws:
+                    yield grouping.Token(T.Whitespace, ' ')
+                    buffered_ws = []
+                yield token
+
+    def _process(self, stack, stmt):
+        buffered_ws = []
+        for token in stmt.tokens:
+            if token.is_whitespace():
+                token.value = re.sub('[ \t\n]+', ' ', token.value)
+                buffered_ws.append(token)
+            elif token.is_group():
+                for item in buffered_ws:
+                    yield item
+                buffered_ws = []
+                token.tokens = self._handle_group(stmt, token)
+                yield token
+            else:
+                for item in buffered_ws:
+                    yield item
+                buffered_ws = []
+                yield token
+
+
+    def process(self, stack, stmt):
+        # TODO(andi): Somehow here's a problem with nested generators
+        stmt.tokens = tuple(self._process(stack, stmt))
+        for subgroup in stmt.subgroups:
+            self.process(stack, subgroup)
+
+
+class ReindentFilter(Filter):
+
+    indents = {
+        'FROM': 0,
+        'JOIN': 0,
+        'WHERE': 0,
+        'AND': 0,
+        'OR': 0,
+        'GROUP': 0,
+        'ORDER': 0,
+    }
+
+    keep_together = (
+        grouping.TypeCast, grouping.Identifier, grouping.Alias,
+    )
+
+    def __init__(self, width=2, char=' '):
+        self.width = width
+        self.char = char
+        self._last_stmt = None
+        self.nl_yielded = False
+        self.level = 0
+        self.line_offset = 0
+        self._indent = []  # if set it's used for nl()
+
+    def nl(self):
+        """Build newline and leading whitespace. Calculate new line_offset."""
+        if not self._indent:
+            width = (len(self.char)*self.width)*self.level
+            indent = ((self.char*self.width)*self.level)
+        else:
+            indent = self.char*self._indent[-1]
+            width = len(self.char)*self._indent[-1]
+        self.line_offset = width
+        return '\n'+indent
+
+    def _process_group(self, stmt, group):
+        def _default(x, y):
+            for item in self._process(None, x, y):
+                yield item
+        func_name = '_group_%s' % group.__class__.__name__.lower()
+        func = getattr(self, func_name, _default)
+        group.tokens = tuple(func(stmt, group.tokens))
+        return group
+
+    def _group_parenthesis(self, stmt, stream):
+        def start_on_nl(stream):
+            """Checks, if the opening parenthesis should be on a new line.
+            That is when the parenthesis if followed by an DML keyword.
+            """
+            for token in stream:
+                if token.ttype is T.Keyword.DML:
+                    return True
+                elif token.match(T.Punctuation, '('):
+                    continue
+                elif token.is_whitespace():
+                    continue
+                else:
+                    return False
+            return False
+
+        lvl_changed = False
+        start_on_nl = start_on_nl(stream)
+        if start_on_nl:
+            self.level += 1
+            lvl_changed = True
+            # FIXME(andi): The nl should be injected into the parent stream.
+            yield grouping.Token(T.Whitespace, self.nl())
+        offset = self.line_offset+1
+        buff = []
+        for token in stream:
+            self._indent.append(offset)
+            if token.match(T.Punctuation, ')'):
+                for item in self._process(None, stmt, buff):
+                    yield item
+                buff = []
+                yield token
+            elif token.is_group():
+#                self._process_group(stmt, token)
+                buff.append(token)
+            else:
+                buff.append(token)
+            self._indent.pop()
+        for item in buff:
+            yield item
+        if buff and self._indent:
+            self._indent.pop()
+        if lvl_changed:
+            self.level -= 1
+
+    def _group_where(self, stmt, stream):
+        lvl_changed = False
+        yield grouping.Token(T.Whitespace, self.nl())
+        for token in stream:
+            if token.match(T.Keyword, ('AND', 'OR')):
+                if not lvl_changed:
+                    self.level += 1
+                    lvl_changed = True
+                yield grouping.Token(T.Whitespace, self.nl())
+            elif token.is_group():
+                token = self._process_group(stmt, token)
+            if not token.is_group():
+                self.line_offset += len(token.value)
+            yield token
+        if lvl_changed:
+            self.level -= 1
+
+    def _process(self, stack, stmt, stream):
+        skip_ws = False
+        if (self._last_stmt is not None and self._last_stmt != stmt
+            and not self.nl_yielded):
+            yield grouping.Token(T.Whitespace, self.nl())
+        if self._last_stmt != stmt:
+            self._last_stmt = stmt
+            skip_ws = True
+        for token in stream:
+            if skip_ws and token.is_whitespace():
+                continue
+            elif skip_ws and token.ttype is T.Comment.Single:
+                self.nl_yielded = True
+                yield token
+                continue  # ends with a new line
+            skip_ws = False
+            if token.match(T.Keyword, list(self.indents)):
+                yield grouping.Token(T.Whitespace, self.nl())
+                self.level += self.indents[token.value.upper()]
+                self.line_offset += len(token.value)
+                yield token
+            elif token.is_group():
+                if not token.__class__ in self.keep_together:
+                    self._process_group(stmt, token)
+                yield token
+            else:
+                self.line_offset += len(token.value)
+                self.nl_yielded = (token.match(T.Punctuation, '\n')
+                                   or token.ttype is T.Comment.Single)
+                yield token
+
+    def process(self, stack, group):
+        group.tokens = rstrip(self._process(stack, group, group.tokens))
+
+
+class RightMarginFilter(Filter):
+
+    keep_together = (
+        grouping.TypeCast, grouping.Identifier, grouping.Alias,
+    )
+
+    def __init__(self, width=79):
+        self.width = width
+        self.line = ''
+
+    def _process(self, stack, group, stream):
+        for token in stream:
+            if token.is_whitespace() and '\n' in token.value:
+                if token.value.endswith('\n'):
+                    self.line = ''
+                else:
+                    self.line = token.value.splitlines()[-1]
+            elif (token.is_group()
+                  and not token.__class__ in self.keep_together):
+                token.tokens = self._process(stack, token, token.tokens)
+            else:
+                val = token.to_unicode()
+                if len(self.line) + len(val) > self.width:
+                    match = re.search('^ +', self.line)
+                    if match is not None:
+                        indent = match.group()
+                    else:
+                        indent = ''
+                    yield grouping.Token(T.Whitespace, '\n%s' % indent)
+                    self.line = indent
+                self.line += val
+            yield token
+
+    def process(self, stack, group):
+        group.tokens = self._process(stack, group, group.tokens)
+
+
+# ---------------------------
+# postprocess
+
+class SerializerUnicode(Filter):
+
+    def process(self, stack, stmt):
+        return stmt.to_unicode()
 
 
 class OutputPythonFilter(Filter):
 
     def __init__(self, varname='sql'):
         self.varname = varname
+        self.cnt = 0
 
-    def filter(self, lexer, stream):
-        yield Name, self.varname
-        yield Whitespace, ' '
-        yield Operator, '='
-        yield Whitespace, ' '
-        yield Operator, '('
-        yield Text, "'"
-        for ttype, value in stream:
-            if value == '\n':
-                yield Text, "'"
-                yield ttype, value
-                for i in range(len(self.varname)+4):
-                    yield Whitespace, ' '
-                yield Text, "'"
+    def _process(self, stream, varname, count, has_nl):
+        if count > 1:
+            yield grouping.Token(T.Whitespace, '\n')
+        yield grouping.Token(T.Name, varname)
+        yield grouping.Token(T.Whitespace, ' ')
+        yield grouping.Token(T.Operator, '=')
+        yield grouping.Token(T.Whitespace, ' ')
+        if has_nl:
+            yield grouping.Token(T.Operator, '(')
+        yield grouping.Token(T.Text, "'")
+        cnt = 0
+        for token in stream:
+            cnt += 1
+            if token.is_whitespace() and '\n' in token.value:
+                if cnt == 1:
+                    continue
+                after_lb = token.value.split('\n', 1)[1]
+                yield grouping.Token(T.Text, "'")
+                yield grouping.Token(T.Whitespace, '\n')
+                for i in range(len(varname)+4):
+                    yield grouping.Token(T.Whitespace, ' ')
+                yield grouping.Token(T.Text, "'")
+                if after_lb:  # it's the indendation
+                    yield grouping.Token(T.Whitespace, after_lb)
                 continue
-            elif "'" in value:
-                value = value.replace("'", "\\'")
-            yield Text, value
-        yield Text, "'"
-        yield Operator, ')'
+            elif token.value and "'" in token.value:
+                token.value = token.value.replace("'", "\\'")
+            yield grouping.Token(T.Text, token.value or '')
+        yield grouping.Token(T.Text, "'")
+        if has_nl:
+            yield grouping.Token(T.Operator, ')')
+
+    def process(self, stack, stmt):
+        self.cnt += 1
+        if self.cnt > 1:
+            varname = '%s%d' % (self.varname, self.cnt)
+        else:
+            varname = self.varname
+        has_nl = len(stmt.to_unicode().strip().splitlines()) > 1
+        stmt.tokens = self._process(stmt.tokens, varname, self.cnt, has_nl)
+        return stmt
 
 
 class OutputPHPFilter(Filter):
 
     def __init__(self, varname='sql'):
         self.varname = '$%s' % varname
+        self.count = 0
 
-    def filter(self, lexer, stream):
-        yield Name, self.varname
-        yield Whitespace, ' '
-        yield Operator, '='
-        yield Whitespace, ' '
-        yield Text, '"'
-        for ttype, value in stream:
-            if value == '\n':
-                yield Text, '"'
-                yield Operator, ';'
-                yield ttype, value
-                yield Name, self.varname
-                yield Whitespace, ' '
-                yield Punctuation, '.'
-                yield Operator, '='
-                yield Whitespace, ' '
-                yield Text, '"'
+    def _process(self, stream, varname):
+        if self.count > 1:
+            yield grouping.Token(T.Whitespace, '\n')
+        yield grouping.Token(T.Name, varname)
+        yield grouping.Token(T.Whitespace, ' ')
+        yield grouping.Token(T.Operator, '=')
+        yield grouping.Token(T.Whitespace, ' ')
+        yield grouping.Token(T.Text, '"')
+        cnt = 0
+        for token in stream:
+            if token.is_whitespace() and '\n' in token.value:
+                cnt += 1
+                if cnt == 1:
+                    continue
+                after_lb = token.value.split('\n', 1)[1]
+                yield grouping.Token(T.Text, '"')
+                yield grouping.Token(T.Operator, ';')
+                yield grouping.Token(T.Whitespace, '\n')
+                yield grouping.Token(T.Name, varname)
+                yield grouping.Token(T.Whitespace, ' ')
+                yield grouping.Token(T.Punctuation, '.')
+                yield grouping.Token(T.Operator, '=')
+                yield grouping.Token(T.Whitespace, ' ')
+                yield grouping.Token(T.Text, '"')
+                if after_lb:
+                    yield grouping.Token(T.Text, after_lb)
                 continue
-            elif '"' in value:
-                value = value.replace('"', '\\"')
-            yield Text, value
-        yield Text, '"'
+            elif '"' in token.value:
+                token.value = token.value.replace('"', '\\"')
+            yield grouping.Token(T.Text, token.value)
+        yield grouping.Token(T.Text, '"')
+        yield grouping.Token(T.Punctuation, ';')
+
+    def process(self, stack, stmt):
+        self.count += 1
+        if self.count > 1:
+            varname = '%s%d' % (self.varname, self.count)
+        else:
+            varname = self.varname
+        stmt.tokens = tuple(self._process(stmt.tokens, varname))
+        return stmt
+

@@ -157,12 +157,7 @@ class SQLView(gtksourceview2.View):
         buffer_start, buffer_end = self.buffer.get_bounds()
         content = self.buffer.get_text(buffer_start, buffer_end)
         iter_ = buffer_start
-        if self.editor and self.editor.connection:
-            dialect = self.editor.connection.get_dialect()
-        else:
-            dialect = None
-        for stmt in sqlparse.parse(content, dialect=dialect):
-            stmt = unicode(stmt)
+        for stmt in sqlparse.split(content):
             if not stmt.strip():
                 continue
             bounds = iter_.forward_search(stmt.lstrip(),

@@ -26,7 +26,6 @@ import time
 import gobject
 import gtk
 
-import cf.sqlparse
 from cf.utils import Emit
 
 
@@ -70,8 +69,6 @@ class DBConnection(gobject.GObject):
                             "Transaction flag", "Transaction flag",
                             gobject.PARAM_READWRITE),
     }
-
-    sqlparse_dialect = cf.sqlparse.dialects.DefaultDialect()
 
     def __init__(self, provider, app):
         self.app = app
@@ -129,14 +126,6 @@ class DBConnection(gobject.GObject):
 
     def explain(self, statement):
         return []
-
-    def get_dialect(self):
-        """Get the sqlparse dialect.
-
-        Returns:
-          A sqlparse dialect (sqlparse.Dialect*, default: DialectDefault).
-        """
-        return self.sqlparse_dialect
 
 
 class DBCursor(gobject.GObject):

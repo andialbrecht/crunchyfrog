@@ -13,25 +13,51 @@ if 'SQLPARSE_DEBUG' in os.environ:
     logging.basicConfig(level=logging.DEBUG)
 
 
-STATEMENT_TYPE_UNKNOWN = 0
-STATEMENT_TYPE_SELECT = 1
-STATEMENT_TYPE_INSERT = 2
-STATEMENT_TYPE_DELETE = 3
-STATEMENT_TYPE_UPDATE = 4
-STATEMENT_TYPE_DROP = 5
-STATEMENT_TYPE_CREATE = 6
-STATEMENT_TYPE_ALTER = 7
+class SQLParseError(Exception):
+    """Base class for exceptions in this module."""
 
 
 # Setup namespace
-from parser import Parser
+from sqlparse import engine
+from sqlparse import filters
+from sqlparse import formatter
 
 
-def parse(sql, dialect=None):
-    parser = Parser(dialect)
-    return parser.parse(sql)
+def parse(sql):
+    """Parse sql and return a list of statements.
+
+    *sql* is a single string containting one or more SQL statements.
+
+    The returned :class:`~sqlparse.parser.Statement` are fully analyzed.
+
+    Returns a list of :class:`~sqlparse.parser.Statement` instances.
+    """
+    stack = engine.FilterStack()
+    stack.full_analyze()
+    return tuple(stack.run(sql))
 
 
-def split_str(sql, dialect=None):
-    parser = Parser(dialect)
-    return [unicode(statement) for statement in parser.parse(sql)]
+def format(sql, **options):
+    """Format *sql* according to *options*.
+
+    Returns a list of :class:`~sqlparse.parse.Statement` instances like
+    :meth:`parse`, but the statements are formatted according to *options*.
+
+    Available options are documented in the :mod:`~sqlparse.format` module.
+    """
+    stack = engine.FilterStack()
+    options = formatter.validate_options(options)
+    stack = formatter.build_filter_stack(stack, options)
+    stack.postprocess.append(filters.SerializerUnicode())
+    return ''.join(stack.run(sql))
+
+
+def split(sql):
+    """Split *sql* into separate statements.
+
+    Returns a list of strings.
+    """
+    stack = engine.FilterStack()
+    stack.split_statements = True
+    return [unicode(stmt) for stmt in stack.run(sql)]
+

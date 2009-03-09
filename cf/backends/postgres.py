@@ -31,8 +31,6 @@ from cf.datasources import DatasourceInfo
 from cf.plugins.core import DBBackendPlugin
 from cf.utils import Emit
 
-import sqlparse
-
 import time
 from urllib import quote_plus
 
@@ -42,6 +40,7 @@ from gettext import gettext as _
 import logging
 log = logging.getLogger("PG")
 
+
 class PgReferenceProvider(ReferenceProvider):
     name = _(u"PostgreSQL Reference")
     base_url = "http://www.postgresql.org/docs/current"
@@ -50,6 +49,7 @@ class PgReferenceProvider(ReferenceProvider):
         url = "http://search.postgresql.org/search?u=%2Fdocs%2F8.3%2Finteractive%2F&q="
         url += quote_plus(term.strip())
         return url
+
 
 class PostgresBackend(DBBackendPlugin):
 
@@ -115,6 +115,7 @@ class PostgresBackend(DBBackendPlugin):
             return str(err)
         return None
 
+
 class PgCursor(DbAPI2Cursor):
 
     def __init__(self, *args, **kw):
@@ -145,9 +146,9 @@ class PgCursor(DbAPI2Cursor):
             ret.append(self._cur.statusmessage)
         return ret
 
+
 class PgConnection(DbAPI2Connection):
     cursor_class = PgCursor
-    sqlparse_dialect = sqlparse.dialects.PSQLDialect()
 
     def update_transaction_status(self):
         stat = self._conn.get_transaction_status()

@@ -81,6 +81,16 @@ Token.Token = Token
 Token.String = String
 Token.Number = Number
 
+# SQL specific tokens
+DML = Keyword.DML
+DDL = Keyword.DDL
+Command = Keyword.Command
+
+Group = Token.Group
+Group.Parenthesis = Token.Group.Parenthesis
+Group.Comment = Token.Group.Comment
+Group.Where = Token.Group.Where
+
 
 def is_token_subtype(ttype, other):
     """
@@ -115,3 +125,4 @@ def string_to_tokentype(s):
     for item in s.split('.'):
         node = getattr(node, item)
     return node
+

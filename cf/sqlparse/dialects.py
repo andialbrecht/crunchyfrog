@@ -9,6 +9,7 @@ from tokens import *
 
 
 class Dialect(object):
+    """Base class for SQL dialect implementations."""
 
     def handle_token(self, tokentype, text):
         """Handle a token.
@@ -66,22 +67,17 @@ class PSQLDialect(DefaultDialect):
 
     def __init__(self):
         super(PSQLDialect, self).__init__()
-        self._dollar_started = False
         self._in_dbldollar = False
 
     def handle_token(self, tokentype, text):
-        if tokentype == Error and text == '$':
-            if not self._dollar_started:
-                self._dollar_started = True
-                return tokentype, text, 0
-            elif self._dollar_started:
-                self._dollar_started = False
-                if not self._in_dbldollar:
-                    self._in_dbldollar = True
-                    return tokentype, text, 1
-                else:
-                    self._in_dbldollar = False
-                    return tokentype, text, -1
+        if (tokentype == Name.Builtin
+            and text.startswith('$') and text.endswith('$')):
+            if self._in_dbldollar:
+                self._in_dbldollar = False
+                return tokentype, text, -1
+            else:
+                self._in_dbldollar = True
+                return tokentype, text, 1
         elif self._in_dbldollar:
             return tokentype, text, 0
         else:

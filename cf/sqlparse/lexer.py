@@ -12,7 +12,7 @@
 
 import re
 
-from sqlparse.filters import Filter
+from sqlparse.keywords import KEYWORDS, KEYWORDS_COMMON
 from sqlparse.tokens import *
 from sqlparse.tokens import _TokenType
 
@@ -29,6 +29,10 @@ class combined(tuple):
     def __init__(self, *args):
         # tuple.__init__ doesn't do anything
         pass
+
+def is_keyword(value):
+    test = value.upper()
+    return KEYWORDS_COMMON.get(test, KEYWORDS.get(test, Name)), value
 
 
 def apply_filters(stream, filters, lexer=None):
@@ -151,95 +155,17 @@ class Lexer:
 
     tokens = {
         'root': [
-            (r'\s+', Text),
+            (r'\s+', Whitespace),
             (r'--.*?\n', Comment.Single),
             (r'/\*', Comment.Multiline, 'multiline-comments'),
-            (r'(ABORT|ABS|ABSOLUTE|ACCESS|ADA|ADD|ADMIN|AFTER|AGGREGATE|'
-             r'ALIAS|ALL|ALLOCATE|ALTER|ANALYSE|ANALYZE|AND|ANY|ARE|AS|'
-             r'ASC|ASENSITIVE|ASSERTION|ASSIGNMENT|ASYMMETRIC|AT|ATOMIC|'
-             r'AUTHORIZATION|AVG|BACKWARD|BEFORE|BEGIN|BETWEEN|BITVAR|'
-             r'BIT_LENGTH|BOTH|BREADTH|BY|C|CACHE|CALL|CALLED|CARDINALITY|'
-             r'CASCADE|CASCADED|CASE|CAST|CATALOG|CATALOG_NAME|CHAIN|'
-             r'CHARACTERISTICS|CHARACTER_LENGTH|CHARACTER_SET_CATALOG|'
-             r'CHARACTER_SET_NAME|CHARACTER_SET_SCHEMA|CHAR_LENGTH|CHECK|'
-             r'CHECKED|CHECKPOINT|CLASS|CLASS_ORIGIN|CLOB|CLOSE|CLUSTER|'
-             r'COALSECE|COBOL|COLLATE|COLLATION|COLLATION_CATALOG|'
-             r'COLLATION_NAME|COLLATION_SCHEMA|COLUMN|COLUMN_NAME|'
-             r'COMMAND_FUNCTION|COMMAND_FUNCTION_CODE|COMMENT|COMMIT|'
-             r'COMMITTED|COMPLETION|CONDITION_NUMBER|CONNECT|CONNECTION|'
-             r'CONNECTION_NAME|CONSTRAINT|CONSTRAINTS|CONSTRAINT_CATALOG|'
-             r'CONSTRAINT_NAME|CONSTRAINT_SCHEMA|CONSTRUCTOR|CONTAINS|'
-             r'CONTINUE|CONVERSION|CONVERT|COPY|CORRESPONTING|COUNT|'
-             r'CREATE|CREATEDB|CREATEUSER|CROSS|CUBE|CURRENT|CURRENT_DATE|'
-             r'CURRENT_PATH|CURRENT_ROLE|CURRENT_TIME|CURRENT_TIMESTAMP|'
-             r'CURRENT_USER|CURSOR|CURSOR_NAME|CYCLE|DATA|DATABASE|'
-             r'DATETIME_INTERVAL_CODE|DATETIME_INTERVAL_PRECISION|DAY|'
-             r'DEALLOCATE|DECLARE|DEFAULT|DEFAULTS|DEFERRABLE|DEFERRED|'
-             r'DEFINED|DEFINER|DELETE|DELIMITER|DELIMITERS|DEREF|DESC|'
-             r'DESCRIBE|DESCRIPTOR|DESTROY|DESTRUCTOR|DETERMINISTIC|'
-             r'DIAGNOSTICS|DICTIONARY|DISCONNECT|DISPATCH|DISTINCT|DO|'
-             r'DOMAIN|DROP|DYNAMIC|DYNAMIC_FUNCTION|DYNAMIC_FUNCTION_CODE|'
-             r'EACH|ELSE|ENCODING|ENCRYPTED|END|END-EXEC|EQUALS|ESCAPE|EVERY|'
-             r'EXCEPT|ESCEPTION|EXCLUDING|EXCLUSIVE|EXEC|EXECUTE|EXISTING|'
-             r'EXISTS|EXPLAIN|EXTERNAL|EXTRACT|FALSE|FETCH|FINAL|FIRST|FOR|'
-             r'FORCE|FOREIGN|FORTRAN|FORWARD|FOUND|FREE|FREEZE|FROM|FULL|'
-             r'FUNCTION|G|GENERAL|GENERATED|GET|GLOBAL|GO|GOTO|GRANT|GRANTED|'
-             r'GROUP|GROUPING|HANDLER|HAVING|HIERARCHY|HOLD|HOST|IDENTITY|'
-             r'IGNORE|ILIKE|IMMEDIATE|IMMUTABLE|IMPLEMENTATION|IMPLICIT|IN|'
-             r'INCLUDING|INCREMENT|INDEX|INDITCATOR|INFIX|INHERITS|INITIALIZE|'
-             r'INITIALLY|INNER|INOUT|INPUT|INSENSITIVE|INSERT|INSTANTIABLE|'
-             r'INSTEAD|INTERSECT|INTO|INVOKER|IS|ISNULL|ISOLATION|ITERATE|JOIN|'
-             r'K|KEY|KEY_MEMBER|KEY_TYPE|LANCOMPILER|LANGUAGE|LARGE|LAST|'
-             r'LATERAL|LEADING|LEFT|LENGTH|LESS|LEVEL|LIKE|LILMIT|LISTEN|LOAD|'
-             r'LOCAL|LOCALTIME|LOCALTIMESTAMP|LOCATION|LOCATOR|LOCK|LOWER|M|'
-             r'MAP|MATCH|MAX|MAXVALUE|MESSAGE_LENGTH|MESSAGE_OCTET_LENGTH|'
-             r'MESSAGE_TEXT|METHOD|MIN|MINUTE|MINVALUE|MOD|MODE|MODIFIES|'
-             r'MODIFY|MONTH|MORE|MOVE|MUMPS|NAMES|NATIONAL|NATURAL|NCHAR|'
-             r'NCLOB|NEW|NEXT|NO|NOCREATEDB|NOCREATEUSER|NONE|NOT|NOTHING|'
-             r'NOTIFY|NOTNULL|NULL|NULLABLE|NULLIF|OBJECT|OCTET_LENGTH|OF|OFF|'
-             r'OFFSET|OIDS|OLD|ON|ONLY|OPEN|OPERATION|OPERATOR|OPTION|OPTIONS|'
-             r'OR|ORDER|ORDINALITY|OUT|OUTER|OUTPUT|OVERLAPS|OVERLAY|OVERRIDING|'
-             r'OWNER|PAD|PARAMETER|PARAMETERS|PARAMETER_MODE|PARAMATER_NAME|'
-             r'PARAMATER_ORDINAL_POSITION|PARAMETER_SPECIFIC_CATALOG|'
-             r'PARAMETER_SPECIFIC_NAME|PARAMATER_SPECIFIC_SCHEMA|PARTIAL|'
-             r'PASCAL|PENDANT|PLACING|PLI|POSITION|POSTFIX|PRECISION|PREFIX|'
-             r'PREORDER|PREPARE|PRESERVE|PRIMARY|PRIOR|PRIVILEGES|PROCEDURAL|'
-             r'PROCEDURE|PUBLIC|READ|READS|RECHECK|RECURSIVE|REF|REFERENCES|'
-             r'REFERENCING|REINDEX|RELATIVE|RENAME|REPEATABLE|REPLACE|RESET|'
-             r'RESTART|RESTRICT|RESULT|RETURN|RETURNED_LENGTH|'
-             r'RETURNED_OCTET_LENGTH|RETURNED_SQLSTATE|RETURNS|REVOKE|RIGHT|'
-             r'ROLE|ROLLBACK|ROLLUP|ROUTINE|ROUTINE_CATALOG|ROUTINE_NAME|'
-             r'ROUTINE_SCHEMA|ROW|ROWS|ROW_COUNT|RULE|SAVE_POINT|SCALE|SCHEMA|'
-             r'SCHEMA_NAME|SCOPE|SCROLL|SEARCH|SECOND|SECURITY|SELECT|SELF|'
-             r'SENSITIVE|SERIALIZABLE|SERVER_NAME|SESSION|SESSION_USER|SET|'
-             r'SETOF|SETS|SHARE|SHOW|SIMILAR|SIMPLE|SIZE|SOME|SOURCE|SPACE|'
-             r'SPECIFIC|SPECIFICTYPE|SPECIFIC_NAME|SQL|SQLCODE|SQLERROR|'
-             r'SQLEXCEPTION|SQLSTATE|SQLWARNINIG|STABLE|START|STATE|STATEMENT|'
-             r'STATIC|STATISTICS|STDIN|STDOUT|STORAGE|STRICT|STRUCTURE|STYPE|'
-             r'SUBCLASS_ORIGIN|SUBLIST|SUBSTRING|SUM|SYMMETRIC|SYSID|SYSTEM|'
-             r'SYSTEM_USER|TABLE|TABLE_NAME| TEMP|TEMPLATE|TEMPORARY|TERMINATE|'
-             r'THAN|THEN|TIMESTAMP|TIMEZONE_HOUR|TIMEZONE_MINUTE|TO|TOAST|'
-             r'TRAILING|TRANSATION|TRANSACTIONS_COMMITTED|'
-             r'TRANSACTIONS_ROLLED_BACK|TRANSATION_ACTIVE|TRANSFORM|'
-             r'TRANSFORMS|TRANSLATE|TRANSLATION|TREAT|TRIGGER|TRIGGER_CATALOG|'
-             r'TRIGGER_NAME|TRIGGER_SCHEMA|TRIM|TRUE|TRUNCATE|TRUSTED|TYPE|'
-             r'UNCOMMITTED|UNDER|UNENCRYPTED|UNION|UNIQUE|UNKNOWN|UNLISTEN|'
-             r'UNNAMED|UNNEST|UNTIL|UPDATE|UPPER|USAGE|USER|'
-             r'USER_DEFINED_TYPE_CATALOG|USER_DEFINED_TYPE_NAME|'
-             r'USER_DEFINED_TYPE_SCHEMA|USING|VACUUM|VALID|VALIDATOR|VALUES|'
-             r'VARIABLE|VERBOSE|VERSION|VIEW|VOLATILE|WHEN|WHENEVER|WHERE|'
-             r'WITH|WITHOUT|WORK|WRITE|YEAR|ZONE)\b', Keyword),
-            (r'(ARRAY|BIGINT|BINARY|BIT|BLOB|BOOLEAN|CHAR|CHARACTER|DATE|'
-             r'DEC|DECIMAL|FLOAT|INT|INTEGER|INTERVAL|NUMBER|NUMERIC|REAL|'
-             r'SERIAL|SMALLINT|VARCHAR|VARYING|INT8|SERIAL8|TEXT)\b',
-             Name.Builtin),
             (r'[+*/<>=~!@#%^&|`?^-]', Operator),
             (r'[0-9]+', Number.Integer),
             # TODO: Backslash escapes?
             (r"'(''|[^'])*'", String.Single),
             (r'"(""|[^"])*"', String.Symbol), # not a real string literal in ANSI SQL
-            (r'[a-zA-Z_][a-zA-Z0-9_]*', Name),
-            (r'[;:()\[\],\.]', Punctuation)
+            (r'[a-zA-Z_][a-zA-Z0-9_]*', is_keyword),
+            (r'\$([a-zA-Z_][a-zA-Z0-9_]*)?\$', Name.Builtin),
+            (r'[;:()\[\],\.]', Punctuation),
         ],
         'multiline-comments': [
             (r'/\*', Comment.Multiline, 'multiline-comments'),
@@ -253,6 +179,7 @@ class Lexer:
         self.filters = []
 
     def add_filter(self, filter_, **options):
+        from sqlparse.filters import Filter
         if not isinstance(filter_, Filter):
             filter_ = filter_(**options)
         self.filters.append(filter_)
@@ -316,13 +243,21 @@ class Lexer:
         tokendefs = self._tokens
         statestack = list(stack)
         statetokens = tokendefs[statestack[-1]]
+        known_names = {}
         while 1:
             for rexmatch, action, new_state in statetokens:
                 m = rexmatch(text, pos)
                 if m:
                     # print rex.pattern
-                    if type(action) is _TokenType:
-                        yield pos, action, m.group()
+                    value = m.group()
+                    if value in known_names:
+                        yield pos, known_names[value], value
+                    elif type(action) is _TokenType:
+                        yield pos, action, value
+                    elif hasattr(action, '__call__'):
+                        ttype, value = action(value)
+                        known_names[value] = ttype
+                        yield pos, ttype, value
                     else:
                         for item in action(self, m):
                             yield item
@@ -360,3 +295,12 @@ class Lexer:
                 except IndexError:
                     break
 
+
+def tokenize(sql):
+    """Tokenize sql.
+
+    Tokenize *sql* using the :class:`Lexer` and return a 2-tuple stream
+    of ``(token type, value)`` items.
+    """
+    lexer = Lexer()
+    return lexer.get_tokens(sql)

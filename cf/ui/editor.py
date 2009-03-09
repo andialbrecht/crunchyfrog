@@ -279,14 +279,9 @@ class Editor(GladeWidget, PaneItem):
         def exec_threaded(statement):
             cur = self.connection.cursor()
             if self.app.config.get("sqlparse.enabled", True):
-                if self.connection:
-                    dialect = self.connection.sqlparse_dialect
-                else:
-                    dialect = None
-                stmts = sqlparse.parse(statement, dialect=dialect)
+                stmts = sqlparse.split(statement)
             else:
                 stmts = [statement]
-            stmts = [unicode(s) for s in stmts]
             for stmt in stmts:
                 if not stmt.strip():
                     continue
@@ -345,12 +340,7 @@ class Editor(GladeWidget, PaneItem):
         else:
             cur = self.connection.cursor()
             if self.app.config.get("sqlparse.enabled", True):
-                if self.connection:
-                    dialect = self.connection.sqlparse_dialect
-                else:
-                    dialect = None
-                stmts = [unicode(x)
-                         for x in sqlparse.parse(statement, dialect=dialect)]
+                stmts = sqlparse.split(statement)
             else:
                 stms = [statement]
             for stmt in stmts:
@@ -368,11 +358,7 @@ class Editor(GladeWidget, PaneItem):
         if not bounds:
             bounds = buf.get_bounds()
         statement = buf.get_text(*bounds)
-        if self.connection:
-            dialect = self.connection.sqlparse_dialect
-        else:
-            dialect = None
-        if len(sqlparse.parse(statement, dialect=dialect)) > 1:
+        if len(sqlparse.split(statement)) > 1:
             dialogs.error(_(u"Select a single statement to explain."))
             return
         data = []
@@ -576,14 +562,11 @@ class Editor(GladeWidget, PaneItem):
             start, end = res
             select_range = True
         orig = buffer_.get_text(start, end)
-        formatted = []
-        for stmt in sqlparse.parse(orig):
-            formatted.append(stmt.format(**options))
+        formatted = sqlparse.format(orig, **options)
         # Modify buffer
         buffer_.begin_user_action()
         buffer_.delete(start, end)
-        new_content = ''.join(unicode(x) for x in formatted)
-        buffer_.insert(start, new_content)
+        buffer_.insert(start, formatted)
         # Set selection again
         if select_range:
             end = start.copy()
