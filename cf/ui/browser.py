@@ -334,23 +334,20 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
                         treeview.expand_row(model.get_path(iter), False)
 
     def on_show_details(self, menuitem, object, model, iter):
+        # FIXME(andi): Rewrite this part when main notebook allows different
+        #  views.
         datasource_info = self.find_datasource_info(model, iter)
         if datasource_info.backend.schema:
             data = datasource_info.backend.schema.get_details(
                 datasource_info.internal_connection, object)
             if not data:
                 return
-            nb = gtk.Notebook()
             for key, value in data.items():
                 if isinstance(value, basestring):
-                    widget = SQLView(self.app)
-                    sw = gtk.ScrolledWindow()
-                    sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-                    sw.add(widget)
-                    widget.set_editable(False)
-                    widget.get_buffer().set_text(value)
-                    nb.append_page(sw, gtk.Label(key))
-            nb.show_all()
+                    editor = self.instance.editor_create()
+                    editor.set_text(value)
+                    return
+
 
     def find_datasource_info(self, model, iter):
         while iter:
