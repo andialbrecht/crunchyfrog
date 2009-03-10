@@ -183,6 +183,8 @@ class ReindentFilter(Filter):
         'OR': 0,
         'GROUP': 0,
         'ORDER': 0,
+        'UNION': 0,
+        'SELECT': 0,
     }
 
     keep_together = (
@@ -253,6 +255,12 @@ class ReindentFilter(Filter):
             elif token.is_group():
 #                self._process_group(stmt, token)
                 buff.append(token)
+            elif start_on_nl and len(buff) == 0:  # prevent nl before DDL/DML
+                if (token.ttype in (T.Keyword.DML, T.Keyword.DDL)
+                    or token.match(T.Punctuation, '(')):
+                    yield token
+                else:
+                    buff.append(token)
             else:
                 buff.append(token)
             self._indent.pop()
@@ -285,9 +293,11 @@ class ReindentFilter(Filter):
         if (self._last_stmt is not None and self._last_stmt != stmt
             and not self.nl_yielded):
             yield grouping.Token(T.Whitespace, self.nl())
+            yield grouping.Token(T.Whitespace, self.nl())
         if self._last_stmt != stmt:
             self._last_stmt = stmt
             skip_ws = True
+        is_first = True
         for token in stream:
             if skip_ws and token.is_whitespace():
                 continue
@@ -301,6 +311,16 @@ class ReindentFilter(Filter):
                 self.level += self.indents[token.value.upper()]
                 self.line_offset += len(token.value)
                 yield token
+            elif token.ttype is T.Keyword and 'JOIN' in token.value.upper():
+                yield grouping.Token(T.Whitespace, self.nl())
+                self.line_offset += len(token.value)
+                yield token
+            elif (token.ttype in (T.Keyword.DML, T.Keyword.DDL)
+                  and not self.nl_yielded and not is_first):
+                yield grouping.Token(T.Whitespace, self.nl())
+                self.nl_yielded = True
+                self.line_offset += len(token.value)
+                yield token
             elif token.is_group():
                 if not token.__class__ in self.keep_together:
                     self._process_group(stmt, token)
@@ -310,6 +330,7 @@ class ReindentFilter(Filter):
                 self.nl_yielded = (token.match(T.Punctuation, '\n')
                                    or token.ttype is T.Comment.Single)
                 yield token
+            is_first = False
 
     def process(self, stack, group):
         group.tokens = rstrip(self._process(stack, group, group.tokens))

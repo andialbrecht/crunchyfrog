@@ -163,6 +163,7 @@ class Lexer:
             # TODO: Backslash escapes?
             (r"'(''|[^'])*'", String.Single),
             (r'"(""|[^"])*"', String.Symbol), # not a real string literal in ANSI SQL
+            (r'(LEFT |RIGHT )?(INNER |OUTER )?JOIN', Keyword),
             (r'[a-zA-Z_][a-zA-Z0-9_]*', is_keyword),
             (r'\$([a-zA-Z_][a-zA-Z0-9_]*)?\$', Name.Builtin),
             (r'[;:()\[\],\.]', Punctuation),
@@ -193,10 +194,11 @@ class Lexer:
         Also preprocess the text, i.e. expand tabs and strip it if
         wanted and applies registered filters.
         """
+        add_newline = text.endswith('\n')
         if isinstance(text, unicode):
-            text = u''.join(text.splitlines(True))
+            text = u'\n'.join(text.splitlines())
         else:
-            text = ''.join(text.splitlines(True))
+            text = '\n'.join(text.splitlines())
             if self.encoding == 'guess':
                 try:
                     text = text.decode('utf-8')
@@ -215,6 +217,8 @@ class Lexer:
                 text = text.decode(enc['encoding'])
             else:
                 text = text.decode(self.encoding)
+        if add_newline:
+            text += '\n'
         if self.stripall:
             text = text.strip()
         elif self.stripnl:

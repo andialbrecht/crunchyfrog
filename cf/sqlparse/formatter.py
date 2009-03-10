@@ -108,7 +108,7 @@ def build_filter_stack(stack, options):
             filters.RightMarginFilter(width=options['right_margin']))
 
     # Serializer
-    if 'output_format' in options:
+    if options.get('output_format'):
         frmt = options['output_format']
         if frmt.lower() == 'php':
             fltr = filters.OutputPHPFilter()
