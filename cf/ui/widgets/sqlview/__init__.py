@@ -91,9 +91,8 @@ class SQLView(gtksourceview2.View):
         if self._buffer_changed_cb is not None:
             gobject.source_remove(self._buffer_changed_cb)
             self._buffer_changed_cb = None
-        self._buffer_changed_cb = gobject.timeout_add(500,
-                                                      self.buffer_changed_cb,
-                                                      buffer)
+        self._buffer_change_cb = gobject.idle_add(self.buffer_changed_cb,
+                                                  buffer)
 
     def on_config_changed(self, config, option, value):
         """Updates view and buffer on configuration change."""
