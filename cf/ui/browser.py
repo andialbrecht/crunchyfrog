@@ -205,7 +205,9 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
                 item.connect("activate", self.on_refresh_node, model, iter)
                 popup.append(item)
             if obj.has_details:
-                item = gtk.MenuItem(_(u"Details"))
+                # FIXME(andi): It's labelled "Definition" because only view
+                #   definitions have details ATM.
+                item = gtk.MenuItem(_(u"Definition"))
                 item.connect("activate", self.on_show_details, obj, model, iter)
                 popup.append(item)
             if popup.get_children():
