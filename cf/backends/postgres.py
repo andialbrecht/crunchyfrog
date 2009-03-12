@@ -83,9 +83,15 @@ class PostgresBackend(DBBackendPlugin):
 
     @classmethod
     def get_label(cls, datasource_info):
-        if not datasource_info.options.get("host", None):
-            datasource_info.options["host"] = "localhost"
-        return DBBackendPlugin.get_label(datasource_info)
+        s = '%s@%s' %  (datasource_info.options.get("user", None) or "??",
+                        datasource_info.options.get("database", None) or "??")
+        if datasource_info.options.get("host", None):
+            s+= ' on %s' % datasource_info.options["host"]
+        else:
+            s+= ', local pipe'
+        if datasource_info.name:
+            s = '%s (%s)' % (datasource_info.name, s)
+        return s
 
     def dbconnect(self, data):
         opts = self._get_conn_opts_from_opts(data)

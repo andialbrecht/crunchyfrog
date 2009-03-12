@@ -12,6 +12,7 @@ Bug Fixes
  * Fixed invalid category in crunchyfrog.desktop (issue37 reported
    by ivazqueznet).
  * Open files given as command line arguments works again (issue38).
+ * Socket connections to PostgreSQL fixed (issue43, thanks to ivazqueznet).
 
 Other
  * Some more UI clean up (incl. issue34, thanks to robertknight for the
