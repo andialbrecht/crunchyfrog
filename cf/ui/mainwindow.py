@@ -431,13 +431,6 @@ class MainWindow(gtk.Window):
         dlg.run()
         dlg.destroy()
 
-    def on_editor_buffer_dirty(self, editor, param):
-        if param.name == 'buffer-dirty':
-            action = self._get_action('file-save')
-            action.set_sensitive(editor.get_property(param.name))
-            action = self._get_action('file-save-as')
-            action.set_sensitive(editor.get_property(param.name))
-
     def on_editor_close(self, *args):
         editor = self.get_active_editor()
         if editor is not None:
@@ -759,10 +752,6 @@ class MainWindow(gtk.Window):
             self._editor.disconnect(self._editor_conn_tag)
             self._editor_conn_tag = None
         if self._editor:
-            handler_id = self._editor.get_data('cf::sig_editor_buffer_dirty')
-            if handler_id:
-                self._editor.disconnect(handler_id)
-                self._editor.set_data('cf::sig_editor_buffer_dirty', None)
             handler_id = self._editor.get_data('cf::sig_editor_buffer_changed')
             if handler_id:
                 self._editor.disconnect(handler_id)
@@ -777,9 +766,6 @@ class MainWindow(gtk.Window):
             if conn:
                 prop =conn.get_property('transaction-state')
                 self.set_transaction_state(prop, conn)
-            handler_id = self._editor.connect('notify::buffer-dirty',
-                                              self.on_editor_buffer_dirty)
-            self._editor.set_data('cf::sig_editor_buffer_dirty', handler_id)
             # XXX add buffer selection changed cb to update copy&paste btns
         else:
             self.set_title('CrunchyFrog %s' % release.version)
@@ -788,8 +774,7 @@ class MainWindow(gtk.Window):
                 group.set_sensitive(self._editor is not None)
                 break
         sensitive = bool((self._editor
-                          and isinstance(self._editor, Editor)
-                          and self._editor.props.buffer_dirty))
+                          and isinstance(self._editor, Editor)))
         action = self._get_action('file-save')
         action.set_sensitive(sensitive)
         action = self._get_action('file-save-as')
