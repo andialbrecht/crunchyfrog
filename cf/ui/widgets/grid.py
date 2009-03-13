@@ -333,6 +333,9 @@ class Grid(gtk.TreeView):
         """Resets the grid"""
         old_model = self.get_model()
         if old_model:
+            self.unselect_cells()
+            self.unselect_rows()
+            self.unselect_columns()
             del old_model
         model = gtk.ListStore(int)
         self.set_model(model)
