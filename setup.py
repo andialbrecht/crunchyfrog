@@ -41,6 +41,15 @@ from utils.command.clean_mo import clean_mo
 from cf import release
 
 
+def find_packages(base):
+    ret = [base]
+    for path in os.listdir(base):
+        full_path = os.path.join(base, path)
+        if os.path.isdir(full_path):
+            ret += find_packages(full_path)
+    return ret
+
+
 class clean_with_subcommands(clean):
 
     def run(self):
@@ -131,10 +140,7 @@ setup(
         'Programming Language :: Python',
         'Topic :: Database :: Front-Ends',
     ],
-    packages=['cf', 'cf/backends', 'cf/backends/schema',
-              'cf/config', 'cf/filter', 'cf/plugins',
-              'cf/shell', 'cf/sqlparse', 'cf/thirdparty',
-              'cf/ui', 'cf/ui/widgets', 'cf/ui/widgets/sqlview'],
+    packages=find_packages('cf'),
     package_data={'cf': ['config/default.cfg']},
     scripts=['crunchyfrog'],
     data_files=DATA_FILES,

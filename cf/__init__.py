@@ -46,6 +46,8 @@ if _is_source_dir():
                      '../docs/manual/build/html/')
         )
 else:
+    if not os.path.exists(os.path.join(PREFIX, 'share/crunchyfrog')):
+        PREFIX = '/usr/local/'
     DATA_DIR = os.path.join(PREFIX, 'share/crunchyfrog/')
     LOCALE_DIR = os.path.join(PREFIX, 'share/locale/')
     MANUAL_URL = '/usr/share/doc/crunchyfrog/manual/'
