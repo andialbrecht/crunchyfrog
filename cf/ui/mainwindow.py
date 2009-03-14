@@ -655,8 +655,8 @@ class MainWindow(gtk.Window):
 
     def on_ui_disconnect_proxy(self, ui, action, widget):
         cids = widget.get_data('cf::cids') or ()
-        for name, cid in cids:
-            widget.disconect(cid)
+        for cid in cids:
+            widget.disconnect(cid)
 
     def on_window_state_event(self, window, event):
         val_names = event.new_window_state.value_names
