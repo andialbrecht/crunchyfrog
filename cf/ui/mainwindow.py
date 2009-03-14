@@ -815,8 +815,13 @@ class MainWindow(gtk.Window):
         self.on_toggle_toolbar(action)
         self.side_pane.state_restore()
         self.bottom_pane.state_restore()
-        self.resize(conf.get('gui.width', 650),
-                    conf.get('gui.height', 650))
+        width = conf.get('gui.width')
+        height = conf.get('gui.height')
+        if not width or width == -1:
+            width = 800
+        if not height or height == -1:
+            height = 600
+        self.resize(width, height)
         if conf.get('gui.maximized', False):
             self.maximize()
         fname = os.path.join(USER_CONFIG_DIR, 'shortcuts.map')
