@@ -174,7 +174,7 @@ class CFApplication(gobject.GObject):
         self.ipc_listener = IPCListener(self)
         t = threading.Thread(target=self.ipc_listener.serve_forever)
         t.setDaemon(True)
-        t.start()
+        gobject.idle_add(t.start)
 
     def show_help(self, topic=None):
         """Opens a webbrowser with a help page.
