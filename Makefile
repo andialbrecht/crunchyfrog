@@ -34,6 +34,7 @@ clean:
 	$(PYTHON) setup.py clean
 	rm -rf build/ MANIFEST $(BUILDIR)
 	rm -rf crunchyfrog.egg-info
+	rm -rf data/crunchyfrog.1
 	find . -name '*.pyc' -delete
 	find . -name '*~' -delete
 	rm -rf testuserdir
