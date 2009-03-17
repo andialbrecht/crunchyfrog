@@ -1,43 +1,53 @@
-.\" Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>
-.\"
-.\" This is free software; you may redistribute it and/or modify
-.\" it under the terms of the GNU General Public License as
-.\" published by the Free Software Foundation; either version 2,
-.\" or (at your option) any later version.
-.\"
-.\" This is distributed in the hope that it will be useful, but
-.\" WITHOUT ANY WARRANTY; without even the implied warranty of
-.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-.\" GNU General Public License for more details.
-.\"
-.\" You should have received a copy of the GNU General Public License
-.\" along with this; if not write to the Free Software Foundation, Inc.
-.\" 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
-.TH crunchyfrog 1 "2008\-02\-18"
+.TH crunchyfrog 1 2009\-03\-16
 .SH NAME
-crunchyfrog \- Simple GNOME database tool
+crunchyfrog \- SQL client (not\-only) for GNOME
 .SH SYNOPSIS
 .B crunchyfrog
-.RI [ option... ] " " [ file name ]
+[OPTIONS] [FILE1, ...]
 .SH DESCRIPTION
-.B crunchyfrog
-is a simple database schema browser and query tool for the GNOME desktop.
+CrunchyFrog is a database navigator and SQL client.
+
+It's mainly written for GNOME but it should run in other environments too.
+
+Supported databases
+===================
+
+ * PostgreSQL (requires psycopg2)
+ * MySQL (requires MySQLdb)
+ * SQLite3 (requires python\-sqlite3)
+ * Oracle (requires cx_Oracle)
+ * MS\-SQL Server (requires pymssql)
+ * LDAP (requires python\-ldap)
+
+It is written in Python (PyGTK) and can be extended using plugins.
+
+Check out the homepage for the most recent version and details.
 .SH OPTIONS
 .TP
-.B -c, --config
-Configuration file to use (default: ~/.config/crunchyfrog/config)
+.B \-\-version
+show program's version number and exit
 .TP
-.B -v,--version
-Print the version and exit
+.B \-h, \-\-help
+show this help message and exit
 .TP
-.B -d, --debug
-Output debug messages on the console output. Disabled by default.
+.B \-c CONFIG, \-\-config=CONFIG
+configuration file
 
+.TP
+LOGGING OPTIONS
+.TP
+.B \-q, \-\-quiet
+Print errors only.
+.TP
+.B \-v, \-\-verbose
+Print info level logs (default).
+.TP
+.B \-\-noisy
+Print all logs.
 .SH AUTHORS
 .B crunchyfrog
-was written by the Andi Albrecht <albrecht.andi@gmail.com>
+was written by Andi Albrecht <albrecht.andi@gmail.com>.
 .SH DISTRIBUTION
 The latest version of crunchyfrog may be downloaded from
-.UR http://cf.andialbrecht.de
-<http://cf.andialbrecht.de/>
+.UR http://crunchyfrog.googlecode.com
 .UE
