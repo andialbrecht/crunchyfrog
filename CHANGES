@@ -1,5 +1,5 @@
-Release 0.3.4 (in development)
-------------------------------
+Release 0.3.4 (Mar 17, 2009)
+----------------------------
 
 New Features
  * Option to use the foreground editor's connection as default for new
@@ -21,11 +21,13 @@ Other
  * Pygments is not required anymore.
 
 Translations
- * Swedish is now complete (thanks to Daniel Nylander).
+ * Swedish and Spanish translations are now complete (thanks to
+   Daniel Nylander and DiegoJ).
+ * Russian translation is almost complete (thanks to Alexandr Udovichenko).
 
 
-Release 0.3.3 (Feb 6, 20096)
-----------------------------
+Release 0.3.3 (Feb 6, 2009)
+---------------------------
 
 New Features
  * Close all action added.

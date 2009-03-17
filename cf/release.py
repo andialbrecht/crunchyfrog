@@ -22,7 +22,7 @@
 
 name = "CrunchyFrog"
 appname = name.lower()
-version = "0.3.3"
+version = "0.3.4"
 copyright = "Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>"
 description = "SQL client (not-only) for GNOME"
 author = "Andi Albrecht"
@@ -59,34 +59,39 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>."""
 
-translators="""Kari Argillander (https://launchpad.net/~kari-argillander)
+translators="""Thanks to all Launchpad contributors!
+Alexandr Udovichenko (https://translations.launchpad.net/~gragdanin)
+Anthony Guéchoum (https://launchpad.net/~athael)
 cd (https://launchpad.net/~zadoev)
-Thanos Chatziathanassiou (https://launchpad.net/~tchatzi)
+Christian Olate Opazo (https://launchpad.net/~cristian-olate)
+Daniel Nylander (https://translations.launchpad.net/~yeager)
 Dante Díaz (https://launchpad.net/~dante)
 DiegoJ (https://launchpad.net/~diegojromerolopez)
+dvdmeer (https://translations.launchpad.net/~dennis-dvdmeer)
 Edwin Dijk (https://launchpad.net/~sitix)
-Micke Elm (https://launchpad.net/~mickeelm)
-Anthony Guéchoum (https://launchpad.net/~athael)
+Enrico Rosina (https://launchpad.net/~e-rosina)
 Guybrush88 (https://launchpad.net/~erpizzo)
-Ryutatsu Ishigami (https://launchpad.net/~ai-inside+ubuntu)
+Jen Ockwell (https://launchpad.net/~rj-ockwell)
+Jeppe Toustrup (https://launchpad.net/~tenzer)
+Kari Argillander (https://launchpad.net/~kari-argillander)
+kezar (https://launchpad.net/~kezar)
+Linus C Unneback (https://launchpad.net/~linus-folkdatorn)
 Luca Livraghi (https://launchpad.net/~luca91)
 Marion Cisternas Milla (https://launchpad.net/~mcisternas)
-Daniel Nylander (https://translations.launchpad.net/~yeager)
-Jen Ockwell (https://launchpad.net/~rj-ockwell)
-Christian Olate Opazo (https://launchpad.net/~cristian-olate)
-Penegal (https://launchpad.net/~penegal)
 Martin Picek <picek.martin@gnome-cesko.cz>
+Micke Elm (https://launchpad.net/~mickeelm)
+Muhammad Zulfikar (https://launchpad.net/~zulfikars)
 Nicola Piovesan (https://launchpad.net/~piovesannicola)
-rcares (https://launchpad.net/~rcares)
-Enrico Rosina (https://launchpad.net/~e-rosina)
-Xoan Sampaiño (https://launchpad.net/~xoan)
-Skiros (https://launchpad.net/~magoskiros)
+Penegal (https://launchpad.net/~penegal)
 Pierre Slamich (https://launchpad.net/~pierre-slamich)
-Jeppe Toustrup (https://launchpad.net/~tenzer)
+rcares (https://launchpad.net/~rcares)
+Ryutatsu Ishigami (https://launchpad.net/~ai-inside+ubuntu)
+Skiros (https://launchpad.net/~magoskiros)
+Thanos Chatziathanassiou (https://launchpad.net/~tchatzi)
 TRanslate (https://launchpad.net/~translatematic)
 ubby (https://launchpad.net/~kostas-sytske)
-Linus C Unneback (https://launchpad.net/~linus-folkdatorn)
+Vadim Peretokin (https://launchpad.net/~vperetokin)
+Xoan Sampaiño (https://launchpad.net/~xoan)
 Yaron (https://launchpad.net/~sh-yaron)
-Muhammad Zulfikar (https://launchpad.net/~zulfikars)
 0x00080h (https://launchpad.net/~einstein89)
 """

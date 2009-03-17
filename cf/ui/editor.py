@@ -570,7 +570,7 @@ class Editor(GladeWidget, PaneItem):
         # Set selection again
         if select_range:
             end = start.copy()
-            end.backward_chars(len(new_content))
+            end.backward_chars(len(formatted))
             buffer_.select_range(end, start)
         buffer_.end_user_action()
 
