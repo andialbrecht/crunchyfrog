@@ -15,13 +15,11 @@ class build_manpage(Command):
 
     user_options = [
         ('output=', 'O', 'output file'),
-        ('synopsis=', None, 'synopsis of command line arguments'),
         ('parser=', None, 'module path to optparser (e.g. mymod:func'),
         ]
 
     def initialize_options(self):
         self.output = None
-        self.synopsis = None
         self.parser = None
 
     def finalize_options(self):
@@ -29,8 +27,6 @@ class build_manpage(Command):
             raise DistutilsOptionError('\'output\' option is required')
         if self.parser is None:
             raise DistutilsOptionError('\'parser\' option is required')
-        if self.synopsis is None:
-            self.synopsis = ''
         mod_name, func_name = self.parser.split(':')
         fromlist = mod_name.split('.')
         try:
@@ -38,6 +34,8 @@ class build_manpage(Command):
             self._parser = getattr(mod, func_name)()
         except ImportError, err:
             raise
+        self._parser.formatter = ManPageFormatter()
+        self._parser.formatter.set_parser(self._parser)
         self.announce('Writing man page %s' % self.output)
         self._today = datetime.date.today()
 
@@ -56,8 +54,11 @@ class build_manpage(Command):
         else:
             name = self._markup(appname)
         ret.append('.SH NAME\n%s\n' % name)
-        ret.append('.SH SYNOPSIS\n.B %s\n%s\n' % (self._markup(appname),
-                                                  self._markup(self.synopsis)))
+        synopsis = self._parser.get_usage()
+        if synopsis:
+            synopsis = synopsis.replace('%s ' % appname, '')
+            ret.append('.SH SYNOPSIS\n.B %s\n%s\n' % (self._markup(appname),
+                                                      synopsis))
         long_desc = self.distribution.get_long_description()
         if long_desc:
             ret.append('.SH DESCRIPTION\n%s\n' % self._markup(long_desc))
@@ -65,8 +66,6 @@ class build_manpage(Command):
 
     def _write_options(self):
         ret = ['.SH OPTIONS\n']
-        self._parser.formatter = ManPageFormatter()
-        self._parser.formatter.set_parser(self._parser)
         ret.append(self._parser.format_option_help())
         return ''.join(ret)
 
@@ -106,6 +105,9 @@ class ManPageFormatter(optparse.HelpFormatter):
 
     def _markup(self, txt):
         return txt.replace('-', '\\-')
+
+    def format_usage(self, usage):
+        return self._markup(usage)
 
     def format_heading(self, heading):
         if self.level == 0:
