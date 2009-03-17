@@ -45,6 +45,8 @@ from cf import release
 def find_packages(base):
     ret = [base]
     for path in os.listdir(base):
+        if path.startswith('.'):
+            continue
         full_path = os.path.join(base, path)
         if os.path.isdir(full_path):
             ret += find_packages(full_path)
