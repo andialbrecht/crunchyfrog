@@ -397,6 +397,7 @@ class SQLLibraryView(gtk.ScrolledWindow, PaneItem):
                         other_obj.parent = obj.id
                     tbd.append(other_obj)
         elif target_id == 1:  # drop from editor
+            data = '\n'.join(data.splitlines())
             stmt = Statement(None, data, data)
             tbd.append(stmt)
         if context.action == gtk.gdk.ACTION_MOVE:
