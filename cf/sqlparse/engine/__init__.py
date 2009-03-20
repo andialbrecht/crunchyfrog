@@ -10,6 +10,7 @@ import re
 
 from sqlparse import lexer, SQLParseError
 from sqlparse.engine import grouping
+from sqlparse.engine.filter import StatementFilter
 
 # XXX remove this when cleanup is complete
 Filter = object
@@ -47,22 +48,24 @@ class FilterStack(object):
 
         if (self.stmtprocess or self.postprocess or self.split_statements
             or self._grouping):
-            splitter = grouping.StatementFilter()
+            splitter = StatementFilter()
             stream = splitter.process(self, stream)
 
         if self._grouping:
             def _group(stream):
                 for stmt in stream:
-                    grouping.group_tokens(stmt)
+                    grouping.group(stmt)
                     yield stmt
             stream = _group(stream)
 
         if self.stmtprocess:
             def _run(stream):
+                ret = []
                 for stmt in stream:
                     for filter_ in self.stmtprocess:
                         filter_.process(self, stmt)
-                    yield stmt
+                    ret.append(stmt)
+                return ret
             stream = _run(stream)
 
         if self.postprocess:

@@ -49,7 +49,7 @@ FORMATTER_DEFAULT_OPTIONS = {
     'n_indents': 4,
     'keyword_case': 'upper',
     'identifier_case': 'lower',
-    'right_margin': 79
+#    'right_margin': 79
 }
 
 

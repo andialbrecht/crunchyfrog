@@ -70,7 +70,9 @@ String      = Literal.String
 Number      = Literal.Number
 Punctuation = Token.Punctuation
 Operator    = Token.Operator
+Wildcard    = Token.Wildcard
 Comment     = Token.Comment
+Assignment  = Token.Assignement
 
 # Generic types for non-source code
 Generic     = Token.Generic

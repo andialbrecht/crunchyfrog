@@ -354,6 +354,7 @@ KEYWORDS = {
     'PROCEDURE': Keyword,
     'PUBLIC': Keyword,
 
+    'RAISE': Keyword,
     'READ': Keyword,
     'READS': Keyword,
     'RECHECK': Keyword,

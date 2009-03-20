@@ -158,12 +158,17 @@ class Lexer:
             (r'\s+', Whitespace),
             (r'--.*?\n', Comment.Single),
             (r'/\*', Comment.Multiline, 'multiline-comments'),
-            (r'[+*/<>=~!@#%^&|`?^-]', Operator),
+            (r':=', Assignment),
+            (r'::', Punctuation),
+            (r'[*]', Wildcard),
+            (r'[+/<>=~!@#%^&|`?^-]', Operator),
             (r'[0-9]+', Number.Integer),
             # TODO: Backslash escapes?
             (r"'(''|[^'])*'", String.Single),
             (r'"(""|[^"])*"', String.Symbol), # not a real string literal in ANSI SQL
             (r'(LEFT |RIGHT )?(INNER |OUTER )?JOIN', Keyword),
+            (r'END( IF| LOOP)?', Keyword),
+            (r'CREATE( OR REPLACE)?', Keyword.DDL),
             (r'[a-zA-Z_][a-zA-Z0-9_]*', is_keyword),
             (r'\$([a-zA-Z_][a-zA-Z0-9_]*)?\$', Name.Builtin),
             (r'[;:()\[\],\.]', Punctuation),

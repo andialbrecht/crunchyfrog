@@ -78,268 +78,209 @@ class IdentifierCaseFilter(_CaseFilter):
 
 class StripCommentsFilter(Filter):
 
-    def _process(self, stream):
-        token_before = None
-        stripped_single = False
-        for token in stream:
-            if token.is_group():
-                token.tokens = self._process(token.tokens)
-            if isinstance(token, grouping.CommentMulti):
-                continue
-            elif token.ttype is T.Comment.Single:
-                stripped_single = True
-                continue
-            if (stripped_single and not token_before.is_whitespace()
-                and token.ttype is not T.Whitespace):
-                yield grouping.Token(T.Whitespace, ' ')
-            if not token.is_whitespace():
-                stripped_single = False
-            yield token
-            token_before = token
+    def _process(self, tlist):
+        idx = 0
+        clss = set([x.__class__ for x in tlist.tokens])
+        while grouping.Comment in clss:
+            token = tlist.token_next_by_instance(0, grouping.Comment)
+            tidx = tlist.token_index(token)
+            prev = tlist.token_prev(tidx, False)
+            next_ = tlist.token_next(tidx, False)
+            # Replace by whitespace if prev and next exist and if they're not
+            # whitespaces. This doesn't apply if prev or next is a paranthesis.
+            if (prev is not None and next_ is not None
+                and not prev.is_whitespace() and not next_.is_whitespace()
+                and not (prev.match(T.Punctuation, '(')
+                         or next_.match(T.Punctuation, ')'))):
+                tlist.tokens[tidx] = grouping.Token(T.Whitespace, ' ')
+            else:
+                tlist.tokens.pop(tidx)
+            clss = set([x.__class__ for x in tlist.tokens])
 
-    def process(self, stack, group):
-        group.tokens = self._process(group.tokens)
+    def process(self, stack, stmt):
+        [self.process(stack, sgroup) for sgroup in stmt.get_sublists()]
+        self._process(stmt)
 
 
 class StripWhitespaceFilter(Filter):
 
-    def _handle_group(self, stmt, group):
-        def streamer(s, stream):
-            for item in stream:
-                yield item
-        func_name = '_group_%s' % group.__class__.__name__.lower()
-        func = getattr(self, func_name, streamer)
-        return func(stmt, group.tokens)
+    def _stripws(self, tlist):
+        func_name = '_stripws_%s' % tlist.__class__.__name__.lower()
+        func = getattr(self, func_name, self._stripws_default)
+        func(tlist)
 
-    def _group_comment(self, stmt, stream):
-        # Comments have trainling whitespaces. So yield either nothing
-        # or a new line afterwards.
-        yield_new_line = False
-        for token in stream:
+    def _stripws_default(self, tlist):
+        for token in tlist.tokens:
             if token.is_whitespace():
-                if value == '\n':
-                    yield_new_line = True
-            elif token.is_group():
-                token.tokens = self._handle_group(stmt, token)
-                yield token
-            else:
-                yield token
-        if yield_new_line:
-            yield grouping.Token(T.Whitespace, '\n')
+                if '\n' in token.value:
+                    token.value = ' '
+                else:
+                    token.value = ' '
 
-    def _group_parenthesis(self, stmt, stream):
-        at_start = False
-        buffered_ws = []
-        for token in stream:
-            if token.match(T.Punctuation, '('):
-                at_start = True
-                yield token
-            elif at_start:
-                if token.is_whitespace():
-                    continue
-                at_start = False
-                yield token
-            elif token.is_whitespace():
-                buffered_ws.append(token)
-            else:
-                if not token.match(T.Punctuation, ')') and buffered_ws:
-                    yield grouping.Token(T.Whitespace, ' ')
-                    buffered_ws = []
-                yield token
-
-    def _process(self, stack, stmt):
-        buffered_ws = []
-        for token in stmt.tokens:
-            if token.is_whitespace():
-                token.value = re.sub('[ \t\n]+', ' ', token.value)
-                buffered_ws.append(token)
-            elif token.is_group():
-                for item in buffered_ws:
-                    yield item
-                buffered_ws = []
-                token.tokens = self._handle_group(stmt, token)
-                yield token
-            else:
-                for item in buffered_ws:
-                    yield item
-                buffered_ws = []
-                yield token
-
+    def _stripws_parenthesis(self, tlist):
+        if tlist.tokens[1].is_whitespace():
+            tlist.tokens.pop(1)
+        if tlist.tokens[-2].is_whitespace():
+            tlist.tokens.pop(-2)
+        self._stripws_default(tlist)
 
     def process(self, stack, stmt):
-        # TODO(andi): Somehow here's a problem with nested generators
-        stmt.tokens = tuple(self._process(stack, stmt))
-        for subgroup in stmt.subgroups:
-            self.process(stack, subgroup)
+        [self.process(stack, sgroup) for sgroup in stmt.get_sublists()]
+        self._stripws(stmt)
+        if stmt.tokens[-1].is_whitespace():
+            stmt.tokens.pop(-1)
 
 
 class ReindentFilter(Filter):
 
-    indents = {
-        'FROM': 0,
-        'JOIN': 0,
-        'WHERE': 0,
-        'AND': 0,
-        'OR': 0,
-        'GROUP': 0,
-        'ORDER': 0,
-        'UNION': 0,
-        'SELECT': 0,
-    }
-
-    keep_together = (
-        grouping.TypeCast, grouping.Identifier, grouping.Alias,
-    )
-
-    def __init__(self, width=2, char=' '):
+    def __init__(self, width=2, char=' ', line_width=None):
         self.width = width
         self.char = char
+        self.indent = 0
+        self.offset = 0
+        self.line_width = line_width
+        self._curr_stmt = None
         self._last_stmt = None
-        self.nl_yielded = False
-        self.level = 0
-        self.line_offset = 0
-        self._indent = []  # if set it's used for nl()
+
+    def _get_offset(self, token):
+        all_ = list(self._curr_stmt.flatten())
+        idx = all_.index(token)
+        raw = ''.join(unicode(x) for x in all_[:idx+1])
+        line = raw.splitlines()[-1]
+        # Now take current offset into account and return relative offset.
+        full_offset = len(line)-(len(self.char*(self.width*self.indent)))
+        return full_offset - self.offset
 
     def nl(self):
-        """Build newline and leading whitespace. Calculate new line_offset."""
-        if not self._indent:
-            width = (len(self.char)*self.width)*self.level
-            indent = ((self.char*self.width)*self.level)
-        else:
-            indent = self.char*self._indent[-1]
-            width = len(self.char)*self._indent[-1]
-        self.line_offset = width
-        return '\n'+indent
+        ws = '\n'+(self.char*((self.indent*self.width)+self.offset))
+        return grouping.Token(T.Whitespace, ws)
 
-    def _process_group(self, stmt, group):
-        def _default(x, y):
-            for item in self._process(None, x, y):
-                yield item
-        func_name = '_group_%s' % group.__class__.__name__.lower()
-        func = getattr(self, func_name, _default)
-        group.tokens = tuple(func(stmt, group.tokens))
-        return group
+    def _split_kwds(self, tlist):
+        split_words = ('FROM', 'JOIN$', 'AND', 'OR',
+                       'GROUP', 'ORDER', 'UNION')
+        idx = 0
+        token = tlist.token_next_match(idx, T.Keyword, split_words,
+                                       regex=True)
+        while token:
+            prev = tlist.token_prev(tlist.token_index(token), False)
+            offset = 1
+            if prev and prev.is_whitespace():
+                tlist.tokens.pop(tlist.token_index(prev))
+                offset += 1
+            nl = self.nl()
+            tlist.insert_before(token, nl)
+            token = tlist.token_next_match(tlist.token_index(nl)+offset,
+                                           T.Keyword, split_words, regex=True)
 
-    def _group_parenthesis(self, stmt, stream):
-        def start_on_nl(stream):
-            """Checks, if the opening parenthesis should be on a new line.
-            That is when the parenthesis if followed by an DML keyword.
-            """
-            for token in stream:
-                if token.ttype is T.Keyword.DML:
-                    return True
-                elif token.match(T.Punctuation, '('):
-                    continue
-                elif token.is_whitespace():
-                    continue
-                else:
-                    return False
-            return False
+    def _split_statements(self, tlist):
+        idx = 0
+        token = tlist.token_next_by_type(idx, (T.Keyword.DDL, T.Keyword.DML))
+        while token:
+            prev = tlist.token_prev(tlist.token_index(token), False)
+            if prev and prev.is_whitespace():
+                tlist.tokens.pop(tlist.token_index(prev))
+            # only break if it's not the first token
+            if prev:
+                nl = self.nl()
+                tlist.insert_before(token, nl)
+            token = tlist.token_next_by_type(tlist.token_index(token)+1,
+                                             (T.Keyword.DDL, T.Keyword.DML))
 
-        lvl_changed = False
-        start_on_nl = start_on_nl(stream)
-        if start_on_nl:
-            self.level += 1
-            lvl_changed = True
-            # FIXME(andi): The nl should be injected into the parent stream.
-            yield grouping.Token(T.Whitespace, self.nl())
-        offset = self.line_offset+1
-        buff = []
-        for token in stream:
-            self._indent.append(offset)
-            if token.match(T.Punctuation, ')'):
-                for item in self._process(None, stmt, buff):
-                    yield item
-                buff = []
-                yield token
-            elif token.is_group():
-#                self._process_group(stmt, token)
-                buff.append(token)
-            elif start_on_nl and len(buff) == 0:  # prevent nl before DDL/DML
-                if (token.ttype in (T.Keyword.DML, T.Keyword.DDL)
-                    or token.match(T.Punctuation, '(')):
-                    yield token
-                else:
-                    buff.append(token)
-            else:
-                buff.append(token)
-            self._indent.pop()
-        for item in buff:
-            yield item
-        if buff and self._indent:
-            self._indent.pop()
-        if lvl_changed:
-            self.level -= 1
+    def _process(self, tlist):
+        func_name = '_process_%s' % tlist.__class__.__name__.lower()
+        func = getattr(self, func_name, self._process_default)
+        func(tlist)
 
-    def _group_where(self, stmt, stream):
-        lvl_changed = False
-        yield grouping.Token(T.Whitespace, self.nl())
-        for token in stream:
-            if token.match(T.Keyword, ('AND', 'OR')):
-                if not lvl_changed:
-                    self.level += 1
-                    lvl_changed = True
-                yield grouping.Token(T.Whitespace, self.nl())
-            elif token.is_group():
-                token = self._process_group(stmt, token)
-            if not token.is_group():
-                self.line_offset += len(token.value)
-            yield token
-        if lvl_changed:
-            self.level -= 1
+    def _process_where(self, tlist):
+        token = tlist.token_next_match(0, T.Keyword, 'WHERE')
+        tlist.insert_before(token, self.nl())
+        self.indent += 1
+        self._process_default(tlist)
+        self.indent -= 1
 
-    def _process(self, stack, stmt, stream):
-        skip_ws = False
-        if (self._last_stmt is not None and self._last_stmt != stmt
-            and not self.nl_yielded):
-            yield grouping.Token(T.Whitespace, self.nl())
-            yield grouping.Token(T.Whitespace, self.nl())
-        if self._last_stmt != stmt:
-            self._last_stmt = stmt
-            skip_ws = True
+    def _process_parenthesis(self, tlist):
+        first = tlist.token_next(0)
+        indented = False
+        if first and first.ttype in (T.Keyword.DML, T.Keyword.DDL):
+            self.indent += 1
+            tlist.tokens.insert(0, self.nl())
+            indented = True
+        num_offset = self._get_offset(tlist.token_next_match(0,
+                                                        T.Punctuation, '('))
+        self.offset += num_offset
+        self._process_default(tlist, stmts=not indented)
+        if indented:
+            self.indent -= 1
+        self.offset -= num_offset
+
+    def _process_identifierlist(self, tlist):
+        identifiers = tlist.get_identifiers()
+        if len(identifiers) > 1:
+            first = list(identifiers[0].flatten())[0]
+            num_offset = self._get_offset(first)-len(first.value)
+            self.offset += num_offset
+            for token in identifiers[1:]:
+                tlist.insert_before(token, self.nl())
+            self.offset -= num_offset
+        self._process_default(tlist)
+
+    def _process_case(self, tlist):
+        cases = tlist.get_cases()
         is_first = True
-        for token in stream:
-            if skip_ws and token.is_whitespace():
+        num_offset = None
+        case = tlist.tokens[0]
+        outer_offset = self._get_offset(case)-len(case.value)
+        self.offset += outer_offset
+        for cond, value in tlist.get_cases():
+            if is_first:
+                is_first = False
+                num_offset = self._get_offset(cond[0])-len(cond[0].value)
+                self.offset += num_offset
                 continue
-            elif skip_ws and token.ttype is T.Comment.Single:
-                self.nl_yielded = True
-                yield token
-                continue  # ends with a new line
-            skip_ws = False
-            if token.match(T.Keyword, list(self.indents)):
-                yield grouping.Token(T.Whitespace, self.nl())
-                self.level += self.indents[token.value.upper()]
-                self.line_offset += len(token.value)
-                yield token
-            elif token.ttype is T.Keyword and 'JOIN' in token.value.upper():
-                yield grouping.Token(T.Whitespace, self.nl())
-                self.line_offset += len(token.value)
-                yield token
-            elif (token.ttype in (T.Keyword.DML, T.Keyword.DDL)
-                  and not self.nl_yielded and not is_first):
-                yield grouping.Token(T.Whitespace, self.nl())
-                self.nl_yielded = True
-                self.line_offset += len(token.value)
-                yield token
-            elif token.is_group():
-                if not token.__class__ in self.keep_together:
-                    self._process_group(stmt, token)
-                yield token
+            if cond is None:
+                token = value[0]
             else:
-                self.line_offset += len(token.value)
-                self.nl_yielded = (token.match(T.Punctuation, '\n')
-                                   or token.ttype is T.Comment.Single)
-                yield token
-            is_first = False
+                token = cond[0]
+            tlist.insert_before(token, self.nl())
+        # Line breaks on group level are done. Now let's add an offset of
+        # 5 (=length of "when", "then", "else") and process subgroups.
+        self.offset += 5
+        self._process_default(tlist)
+        self.offset -= 5
+        if num_offset is not None:
+            self.offset -= num_offset
+        end = tlist.token_next_match(0, T.Keyword, 'END')
+        tlist.insert_before(end, self.nl())
+        self.offset -= outer_offset
 
-    def process(self, stack, group):
-        group.tokens = rstrip(self._process(stack, group, group.tokens))
+    def _process_default(self, tlist, stmts=True, kwds=True):
+        if stmts:
+            self._split_statements(tlist)
+        if kwds:
+            self._split_kwds(tlist)
+        [self._process(sgroup) for sgroup in tlist.get_sublists()]
+
+    def process(self, stack, stmt):
+        if isinstance(stmt, grouping.Statement):
+            self._curr_stmt = stmt
+        self._process(stmt)
+        if isinstance(stmt, grouping.Statement):
+            if self._last_stmt is not None:
+                if self._last_stmt.to_unicode().endswith('\n'):
+                    nl = '\n'
+                else:
+                    nl = '\n\n'
+                stmt.tokens.insert(0,
+                    grouping.Token(T.Whitespace, nl))
+            if self._last_stmt != stmt:
+                self._last_stmt = stmt
 
 
+# FIXME: Doesn't work ;)
 class RightMarginFilter(Filter):
 
     keep_together = (
-        grouping.TypeCast, grouping.Identifier, grouping.Alias,
+#        grouping.TypeCast, grouping.Identifier, grouping.Alias,
     )
 
     def __init__(self, width=79):
@@ -370,6 +311,7 @@ class RightMarginFilter(Filter):
             yield token
 
     def process(self, stack, group):
+        return
         group.tokens = self._process(stack, group, group.tokens)
 
 
@@ -379,7 +321,12 @@ class RightMarginFilter(Filter):
 class SerializerUnicode(Filter):
 
     def process(self, stack, stmt):
-        return stmt.to_unicode()
+        raw = stmt.to_unicode()
+        add_nl = raw.endswith('\n')
+        res = '\n'.join(line.rstrip() for line in raw.splitlines())
+        if add_nl:
+            res += '\n'
+        return res
 
 
 class OutputPythonFilter(Filter):
