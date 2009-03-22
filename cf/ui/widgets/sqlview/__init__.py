@@ -278,7 +278,7 @@ class SQLView(gtksourceview2.View):
         cursor_iter = buffer.get_iter_at_mark(buffer.get_insert())
         cursor_line = cursor_iter.get_line()
         if self.app.config.get("sqlparse.enabled", True):
-            for iter_start, iter_end in self.get_statements():
+            for iter_start, iter_end in self.find_statements():
                 # Mark beginning of line
                 iter_start.set_line_offset(0)
                 iter_end.set_line_offset(0)
@@ -323,12 +323,13 @@ class SQLView(gtksourceview2.View):
         scheme = sm.get_scheme(c.get('editor.scheme'))
         buf.set_style_scheme(scheme)
 
-    def get_statements(self):
+    def find_statements(self):
         """Finds statements in current buffer.
 
         Returns:
             List of 2-tuples (start iter, end iter).
         """
+        # FIXME: A "cached" version is requried. It's called on expose event!
         buffer_ = self.get_buffer()
         buffer_start, buffer_end = buffer_.get_bounds()
         content = buffer_.get_text(buffer_start, buffer_end)
@@ -339,7 +340,7 @@ class SQLView(gtksourceview2.View):
             # FIXME: Does not work if linebreaks in buffers are not '\n'.
             #    sqlparse unifies them!
             bounds = iter_.forward_search(stmt.strip(),
-                                          gtk.TEXT_SEARCH_VISIBLE_ONLY)
+                                          gtk.TEXT_SEARCH_TEXT_ONLY)
             if bounds is None:
                 continue
             start, end = bounds
@@ -347,6 +348,26 @@ class SQLView(gtksourceview2.View):
             iter_ = end
             if not iter_:
                 raise StopIteration
+        raise StopIteration
+
+    def get_statements(self):
+        """Returns iter 2-tuples for marked statements."""
+        buffer_ = self.buffer
+        iter_ = buffer_.get_iter_at_line(0)
+        start = None
+        end = None
+        while not iter_.is_end():
+            lineno = iter_.get_line()
+            for mark in buffer_.get_source_marks_at_line(lineno, None):
+                name = mark.get_category()
+                if name.endswith('-start'):
+                    start = buffer_.get_iter_at_mark(mark)
+                elif name.endswith('-end'):
+                    end = buffer_.get_iter_at_mark(mark)
+            if start is not None and end is not None:
+                yield start, end
+                start = end = None
+            iter_.forward_line()
         raise StopIteration
 
     def get_current_statement(self):
