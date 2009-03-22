@@ -391,7 +391,7 @@ class Editor(GladeWidget, PaneItem):
         else:
             a = ""
         self._filecontent_read = a
-        self.textview.get_buffer().set_text(a)
+        self.set_text(a)
         self.app.recent_manager.add_item(to_uri(filename))
 
     def get_filename(self):
@@ -470,7 +470,10 @@ class Editor(GladeWidget, PaneItem):
         return buffer.get_text(*buffer.get_bounds())
 
     def set_text(self, txt):
-        self.get_buffer().set_text(txt)
+        buffer_ = self.get_buffer()
+        buffer_.begin_user_action()
+        buffer_.set_text(txt)
+        buffer_.end_user_action()  # starts tagging of statements too
 
     def show_in_separate_window(self):
         instance = self.app.new_instance(show=False)

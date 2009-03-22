@@ -85,7 +85,7 @@ class SQLView(gtksourceview2.View):
         self.app.config.connect('changed', self.on_config_changed)
         self.update_textview_options()
         self._buffer_changed_cb = None
-        self.buffer.connect('changed', self.on_buffer_changed)
+        self.buffer.connect('end-user-action', self.on_buffer_changed)
         self.buffer.connect('mark-set', self.on_mark_set)
         if self.editor is not None:
             self.editor.connect('connection-changed', lambda e, c:
@@ -95,10 +95,6 @@ class SQLView(gtksourceview2.View):
 
     def on_buffer_changed(self, buffer):
         """Installs timeout callback to self.buffer_changed_cb()."""
-        if buffer.get_data('cf::skip_update_marks'):
-            buffer.set_data('cf::skip_update_marks', False)
-            if self._sql_marks:
-                return
         if self._buffer_changed_cb is not None:
             gobject.source_remove(self._buffer_changed_cb)
             self._buffer_changed_cb = None
@@ -258,8 +254,6 @@ class SQLView(gtksourceview2.View):
         if insert != mark:
             return False
         self.queue_draw()
-        buffer_.set_data('cf::skip_update_marks', True)
-        buffer_.emit('changed')  # to highlight statement again
 
     def _iter_in_statement(self, lineno):
         for start, end in self.get_statements():
@@ -329,7 +323,6 @@ class SQLView(gtksourceview2.View):
         Returns:
             List of 2-tuples (start iter, end iter).
         """
-        # FIXME: A "cached" version is requried. It's called on expose event!
         buffer_ = self.get_buffer()
         buffer_start, buffer_end = buffer_.get_bounds()
         content = buffer_.get_text(buffer_start, buffer_end)
