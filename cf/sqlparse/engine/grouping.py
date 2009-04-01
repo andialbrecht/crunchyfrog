@@ -66,7 +66,7 @@ class Token(object):
         return False
 
     def is_whitespace(self):
-        return self.ttype and self.ttype is T.Whitespace
+        return self.ttype and self.ttype in T.Whitespace
 
 
 class TokenList(Token):
@@ -433,6 +433,8 @@ def group_identifier(tlist):
 
 
 def group_identifier_list(tlist):
+    [group_identifier_list(sgroup) for sgroup in tlist.get_sublists()
+     if not isinstance(sgroup, IdentifierList)]
     idx = 0
     token = tlist.token_next_by_instance(idx, Identifier)
     while token:

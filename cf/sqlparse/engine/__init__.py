@@ -71,7 +71,7 @@ class FilterStack(object):
         if self.postprocess:
             def _run(stream):
                 for stmt in stream:
-                    stmt.tokens = self._flatten(stmt.tokens)
+                    stmt.tokens = list(self._flatten(stmt.tokens))
                     for filter_ in self.postprocess:
                         stmt = filter_.process(self, stmt)
                     yield stmt

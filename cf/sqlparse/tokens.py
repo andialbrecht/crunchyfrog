@@ -58,6 +58,7 @@ Token       = _TokenType()
 # Special token types
 Text        = Token.Text
 Whitespace  = Text.Whitespace
+Newline     = Whitespace.Newline
 Error       = Token.Error
 # Text that doesn't belong to this lexer (e.g. HTML in PHP)
 Other       = Token.Other

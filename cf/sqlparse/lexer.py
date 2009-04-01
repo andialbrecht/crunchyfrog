@@ -155,8 +155,9 @@ class Lexer:
 
     tokens = {
         'root': [
+            (r'--.*?(\r|\n|\r\n)', Comment.Single),
+            (r'(\r|\n|\r\n)', Newline),
             (r'\s+', Whitespace),
-            (r'--.*?\n', Comment.Single),
             (r'/\*', Comment.Multiline, 'multiline-comments'),
             (r':=', Assignment),
             (r'::', Punctuation),
@@ -199,11 +200,7 @@ class Lexer:
         Also preprocess the text, i.e. expand tabs and strip it if
         wanted and applies registered filters.
         """
-        add_newline = text.endswith('\n')
-        if isinstance(text, unicode):
-            text = u'\n'.join(text.splitlines())
-        else:
-            text = '\n'.join(text.splitlines())
+        if not isinstance(text, unicode):
             if self.encoding == 'guess':
                 try:
                     text = text.decode('utf-8')
@@ -222,8 +219,6 @@ class Lexer:
                 text = text.decode(enc['encoding'])
             else:
                 text = text.decode(self.encoding)
-        if add_newline:
-            text += '\n'
         if self.stripall:
             text = text.strip()
         elif self.stripnl:

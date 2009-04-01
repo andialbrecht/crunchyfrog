@@ -18,6 +18,7 @@ class TokenFilter(Filter):
         raise NotImplementedError
 
 
+# FIXME: Should be removed
 def rstrip(stream):
     buff = []
     for token in stream:
@@ -110,12 +111,14 @@ class StripWhitespaceFilter(Filter):
         func(tlist)
 
     def _stripws_default(self, tlist):
+        last_was_ws = False
         for token in tlist.tokens:
             if token.is_whitespace():
-                if '\n' in token.value:
-                    token.value = ' '
+                if last_was_ws:
+                    token.value = ''
                 else:
                     token.value = ' '
+            last_was_ws = token.is_whitespace()
 
     def _stripws_parenthesis(self, tlist):
         if tlist.tokens[1].is_whitespace():
@@ -152,12 +155,13 @@ class ReindentFilter(Filter):
         return full_offset - self.offset
 
     def nl(self):
+        # TODO: newline character should be configurable
         ws = '\n'+(self.char*((self.indent*self.width)+self.offset))
         return grouping.Token(T.Whitespace, ws)
 
     def _split_kwds(self, tlist):
         split_words = ('FROM', 'JOIN$', 'AND', 'OR',
-                       'GROUP', 'ORDER', 'UNION')
+                       'GROUP', 'ORDER', 'UNION', 'VALUES')
         idx = 0
         token = tlist.token_next_match(idx, T.Keyword, split_words,
                                        regex=True)
