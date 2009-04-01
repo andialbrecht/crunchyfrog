@@ -1,6 +1,10 @@
 Release 0.3.5 (In Development)
 ------------------------------
 
+Bug Fixes
+ * Fixed execution of statement with Oracle (issue50, thanks to
+   massimiliano.bini for reporting and testings).
+
 Other
  * Improved SQL formatting.
  * Improved statment markers, derived from Giggle's browse view.

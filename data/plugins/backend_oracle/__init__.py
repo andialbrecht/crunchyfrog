@@ -115,6 +115,18 @@ class OracleCursor(DbAPI2Cursor):
         return len(self._fetched)
     rowcount = property(fget=_get_rowcount)
 
+    def prepare_statement(self, sql):
+        # See issue50: cx_Oracle requires str or None for cursor.execute().
+        sql = str(sql)
+        # Another issue: Somehow Oracle dislikes trailing semicolons.
+        # Maybe this approach is a little bit crude, but just remove it...
+        # See this thread for example:
+        # http://www.mail-archive.com/django-users@googlegroups.com/msg11479.html
+        sql = sql.strip()
+        if sql.endswith(';'):
+            sql = sql[:-1]
+        return str(sql)
+
 class OracleConnection(DbAPI2Connection):
     cursor_class = OracleCursor
 

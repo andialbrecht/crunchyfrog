@@ -143,6 +143,16 @@ class DBCursor(gobject.GObject):
     def close(self):
         raise NotImplementedError
 
+    def prepare_statement(self, sql):
+        """Prepare statement for execution.
+
+        This method could be overwritten by backend implementations
+        to prepare a statement before it's execute with this cursor.
+
+        The default implementation just returns the given statement.
+        """
+        return sql
+
 
 class Query(gobject.GObject):
 
@@ -175,8 +185,9 @@ class Query(gobject.GObject):
         else:
             self.emit("started")
         start = time.time()
+        stmt = self.cursor.prepare_statement(self.statement)
         try:
-            self.cursor.execute(self.statement)
+            self.cursor.execute(stmt)
         except:
             self.failed = True
             self.errors.append(str(sys.exc_info()[1]))
