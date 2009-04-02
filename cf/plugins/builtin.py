@@ -40,6 +40,9 @@ except ImportError, err:
 try: from cf.backends.mssql import MsSQLBackend
 except ImportError, err:
     logging.warning('Could not import MsSQLBackend: %s', err)
+try: from cf.backends.oracle import OracleBackend
+except ImportError, err:
+    logging.warning('Could not import OracleBackend; %s', err)
 
 from cf.shell import CFShell
 from cf.library import SQLLibraryPlugin

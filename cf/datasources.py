@@ -213,6 +213,8 @@ class DatasourceInfo(gobject.GObject):
                "from datasource where id=?")
         cur.execute(sql, (db_id,))
         res = cur.fetchone()
+        logging.debug('Initiating data source %s with backend %s',
+                      res[0], res[2])
         backend = app.plugins.by_id(res[2], False)
         opts = cPickle.loads(str(res[3]))
         i = cls(app, backend, res[0], res[1], opts, db_id=db_id)
