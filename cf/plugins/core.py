@@ -282,6 +282,9 @@ class PluginManager(gobject.GObject):
 
     def _get_modules(self, path):
         modules = []
+        if not os.access(path, os.R_OK) or not os.path.exists(path):
+            logging.warning('Plugin path %s missing', path)
+            return modules
         if path not in sys.path:
             sys.path.insert(0, path)
         for item in os.listdir(path):
