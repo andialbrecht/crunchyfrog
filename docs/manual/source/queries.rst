@@ -50,6 +50,13 @@ click on the execute button in the toolbar. The result of
 a query will be displayed in the results panel, when the
 query has finished.
 
+If no text is selected, all statements in the editor are executed.
+
+Select one or more statements to execute the selected statements only.
+
+Press :kbd:`Ctrl+F5` to execute the statement at the current cursor
+location.
+
 .. tip::
    Statements can contain placholders. Placeholders begin with
    a dollar sign followed by one or more letters and numbers.

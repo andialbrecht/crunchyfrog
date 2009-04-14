@@ -275,7 +275,7 @@ class Editor(GladeWidget, PaneItem):
         cur.close()
         self.results.add_message('BEGIN TRANSACTION', 'info')
 
-    def execute_query(self):
+    def execute_query(self, statement_at_cursor=False):
         def exec_threaded(statement):
             cur = self.connection.cursor()
             if self.app.config.get("sqlparse.enabled", True):
@@ -313,10 +313,15 @@ class Editor(GladeWidget, PaneItem):
 #                    if leave:
 #                        return
         buffer = self.textview.get_buffer()
-        bounds = buffer.get_selection_bounds()
         self.results.reset()
-        if not bounds:
-            bounds = buffer.get_bounds()
+        if not statement_at_cursor:
+            bounds = buffer.get_selection_bounds()
+            if not bounds:
+                bounds = buffer.get_bounds()
+        else:
+            bounds = self.textview.get_current_statement()
+            if bounds is None:
+                return
         statement = buffer.get_text(*bounds)
         if self.app.config.get("editor.replace_variables"):
             tpl = string.Template(statement)

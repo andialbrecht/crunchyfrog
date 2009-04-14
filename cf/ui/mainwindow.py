@@ -238,6 +238,10 @@ class MainWindow(gtk.Window):
             ('query-execute', gtk.STOCK_EXECUTE,
              None, 'F5', _(u'Execute statements in SQL editor'),
              self.on_query_execute),
+            ('query-execute-current', None,
+             _(u'Exec_ute Current Statement'), '<control>F5',
+             _(u'Executes statement at cursor'),
+             self.on_query_execute_current),
             ('query-begin', gtk.STOCK_INDENT,
              _(u'Transaction'), 'F6',
              _(u'Begin transaction on current connection'),
@@ -575,6 +579,9 @@ class MainWindow(gtk.Window):
     def on_query_execute(self, *args):
         self.get_active_editor().execute_query()
 
+    def on_query_execute_current(self, action):
+        self.get_active_editor().execute_query(True)
+
     def on_query_menu_activate(self, menuitem):
         for idx in range(1, 11):
             if idx == 10:
@@ -887,6 +894,7 @@ UI = '''
       </menu>
       <separator />
       <menuitem name="Execute" action="query-execute" />
+      <menuitem name="ExecuteCurrent" action="query-execute-current" />
       <menuitem name="Begin" action="query-begin" />
       <menuitem name="Commit" action="query-commit" />
       <menuitem name="Rollback" action="query-rollback" />

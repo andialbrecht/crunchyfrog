@@ -358,6 +358,7 @@ class SQLView(gtksourceview2.View):
                 elif name.endswith('-end'):
                     end = buffer_.get_iter_at_mark(mark)
             if start is not None and end is not None:
+                end.forward_to_line_end()
                 yield start, end
                 start = end = None
             iter_.forward_line()
