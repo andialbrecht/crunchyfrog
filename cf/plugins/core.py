@@ -134,7 +134,6 @@ class DBBackendPlugin(GenericPlugin):
     def __init__(self, app):
         GenericPlugin.__init__(self, app)
         self.schema = None
-        self.reference = None
         self.features = DBFeatures()
 
     @classmethod

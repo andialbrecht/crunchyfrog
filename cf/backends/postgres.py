@@ -26,7 +26,6 @@ import gobject
 from cf.backends import DBConnectError, TRANSACTION_IDLE, TRANSACTION_COMMIT_ENABLED, TRANSACTION_ROLLBACK_ENABLED
 from cf.backends.dbapi2helper import DbAPI2Connection, DbAPI2Cursor
 from cf.backends.schema import *
-from cf.backends import ReferenceProvider
 from cf.datasources import DatasourceInfo
 from cf.plugins.core import DBBackendPlugin
 from cf.utils import Emit
@@ -41,16 +40,6 @@ import logging
 log = logging.getLogger("PG")
 
 
-class PgReferenceProvider(ReferenceProvider):
-    name = _(u"PostgreSQL Reference")
-    base_url = "http://www.postgresql.org/docs/current"
-
-    def get_context_help_url(self, term):
-        url = "http://search.postgresql.org/search?u=%2Fdocs%2F8.3%2Finteractive%2F&q="
-        url += quote_plus(term.strip())
-        return url
-
-
 class PostgresBackend(DBBackendPlugin):
 
     id = "crunchyfrog.backend.postgres"
@@ -62,7 +51,6 @@ class PostgresBackend(DBBackendPlugin):
         DBBackendPlugin.__init__(self, app)
         log.info("Activating PostgreSQL backend")
         self.schema = PgSchema()
-        self.reference = PgReferenceProvider()
         self.features.transactions = True
 
     def _get_conn_opts_from_opts(self, opts):

@@ -24,7 +24,6 @@
 from cf.backends import DBConnectError
 from cf.backends.dbapi2helper import DbAPI2Connection
 from cf.backends.schema import *
-from cf.backends import ReferenceProvider
 from cf.datasources import DatasourceInfo
 from cf.plugins.core import DBBackendPlugin
 
@@ -47,7 +46,6 @@ class MySQLBackend(DBBackendPlugin):
         DBBackendPlugin.__init__(self, app)
         log.info("Activating MySQL backend")
         self.schema = MySQLSchema()
-        self.reference = MySQLReferenceProvider()
         self.features.transactions = True
 
     def _get_conn_opts_from_opts(self, opts):
@@ -163,15 +161,6 @@ class MySQLSchema(SchemaProvider):
             for item in self.q(connection, sql):
                 ret.append(Column(item[0], item[1], table=table))
             return ret
-
-class MySQLReferenceProvider(ReferenceProvider):
-    name = _(u"MySQL Reference")
-    base_url = "http://dev.mysql.com/doc/refman/5.1/en/index.html"
-
-    def get_context_help_url(self, term):
-        url = "http://dev.mysql.com/doc/mysql/search.php?version=5.1&q="
-        url += quote_plus(term.strip())
-        return url
 
 
 try:

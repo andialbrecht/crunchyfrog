@@ -147,20 +147,6 @@ class Editor(GladeWidget, PaneItem):
         sep = gtk.SeparatorMenuItem()
         sep.show()
         popup.append(sep)
-        if self.connection and self.connection.provider.reference:
-            refviewer = self.win.get_data("refviewer")
-            buffer = self.textview.get_buffer()
-            bounds = buffer.get_selection_bounds()
-            if bounds:
-                url = self.connection.provider.reference.get_context_help_url(buffer.get_text(*bounds))
-            else:
-                url = None
-            if url and refviewer:
-                item = gtk.ImageMenuItem("gtk-help")
-                item.connect("activate", self.on_show_context_help,
-                             refviewer, url)
-                item.show()
-                popup.append(item)
         item = gtk.CheckMenuItem(_(u"Split statements"))
         item.set_active(cfg.get("sqlparse.enabled"))
         item.connect("toggled", lambda x: cfg.set("sqlparse.enabled",

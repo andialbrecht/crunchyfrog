@@ -204,12 +204,3 @@ class Query(gobject.GObject):
         else:
             self.emit("finished")
 
-class ReferenceProvider(gobject.GObject):
-    name = None
-    base_url = None
-
-    def __init__(self):
-        self.__gobject_init__()
-
-    def get_context_help_url(self, term):
-        return None

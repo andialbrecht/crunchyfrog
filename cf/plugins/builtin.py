@@ -46,4 +46,4 @@ except ImportError, err:
 
 from cf.shell import CFShell
 from cf.library import SQLLibraryPlugin
-from cf.ui.refviewer import ReferenceViewer
+
