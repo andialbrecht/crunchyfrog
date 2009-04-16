@@ -20,8 +20,6 @@
 #   (c) Kevin Scott (kevin.scott@gmail.com)
 #   modified by bkjones for the Loghetti project (http://code.google.com/p/loghetti/)
 
-# $Id$
-
 """Backend for http server (Apache, Lighttpd) log files
 
 This backend can be used for simple log file analysis of

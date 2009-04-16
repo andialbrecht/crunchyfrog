@@ -16,8 +16,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# $Id: oracle.py 109 2008-03-17 19:29:34Z albrecht.andi $
-
 """Oracle backend"""
 
 
