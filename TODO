@@ -48,7 +48,6 @@ Misc.
 - Remove ReferenceProvider
 - Remove LDAP backend?
 - Cleanup plugin API
-- Add g_set_application_name() when PyGTK 2.13 has landed.
 - Add options for CSV export.
   See: http://docs.python.org/lib/csv-fmt-params.html
 - Export filter should emit a progress signal (and of course the dialog

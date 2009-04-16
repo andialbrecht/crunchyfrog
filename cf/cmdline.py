@@ -71,17 +71,25 @@ def run():
     # Let's import gtk and related.
     # Note: We import them here to allow command line usage
     # (e.g. crunchyfrog --version) without gkt requirements.
+    try:
+        import glib
+        glib.set_application_name('CrunchyFrog')
+    except ImportError:
+        logging.debug('glib module not found.')
+
     import pygtk
     if not sys.platform == 'win32':
         pygtk.require('2.0')
     import gtk
     import gtk.glade
+
     try:
         import gnome
         have_gnome = True
     except ImportError:
         have_gnome = False
     logging.info('GNOME enabled: %s', have_gnome and 'yes' or 'no')
+
     from cf.app import CFApplication
 
     gtk.glade.bindtextdomain('crunchyfrog', cf.LOCALE_DIR)
