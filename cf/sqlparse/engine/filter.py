@@ -55,6 +55,8 @@ class StatementFilter(TokenFilter):
             return 0
 
         if unified == 'END':
+            # Should this respect a preceeding BEGIN?
+            # In CASE ... WHEN ... END this results in a split level -1.
             return -1
 
         if ttype is T.Keyword.DDL and unified.startswith('CREATE'):
@@ -88,7 +90,7 @@ class StatementFilter(TokenFilter):
             # Append the token
             stmt_tokens.append(Token(ttype, value))
             # After appending the token
-            if (not splitlevel and ttype is T.Punctuation
+            if (splitlevel <= 0 and ttype is T.Punctuation
                 and value == ';'):
                 consume_ws = True
         if stmt is not None:
