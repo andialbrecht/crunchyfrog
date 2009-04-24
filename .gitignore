@@ -1,8 +1,0 @@
-*~
-*.pyc
-dist/
-MANIFEST
-mydeb/
-cf/.ropeproject/
-data/crunchyfrog.1
-*.mo

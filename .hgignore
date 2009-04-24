@@ -1,2 +1,9 @@
 syntax: glob
 docs/manual/build
+*~
+*.pyc
+dist/
+MANIFEST
+mydeb/
+data/crunchyfrog.1
+*.mo
