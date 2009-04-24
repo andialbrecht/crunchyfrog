@@ -96,13 +96,16 @@ def group_comparsion(tlist):
 
 
 def group_case(tlist):
-    _group_matching(tlist, T.Keyword, 'CASE', T.Keyword, 'END', Case, True)
+    _group_matching(tlist, T.Keyword, 'CASE', T.Keyword, 'END', Case,
+                    include_semicolon=True, recurse=True)
 
 
 def group_identifier(tlist):
     def _consume_cycle(tl, i):
         x = itertools.cycle((lambda y: y.match(T.Punctuation, '.'),
-                             lambda y: y.ttype in (T.String.Symbol, T.Name)))
+                             lambda y: y.ttype in (T.String.Symbol,
+                                                   T.Name,
+                                                   T.Wildcard)))
         for t in tl.tokens[i:]:
             if x.next()(t):
                 yield t
