@@ -12,6 +12,7 @@ CrunchyFrog Manual
    datasources
    schema
    queries
+   nativeshell
    plugins
    about
    changes
