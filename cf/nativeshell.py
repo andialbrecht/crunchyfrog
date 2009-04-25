@@ -19,11 +19,11 @@
 """Native Shells"""
 
 import gtk
-import vte
 
 from cf.db import Datasource
 from cf.plugins.core import GenericPlugin
 from cf.plugins.mixins import InstanceMixin
+from cf.ui import dialogs
 from cf.ui.pane import PaneItem
 
 
@@ -85,6 +85,16 @@ class NativeShellPlugin(GenericPlugin, InstanceMixin):
         instance.queries.add_item(view)
 
 
+try:
+    import vte
+except ImportError, err:
+    NativeShellPlugin.INIT_ERROR = _(u'Please install python-vte.')
+    class Dummy(object):
+        Terminal = str
+    vte = Dummy
+
+
+
 class NativeShell(vte.Terminal, PaneItem):
 
     name = _(u'Native Shell')
@@ -99,10 +109,18 @@ class NativeShell(vte.Terminal, PaneItem):
         cmd, args = self.datasource.backend.get_native_shell_command(
             self.datasource.url)
         args.insert(0, cmd)
+        self.connect('child-exited', self.on_child_exited, cmd, args)
         self.fork_command(cmd, args)
-        self.connect('child-exited', self.on_child_exited)
 
-    def on_child_exited(self, term):
+    def on_child_exited(self, term, cmd, args):
+        exit_status = term.get_child_exit_status()
+        if exit_status != 0:
+            msg = _((u'The command "%(command)s" failed '
+                     u'(Exit status: %(status)d).'))
+            msg = msg % {'command': cmd, 'status': exit_status}
+            gtk.gdk.threads_enter()
+            dialogs.error(_(u'Failed'), msg)
+            gtk.gdk.threads_leave()
         self.destroy()
 
 

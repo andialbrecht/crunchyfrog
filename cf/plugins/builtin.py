@@ -44,9 +44,5 @@ except ImportError, err:
 
 from cf.shell import CFShell
 from cf.library import SQLLibraryPlugin
-try:
-    from cf.nativeshell import NativeShellPlugin
-except ImportError, err:
-    logging.warning('Python module vte missing. Not loading native shell: %s',
-                    err)
+from cf.nativeshell import NativeShellPlugin
 
