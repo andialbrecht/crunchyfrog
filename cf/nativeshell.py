@@ -95,22 +95,26 @@ except ImportError, err:
 
 
 
-class NativeShell(vte.Terminal, PaneItem):
+class NativeShell(gtk.ScrolledWindow, PaneItem):
 
     name = _(u'Native Shell')
     icon = 'gnome-terminal'
     detachable = True
 
     def __init__(self, app, instance, datasource):
-        vte.Terminal.__init__(self)
+        gtk.ScrolledWindow.__init__(self)
         self.app = app
         self.instance = instance
         self.datasource = datasource
+        self.term = vte.Terminal()
+        self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        self.add(self.term)
+        self.term.show()
         cmd, args = self.datasource.backend.get_native_shell_command(
             self.datasource.url)
         args.insert(0, cmd)
-        self.connect('child-exited', self.on_child_exited, cmd, args)
-        self.fork_command(cmd, args)
+        self.term.connect('child-exited', self.on_child_exited, cmd, args)
+        self.term.fork_command(cmd, args)
 
     def on_child_exited(self, term, cmd, args):
         exit_status = term.get_child_exit_status()
