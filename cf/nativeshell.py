@@ -47,6 +47,7 @@ class NativeShellPlugin(GenericPlugin, InstanceMixin):
             return
         instance.ui.add_ui_from_string(UI)
         group = gtk.ActionGroup('native-shell')
+        group.set_data('cf::label', _(u'Native Shells'))  # shortcuts prefs
         tooltip = _(u'Access this database through it\'s native shell')
         action = gtk.Action('nativeshell-run', _(u'Open Native Shell'),
                             tooltip, None)
