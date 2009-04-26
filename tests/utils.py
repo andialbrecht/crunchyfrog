@@ -14,6 +14,10 @@ import cf.cmdline
 
 __builtin__.__dict__['_'] = lambda x: x
 
+# Monkey patch gtk.main_quit() to avoid RuntimeError. We're never in the
+# mainloop here.
+gtk.main_quit = lambda *a: None
+
 
 class AppTest(unittest.TestCase):
 
