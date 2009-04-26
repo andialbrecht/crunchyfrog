@@ -290,6 +290,9 @@ class PluginManager(gobject.GObject):
             name, ext = os.path.splitext(item)
             if ext and ext not in [".zip", ".py"]:
                 continue
+            elif not ext and not os.path.isfile(os.path.join(path, item,
+                                                             '__init__.py')):
+                continue
             if ext == ".zip":
                 sys.path.insert(0, os.path.join(path, item))
                 importer = zipimport.zipimporter(os.path.join(path, item))
