@@ -488,7 +488,11 @@ class PreferencesDialog(GladeWidget):
                 if accel_path is None:
                     keyval = mods = None
                 else:
-                    keyval, mods = gtk.accel_map_lookup_entry(accel_path)
+                    shortcut = gtk.accel_map_lookup_entry(accel_path)
+                    if shortcut is not None:
+                        keyval, mods = shortcut
+                    else:
+                        keyval = mods = None
                 model.set(citer,
                           0, action.props.label.replace('_', ''),
                           3, True,

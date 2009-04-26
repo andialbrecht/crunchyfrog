@@ -2,7 +2,7 @@ import os
 
 from utils import AppTest
 
-PG_URL = 'postgres://postgres@/avsweb'
+PG_URL = 'postgres://postgres@/pagila'
 
 import cf.db
 

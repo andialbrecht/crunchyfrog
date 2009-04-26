@@ -22,10 +22,24 @@ class AppTest(unittest.TestCase):
                                      '../testuserdir')
         parser = cf.cmdline.get_parser()
         opts, args = parser.parse_args(['testrunner'])
+        opts.first_run = False
         self.app = cf.app.CFApplication(opts)
+        self.app.init()
 
     def refresh_gui(self, delay=0):
         # see http://unpythonic.blogspot.com/2007/03/unit-testing-pygtk.html
         while gtk.events_pending():
             gtk.main_iteration_do(block=False)
         time.sleep(delay)
+
+
+class InstanceTest(AppTest):
+
+    def setUp(self):
+        super(InstanceTest, self).setUp()
+        self.instance = self.app.new_instance()
+
+    def tearDown(self):
+        self.instance.destroy()
+        self.instance = None
+        super(InstanceTest, self).tearDown()
