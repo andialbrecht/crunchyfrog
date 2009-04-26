@@ -79,6 +79,7 @@ class DatasourcesDialog(object):
                               str,                    # 1 label
                               str,                    # 2 color
                               )
+        model.set_sort_column_id(1, gtk.SORT_ASCENDING)
         treeview.set_model(model)
         col = gtk.TreeViewColumn()
         renderer = gtk.CellRendererText()
