@@ -224,7 +224,9 @@ class Datasource(gobject.GObject):
         return self.connections
 
     def get_label(self):
-        return self.name or self.public_url
+        if self.name:
+            return '%s (%s)' % (self.name, self.public_url)
+        return self.public_url
 
     def to_dict(self):
         data = {}
