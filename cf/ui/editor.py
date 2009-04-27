@@ -98,6 +98,7 @@ class Editor(GladeWidget, PaneItem):
         self._filecontent_read = ""
         GladeWidget.__init__(self, self.win, "editor", "box_editor")
         self.set_data("win", None)
+        self.win.emit('editor-created', self)
         self.show_all()
 
     def do_get_property(self, param):

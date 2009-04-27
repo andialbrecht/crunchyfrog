@@ -3,6 +3,8 @@ Release 0.3.5 (In Development)
 
 New Features
  * Execute statement at cursor position with Ctrl-F5.
+ * Auto-completion of tables, columns and SQL syntax (issue36, thanks to
+   nearyd for making the suggestion).
 
 Bug Fixes
  * Fixed execution of statement with Oracle (issue50, thanks to

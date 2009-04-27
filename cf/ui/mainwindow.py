@@ -62,6 +62,9 @@ class MainWindow(gtk.Window):
         'active-editor-changed': (gobject.SIGNAL_RUN_LAST,
                                   gobject.TYPE_NONE,
                                   (gobject.TYPE_PYOBJECT,)),
+        'editor-created': (gobject.SIGNAL_RUN_LAST,
+                           gobject.TYPE_NONE,
+                           (gobject.TYPE_PYOBJECT,)),
     }
 
     def __init__(self, app, create_editor=True):
@@ -698,6 +701,11 @@ class MainWindow(gtk.Window):
         for item in self.queries.get_all_editors():
             item.close(force=True)
         return True
+
+    def get_editors(self):
+        """Return a list of all SQL editors."""
+        return [item for item in self.queries.get_all_editors()
+                if isinstance(item, Editor)]
 
     def editor_create(self, fname=None):
         """Creates a new SQL editor.

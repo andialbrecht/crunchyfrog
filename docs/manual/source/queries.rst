@@ -135,6 +135,29 @@ The editor provides features for editing SQL statements.
 
 
 .. index::
+   pair: Editor; Autocompletion
+
+Autocompletion
+^^^^^^^^^^^^^^
+
+The editor supports autocompletion for tables, columns and SQL syntax.
+To activate autocompletion press :kbd:`<Control>Space` while typing
+a SQL statement. If there's more than one possible completion you can
+select the desired completion from a popup list.
+Use the arrow keys to navigate through this list, :kbd:`Enter` to write the
+selected item in the editor window or :kbd:`Escape` to cancel this operation.
+Any other key will narrow down the list of possible completions.
+
+A more advanced approach is to activate :guilabel:`Tab Starts Autocompletion`
+in the preferences dialog. If this option is activated, :kbd:`Tab` omits the
+popup if there's exactly one completion. Otherwise it let's you select a
+completion from the popup list described above.
+
+Completion of table names and column names is only active, if the forground
+editor is connected to a database.
+
+
+.. index::
    single: Editor; Splitting Statements
 
 SQL Splitting

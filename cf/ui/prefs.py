@@ -336,6 +336,8 @@ class PreferencesDialog(GladeWidget):
         gw("editor_replace_variables").set_active(config.get("editor.replace_variables"))
         gw("sqlparse_enabled").set_data("config_option", "sqlparse.enabled")
         gw("sqlparse_enabled").set_active(config.get("sqlparse.enabled"))
+        gw('autocompl_tab').set_data('config_option', 'editor.tabcompletion')
+        gw('autocompl_tab').set_active(config.get('editor.tabcompletion'))
         gw("editor_wrap_text").set_data("config_option", "editor.wrap_text")
         gw("editor_wrap_text").set_active(config.get("editor.wrap_text"))
         gw("editor_wrap_split").set_data("config_option", "editor.wrap_split")

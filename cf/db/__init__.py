@@ -277,6 +277,10 @@ class Connection(gobject.GObject):
             return 2
         return 1
 
+    @property
+    def meta(self):
+        return self.datasource.meta
+
     def do_set_property(self, property, value):
         if property.name == "transaction-state":
             self._transaction_state = value

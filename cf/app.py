@@ -37,6 +37,7 @@ from cf.ui.widgets import ConnectionsDialog
 from ui.mainwindow import MainWindow
 from ui.prefs import PreferencesDialog
 from cf.userdb import UserDB
+from cf import autocompletion
 
 import logging
 
@@ -78,6 +79,7 @@ class CFApplication(gobject.GObject):
         self.plugins = PluginManager(self)
         self.datasources = DatasourceManager(self)
         self.recent_manager = gtk.recent_manager_get_default()
+        autocompletion.setup(self)
 
     def _check_version(self):
         """Run possible version updates."""
@@ -279,6 +281,14 @@ class CFApplication(gobject.GObject):
             logging.warning(err)
             return self.icon_theme.load_icon('gtk-missing-image',
                                              size, lookup_method)
+
+    def set_status_message(self, msg, context=1):
+        for window in self.get_instances():
+            window.statusbar.set_message(msg, context)
+
+    def pop_status_message(self, context=1):
+        for window in self.get_instances():
+            window.statusbar.pop(context)
 
     def set_status_message(self, msg, context=1):
         for window in self.get_instances():
