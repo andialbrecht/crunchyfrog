@@ -43,12 +43,14 @@ class DatasourcesDialog(object):
         self.refresh_datasources()
         self.init_providers()
         self.refresh_providers()
-        self.app.datasources.connect('datasource-changed',
-                                     lambda *a: self.refresh_datasources())
-        self.app.datasources.connect('datasource-added',
-                                     lambda *a: self.refresh_datasources())
-        self.app.datasources.connect('datasource-deleted',
-                                     lambda *a: self.refresh_datasources())
+        self._ds_sigs = []
+        ds = self.app.datasources
+        self._ds_sigs.append(ds.connect('datasource-changed',
+                                        lambda *a: self.refresh_datasources()))
+        self._ds_sigs.append(ds.connect('datasource-added',
+                                        lambda *a: self.refresh_datasources()))
+        self._ds_sigs.append(ds.connect('datasource-deleted',
+                                        lambda *a: self.refresh_datasources()))
 
     # -----------------
     # Dialog callbacks
@@ -213,6 +215,8 @@ class DatasourcesDialog(object):
                           available[name][0]])
 
     def destroy(self):
+        while self._ds_sigs:
+            self.app.datasources.disconnect(self._ds_sigs.pop())
         self.dlg.destroy()
 
     def run(self):
