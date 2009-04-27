@@ -491,7 +491,9 @@ class MainWindow(gtk.Window):
             return
         self.queries.set_current_page(queries_idx)
         editor = self.queries.get_nth_page(queries_idx)
-        editor.get_child1().get_children()[0].grab_focus()
+        focus_child = editor.get_focus_child()
+        if focus_child is not None:
+            focus_child.grab_focus()
 
     def on_frmt_comment(self, action):
         editor = self.get_active_editor()

@@ -219,7 +219,7 @@ class SQLLibraryView(gtk.ScrolledWindow, PaneItem):
         self.instance = instance
         self.lib = library
         gtk.ScrolledWindow.__init__(self)
-        PaneItem.__init__(self)
+        PaneItem.__init__(self, app)
         self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.model = gtk.TreeStore(gobject.TYPE_PYOBJECT,   # 0 item
                                    str,                     # 1 stock id

@@ -88,6 +88,7 @@ class Editor(GladeWidget, PaneItem):
         :Args:
           win: A MainWindow instance.
         """
+        PaneItem.__init__(self, win.app)
         self.app = win.app
         self.win = win
         self.connection = None
@@ -210,6 +211,9 @@ class Editor(GladeWidget, PaneItem):
         gobject.idle_add(self.show_in_separate_window)
 
     # Public methods
+
+    def get_focus_child(self):
+        return self.get_child1().get_children()[0].grab_focus()
 
     def close(self, force=False):
         """Close editor, displays a confirmation dialog for unsaved files.

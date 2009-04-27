@@ -55,11 +55,30 @@ gtk.rc_parse_string('''style "cf-tab-button-style"
 }
 widget "*.cf-tab-button" style "cf-tab-button-style"''')
 
+TAB_LABEL_CENTER = 1
+TAB_LABEL_SIDEPANE = 2
+
 
 class PaneItem(object):
     name = None
     icon = None
     detachable = False
+
+    def __init__(self, app):
+        self._tab_label = None
+        self.app = app
+
+    @property
+    def tab_label(self):
+        return self.get_tab_label()
+
+    def close(self, force=False):
+        self.destroy()
+
+    def get_tab_label(self):
+        if self._tab_label is None:
+            self._tab_label = TabLabelDefault(self.app, self)
+        return self._tab_label
 
     def get_pane_icon(self):
         return gtk.STOCK_MISSING_IMAGE
@@ -69,6 +88,9 @@ class PaneItem(object):
 
     def get_pane_detachable(self):
         return False
+
+    def get_focus_child(self):
+        return None
 
 
 class Pane(object):
@@ -215,29 +237,21 @@ class Pane(object):
     def add_item(self, item):
         """Add a PaneItem."""
         assert isinstance(item, PaneItem)
-        pb = self.app.load_icon(item.icon, gtk.ICON_SIZE_MENU,
-                                gtk.ICON_LOOKUP_FORCE_SVG)
-        box = gtk.HBox()
-        box.set_spacing(3)
-        img = gtk.image_new_from_pixbuf(pb)
-        img.set_tooltip_text(item.name)
-        img.show()
-        box.pack_start(img, False, False)
-        if not HAVE_ICONS:
-            lbl = gtk.Label(item.name)
-            lbl.set_alignment(0, 0.5)
-            lbl.show()
-            box.pack_start(lbl)
-        item.show()
+        pitem = item
         if isinstance(item, GladeWidget):
             item.widget.set_data('cf::real-object', item)
             item = item.widget
+        tab_label = pitem.get_tab_label()
+        if self.__class__.__name__ != 'CenterPane':
+            tab_label.set_mode(TAB_LABEL_SIDEPANE)
         if item.get_parent():
             item.reparent(self.notebook)
-            self.notebook.set_tab_label(item, box)
+            self.notebook.set_tab_label(item, tab_label)
         else:
-            self.notebook.append_page(item, box)
+            self.notebook.append_page(item, tab_label)
         self.notebook.set_tab_detachable(item, True)
+        item.show()
+        tab_label.show()
 
     def remove_item(self, pane_item):
         """Remove a previously added PaneItem."""
@@ -390,18 +404,40 @@ class CenterPane(gtk.VBox, Pane):
     def get_view_by_page(self, page):
         """Return editor object by child widget."""
         lbl = self.notebook.get_tab_label(page)
-        return lbl.editor
+        return lbl.pane_item
 
 
+class TabLabelDefault(gtk.HBox):
+    """Default tab label implementation for pane items."""
 
-class TabLabel(gtk.HBox):
+    def __init__(self, app, pane_item, mode=TAB_LABEL_CENTER):
+        """Constructor.
 
-    def __init__(self, editor):
+        :param pane_item: A :class:`PaneItem` instance.
+        """
         gtk.HBox.__init__(self)
+        self.app = app
+        self.pane_item = pane_item
+        self.mode = None
+        self.datasource = None
+
         self.set_spacing(4)
+
+        # Data source color indicator
         self.datasource_color_eb = gtk.EventBox()
         self.datasource_color_eb.set_size_request(5, -1)
+        self.datasource_color_eb.show()
         self.pack_start(self.datasource_color_eb, False, False)
+
+        # Icon
+        pb = self.app.load_icon(self.pane_item.icon, gtk.ICON_SIZE_MENU,
+                                gtk.ICON_LOOKUP_FORCE_SVG)
+        self.img = gtk.image_new_from_pixbuf(pb)
+        self.img.set_tooltip_text(self.pane_item.name)
+        self.img.show()
+        self.pack_start(self.img, False, False)
+
+        # Label
         self.label = gtk.Label(_(u"Query"))
         self.label.set_ellipsize(pango.ELLIPSIZE_END)
         self.label.set_width_chars(15)
@@ -411,7 +447,98 @@ class TabLabel(gtk.HBox):
         font_desc = self.label.get_style().font_desc
         font_desc.set_size(int(font_desc.get_size()*.8))
         self.label.modify_font(font_desc)
+        self.label.show()
+        self.pack_start(self.label, True, True)
+
+        # Close button
+        self.btn_close = gtk.Button()
+        self.btn_close.set_focus_on_click(False)
+        self.btn_close.set_relief(gtk.RELIEF_NONE)
+        self.btn_close.set_name('cf-tab-button')
+        image = gtk.image_new_from_stock(gtk.STOCK_CLOSE,
+                                         gtk.ICON_SIZE_MENU)
+        self.btn_close.add(image)
+        self.btn_close.set_tooltip_text(_(u'Close'))
+        self.btn_close.connect("clicked", self.on_button_close_clicked)
+        self.btn_close.show_all()
+        self.pack_start(self.btn_close, False, False)
+
+        self.app.datasources.connect('datasource-changed',
+                                     self.on_datasource_changed)
+
+        self.set_mode(mode)
+
+    def on_button_close_clicked(self, button):
+        self.close()
+
+    def on_datasource_changed(self, manager, datasource):
+        if datasource == self.datasource:
+            self.set_datasource(datasource)
+
+    def set_close_callback(self, callback):
+        """Set a callback function that handles a click on the close button.
+
+        The callback function has the signature ``def callback(tab_label)``.
+        """
+        assert (hasattr(callback, '__call__') or callback is None)
+        self._close_cb = callback
+
+    def set_datasource(self, datasource=None):
+        """Set data source information.
+
+        Usually this just updates the data source's color code.
+
+        :param datasource: A :class:`~cf.db.Datasource` instance or ``None``.
+        """
+        if datasource is not None and datasource.color:
+            color = gtk.gdk.color_parse(datasource.color)
+            self.datasource_color_eb.modify_bg(gtk.STATE_NORMAL, color)
+            self.datasource_color_eb.modify_bg(gtk.STATE_ACTIVE, color)
+        else:
+            self.datasource_color_eb.modify_bg(gtk.STATE_NORMAL, None)
+            self.datasource_color_eb.modify_bg(gtk.STATE_ACTIVE, None)
+        self.datasource = datasource
+
+    def set_mode(self, mode):
+        """Set tab label mode.
+
+        *mode* is either ``TAB_LABEL_CENTER`` or ``TAB_LABEL_SIDEPANE``.
+        """
+        assert mode in (TAB_LABEL_CENTER, TAB_LABEL_SIDEPANE)
+        self.mode = mode
+        if self.mode == TAB_LABEL_CENTER:
+            self.datasource_color_eb.show()
+            self.label.show()
+            self.btn_close.show()
+        else:
+            self.datasource_color_eb.hide()
+            self.label.hide()
+            self.btn_close.hide()
+
+    def set_text(self, text):
+        """Set tab label's text."""
+        self.label.set_text(text)
+
+    def set_tootltip(self, markup):
+        """Set the tooltip for the whole tab label."""
+        self.label.set_tooltip_markup(markup)
+        self.datasource_color_eb.set_tooltip_markup(markup)
+
+    def set_show_close_button(self, visible):
+        """Wether the close button should be visible or not."""
+        if visible:
+            self.btn_close.show()
+        else:
+            self.btn_close.hide()
+
+
+
+class TabLabel(TabLabelDefault):
+
+    def __init__(self, editor):
+        TabLabelDefault.__init__(self, editor.app, editor)
         self.editor = editor
+        self.set_close_callback(lambda tl: tl.pane_item.close())
         from cf.ui.editor import Editor
         if isinstance(editor, Editor):
             self.editor.connect("connection-changed",
@@ -419,22 +546,8 @@ class TabLabel(gtk.HBox):
             buffer = self.editor.textview.get_buffer()
             buffer.connect("changed", self.on_buffer_changed)
             self.update_label(buffer)
-        self.pack_start(self.label, True, True)
-        btn_close = gtk.Button()
-        btn_close.set_focus_on_click(False)
-        btn_close.set_relief(gtk.RELIEF_NONE)
-        btn_close.set_name('cf-tab-button')
-        image = gtk.image_new_from_stock(gtk.STOCK_CLOSE,
-                                         gtk.ICON_SIZE_MENU)
-        btn_close.add(image)
-        btn_close.set_tooltip_text(_(u'Close'))
-        btn_close.connect("clicked", self.on_button_close_clicked)
-        self.pack_start(btn_close, False, False)
         self.update_tooltip()
         self.show_all()
-
-    def on_button_close_clicked(self, button):
-        self.editor.close()
 
     def on_buffer_changed(self, buffer):
         gobject.idle_add(self.update_label, buffer)
@@ -462,7 +575,7 @@ class TabLabel(gtk.HBox):
         txt = txt.strip()
         if not txt:
             txt = _(u"Query")
-        self.label.set_text(txt)
+        self.set_text(txt)
         self.update_tooltip()
 
     def update_tooltip(self):
@@ -475,14 +588,10 @@ class TabLabel(gtk.HBox):
                 markup += "["+_(u"Not connected")+"]"
             if self.editor.get_filename():
                 markup += "\n<b>File:</b> "+self.editor.get_filename()
-            self.label.set_tooltip_markup(markup)
-            self.datasource_color_eb.set_tooltip_markup(markup)
+            self.set_tootltip(markup)
             conn = self.editor.connection
-            if conn and conn.datasource.color:
-                color = gtk.gdk.color_parse(conn.datasource.color)
-                self.datasource_color_eb.modify_bg(gtk.STATE_NORMAL, color)
-                self.datasource_color_eb.modify_bg(gtk.STATE_ACTIVE, color)
+            if conn:
+                self.set_datasource(conn.datasource)
             else:
-                self.datasource_color_eb.modify_bg(gtk.STATE_NORMAL, None)
-                self.datasource_color_eb.modify_bg(gtk.STATE_ACTIVE, None)
+                self.set_datasource(None)
 

@@ -56,6 +56,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
 
     def __init__(self, app, instance):
         """Constructor."""
+        pane.PaneItem.__init__(self, app)
         self.app = app
         self.instance = instance
         self._setup_widget()

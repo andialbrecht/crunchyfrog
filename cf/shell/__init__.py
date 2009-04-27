@@ -75,6 +75,7 @@ class CFShellView(gtk.ScrolledWindow, PaneItem):
 
     def __init__(self, app, instance):
         gtk.ScrolledWindow.__init__(self)
+        PaneItem.__init__(self, app)
         self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.set_shadow_type(gtk.SHADOW_ETCHED_IN)
         self.app = app

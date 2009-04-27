@@ -104,9 +104,12 @@ class NativeShell(gtk.ScrolledWindow, PaneItem):
 
     def __init__(self, app, instance, datasource):
         gtk.ScrolledWindow.__init__(self)
+        PaneItem.__init__(self, app)
         self.app = app
         self.instance = instance
         self.datasource = datasource
+        self.tab_label.set_datasource(datasource)
+        self.tab_label.set_text(_(u'Shell') + (': %s' % datasource.public_url))
         self.term = vte.Terminal()
         self.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
         self.add(self.term)
