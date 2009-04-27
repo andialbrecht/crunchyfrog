@@ -104,4 +104,7 @@ class Oracle(Generic):
             sql = sql[:-1]
         return str(sql)
 
+    def get_explain_statement(self, statement):
+        return ['explain plan for %s' % statement, 'select * from plan_table']
+
 DRIVER = Oracle

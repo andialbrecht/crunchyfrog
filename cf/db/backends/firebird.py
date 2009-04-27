@@ -64,5 +64,8 @@ class Firebird(Generic):
     def get_server_info(self, connection):
         return 'Firebird %s' % connection.connection.server_version
 
+    def get_explain_statement(self, statement):
+        return None
+
 
 DRIVER = Firebird

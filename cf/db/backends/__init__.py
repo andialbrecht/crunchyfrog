@@ -158,3 +158,7 @@ class Generic(object):
         """Begin transaction. Return True if handled."""
         connection.execute('BEGIN')
         return True
+
+    def get_explain_statement(self, statement):
+        """Return a SQL for executing EXPLAIN or None."""
+        return "EXPLAIN %s" % statement

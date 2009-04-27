@@ -349,10 +349,23 @@ class Editor(GladeWidget, PaneItem):
         if len(sqlparse.split(statement)) > 1:
             dialogs.error(_(u"Select a single statement to explain."))
             return
-        data = []
-        if self.connection:
-            data = self.connection.explain(statement)
-        self.results.set_explain(data)
+        if not self.connection:
+            return
+        queries = [Query(stmt, self.connection)
+                   for stmt in self.connection.explain_statements(statement)]
+        def _execute_next(last, queries):
+            if last is not None and last.failed:
+                self.results.set_explain_results(last)
+                return
+            q = queries.pop(0)
+            if len(queries) == 0:
+                q.connect('finished',
+                          lambda x: self.results.set_explain_results(x))
+            else:
+                q.connect('finished',
+                          lambda x: _execute_next(x, queries))
+            q.execute()
+        _execute_next(None, queries)
 
     def set_connection(self, conn):
         if self.connection and self.__conn_close_tag:
@@ -597,11 +610,10 @@ class ResultsView(GladeWidget):
         col.add_attribute(renderer, 'font', 5)
         self.messages.append_column(col)
         self.messages.set_row_separator_func(self._set_row_separator)
-        self.explain_model = gtk.ListStore(str)
-        treeview = self.xml.get_widget("editor_explain")
-        treeview.set_model(self.explain_model)
-        col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=0)
-        treeview.append_column(col)
+        self.explain_results = Grid()
+        sw = self.xml.get_widget('sw_explain_results')
+        sw.add(self.explain_results)
+        self.explain_results.show_all()
 
     def _msg_model_changed(self, model, *args):
         tb_clear = self.xml.get_widget("tb_messages_clear")
@@ -678,7 +690,7 @@ class ResultsView(GladeWidget):
 
     def reset(self):
         # Explain
-        self.explain_model.clear()
+        self.explain_results.reset()
         # Messages
         # Only gray out messages from previous runs, don't remove them!
         model = self.messages.get_model()
@@ -688,11 +700,13 @@ class ResultsView(GladeWidget):
             iter_ = model.iter_next(iter_)
         self.set_current_page(2)
 
-    def set_explain(self, data):
-        self.explain_model.clear()
-        for item in data:
-            iter = self.explain_model.append()
-            self.explain_model.set(iter, 0, item)
+    def set_explain_results(self, query):
+        self.explain_results.reset()
+        if query.failed:
+            dialogs.error(_(u'Failed'), '\n'.join(query.errors),
+                          parent=self.instance)
+        else:
+            self.explain_results.set_result(query.rows, query.description)
 
     def set_query(self, query):
         self.grid.set_query(query)

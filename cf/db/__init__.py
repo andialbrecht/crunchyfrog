@@ -371,6 +371,15 @@ class Connection(gobject.GObject):
         if new_state != old_state:
             self.set_property('transaction-state', new_state)
 
+    def explain_statements(self, statement):
+        """Return a list of statements to execute for EXPLAIN."""
+        explain = self.datasource.backend.get_explain_statement(statement)
+        if explain is None:
+            return []
+        if not isinstance(explain, (list, tuple)):
+            explain = [explain]
+        return explain
+
 
 class DatasourceManager(gobject.GObject):
 
