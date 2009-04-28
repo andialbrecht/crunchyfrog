@@ -2,7 +2,8 @@
 :mod:`cf` -- CrunchyFrog Package
 ********************************
 
-.. toctree::
-   :glob:
+.. autosummary::
+   :toctree:
 
-   cf_*
+   cf
+   cf.db
