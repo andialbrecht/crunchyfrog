@@ -377,6 +377,9 @@ class CenterPane(gtk.VBox, Pane):
         self.notebook.set_tab_reorderable(widget, True)
         self.notebook.set_tab_detachable(widget, True)
         self.notebook.set_current_page(self.notebook.page_num(widget))
+        self.mainwin._rebuild_activate_editor_actions()
+        widget.connect('destroy', lambda *a:
+                       self.mainwin._rebuild_activate_editor_actions())
 
     def get_all_editors(self):
         """Return a list of all editors."""
@@ -469,7 +472,7 @@ class TabLabelDefault(gtk.HBox):
         self.set_mode(mode)
 
     def on_button_close_clicked(self, button):
-        self.close()
+        self.pane_item.close()
 
     def on_datasource_changed(self, manager, datasource):
         if datasource == self.datasource:

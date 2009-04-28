@@ -588,6 +588,9 @@ class MainWindow(gtk.Window):
         self.get_active_editor().execute_query(True)
 
     def on_query_menu_activate(self, menuitem):
+        self._rebuild_activate_editor_actions()
+
+    def _rebuild_activate_editor_actions(self):
         for idx in range(1, 11):
             if idx == 10:
                 idx = 0
