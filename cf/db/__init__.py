@@ -130,7 +130,7 @@ def get_dialect_backend(dialect):
 
 class Datasource(gobject.GObject):
 
-    def __init__(self, manager=None):
+    def __init__(self, manager):
         self.__gobject_init__()
         self._engine = None
         self.connections = set()

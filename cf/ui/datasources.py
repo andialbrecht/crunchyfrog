@@ -440,7 +440,7 @@ class DatasourceEditDialog(object):
         if self.datasource and not create_new:
             ds = self.datasource
         else:
-            ds = cf.db.Datasource()
+            ds = cf.db.Datasource(self.app.datasources)
         ds.url = self.get_sa_url()
         data = self._get_url_options()
         if 'ask_for_password' in data:
