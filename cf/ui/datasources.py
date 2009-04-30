@@ -93,6 +93,7 @@ class DatasourcesDialog(object):
         treeview.append_column(col)
         selection = treeview.get_selection()
         selection.connect('changed', self.on_selected_datasource_changed)
+        treeview.connect('row-activated', self.on_row_activated)
 
     def refresh_datasources(self):
         treeview = self.builder.get_object('list_datasources')
@@ -127,6 +128,11 @@ class DatasourcesDialog(object):
         dlg.run()
         dlg.destroy()
 
+    def on_row_activated(self, treeview, path, column):
+        model = treeview.get_model()
+        iter_ = model.get_iter(path)
+        self.edit_datasource(model.get_value(iter_, 0))
+
     def on_selected_datasource_changed(self, selection):
         model, iter_ = selection.get_selected()
         for name in ('btn_datasource_edit', 'btn_datasource_delete'):
@@ -137,6 +143,10 @@ class DatasourcesDialog(object):
         datasource = self.get_selected_datasource()
         if datasource is None:
             return
+        self.edit_datasource(datasource)
+
+    def edit_datasource(self, datasource):
+        """Create or edit a data source."""
         dlg = DatasourceEditDialog(self.app, self.dlg, datasource)
         dlg.run()
         dlg.destroy()
