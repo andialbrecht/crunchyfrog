@@ -40,7 +40,7 @@ class SQLite(Generic):
 
     @classmethod
     def get_native_shell_command(cls, url):
-        return 'sqlite3', (url.database,)
+        return 'sqlite3', [url.database,]
 
     @classmethod
     def dbapi(cls):
