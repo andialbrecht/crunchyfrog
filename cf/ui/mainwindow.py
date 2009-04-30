@@ -944,7 +944,4 @@ UI = '''
     <toolitem name="QueryCommit" action="query-commit" />
     <toolitem name="QueryRollback" action="query-rollback" />
   </toolbar>
-  <popup name="NavigatorPopup">
-    <menuitem name="DatasourceAdd" action="instance-datasourcemanager" />
-  </popup>
 '''

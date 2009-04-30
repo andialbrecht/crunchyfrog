@@ -200,6 +200,11 @@ class Datasource(gobject.GObject):
             conn.execute(self.startup_commands)
         return conn
 
+    def on_connection_closed(self, connection):
+        if connection in self.connections:
+            self.connections.remove(connection)
+        self.manager.emit('datasource-changed', self)
+
     def dbconnect(self):
         """Returns a database connection."""
         try:
@@ -207,6 +212,7 @@ class Datasource(gobject.GObject):
             self._conn_count += 1
             conn.num = self._conn_count
             self.connections.add(conn)
+            conn.connect('closed', self.on_connection_closed)
             if self.internal_connection is None:
                 self.internal_connection = conn
             if self.manager is not None:
@@ -219,6 +225,12 @@ class Datasource(gobject.GObject):
                          'error': str(sys.exc_info()[1])}
             dialogs.error(_(u'Failed'), msg)
             return None
+
+    def dbdisconnect_all(self):
+        """Disconnect all open connections."""
+        while self.connections:
+            conn = self.connections.pop()
+            conn.close()
 
     def get_connections(self):
         return self.connections
@@ -306,9 +318,8 @@ class Connection(gobject.GObject):
         return self.connection
 
     def close(self):
-        if self in self.datasource.connections:
-            self.datasource.connections.remove(self)
         self.connection.close()
+        self.emit('closed')
 
     def prepare_statement(self, sql):
         """Prepare sql before executing."""

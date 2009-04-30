@@ -45,15 +45,6 @@ class NativeShellPlugin(GenericPlugin, InstanceMixin):
     def init_instance(self, instance):
         if instance in self._instances:
             return
-        instance.ui.add_ui_from_string(UI)
-        group = gtk.ActionGroup('native-shell')
-        group.set_data('cf::label', _(u'Native Shells'))  # shortcuts prefs
-        tooltip = _(u'Access this database through it\'s native shell')
-        action = gtk.Action('nativeshell-run', _(u'Open Native Shell'),
-                            tooltip, None)
-        group.add_action(action)
-        action.connect('activate', self.on_start_shell, instance)
-        instance.ui.insert_action_group(group)
         sid = instance.browser.connect('object-menu-popup',
                                        self.on_object_menu_popup)
         self._instances[instance] = (sid, [])
@@ -67,21 +58,20 @@ class NativeShellPlugin(GenericPlugin, InstanceMixin):
             instance.browser.disconnect(sid)
 
     def on_object_menu_popup(self, browser, popup, obj):
-        action = browser.instance._get_action('nativeshell-run')
-        action.set_data('cf::native-shell-obj', None)
         if not isinstance(obj, Datasource):
-            action.set_visible(False)
             return
-        action.set_visible(True)
+        item = gtk.MenuItem(_(u'Open Native Shell'))
+        item.show()
+        popup.append(item)
         cmd = obj.backend.get_native_shell_command(obj.url)
         if cmd is None:
-            action.set_sensitive(False)
+            item.set_sensitive(False)
         else:
-            action.set_sensitive(True)
-            action.set_data('cf::native-shell-obj', obj)
+            item.set_sensitive(True)
+            item.connect('activate', self.on_start_shell, obj,
+                         browser.instance)
 
-    def on_start_shell(self, action, instance):
-        obj = action.get_data('cf::native-shell-obj')
+    def on_start_shell(self, menuitem, obj, instance):
         view = NativeShell(self.app, instance, obj)
         instance.queries.add_item(view)
 
@@ -131,9 +121,5 @@ class NativeShell(gtk.ScrolledWindow, PaneItem):
             gtk.gdk.threads_leave()
         self.destroy()
 
-
-UI = '''
-<popup name="NavigatorPopup">
-  <menuitem name="NativeShell" action="nativeshell-run" />
-</popup>
-'''
+    def get_focus_child(self):
+        return self.term
