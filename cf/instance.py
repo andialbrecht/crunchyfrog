@@ -18,21 +18,28 @@
 
 """Instance selector class"""
 
+import os.path
+
 import gtk
-import gtk.glade
 
-from cf.ui import GladeWidget
+import cf
 
 
-class InstanceSelector(GladeWidget):
+class InstanceSelector(object):
 
     def __init__(self, client):
         self.client = client
-        GladeWidget.__init__(self, None, "crunchyfrog", "instanceselector")
+        self.builder = gtk.Builder()
+        fname = os.path.join(cf.DATA_DIR, 'glade/instanceselector.glade')
+        self.builder.add_from_file(fname)
+        self.builder.connect_signals(self)
+        self.dlg = self.builder.get_object('instanceselector')
+        self._setup_widget()
+        self._setup_connections()
 
     def _setup_widget(self):
         model = gtk.ListStore(int, str)
-        self.list = self.xml.get_widget("list_instances")
+        self.list = self.builder.get_object("list_instances")
         self.list.set_model(model)
         col = gtk.TreeViewColumn("", gtk.CellRendererText(), text=1)
         self.list.append_column(col)
@@ -42,8 +49,12 @@ class InstanceSelector(GladeWidget):
     def _setup_connections(self):
         sel = self.list.get_selection()
         sel.connect("changed", self.on_isel_changed)
-        self.xml.get_widget("btn_newinstance").connect(
+        self.builder.get_object("btn_newinstance").connect(
             "toggled", self.on_newi_toggled)
+
+    # ---------
+    # Callbacks
+    # ---------
 
     def on_newi_toggled(self, btn):
         sel = self.list.get_selection()
@@ -57,12 +68,24 @@ class InstanceSelector(GladeWidget):
     def on_isel_changed(self, selection):
         model, iter = selection.get_selected()
         if not iter:
-            self.xml.get_widget("btn_newinstance").set_active(True)
+            self.builder.get_object("btn_newinstance").set_active(True)
         else:
-            self.xml.get_widget("btn_activeinstance").set_active(True)
+            self.builder.get_object("btn_activeinstance").set_active(True)
+
+    # --------------
+    # Public methods
+    # --------------
+
+    def run(self):
+        """Run the dialog."""
+        return self.dlg.run()
+
+    def destroy(self):
+        """Destroy the dialog."""
+        return self.dlg.destroy()
 
     def get_instance_id(self):
-        if self.xml.get_widget("btn_newinstance").get_active():
+        if self.builder.get_object("btn_newinstance").get_active():
             return None
         else:
             sel = self.list.get_selection()
