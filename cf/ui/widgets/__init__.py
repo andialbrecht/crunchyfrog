@@ -31,8 +31,8 @@ try:
 except ImportError:
     HAVE_GNOMEVFS = False
 
-from cf.backends import DBConnectError, DBConnection
-from cf.datasources import DatasourceInfo
+from cf.backends import DBConnectError
+from cf.db import Connection, Datasource
 from cf.ui import GladeWidget, dialogs
 
 
@@ -114,9 +114,9 @@ def rebuild_connection_menu(menu, win, editor=None):
     if editor is None:
         return
 
-    def create_and_assign(menuitem, datasource_info, editor):
+    def create_and_assign(menuitem, datasource, editor):
         try:
-            conn = datasource_info.dbconnect()
+            conn = datasource.dbconnect()
             editor.set_connection(conn)
         except DBConnectError, err:
             dialogs.error(_(u'Connection failed'), str(err))
@@ -388,15 +388,22 @@ class ProgressDialog(GladeWidget):
         self.xml.get_widget("progress_btn_close").set_sensitive(finished)
 
 
-class ConnectionsWidget(GladeWidget):
+class ConnectionsDialog(object):
     """Lists datasources and active connections"""
 
     def __init__(self, win, xml="connectionsdialog"):
-        GladeWidget.__init__(self, win, xml, "connections_widget")
+        self.app = win.app
+        self.instance = win
+        self.builder = gtk.Builder()
+        self.builder.add_from_file(self.app.get_glade_file('%s.glade' % xml))
+        self.builder.connect_signals(self)
+        self.dlg = self.builder.get_object('connectionsdialog')
+        self._setup_widget()
+        self._setup_connections()
         self.refresh()
 
     def _setup_widget(self):
-        self.list_conn = self.xml.get_widget("list_connections")
+        self.list_conn = self.builder.get_object("list_connections")
         model = gtk.ListStore(gobject.TYPE_PYOBJECT,  # 0 object
                               str,                    # 1 label
                               bool,                   # 2 is separator
@@ -404,7 +411,7 @@ class ConnectionsWidget(GladeWidget):
                               str,                    # 4 stock-id
                               str,                    # 5 sort name
                               )
-#        model.set_sort_column_id(5, gtk.SORT_ASCENDING)
+        model.set_sort_column_id(5, gtk.SORT_ASCENDING)
         self.list_conn.set_model(model)
         col = gtk.TreeViewColumn()
         renderer = gtk.CellRendererPixbuf()
@@ -425,8 +432,12 @@ class ConnectionsWidget(GladeWidget):
                                      self.on_datasource_added)
         self.app.datasources.connect("datasource-deleted",
                                      self.on_datasource_deleted)
-        self.app.datasources.connect("datasource-modified",
+        self.app.datasources.connect("datasource-changed",
                                      self.on_datasource_modified)
+
+    # ---------
+    # Callbacks
+    # ---------
 
     def on_assign_to_editor(self, *args):
         sel = self.list_conn.get_selection()
@@ -434,7 +445,7 @@ class ConnectionsWidget(GladeWidget):
         if not iter:
             return
         obj = model.get_value(iter, 0)
-        editor = self.win.get_active_editor()
+        editor = self.instance.get_active_editor()
         if editor is None:
             return
         editor.set_connection(obj)
@@ -445,13 +456,13 @@ class ConnectionsWidget(GladeWidget):
         if not iter:
             return
         obj = model.get_value(iter, 0)
-        if not isinstance(obj, DatasourceInfo):
+        if not isinstance(obj, Datasource):
             return
         conn = obj.dbconnect()
         conn.connect("closed", self.on_connection_closed)
         iter = model.get_iter_first()
         while iter:
-            if model.get_value(iter, 0) == conn.datasource_info:
+            if model.get_value(iter, 0) == conn.datasource:
                 citer = model.insert_after(iter)
                 model.set(citer, 0, conn, 1, conn.get_label(short=True),
                           5, conn.get_label())
@@ -466,7 +477,7 @@ class ConnectionsWidget(GladeWidget):
         if not iter:
             return
         obj = model.get_value(iter, 0)
-        if not isinstance(obj, DBConnection):
+        if not isinstance(obj, Connection):
             return
         model.remove(iter)
         obj.close()
@@ -477,7 +488,7 @@ class ConnectionsWidget(GladeWidget):
             return
         iter = model.get_iter_first()
         while iter:
-            if model.get_value(iter, 0) == connection.datasource_info:
+            if model.get_value(iter, 0) == connection.datasource:
                 citer = model.iter_children(iter)
                 while citer:
                     if model.get_value(citer, 0) == connection:
@@ -486,29 +497,29 @@ class ConnectionsWidget(GladeWidget):
                     citer = model.iter_next(citer)
             iter = model.iter_next(iter)
 
-    def on_datasource_added(self, manager, datasource_info):
+    def on_datasource_added(self, manager, datasource):
         model = self.list_conn.get_model()
         iter = model.append(None)
-        model.set(iter, 0, datasource_info, 1, datasource_info.get_label())
+        model.set(iter, 0, datasource, 1, datasource.get_label())
 
-    def on_datasource_modified(self, manager, datasource_info):
+    def on_datasource_modified(self, manager, datasource):
         model = self.list_conn.get_model()
         if not model:
             return
         iter = model.get_iter_first()
         while iter:
-            if model.get_value(iter, 0) == datasource_info:
+            if model.get_value(iter, 0) == datasource:
                 model.set(iter,
-                          0, datasource_info,
-                          1, datasource_info.get_label())
+                          0, datasource,
+                          1, datasource.get_label())
                 return
             iter = model.iter_next(iter)
 
-    def on_datasource_deleted(self, manager, datasource_info):
+    def on_datasource_deleted(self, manager, datasource):
         model = self.list_conn.get_model()
         iter = model.get_iter_first()
         while iter:
-            if model.get_value(iter, 0) == datasource_info:
+            if model.get_value(iter, 0) == datasource:
                 model.remove(iter)
                 return
             iter = model.iter_next(iter)
@@ -519,26 +530,38 @@ class ConnectionsWidget(GladeWidget):
         is_ds = False
         if iter:
             obj = model.get_value(iter, 0)
-            is_ds = isinstance(obj, DatasourceInfo)
-            is_connection = isinstance(obj, DBConnection)
-        self.xml.get_widget('btn_disconnect').set_sensitive(is_connection)
-        self.xml.get_widget('btn_connect').set_sensitive(is_ds)
-        btn_assign = self.xml.get_widget('btn_assign')
-        editor = self.win.get_active_editor()
+            is_ds = isinstance(obj, Datasource)
+            is_connection = isinstance(obj, Connection)
+        self.builder.get_object('btn_disconnect').set_sensitive(is_connection)
+        self.builder.get_object('btn_connect').set_sensitive(is_ds)
+        btn_assign = self.builder.get_object('btn_assign')
+        editor = self.instance.get_active_editor()
         btn_assign.set_sensitive(bool(is_connection and editor))
 
+    # --------------
+    # Public methods
+    # --------------
+
+    def run(self):
+        """Run the dialog."""
+        return self.dlg.run()
+
+    def destroy(self):
+        """Destroy the dialog."""
+        self.dlg.destroy()
+
     def refresh(self):
-        """Initializes the data model"""
+        """Refresh the data model"""
         model = self.list_conn.get_model()
-        for datasource_info in self.app.datasources.get_all():
+        for datasource in self.app.datasources.get_all():
             iter = model.append(None)
-            model.set(iter, 0, datasource_info,
-                      1, datasource_info.get_label(),
+            model.set(iter, 0, datasource,
+                      1, datasource.get_label(),
                       2, False,
                       3, pango.WEIGHT_BOLD,
-                      5, datasource_info.get_label())
+                      5, datasource.get_label())
             citer = None
-            for conn in datasource_info.get_connections():
+            for conn in datasource.get_connections():
                 citer = model.append(None)
                 model.set(citer,
                           0, conn,
@@ -550,18 +573,6 @@ class ConnectionsWidget(GladeWidget):
             else:
                 model.set_value(iter, 4, gtk.STOCK_CONNECT)
         self.list_conn.expand_all()
-
-
-class ConnectionsDialog(GladeWidget):
-    """Dialog displaying connections"""
-
-    def __init__(self, win):
-        GladeWidget.__init__(self, win, "connectionsdialog",
-                             "connectionsdialog")
-        self.win = win
-
-    def _setup_widget(self):
-        self.connections = ConnectionsWidget(self.win, self.xml)
 
 
 class CustomImageMenuItem(gtk.ImageMenuItem):

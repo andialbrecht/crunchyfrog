@@ -305,8 +305,16 @@ class Connection(gobject.GObject):
         else:
             raise AttributeError, "unknown property %r" % property.name
 
-    def get_label(self):
-        return '%s #%d' % (self.datasource.get_label(), self.num)
+    def get_label(self, short=False):
+        """Return a label for this connection.
+
+        :param short: If ``True``, data source information will be omitted.
+          Defaults to ``False``.
+        """
+        if short:
+            return _(u'Connection #%(num)d') % {'num': self.num}
+        else:
+            return '%s #%d' % (self.datasource.get_label(), self.num)
 
     def execute(self, sql):
         cur = self.connection.cursor()
