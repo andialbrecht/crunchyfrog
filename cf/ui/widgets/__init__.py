@@ -33,7 +33,7 @@ except ImportError:
 
 from cf.backends import DBConnectError
 from cf.db import Connection, Datasource
-from cf.ui import GladeWidget, dialogs
+from cf.ui import dialogs
 
 
 class ConnectionButton(gtk.MenuToolButton):
