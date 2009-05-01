@@ -63,6 +63,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         self._setup_connections()
         self.reset_tree()
         self.guess_hint()
+        self.connect('object-menu-popup', self.on_object_menu_popup)
 
     def _setup_widget(self):
         gtk.ScrolledWindow.__init__(self)
@@ -176,6 +177,23 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         popup.append(item)
         return popup
 
+    def on_object_menu_popup(self, navigator, popup, obj):
+        if obj is None:
+            item = gtk.MenuItem(_(u'Add Data source'))
+            item.connect('activate', self.instance.on_datasource_manager)
+            item.show()
+            popup.append(item)
+        elif isinstance(obj, Datasource):
+            if obj.connections:
+                item = gtk.MenuItem(_(u'Disconnect'))
+                item.connect('activate',
+                             lambda m, d: d.dbdisconnect_all(), obj)
+            else:
+                item = gtk.MenuItem(_(u'Connect'))
+                item.connect('activate', lambda m, d: d.dbconnect(), obj)
+            item.show()
+            popup.append(item)
+
     def guess_hint(self):
         if self.object_tree.get_model().get_iter_first():
             if not self.get_child() == self.object_tree:
@@ -193,7 +211,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         y = int(event.y)
         time = event.time
         pthinfo = treeview.get_path_at_pos(x, y)
-        popup = self.instance.ui.get_widget('/NavigatorPopup')
+        popup = gtk.Menu()
         obj = None
         if pthinfo is not None:
             path, col, cellx, celly = pthinfo

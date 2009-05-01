@@ -791,8 +791,10 @@ class MainWindow(gtk.Window):
             self.set_title('CrunchyFrog %s' % release.version)
         for group in self.ui.get_action_groups():
             if group.get_name() == 'editor':
-                group.set_sensitive(self._editor is not None)
-                break
+                group.set_sensitive(isinstance(self._editor, Editor))
+            elif group.get_name() == 'query':
+                group.set_sensitive(bool(isinstance(self._editor, Editor)
+                                         and self._editor.connection))
         sensitive = bool((self._editor
                           and isinstance(self._editor, Editor)))
         action = self._get_action('file-save')
@@ -945,7 +947,4 @@ UI = '''
     <toolitem name="QueryCommit" action="query-commit" />
     <toolitem name="QueryRollback" action="query-rollback" />
   </toolbar>
-  <popup name="NavigatorPopup">
-    <menuitem name="DatasourceAdd" action="instance-datasourcemanager" />
-  </popup>
 '''
