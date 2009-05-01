@@ -201,9 +201,6 @@ class Editor(GladeWidget, PaneItem):
             self.connection.disconnect(tag_notice)
         self.textview.grab_focus()
 
-    def on_show_context_help(self, menuitem, refviewer, url):
-        refviewer.load_url(url)
-
     def on_show_in_main_window(self, *args):
         gobject.idle_add(self.show_in_main_window)
 
