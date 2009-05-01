@@ -47,7 +47,7 @@ from cf.backends import DBFeatures
 from cf.plugins.mixins import InstanceMixin, MenubarMixin, EditorMixin
 from cf.plugins.mixins import UserDBMixin
 from cf.ui import dialogs
-from cf.ui.widgets import ProgressDialog
+
 
 class GenericPlugin(gobject.GObject):
     """Plugin base class"""

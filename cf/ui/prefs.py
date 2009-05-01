@@ -42,7 +42,6 @@ log = logging.getLogger("PREFS")
 
 import cf
 from cf.ui import GladeWidget, dialogs
-from cf.ui.widgets import ProgressDialog
 from cf.plugins.core import GenericPlugin
 
 class PreferencesDialog(GladeWidget):
