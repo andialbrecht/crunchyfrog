@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+"""Confirmation dialog."""
+
 import gtk
 import gobject
 
@@ -23,17 +25,28 @@ import os
 
 from gettext import gettext as _
 
-from cf.ui import GladeWidget
 
 MODE_SINGLE = 1
 MODE_MULTIPLE = 2
 
-class ConfirmSaveDialog(GladeWidget):
+
+class ConfirmSaveDialog(object):
 
     def __init__(self, instance, changed_editors):
-        GladeWidget.__init__(self, instance, "saveconfirm",
-                             "saveconfirm_dialog")
+        """Constructor.
+
+        :param instance: :class:`~cf.ui.MainWindow` instance.
+        :param changed_editors: List of :class:`~cf.ui.editor.Editor` instances
+          that have changed content.
+        """
+        app = instance.app
+        self.instance = instance
+        self.builder = gtk.Builder()
+        self.builder.add_from_file(app.get_glade_file('saveconfirm.glade'))
+        self.builder.connect_signals(self)
         self.changed_editors = changed_editors
+        self.dlg = self.builder.get_object('saveconfirm_dialog')
+        self._setup_widget()
         if len(changed_editors) == 1:
             self.set_dialog_mode(MODE_SINGLE)
         else:
@@ -42,7 +55,7 @@ class ConfirmSaveDialog(GladeWidget):
 
     def _setup_widget(self):
         model = gtk.ListStore(gobject.TYPE_PYOBJECT, str, bool, str)
-        self.filelist = self.xml.get_widget("filelist")
+        self.filelist = self.builder.get_object("filelist")
         self.filelist.set_model(model)
         self.filelist.set_tooltip_column(3)
         col = gtk.TreeViewColumn()
@@ -55,12 +68,21 @@ class ConfirmSaveDialog(GladeWidget):
         col.add_attribute(renderer, 'text', 1)
         self.filelist.append_column(col)
 
+    # ---------
+    # Callbacks
+    # ---------
+
     def on_entry_toggled(self, renderer, path):
         model = self.filelist.get_model()
         iter = model.get_iter(path)
         model.set_value(iter, 2, not model.get_value(iter, 2))
 
+    # --------------
+    # Public methods
+    # --------------
+
     def fill_filelist(self):
+        """Populate the list of file names from the list of changed editors."""
         model = self.filelist.get_model()
         for i in range(len(self.changed_editors)):
             editor = self.changed_editors[i]
@@ -84,10 +106,19 @@ class ConfirmSaveDialog(GladeWidget):
             model.append([editor, lbl, True, tip])
 
     def set_dialog_mode(self, mode):
+        """Adjust visibility of widgets according to *mode*.
+
+        Usually there's no need to call this method directly. It's called
+        on instance creation with the correct mode determined by the list
+        of changed editors.
+
+        :param mode: Either *MODE_SINGLE* if just one editor has changed, or
+          *MODE_MULTIPLE* if two or more editors have changed.
+        """
         if mode == MODE_SINGLE:
-            self.xml.get_widget("lbl_filelist").hide()
-            self.xml.get_widget("sw_filelist").hide()
-            self.xml.get_widget("filelist").hide()
+            self.builder.get_object("lbl_filelist").hide()
+            self.builder.get_object("sw_filelist").hide()
+            self.builder.get_object("filelist").hide()
             editor = self.changed_editors[0]
             if editor.get_filename():
                 filename = os.path.basename(editor.get_filename())
@@ -95,19 +126,37 @@ class ConfirmSaveDialog(GladeWidget):
                 filename = _(u"Unsaved Query %(num)s") % {"num" : 1}
             msg_header = _(u'Save the changes to document "%(filename)s" before closing?') % {"filename":filename}
         else:
-            self.xml.get_widget("lbl_filelist").show()
-            self.xml.get_widget("sw_filelist").show()
+            self.builder.get_object("lbl_filelist").show()
+            self.builder.get_object("sw_filelist").show()
             msg_header = _(u"There are %(num)d documents with unsaved changes. Save changes before closing?")
             msg_header = msg_header % {"num" : len(self.changed_editors)}
         markup = '<span size="large"><b>%s</b></span>' % msg_header
-        self.xml.get_widget("lbl_header").set_markup(markup)
+        self.builder.get_object("lbl_header").set_markup(markup)
 
     def save_files(self):
+        """Save selected files.
+
+        ``True`` is returned if all files were saved. Otherwise ``False``.
+        """
         model = self.filelist.get_model()
-        iter = model.get_iter_first()
-        while iter:
-            if model.get_value(iter, 2):
-                if not model.get_value(iter, 0).save_file(default_name=model.get_value(iter, 1)):
+        iter_ = model.get_iter_first()
+        while iter_:
+            if model.get_value(iter_, 2):
+                editor = model.get_value(iter_, 0)
+                default_name = model.get_value(iter_, 1)
+                if not editor.save_file(default_name=default_name):
                     return False
-            iter = model.iter_next(iter)
+            iter_ = model.iter_next(iter_)
         return True
+
+    def run(self):
+        """Run the dialog."""
+        return self.dlg.run()
+
+    def destroy(self):
+        """Destroy the dialog."""
+        self.dlg.destroy()
+
+    def hide(self):
+        """Hide the dialog."""
+        self.dlg.hide()
