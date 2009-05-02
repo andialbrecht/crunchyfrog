@@ -98,6 +98,7 @@ class Editor(gobject.GObject, PaneItem):
         self._filename = None
         self._filecontent_read = ""
         self.builder = gtk.Builder()
+        self.builder.set_translation_domain('crunchyfrog')
         self.builder.add_from_file(self.app.get_glade_file('editor.glade'))
         self.widget = self.builder.get_object('box_editor')
         self._setup_widget()

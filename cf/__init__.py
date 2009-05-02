@@ -83,14 +83,3 @@ gettext.install('crunchyfrog', LOCALE_DIR, True)
 
 # Add sqlparse to PYTHONPATH
 sys.path.append(os.path.abspath(os.path.dirname(__file__)))
-
-try:
-    import gtk
-    import gtk.glade
-    gtk.glade.textdomain('crunchyfrog')
-    gtk.glade.bindtextdomain('crunchyfrog', LOCALE_DIR)
-except ImportError:
-    # We don't need it on buildbots, so let's die silently.
-    pass
-
-

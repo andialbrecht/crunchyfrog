@@ -81,7 +81,6 @@ def run():
     if not sys.platform == 'win32':
         pygtk.require('2.0')
     import gtk
-    import gtk.glade
 
     try:
         import gnome
@@ -91,9 +90,6 @@ def run():
     logging.info('GNOME enabled: %s', have_gnome and 'yes' or 'no')
 
     from cf.app import CFApplication
-
-    gtk.glade.bindtextdomain('crunchyfrog', cf.LOCALE_DIR)
-    gtk.glade.textdomain('crunchyfrog')
 
     # Check for running applications or create one
     if ipc_client is None or not ipc.is_alive(ipc_client):

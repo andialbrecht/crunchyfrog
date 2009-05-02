@@ -27,9 +27,6 @@ import gobject
 import gtk
 import pango
 
-from cf.ui import GladeWidget
-
-
 try:
     # Let's see if we have additional items.
     # This is a dirty hack...

@@ -51,6 +51,7 @@ class PreferencesDialog(object):
         self.win = win
         self.app = win.app
         self.builder = gtk.Builder()
+        self.builder.set_translation_domain('crunchyfrog')
         fname = self.app.get_glade_file('preferences.glade')
         self.builder.add_from_file(fname)
         self.builder.connect_signals(self)

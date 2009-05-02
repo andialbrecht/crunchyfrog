@@ -322,6 +322,7 @@ class ConnectionsDialog(object):
         self.app = win.app
         self.instance = win
         self.builder = gtk.Builder()
+        self.builder.set_translation_domain('crunchyfrog')
         self.builder.add_from_file(self.app.get_glade_file('%s.glade' % xml))
         self.builder.connect_signals(self)
         self.dlg = self.builder.get_object('connectionsdialog')

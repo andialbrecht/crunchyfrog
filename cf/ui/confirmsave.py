@@ -42,6 +42,7 @@ class ConfirmSaveDialog(object):
         app = instance.app
         self.instance = instance
         self.builder = gtk.Builder()
+        self.builder.set_translation_domain('crunchyfrog')
         self.builder.add_from_file(app.get_glade_file('saveconfirm.glade'))
         self.builder.connect_signals(self)
         self.changed_editors = changed_editors

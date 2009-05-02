@@ -30,6 +30,7 @@ class InstanceSelector(object):
     def __init__(self, client):
         self.client = client
         self.builder = gtk.Builder()
+        self.builder.set_translation_domain('crunchyfrog')
         fname = os.path.join(cf.DATA_DIR, 'glade/instanceselector.glade')
         self.builder.add_from_file(fname)
         self.builder.connect_signals(self)

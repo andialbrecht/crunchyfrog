@@ -35,6 +35,7 @@ class DatasourcesDialog(object):
     def __init__(self, app, parent=None):
         self.app = app
         self.builder = gtk.Builder()
+        self.builder.set_translation_domain('crunchyfrog')
         self.builder.add_from_file(app.get_glade_file('datasources.glade'))
         self.builder.connect_signals(self)
         self.dlg = self.builder.get_object('datasources_dialog')
@@ -238,6 +239,7 @@ class DatasourceEditDialog(object):
     def __init__(self, app, parent=None, datasource=None):
         self.app = app
         self.builder = gtk.Builder()
+        self.builder.set_translation_domain('crunchyfrog')
         self.builder.add_from_file(app.get_glade_file('datasourceedit.glade'))
         self.builder.connect_signals(self)
         self.dlg = self.builder.get_object('dialog_datasource_edit')
