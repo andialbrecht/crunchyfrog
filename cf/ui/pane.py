@@ -92,6 +92,10 @@ class PaneItem(object):
     def get_focus_child(self):
         return None
 
+    def get_widget(self):
+        """Returns the real gtk.Widget that should be displayed."""
+        return self
+
 
 class Pane(object):
     """Base class for all pane widgets."""
@@ -238,9 +242,8 @@ class Pane(object):
         """Add a PaneItem."""
         assert isinstance(item, PaneItem)
         pitem = item
-        if isinstance(item, GladeWidget):
-            item.widget.set_data('cf::real-object', item)
-            item = item.widget
+        item = pitem.get_widget()
+        item.set_data('cf::real-object', pitem)
         tab_label = pitem.get_tab_label()
         if self.__class__.__name__ != 'CenterPane':
             tab_label.set_mode(TAB_LABEL_SIDEPANE)
@@ -363,7 +366,7 @@ class CenterPane(gtk.VBox, Pane):
             self.mainwin.set_editor_active(child, False)
 
     def on_switch_page(self, notebook, page, page_num):
-        editor = self.get_nth_page(page_num).get_data("glade-widget")
+        editor = self.get_nth_page(page_num).get_data('cf::real-object')
         gobject.idle_add(self.mainwin.set_editor_active, editor, True)
 
     def add_item(self, editor):

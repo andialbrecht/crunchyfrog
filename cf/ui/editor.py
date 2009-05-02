@@ -33,7 +33,7 @@ import gtksourceview2
 import pango
 
 from cf.backends import Query
-from cf.ui import GladeWidget, dialogs
+from cf.ui import dialogs
 from cf.ui.confirmsave import ConfirmSaveDialog
 from cf.ui.pane import PaneItem
 from cf.ui.widgets import DataExportDialog
@@ -53,7 +53,7 @@ FORMATTER_DEFAULT_OPTIONS = {
 }
 
 
-class Editor(GladeWidget, PaneItem):
+class Editor(gobject.GObject, PaneItem):
     """SQL editor widget.
 
     :Signals:
@@ -85,9 +85,9 @@ class Editor(GladeWidget, PaneItem):
     def __init__(self, win):
         """Constructor.
 
-        :Args:
-          win: A MainWindow instance.
+        :param win: A MainWindow instance.
         """
+        self.__gobject_init__()
         PaneItem.__init__(self, win.app)
         self.app = win.app
         self.win = win
@@ -97,10 +97,31 @@ class Editor(GladeWidget, PaneItem):
         self._query_timer = None
         self._filename = None
         self._filecontent_read = ""
-        GladeWidget.__init__(self, self.win, "editor", "box_editor")
+        self.builder = gtk.Builder()
+        self.builder.add_from_file(self.app.get_glade_file('editor.glade'))
+        self.widget = self.builder.get_object('box_editor')
+        self._setup_widget()
+        self._setup_connections()
+        self.on_messages_copy = self.results.on_messages_copy
+        self.on_messages_clear = self.results.on_messages_clear
+        self.on_copy_data = self.results.on_copy_data
+        self.on_export_data = self.results.on_export_data
+        self.builder.connect_signals(self)
         self.set_data("win", None)
         self.win.emit('editor-created', self)
         self.show_all()
+
+    def show_all(self):
+        self.widget.show_all()
+
+    def show(self):
+        self.widget.show()
+
+    def destroy(self):
+        self.widget.destroy()
+
+    def get_widget(self):
+        return self.widget
 
     def do_get_property(self, param):
         if param.name == 'buffer-dirty':
@@ -118,12 +139,12 @@ class Editor(GladeWidget, PaneItem):
 
     def _setup_textview(self):
         self.textview = SQLView(self.win, self)
-        sw = self.xml.get_widget("sw_editor_textview")
+        sw = self.builder.get_object("sw_editor_textview")
         sw.add(self.textview)
         self.textview.buffer.connect('changed', self.on_buffer_changed)
 
     def _setup_resultsgrid(self):
-        self.results = ResultsView(self.win, self.xml)
+        self.results = ResultsView(self.win, self.builder)
 
     def _setup_connections(self):
         self.textview.connect("populate-popup", self.on_populate_popup)
@@ -576,15 +597,18 @@ class Editor(GladeWidget, PaneItem):
         buffer_.end_user_action()
 
 
-class ResultsView(GladeWidget):
+class ResultsView(object):
 
-    def __init__(self, win, xml):
+    def __init__(self, win, builder):
         self.instance = win
-        GladeWidget.__init__(self, win, xml, "editor_results")
+        self.widget = builder.get_object('editor_results')
+        self.builder = builder
+        self._setup_widget()
+        self._setup_connections()
 
     def _setup_widget(self):
-        self.grid = ResultList(self.instance, self.xml)
-        self.messages = self.xml.get_widget("editor_results_messages")
+        self.grid = ResultList(self.instance, self.builder)
+        self.messages = self.builder.get_object("editor_results_messages")
         model = gtk.ListStore(str,  # 0 stock id
                               str,  # 1 message
                               str,  # 2 foreground color
@@ -608,13 +632,13 @@ class ResultsView(GladeWidget):
         self.messages.append_column(col)
         self.messages.set_row_separator_func(self._set_row_separator)
         self.explain_results = Grid()
-        sw = self.xml.get_widget('sw_explain_results')
+        sw = self.builder.get_object('sw_explain_results')
         sw.add(self.explain_results)
         self.explain_results.show_all()
 
     def _msg_model_changed(self, model, *args):
-        tb_clear = self.xml.get_widget("tb_messages_clear")
-        tb_copy = self.xml.get_widget("tb_messages_copy")
+        tb_clear = self.builder.get_object("tb_messages_clear")
+        tb_copy = self.builder.get_object("tb_messages_copy")
         sensitive = model.get_iter_first() is not None
         tb_clear.set_sensitive(sensitive)
         tb_copy.set_sensitive(sensitive)
@@ -651,7 +675,7 @@ class ResultsView(GladeWidget):
         clipboard.set_text('\n'.join(plain))
 
     def on_grid_selection_changed(self, grid, selected_cells):
-        self.xml.get_widget("editor_copy_data").set_sensitive(bool(selected_cells))
+        self.builder.get_object("editor_copy_data").set_sensitive(bool(selected_cells))
 
     def copy_data(self):
         rows = dict()
@@ -695,7 +719,7 @@ class ResultsView(GladeWidget):
         while iter_:
             model.set_value(iter_, 2, '#cccccc')
             iter_ = model.iter_next(iter_)
-        self.set_current_page(2)
+        self.widget.set_current_page(2)
 
     def set_explain_results(self, query):
         self.explain_results.reset()
@@ -718,8 +742,8 @@ class ResultsView(GladeWidget):
             curr_page = 0
         else:
             curr_page = 2
-        self.xml.get_widget("editor_export_data").set_sensitive(bool(query.rows))
-        gobject.idle_add(self.set_current_page, curr_page)
+        self.builder.get_object("editor_export_data").set_sensitive(bool(query.rows))
+        gobject.idle_add(self.widget.set_current_page, curr_page)
 
     def add_message(self, msg, type_=None, path=None, monospaced=False):
         """Add a message.
@@ -796,17 +820,19 @@ class ResultsView(GladeWidget):
         model.append([None, None, None, pango.WEIGHT_NORMAL, True, None])
 
 
-class ResultList(GladeWidget):
+class ResultList(object):
     """Result list with toolbar"""
 
-    def __init__(self, win, xml):
-        GladeWidget.__init__(self, win, xml, "editor_results_data")
+    def __init__(self, win, builder):
+        self.builder = builder
+        self.widget = self.builder.get_object('editor_results_data')
+        self._setup_widget()
         self.instance = win
         self.query = None
 
     def _setup_widget(self):
         self.grid = Grid()
-        self.xml.get_widget("sw_grid").add(self.grid)
+        self.builder.get_object("sw_grid").add(self.grid)
 
     def set_query(self, query):
         self.query = query
