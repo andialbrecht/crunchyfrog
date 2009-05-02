@@ -41,13 +41,22 @@ log = logging.getLogger("PREFS")
 
 
 import cf
-from cf.ui import GladeWidget, dialogs
+from cf.ui import dialogs
 from cf.plugins.core import GenericPlugin
 
-class PreferencesDialog(GladeWidget):
+
+class PreferencesDialog(object):
 
     def __init__(self, win, mode="editor"):
-        GladeWidget.__init__(self, win, "preferences", "preferences_dialog")
+        self.win = win
+        self.app = win.app
+        self.builder = gtk.Builder()
+        fname = self.app.get_glade_file('preferences.glade')
+        self.builder.add_from_file(fname)
+        self.builder.connect_signals(self)
+        self.dlg = self.builder.get_object('preferences_dialog')
+        self._setup_widget()
+        self._setup_connections()
         self.refresh()
         if mode == "editor":
             curr_page = 1
@@ -55,20 +64,20 @@ class PreferencesDialog(GladeWidget):
             curr_page = 2
         else:
             curr_page = 0
-        self.xml.get_widget("notebook1").set_current_page(curr_page)
+        self.builder.get_object("notebook1").set_current_page(curr_page)
 
     def _setup_widget(self):
         self._setup_plugins()
         self._setup_editor()
         self._setup_shortcuts()
         # Fix secondary button
-        btn = self.xml.get_widget("btn_help")
-        box = self.xml.get_widget("dialog-action_area1")
+        btn = self.builder.get_object("btn_help")
+        box = self.builder.get_object("dialog-action_area1")
         box.set_child_secondary(btn, True)
 
     def _setup_editor(self):
         model = gtk.ListStore(int, str, gtk.gdk.Pixbuf)
-        iconview = self.xml.get_widget("editor_iconview")
+        iconview = self.builder.get_object("editor_iconview")
         iconview.set_model(model)
         iconview.set_text_column(1)
         iconview.set_pixbuf_column(2)
@@ -81,7 +90,7 @@ class PreferencesDialog(GladeWidget):
         model.append([4, _(u'Keyboard\nShortcuts'),
                       get_pb('preferences-desktop-keyboard-shortcuts')])
         iconview.connect("selection-changed", self.on_editor_selection_changed)
-        schemes = self.xml.get_widget("editor_schemes")
+        schemes = self.builder.get_object("editor_schemes")
         model = gtk.ListStore(str, str)
         model.set_sort_column_id(1, gtk.SORT_ASCENDING)
         schemes.set_model(model)
@@ -114,7 +123,7 @@ class PreferencesDialog(GladeWidget):
                                           bool, # 4 active visible
                                           )
         self.plugin_model.set_sort_column_id(2, gtk.SORT_ASCENDING)
-        self.plugin_list = self.xml.get_widget("plugin_list")
+        self.plugin_list = self.builder.get_object("plugin_list")
         self.plugin_list.set_model(self.plugin_model)
         # label
         col = gtk.TreeViewColumn()
@@ -141,7 +150,7 @@ class PreferencesDialog(GladeWidget):
                                              str,                  # 4 tooltip
                                              gobject.TYPE_PYOBJECT,# 5 action
                                              )
-        self.list_shortcuts = self.xml.get_widget('list_shortcuts')
+        self.list_shortcuts = self.builder.get_object('list_shortcuts')
         col = gtk.TreeViewColumn(_('Action'), gtk.CellRendererText(), text=0)
         self.list_shortcuts.append_column(col)
         renderer = gtk.CellRendererAccel()
@@ -156,6 +165,14 @@ class PreferencesDialog(GladeWidget):
     def _setup_connections(self):
         self.app.plugins.connect("plugin-added", self.on_plugin_added)
         self.app.plugins.connect("plugin-removed", self.on_plugin_removed)
+
+    def run(self):
+        """Run the dialog."""
+        return self.dlg.run()
+
+    def destroy(self):
+        """Destroy the dialog."""
+        self.dlg.destroy()
 
     def on_accel_edited(self, renderer, path, accel_key, accel_mods,
                         hardware_keycode):
@@ -187,11 +204,11 @@ class PreferencesDialog(GladeWidget):
             model, iter = widget.get_selected()
             conf.set(option, model.get_value(iter, 0))
         if option == "editor.wrap_text":
-            self.xml.get_widget("editor_wrap_split").set_sensitive(widget.get_active())
+            self.builder.get_object("editor_wrap_split").set_sensitive(widget.get_active())
         if option == "editor.right_margin":
-            self.xml.get_widget("editor_right_margin_position_box").set_sensitive(widget.get_active())
+            self.builder.get_object("editor_right_margin_position_box").set_sensitive(widget.get_active())
         if option == "editor.default_font":
-            self.xml.get_widget("editor_font_box").set_sensitive(not widget.get_active())
+            self.builder.get_object("editor_font_box").set_sensitive(not widget.get_active())
         if option == "plugins.repo_enabled":
             gobject.idle_add(self.refresh_plugins)
 
@@ -199,7 +216,7 @@ class PreferencesDialog(GladeWidget):
         model = iconview.get_model()
         for path in iconview.get_selected_items():
             iter = model.get_iter(path)
-            nb = self.xml.get_widget("editor_notebook")
+            nb = self.builder.get_object("editor_notebook")
             nb.set_current_page(model.get_value(iter, 0))
 
     def on_help(self, *args):
@@ -305,11 +322,11 @@ class PreferencesDialog(GladeWidget):
             return
         obj = model.get_value(iter, 0)
         if isclass(obj) and issubclass(obj, GenericPlugin):
-            self.xml.get_widget("plugin_about").set_sensitive(True)
-            self.xml.get_widget("plugin_prefs").set_sensitive(obj.has_custom_options)
+            self.builder.get_object("plugin_about").set_sensitive(True)
+            self.builder.get_object("plugin_prefs").set_sensitive(obj.has_custom_options)
         else:
-            self.xml.get_widget("plugin_about").set_sensitive(False)
-            self.xml.get_widget("plugin_prefs").set_sensitive(False)
+            self.builder.get_object("plugin_about").set_sensitive(False)
+            self.builder.get_object("plugin_prefs").set_sensitive(False)
 
     def on_plugin_sync_repo(self, *args):
         self.sync_repo_file()
@@ -326,7 +343,7 @@ class PreferencesDialog(GladeWidget):
 
     def refresh_editor(self):
         config = self.app.config
-        gw = self.xml.get_widget
+        gw = self.builder.get_object
         gw('editor_reuse_connection').set_data('config_option',
                                                'editor.reuse_connection')
         gw("editor_reuse_connection").set_active(
@@ -373,8 +390,8 @@ class PreferencesDialog(GladeWidget):
 
     def refresh_plugins(self):
         # Repo
-        self.xml.get_widget("plugin_enable_repo").set_data("config_option", "plugins.repo_enabled")
-        self.xml.get_widget("plugin_enable_repo").set_active(self.app.config.get("plugins.repo_enabled"))
+        self.builder.get_object("plugin_enable_repo").set_data("config_option", "plugins.repo_enabled")
+        self.builder.get_object("plugin_enable_repo").set_active(self.app.config.get("plugins.repo_enabled"))
         # Plugins
         model = self.plugin_model
         model.clear()

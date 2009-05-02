@@ -12,9 +12,9 @@ class TestDialogBasic(InstanceTest):
 
     def test_preferences(self):
         dlg = PreferencesDialog(self.instance)
-        dlg.show_all()
+        dlg.dlg.show_all()
         self.refresh_gui()
-        self.assertEqual(dlg.widget.get_property('visible'), True)
+        self.assertEqual(dlg.dlg.get_property('visible'), True)
         dlg.destroy()
 
     def test_datasources(self):
