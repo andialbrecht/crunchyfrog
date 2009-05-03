@@ -39,7 +39,7 @@ KEYWORDS = {
     'BREADTH': Keyword,
     'BY': Keyword,
 
-    'C': Keyword,
+#    'C': Keyword,  # most likely this is an alias
     'CACHE': Keyword,
     'CALL': Keyword,
     'CALLED': Keyword,
@@ -250,7 +250,7 @@ KEYWORDS = {
     'LESS': Keyword,
     'LEVEL': Keyword,
     'LIKE': Keyword,
-    'LILMIT': Keyword,
+    'LIMIT': Keyword,
     'LISTEN': Keyword,
     'LOAD': Keyword,
     'LOCAL': Keyword,
