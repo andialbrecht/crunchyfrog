@@ -18,6 +18,7 @@
 
 """SQL Server backend."""
 
+from cf.db import TRANSACTION_ACTIVE, TRANSACTION_IDLE
 from cf.db import objects
 from cf.db.backends import Generic, DEFAULT_OPTIONS
 
@@ -47,6 +48,22 @@ class MSSql(Generic):
         ver = connection.execute('SELECT @@VERSION')[0][0]
         ver = ver.splitlines()[0].strip()+" - "+ver.splitlines()[-1].strip()
         return ver
+
+    def begin(self, connection):
+        connection.execute('BEGIN TRANSACTION')
+        connection._tstate = TRANSACTION_ACTIVE
+        return True
+
+    def commit(self, connection):
+        super(MSSql, self).commit(connection)
+        connection._tstate = TRANSACTION_IDLE
+
+    def rollback(self, connection):
+        super(MSSql, self).rollback(connection)
+        connection._tstate = TRANSACTION_IDLE
+
+    def get_transaction_state(self, connection):
+        return getattr(connection, '_tstate', TRANSACTION_IDLE)
 
     def _query(self, connection, sql):
         return connection.execute_raw(sql)

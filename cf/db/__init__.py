@@ -362,7 +362,7 @@ class Connection(gobject.GObject):
         """Commit changes."""
         if self._transaction is None:
             # Transaction started via direct statement (not sqlalchemy)
-            self.execute('COMMIT')
+            self.datasource.backend.commit(self)
         else:
             self._transaction.commit()
             self._transaction = None
@@ -371,7 +371,7 @@ class Connection(gobject.GObject):
     def rollback(self):
         """Rollback changes."""
         if self._transaction is None:
-            self.execute('ROLLBACK')
+            self.datasource.backend.rollback(self)
         else:
             self._transaction.rollback()
             self._transaction = None

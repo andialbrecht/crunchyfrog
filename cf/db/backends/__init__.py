@@ -159,6 +159,14 @@ class Generic(object):
         connection.execute('BEGIN')
         return True
 
+    def commit(self, connection):
+        """Commit transaction."""
+        connection.execute('COMMIT')
+
+    def rollback(self, connection):
+        """Rollback transaction."""
+        connection.execute('ROLLBACK')
+
     def get_explain_statement(self, statement):
         """Return a SQL for executing EXPLAIN or None."""
         return "EXPLAIN %s" % statement
