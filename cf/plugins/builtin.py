@@ -23,21 +23,12 @@ import logging
 from cf.filter.exportfilter import CSVExportFilter
 from cf.filter.exportfilter import OOCalcExportFilter
 
-try: from cf.backends.ldapbe import LDAPBackend
-except ImportError, err:
-    logging.warning('Could not import LDAPBackend: %s', err)
 try: from cf.backends.mysql import MySQLBackend
 except ImportError, err:
     logging.warning('Could not import MySQLBackend: %s', err)
 try: from cf.backends.postgres import PostgresBackend
 except ImportError, err:
     logging.warning('Could not import PostgresBackend: %s', err)
-try: from cf.backends.sqlite import SQLiteBackend
-except ImportError, err:
-    logging.warning('Could not import SQLiteBackend: %s', err)
-try: from cf.backends.mssql import MsSQLBackend
-except ImportError, err:
-    logging.warning('Could not import MsSQLBackend: %s', err)
 try: from cf.backends.oracle import OracleBackend
 except ImportError, err:
     logging.warning('Could not import OracleBackend; %s', err)
