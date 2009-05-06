@@ -221,38 +221,6 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             iter_ = model.get_iter(path)
             obj = model.get_value(iter_, 0)
         self.emit('object-menu-popup', popup, obj)
-        popup.popup(None, None, None, event.button, time)
-        return
-        if pthinfo is None:
-            item = gtk.MenuItem(_(u"Add data source"))
-            item.connect("activate", self.instance.on_datasource_manager)
-            popup.append(item)
-        else:
-            path, col, cellx, celly = pthinfo
-            treeview.grab_focus()
-            treeview.set_cursor( path, col, 0)
-            model = treeview.get_model()
-            iter = model.get_iter(path)
-            obj = model.get_value(iter, 0)
-            if model.iter_children(iter):
-                item = gtk.ImageMenuItem("gtk-refresh")
-                item.connect("activate", self.on_refresh_node, model, iter)
-                popup.append(item)
-            if obj.has_details:
-                # FIXME(andi): It's labelled "Definition" because only view
-                #   definitions have details ATM.
-                item = gtk.MenuItem(_(u"Definition"))
-                item.connect("activate", self.on_show_details, obj, model, iter)
-                popup.append(item)
-            if popup.get_children():
-                popup.append(gtk.SeparatorMenuItem())
-            cb = model.get_value(iter, 4)
-            if cb:
-                try:
-                    popup = cb(model, iter, popup)
-                except:
-                    import traceback; traceback.print_exc()
-            self.emit("object-menu-popup", popup, model.get_value(iter, 0))
         if popup.get_children():
             popup.show_all()
             popup.popup( None, None, None, event.button, time)
