@@ -57,7 +57,7 @@ class NativeShellPlugin(GenericPlugin, InstanceMixin):
                 view.destroy()
             instance.browser.disconnect(sid)
 
-    def on_object_menu_popup(self, browser, popup, obj):
+    def on_object_menu_popup(self, browser, popup, obj, path):
         if not isinstance(obj, Datasource):
             return
         item = gtk.MenuItem(_(u'Open Native Shell'))

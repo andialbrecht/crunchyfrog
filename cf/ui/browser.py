@@ -44,8 +44,10 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         "object-menu-popup" : (
             gobject.SIGNAL_RUN_LAST,
             gobject.TYPE_NONE,
-            (gobject.TYPE_PYOBJECT,
-             gobject.TYPE_PYOBJECT)
+            (gobject.TYPE_PYOBJECT,  # popup menu
+             gobject.TYPE_PYOBJECT,  # selected object or None
+             gobject.TYPE_PYOBJECT,  # selected path or None
+             )
             ),
     }
 
@@ -177,7 +179,8 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         popup.append(item)
         return popup
 
-    def on_object_menu_popup(self, navigator, popup, obj):
+    def on_object_menu_popup(self, navigator, popup, obj, path):
+        model = self.object_tree.get_model()
         if obj is None:
             item = gtk.MenuItem(_(u'Add Data source'))
             item.connect('activate', self.instance.on_datasource_manager)
@@ -191,6 +194,15 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             else:
                 item = gtk.MenuItem(_(u'Connect'))
                 item.connect('activate', lambda m, d: d.dbconnect(), obj)
+            item.show()
+            popup.append(item)
+        else:
+            item = gtk.MenuItem(_(u'Refresh'))
+            ds = self.find_datasource_info(model, model.get_iter(path))
+            conn = ds.internal_connection
+            item.connect('activate',
+                         lambda m, d, o: d.backend.refresh(o, d.meta, conn),
+                         ds, obj)
             item.show()
             popup.append(item)
 
@@ -211,6 +223,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         y = int(event.y)
         time = event.time
         pthinfo = treeview.get_path_at_pos(x, y)
+        path = None
         popup = gtk.Menu()
         obj = None
         if pthinfo is not None:
@@ -220,7 +233,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             model = treeview.get_model()
             iter_ = model.get_iter(path)
             obj = model.get_value(iter_, 0)
-        self.emit('object-menu-popup', popup, obj)
+        self.emit('object-menu-popup', popup, obj, path)
         if popup.get_children():
             popup.show_all()
             popup.popup( None, None, None, event.button, time)
