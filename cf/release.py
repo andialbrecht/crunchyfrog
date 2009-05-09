@@ -20,7 +20,7 @@
 
 name = "CrunchyFrog"
 appname = name.lower()
-version = "0.3.4"
+version = "0.3.90"
 copyright = "Copyright (C) 2008 Andi Albrecht <albrecht.andi@gmail.com>"
 description = "SQL client (not-only) for GNOME"
 author = "Andi Albrecht"
