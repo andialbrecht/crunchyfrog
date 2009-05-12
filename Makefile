@@ -6,6 +6,7 @@ PROJECT=crunchyfrog
 VERSION=0.3.4
 DEBFLAGS=
 PO=`find po/* -maxdepth 0 -name .svn -prune -o -type d|sed 's/po\///g'`
+PUSHPPA=cf-ppa
 
 all:
 	@echo "make install - Install on local system"
@@ -28,7 +29,7 @@ builddeb-src:
 	make builddeb DEBFLAGS="-S -k090D660E"
 
 push-ppa: builddeb-src
-	cd $(BUILDIR) && dput cf-ppa $(PROJECT)_$(VERSION)*_source.changes
+	cd $(BUILDIR) && dput $(PUSHPPA) $(PROJECT)_$(VERSION)*_source.changes
 
 clean:
 	$(PYTHON) setup.py clean
