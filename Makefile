@@ -27,7 +27,7 @@ builddeb: dist-clean
 	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dpkg-buildpackage $(DEBFLAGS)
 
 builddeb-src:
-	make builddeb DEBFLAGS="-S -k$PGPKEY"
+	make builddeb DEBFLAGS="-S -k$(PGPKEY)"
 
 push-ppa: builddeb-src
 	cd $(BUILDIR) && dput $(PUSHPPA) $(PROJECT)_$(VERSION)*_source.changes
