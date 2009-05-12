@@ -19,7 +19,6 @@
 """Preferences"""
 
 from inspect import isclass
-from xml.etree import ElementTree as etree
 
 import gtk
 import gobject
@@ -226,9 +225,7 @@ class PreferencesDialog(object):
     def on_plugin_active_toggled(self, renderer, path):
         iter = self.plugin_model.get_iter(path)
         plugin = self.plugin_model.get_value(iter, 0)
-        if isinstance(plugin, etree._Element):
-            print plugin
-        elif issubclass(plugin, GenericPlugin):
+        if issubclass(plugin, GenericPlugin):
             self.plugin_model.set_value(iter, 1, not renderer.get_active())
             gobject.idle_add(self.app.plugins.set_active, plugin, not renderer.get_active())
 
@@ -255,7 +252,6 @@ class PreferencesDialog(object):
                       2, lbl,
                       3, ico,
                       4, True)
-        self.refresh_plugins_repo()
 
     def on_plugin_install(self, *args):
         dlg = gtk.FileChooserDialog(_(u"Install plugin"), None,
@@ -283,7 +279,6 @@ class PreferencesDialog(object):
                 while citer:
                     if self.plugin_model.get_value(citer, 0) == plugin:
                         self.plugin_model.remove(citer)
-                        self.refresh_plugins_repo()
                         return
                     citer = self.plugin_model.iter_next(citer)
             iter = self.plugin_model.iter_next(iter)
@@ -424,7 +419,6 @@ class PreferencesDialog(object):
                           2, lbl,
                           3, ico,
                           4, not bool(plugin.INIT_ERROR))
-        gobject.idle_add(self.refresh_plugins_repo)
 
     def _plugin_iter_for_ep(self, ep_name):
         model = self.plugin_list.get_model()
@@ -434,59 +428,6 @@ class PreferencesDialog(object):
                 return model, iter
             iter = model.iter_next(iter)
         return model, None
-
-    def refresh_plugins_repo(self):
-        """Refresh repository plugins"""
-        model = self.plugin_list.get_model()
-        iter = model.get_iter_first()
-        while iter:
-            citer = model.iter_children(iter)
-            while citer:
-                obj = model.get_value(citer, 0)
-                if isinstance(obj, etree._Element):
-                    model.remove(citer)
-                citer = model.iter_next(citer)
-            iter = model.iter_next(iter)
-        if not self.app.config.get("plugins.repo_enabled"):
-            return
-        if not os.path.isfile(cf.USER_PLUGIN_REPO):
-            if not self.sync_repo_file():
-                return
-        dom = etree.parse(cf.USER_PLUGIN_REPO)
-        for plugin in dom.xpath("//*/plugin"):
-            ptype = plugin.get("type")
-            model, iter = self._plugin_iter_for_ep(int(ptype))
-            if not iter:
-                log.error("Invalid plugin type %r" % ptype)
-                continue
-            citer = model.iter_children(iter)
-            skip = False
-            while citer:
-                x = model.get_value(citer, 0)
-                if isclass(x) and issubclass(x, GenericPlugin) \
-                and x.id == plugin.get("id"):
-                    skip = True
-                    break
-                elif isinstance(x, etree._Element) \
-                and x.get("id") == plugin.get("id"):
-                    skip = True
-                    break
-                citer = model.iter_next(citer)
-            if skip:
-                continue
-            lbl = '<b>[REPO] %s</b>' % plugin.xpath("//*/name")[0].text or _(u"Unknown")
-            if plugin.xpath("//*/description"):
-                lbl += "\n"+plugin.xpath("//*/description")[0].text
-            ico = self.app.load_icon("stock_internet",
-                                     gtk.ICON_SIZE_LARGE_TOOLBAR,
-                                     gtk.ICON_LOOKUP_FORCE_SVG)
-            citer = model.append(iter)
-            model.set(citer,
-                      0, plugin,
-                      1, False,
-                      2, lbl,
-                      3, ico,
-                      4, True)
 
     def refresh_shortcuts(self):
         model = self.shortcuts_model

@@ -32,9 +32,9 @@ try:
 except ImportError:
     from pysqlite2 import dbapi2 as sqlite
 
-from cf import USER_DIR
+from cf import USER_CONFIG_DIR
 
-USER_DB = os.path.join(USER_DIR, "user.db")
+USER_DB = os.path.join(USER_CONFIG_DIR, "user.db")
 
 import logging
 log = logging.getLogger("USERDB")

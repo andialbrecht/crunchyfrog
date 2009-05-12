@@ -424,7 +424,7 @@ class DatasourceManager(gobject.GObject):
 
     def _get_config(self):
         conf = ConfigParser()
-        fname = os.path.join(cf.USER_DIR, 'datasources.cfg')
+        fname = os.path.join(cf.USER_CONFIG_DIR, 'datasources.cfg')
         if os.path.exists(fname):
             conf.readfp(open(fname))
         return conf
@@ -459,7 +459,7 @@ class DatasourceManager(gobject.GObject):
         conf.set(datasource.id, 'name', datasource.name or '')
         conf.set(datasource.id, 'description', datasource.description or '')
         conf.set(datasource.id, 'color', datasource.color or '')
-        fp = open(os.path.join(cf.USER_DIR, 'datasources.cfg'), 'w')
+        fp = open(os.path.join(cf.USER_CONFIG_DIR, 'datasources.cfg'), 'w')
         conf.write(fp)
         fp.close()
         if pwd is not None:
@@ -492,7 +492,7 @@ class DatasourceManager(gobject.GObject):
         conf = self._get_config()
         if conf.has_section(datasource.id):
             conf.remove_section(datasource.id)
-        fp = open(os.path.join(cf.USER_DIR, 'datasources.cfg'), 'w')
+        fp = open(os.path.join(cf.USER_CONFIG_DIR, 'datasources.cfg'), 'w')
         conf.write(fp)
         fp.close()
         if USE_KEYRING:

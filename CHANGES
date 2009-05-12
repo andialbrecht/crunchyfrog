@@ -9,6 +9,9 @@ New Features
 Bug Fixes
  * Fixed execution of statement with Oracle (issue50, thanks to
    massimiliano.bini for reporting and testings).
+ * Moved user specific files and directories to proper locations
+   according to XDG Base Directory Specification (issue56, reported by
+   schlaber).
 
 Other
  * Improved SQL formatting.

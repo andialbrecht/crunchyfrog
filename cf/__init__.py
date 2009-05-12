@@ -64,17 +64,29 @@ LOCALE_DIR = os.path.abspath(LOCALE_DIR)
 
 
 PLUGIN_DIR = os.path.join(DATA_DIR, "plugins")
-USER_CONFIG_DIR = os.path.abspath(os.path.expanduser("~/.config/crunchyfrog"))
+
+if not sys.platform.startswith('win'):
+    from xdg import BaseDirectory as base_dir
+    USER_CONFIG_DIR = base_dir.save_config_path('crunchyfrog')
+    USER_DIR = base_dir.save_data_path('crunchyfrog')
+else:
+    USER_CONFIG_DIR = os.path.abspath(
+        os.path.expanduser('~/crunchyfrog/config/'))
+    USER_DIR = os.path.abspath(
+        os.path.expanduser('~/crunchyfrog/data'))
+
 USER_CONF = os.path.join(USER_CONFIG_DIR, "config")
+
 if not os.path.isdir(USER_CONFIG_DIR):
     os.makedirs(USER_CONFIG_DIR)
-USER_DIR = os.path.abspath(os.path.expanduser("~/.crunchyfrog"))
+
 if not os.path.isdir(USER_DIR):
     os.makedirs(USER_DIR)
+
 USER_PLUGIN_DIR = os.path.join(USER_DIR, "plugins/")
 if not os.path.isdir(USER_PLUGIN_DIR):
     os.makedirs(USER_PLUGIN_DIR)
-USER_PLUGIN_REPO = os.path.join(USER_DIR, "repo.xml")
+
 IPC_SOCKET = os.path.join(USER_DIR, "crunchyfog.sock")
 
 gettext.bindtextdomain('crunchyfrog', LOCALE_DIR)

@@ -28,7 +28,7 @@ import webbrowser
 import gobject
 import gtk
 
-from cf import release, USER_DIR, MANUAL_URL, DATA_DIR
+from cf import release, USER_DIR, MANUAL_URL, DATA_DIR, USER_CONFIG_DIR
 from config import Config
 from plugins.core import PluginManager
 from cf.db import DatasourceManager
@@ -83,17 +83,40 @@ class CFApplication(gobject.GObject):
 
     def _check_version(self):
         """Run possible version updates."""
-        version_file = os.path.join(USER_DIR, 'VERSION')
+        version_file = os.path.join(USER_CONFIG_DIR, 'VERSION')
         if os.path.isfile(version_file):
             dir_version = open(version_file).read()
         else:
-            dir_version = None
+            # Upgrade to 0.4.0 regression
+            version_file = os.path.expanduser('~/.crunchyfrog/VERSION')
+            if os.path.isfile(version_file):
+                dir_version = open(version_file).read()
+            else:
+                dir_version = None
         if dir_version is not None and dir_version != release.version:
+            self._move_user_files(dir_version, release.version)
             self._datasources_db2url(dir_version, release.version)
             # Do upgrades here
             f = open(version_file, "w")
             f.write(release.version)
             f.close()
+
+    def _move_user_files(self, dir_version, release):
+        """Move user specific files and directories to new locations."""
+        # Upgrade to 0.4.0: User specific files now life in proper locations
+        #   following XDG Base Directory specification.
+        import shutil
+        import cf
+        old_user_dir = os.path.expanduser('~/.crunchyfrog')
+        logging.info('Migrating user dir %s', old_user_dir)
+        if not os.path.exists(old_user_dir):
+            return
+        for fname in ['user.db', 'VERSION']:
+            shutil.move(os.path.join(old_user_dir, fname),
+                        os.path.join(cf.USER_CONFIG_DIR, fname))
+        shutil.move(os.path.join(old_user_dir, 'plugins'),
+                    os.path.join(cf.USER_DIR, 'plugins'))
+        shutil.rmtree(old_user_dir)
 
     def _datasources_db2url(self, dir_version, release):
         """Move data source config from userdb to datasources.cfg."""
