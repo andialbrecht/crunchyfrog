@@ -1,13 +1,18 @@
 PYTHON=`which python`
+
 PKGNAME=crunchyfrog
+VERSION=0.3.90
+
 DESTDIR=/
 BUILDIR=mydeb
 PROJECT=crunchyfrog
-VERSION=0.3.90
 DEBFLAGS=
+
 PO=`find po/* -maxdepth 0 -name .svn -prune -o -type d|sed 's/po\///g'`
+
 PUSHPPA=cf-ppa
 PGPKEY=090D660E
+
 
 all:
 	@echo "make install - Install on local system"
