@@ -7,6 +7,7 @@ VERSION=0.3.90
 DEBFLAGS=
 PO=`find po/* -maxdepth 0 -name .svn -prune -o -type d|sed 's/po\///g'`
 PUSHPPA=cf-ppa
+PGPKEY=090D660E
 
 all:
 	@echo "make install - Install on local system"
@@ -26,7 +27,7 @@ builddeb: dist-clean
 	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dpkg-buildpackage $(DEBFLAGS)
 
 builddeb-src:
-	make builddeb DEBFLAGS="-S -k090D660E"
+	make builddeb DEBFLAGS="-S -k$PGPKEY"
 
 push-ppa: builddeb-src
 	cd $(BUILDIR) && dput $(PUSHPPA) $(PROJECT)_$(VERSION)*_source.changes
