@@ -25,12 +25,6 @@ import gobject
 import gtk
 import pango
 
-try:
-    import gnomevfs
-    HAVE_GNOMEVFS = True
-except ImportError:
-    HAVE_GNOMEVFS = False
-
 from cf.backends import DBConnectError
 from cf.db import Connection, Datasource
 from cf.ui import dialogs
@@ -242,11 +236,8 @@ class DataExportDialog(gtk.FileChooserDialog):
                                                    u"selected rows")))
         self.export_selection.set_sensitive(bool(self.selected))
         vbox.pack_start(self.export_selection, False, False)
-        if HAVE_GNOMEVFS:
-            self.open_file = gtk.CheckButton(_(u"_Open file when finished"))
-            vbox.pack_start(self.open_file, False, False)
-        else:
-            self.open_file = None
+        self.open_file = gtk.CheckButton(_(u"_Open file when finished"))
+        vbox.pack_start(self.open_file, False, False)
         vbox.show_all()
         if cfg.get("editor.export.recent_folder"):
             self.set_current_folder(cfg.get("editor.export.recent_folder"))
@@ -309,10 +300,7 @@ class DataExportDialog(gtk.FileChooserDialog):
             opts.update(plugin.show_options(self.description, rows))
         plugin.export(self.description, rows, opts)
         if self.open_file is not None and self.open_file.get_active():
-            mime = gnomevfs.get_mime_type(opts["uri"])
-            app_desc = gnomevfs.mime_get_default_application(mime)
-            cmd = app_desc[2].split(" ")
-            os.spawnvp(os.P_NOWAIT, cmd[0], cmd+[opts["uri"]])
+            gtk.show_uri(gtk.gdk.screen_get_default(), opts['uri'], 0)
 
 
 class ConnectionsDialog(object):
