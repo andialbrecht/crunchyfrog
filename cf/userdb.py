@@ -108,8 +108,11 @@ class UserDB(gobject.GObject):
         sql = "create table sy_table_version (id integer primary key, \
         tablename text, version text)"
         self.cursor.execute(sql)
-        from cf import datasources
-        datasources.check_userdb(self)
+        if not self.get_table_version("datasource"):
+            sql = ("create table datasource (id integer primary key, "
+                   "name text, description text, backend text, options text, "
+                   "last_accessed real, num_accessed integer)")
+            self.create_table("datasource", "0.1", sql)
 
     def get_cursor(self):
         """Returns a new DB-API compliant cursor.
