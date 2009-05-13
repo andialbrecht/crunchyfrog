@@ -700,14 +700,12 @@ class ResultsView(object):
         description = self.grid.grid.description
         selected = self.grid.grid.get_selected_rows()
         statement = self.grid.query.statement
-        gtk.gdk.threads_enter()
-        dlg = DataExportDialog(self.app, self.instance,
+        dlg = DataExportDialog(self.instance.app, self.instance,
                                data, selected, statement, description)
         if dlg.run() == gtk.RESPONSE_OK:
             dlg.hide()
             dlg.export_data()
         dlg.destroy()
-        gtk.gdk.threads_leave()
 
     def reset(self):
         # Explain
