@@ -93,6 +93,7 @@ class CFApplication(gobject.GObject):
                 dir_version = open(version_file).read()
             else:
                 dir_version = None
+            version_file = os.path.join(USER_CONFIG_DIR, 'VERSION')
         if dir_version is not None and dir_version != release.version:
             self._move_user_files(dir_version, release.version)
             self._datasources_db2url(dir_version, release.version)
