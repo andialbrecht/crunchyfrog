@@ -281,6 +281,7 @@ class Editor(gobject.GObject, PaneItem):
 
     def execute_query(self, statement_at_cursor=False):
         def exec_threaded(statement):
+            print statement
             if self.app.config.get("sqlparse.enabled", True):
                 stmts = sqlparse.split(statement)
             else:
@@ -331,13 +332,11 @@ class Editor(gobject.GObject, PaneItem):
             tpl_search = tpl.pattern.search(tpl.template)
             if tpl_search and tpl_search.groupdict().get("named"):
                 dlg = StatementVariablesDialog(tpl)
-                gtk.gdk.threads_enter()
                 if dlg.run() == gtk.RESPONSE_OK:
                     statement = dlg.get_statement()
                 else:
                     statement = None
                 dlg.destroy()
-                gtk.gdk.threads_leave()
                 if not statement:
                     return
         def foo(connection, msg):
