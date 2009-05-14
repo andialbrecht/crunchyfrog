@@ -37,7 +37,6 @@ log = logging.getLogger("PLUGINS")
 from gettext import gettext as _
 
 PLUGIN_TYPE_GENERIC = 0
-PLUGIN_TYPE_BACKEND = 1
 PLUGIN_TYPE_EXPORT = 2
 PLUGIN_TYPE_EDITOR = 3
 
@@ -121,44 +120,10 @@ class ExportPlugin(GenericPlugin):
         return dict()
 
 
-class DBBackendPlugin(GenericPlugin):
-    """Database backend base class"""
-
-    icon = "stock_database"
-    context_help_pattern = None
-    plugin_type = PLUGIN_TYPE_BACKEND
-    password_option = None # key for options which holds the password
-
-    def __init__(self, app):
-        GenericPlugin.__init__(self, app)
-        self.schema = None
-        self.features = DBFeatures()
-
-    @classmethod
-    def get_datasource_options_widgets(cls, data_widgets, initial_data=None):
-        return data_widgets, []
-    # TODO: Documentation
-
-    @classmethod
-    def get_label(cls, datasource_info):
-        s = "%s@%s on %s" % (datasource_info.options.get("user", None) or "??",
-                             datasource_info.options.get("database", None) or "??",
-                             datasource_info.options.get("host", None) or "??")
-        if datasource_info.name:
-            s = '%s (%s)' % (datasource_info.name, s)
-        return s
-
-    def test_connection(self, data):
-        raise NotImplementedError
-
-    def password_prompt(self):
-        return dialogs.password(_(u"Password required"), _(u"Enter the password to connect to this database."))
-
 # Key: plugin type
 # Value: 2-tuple (label, expected class)
 PLUGIN_TYPES_MAP = {
     PLUGIN_TYPE_GENERIC : (_(u"Miscellaneous"), GenericPlugin),
-    PLUGIN_TYPE_BACKEND : (_(u"Database backends"), DBBackendPlugin),
     PLUGIN_TYPE_EXPORT : (_(u"Export filter"), ExportPlugin),
     PLUGIN_TYPE_EDITOR : (_(u"Editor"), GenericPlugin),
 }
@@ -247,10 +212,6 @@ class PluginManager(gobject.GObject):
     def _first_run(self):
         if not self.app.options.first_run:
             return
-        log.info("Activating default backends...")
-        from cf.plugins.core import PLUGIN_TYPE_BACKEND
-        for plugin in self.get_plugins(PLUGIN_TYPE_BACKEND):
-            self.set_active(plugin, True)
 
     def get_plugins(self, plugin_type, active_only=False):
         """Returns a list of plugins.
@@ -322,7 +283,7 @@ class PluginManager(gobject.GObject):
         for name in dir(module):
             obj = getattr(module, name)
             if isclass(obj) and issubclass(obj, GenericPlugin) \
-            and obj not in [GenericPlugin, ExportPlugin, DBBackendPlugin]:
+            and obj not in [GenericPlugin, ExportPlugin]:
                 plugins.append(obj)
         return plugins
 
