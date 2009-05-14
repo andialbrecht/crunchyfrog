@@ -95,7 +95,9 @@ def editor_autocomplete(editor, popup=None, matches=None):
     y2, height = editor.textview.get_line_yrange(end)
     left_window = editor.textview.get_window(gtk.TEXT_WINDOW_LEFT)
     if popup is None:
-        popup = create_popup_window(editor)
+        popup = editor.textview.get_data('cf::ac_window')
+        if popup is None:
+            popup = create_popup_window(editor)
     model = popup.get_data('model')
     treeview = popup.get_data('treeview')
     popup.move(x+iter_rect.x+left_window.get_size()[0], y+iter_rect.y+height)
