@@ -99,6 +99,7 @@ from cf.db import backends
 from cf.db.meta import DatabaseMeta
 from cf.db.url import make_url
 from cf.ui import dialogs
+from cf.utils import Emit
 
 
 def availability():
@@ -556,3 +557,75 @@ class DatasourceManager(gobject.GObject):
             entry = None
         if entry is not None:
             datasource.url.password = entry.secret
+
+
+class Query(gobject.GObject):
+    """Object representing a database query."""
+
+    __gsignals__ = {
+        "started" : (gobject.SIGNAL_RUN_LAST,
+                     gobject.TYPE_NONE,
+                     tuple()),
+        "finished" : (gobject.SIGNAL_RUN_LAST,
+                      gobject.TYPE_NONE,
+                      tuple())
+    }
+
+    def __init__(self, statement, connection):
+        """Constructor.
+
+        :param statement: Raw SQL statement.
+        :param connection: A database connection.
+        """
+        self.__gobject_init__()
+        self.statement = statement
+        self.connection = connection
+        self.description = None
+        self.rowcount = -1
+        self.rows = None
+        self.messages = []
+        self.failed = False
+        self.executed = False
+        self.execution_time = None
+        self.coding_hint = "utf-8"
+        self.errors = list()
+
+    def execute(self, threaded=False):
+        """Execute the statement.
+
+        :param threaded: If ``True`` the statement is executed in threaded
+          mode, otherwise in blocking mode (default: ``False``).
+        """
+        if threaded:
+            Emit(self, "started")
+        else:
+            self.emit("started")
+        start = time.time()
+        stmt = self.connection.prepare_statement(self.statement)
+        # Let's go down to plain DB-API stuff to speed things up a bit
+        # and to avoid statement modifications done by sqlalchemy.
+        # We're not afraid of SQL injections here and don't need to
+        # replace parameters... ;-)
+        dbapi_conn = self.connection.get_dbapi_connection()
+        dbapi_cur = dbapi_conn.cursor()
+        try:
+            dbapi_cur.execute(stmt)
+        except:
+            self.failed = True
+            self.errors.append(str(sys.exc_info()[1]))
+        self.executed = True
+        self.execution_time = time.time() - start
+        if not self.failed:
+            if hasattr(dbapi_cur, 'statusmessage'):
+                self.messages = [dbapi_cur.statusmessage]
+            else:
+                self.messages = []
+            self.description = dbapi_cur.description
+            self.rowcount = dbapi_cur.rowcount
+            if self.description:
+                self.rows = dbapi_cur.fetchall()
+        self.connection.update_transaction_state()
+        if threaded:
+            Emit(self, "finished")
+        else:
+            self.emit("finished")

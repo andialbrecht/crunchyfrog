@@ -32,7 +32,7 @@ import gtk
 import gtksourceview2
 import pango
 
-from cf.backends import Query
+from cf.db import Query
 from cf.ui import dialogs
 from cf.ui.confirmsave import ConfirmSaveDialog
 from cf.ui.pane import PaneItem
@@ -281,7 +281,6 @@ class Editor(gobject.GObject, PaneItem):
 
     def execute_query(self, statement_at_cursor=False):
         def exec_threaded(statement):
-            print statement
             if self.app.config.get("sqlparse.enabled", True):
                 stmts = sqlparse.split(statement)
             else:
