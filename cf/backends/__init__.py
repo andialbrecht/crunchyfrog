@@ -27,25 +27,6 @@ import gtk
 from cf.utils import Emit
 
 
-TRANSACTION_IDLE = 1 << 1
-TRANSACTION_COMMIT_ENABLED = 1 << 2
-TRANSACTION_ROLLBACK_ENABLED = 1 << 3
-
-
-class DBError(StandardError):
-    """Base class for database errors"""
-
-    def __init__(self, msg):
-        self._msg = msg
-
-    def __str__(self):
-        return self._msg
-
-
-class DBConnectError(DBError):
-    """Errors on opening a connection"""
-
-
 class DBFeatures(object):
     """Defines available database features."""
     transactions = False

@@ -33,8 +33,8 @@ except ImportError:
 
 from cf import USER_CONFIG_DIR
 from cf import release
-from cf.backends import TRANSACTION_IDLE, TRANSACTION_COMMIT_ENABLED
-from cf.backends import TRANSACTION_ROLLBACK_ENABLED
+from cf.db import TRANSACTION_IDLE, TRANSACTION_COMMIT_ENABLED
+from cf.db import TRANSACTION_ROLLBACK_ENABLED
 from cf.ui import pane
 from cf.ui import utils
 from cf.ui import widgets

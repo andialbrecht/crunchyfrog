@@ -28,7 +28,7 @@ except ImportError:
     HAVE_SEXY = False
 
 from cf.db import Datasource
-from cf.backends import DBConnectError, schema
+from cf.backends import schema
 from cf.ui.editor import SQLView
 from cf.ui import pane, dialogs
 
@@ -155,11 +155,10 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
     def _create_dsinfo_menu(self, model, iter, popup):
 
         def connect(item, datasource_info):
-            try:
-                datasource_info.dbconnect()
-                self.on_object_tree_selection_changed(self.object_tree.get_selection())
-            except DBConnectError, err:
-                dialogs.error(_(u"Connection failed"), str(err))
+            conn = datasource_info.dbconnect()
+            if conn:
+                self.on_object_tree_selection_changed(
+                    self.object_tree.get_selection())
 
         def disconnect(item, datasource_info):
             datasource_info.dbdisconnect()

@@ -25,9 +25,7 @@ import gobject
 import gtk
 import pango
 
-from cf.backends import DBConnectError
 from cf.db import Connection, Datasource
-from cf.ui import dialogs
 
 
 class ConnectionButton(gtk.MenuToolButton):
@@ -109,11 +107,9 @@ def rebuild_connection_menu(menu, win, editor=None):
         return
 
     def create_and_assign(menuitem, datasource, editor):
-        try:
-            conn = datasource.dbconnect()
+        conn = datasource.dbconnect()
+        if conn is not None:
             editor.set_connection(conn)
-        except DBConnectError, err:
-            dialogs.error(_(u'Connection failed'), str(err))
 
     add_sep = False
     for conn in win.app.datasources.get_connections():
