@@ -4,6 +4,7 @@ import re
 
 from sqlparse.engine import grouping
 from sqlparse import tokens as T
+from sqlparse import sql
 
 
 class Filter(object):
@@ -161,7 +162,8 @@ class ReindentFilter(Filter):
 
     def _split_kwds(self, tlist):
         split_words = ('FROM', 'JOIN$', 'AND', 'OR',
-                       'GROUP', 'ORDER', 'UNION', 'VALUES')
+                       'GROUP', 'ORDER', 'UNION', 'VALUES',
+                       'SET')
         idx = 0
         token = tlist.token_next_match(idx, T.Keyword, split_words,
                                        regex=True)
@@ -171,8 +173,10 @@ class ReindentFilter(Filter):
             if prev and prev.is_whitespace():
                 tlist.tokens.pop(tlist.token_index(prev))
                 offset += 1
-            if prev and (str(prev).endswith('\n')
-                         or str(prev).endswith('\r')):
+            if (prev
+                and isinstance(prev, sql.Comment)
+                and (str(prev).endswith('\n')
+                     or str(prev).endswith('\r'))):
                 nl = tlist.token_next(token)
             else:
                 nl = self.nl()
@@ -360,7 +364,7 @@ class OutputPythonFilter(Filter):
                 if cnt == 1:
                     continue
                 after_lb = token.value.split('\n', 1)[1]
-                yield grouping.Token(T.Text, "'")
+                yield grouping.Token(T.Text, " '")
                 yield grouping.Token(T.Whitespace, '\n')
                 for i in range(len(varname)+4):
                     yield grouping.Token(T.Whitespace, ' ')
@@ -403,11 +407,11 @@ class OutputPHPFilter(Filter):
         cnt = 0
         for token in stream:
             if token.is_whitespace() and '\n' in token.value:
-                cnt += 1
-                if cnt == 1:
-                    continue
+#                cnt += 1
+#                if cnt == 1:
+#                    continue
                 after_lb = token.value.split('\n', 1)[1]
-                yield grouping.Token(T.Text, '"')
+                yield grouping.Token(T.Text, ' "')
                 yield grouping.Token(T.Operator, ';')
                 yield grouping.Token(T.Whitespace, '\n')
                 yield grouping.Token(T.Name, varname)

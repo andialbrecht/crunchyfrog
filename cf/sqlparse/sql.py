@@ -16,7 +16,7 @@ class Token(object):
     the type of the token.
     """
 
-    __slots__ = ('value', 'ttype')
+    __slots__ = ('value', 'ttype',)
 
     def __init__(self, ttype, value):
         self.value = value
@@ -48,6 +48,10 @@ class Token(object):
             short = raw
         return re.sub('\s+', ' ', short)
 
+    def flatten(self):
+        """Resolve subgroups."""
+        yield self
+
     def match(self, ttype, values, regex=False):
         """Checks whether the token matches the given arguments.
 
@@ -60,24 +64,24 @@ class Token(object):
         If *regex* is ``True`` (default is ``False``) the given values are
         treated as regular expressions.
         """
-        if self.ttype is not ttype:
-            return False
-        if values is None:
-            return self.ttype is ttype
+        type_matched = self.ttype in ttype
+        if not type_matched or values is None:
+            return type_matched
         if isinstance(values, basestring):
-            values = [values]
+            values = set([values])
         if regex:
             if self.ttype is T.Keyword:
-                values = [re.compile(v, re.IGNORECASE) for v in values]
+                values = set([re.compile(v, re.IGNORECASE) for v in values])
             else:
-                values = [re.compile(v) for v in values]
+                values = set([re.compile(v) for v in values])
             for pattern in values:
                 if pattern.search(self.value):
                     return True
             return False
         else:
             if self.ttype is T.Keyword:
-                return self.value.upper() in [v.upper() for v in values]
+                values = set([v.upper() for v in values])
+                return self.value.upper() in values
             else:
                 return self.value in values
 
@@ -114,19 +118,19 @@ class TokenList(Token):
     def _get_repr_name(self):
         return self.__class__.__name__
 
-    def _pprint_tree(self, max_depth=None, depth=0):
-        """Pretty-print the object tree."""
-        indent = ' '*(depth*2)
-        for token in self.tokens:
-            if token.is_group():
-                pre = ' | '
-            else:
-                pre = ' | '
-            print '%s%s%s \'%s\'' % (indent, pre, token._get_repr_name(),
-                                     token._get_repr_value())
-            if (token.is_group() and max_depth is not None
-                and depth < max_depth):
-                token._pprint_tree(max_depth, depth+1)
+    ## def _pprint_tree(self, max_depth=None, depth=0):
+    ##     """Pretty-print the object tree."""
+    ##     indent = ' '*(depth*2)
+    ##     for token in self.tokens:
+    ##         if token.is_group():
+    ##             pre = ' | '
+    ##         else:
+    ##             pre = ' | '
+    ##         print '%s%s%s \'%s\'' % (indent, pre, token._get_repr_name(),
+    ##                                  token._get_repr_value())
+    ##         if (token.is_group() and max_depth is not None
+    ##             and depth < max_depth):
+    ##             token._pprint_tree(max_depth, depth+1)
 
     def flatten(self):
         """Generator yielding ungrouped tokens.
@@ -166,9 +170,9 @@ class TokenList(Token):
 
         If no matching token can be found ``None`` is returned.
         """
-        if type(clss) not in (types.ListType, types.TupleType):
+        if isinstance(clss, (list, tuple)):
             clss = (clss,)
-        if type(clss) is not types.TupleType:
+        if isinstance(clss, tuple):
             clss = tuple(clss)
         for token in self.tokens[idx:]:
             if isinstance(token, clss):
@@ -177,7 +181,7 @@ class TokenList(Token):
 
     def token_next_by_type(self, idx, ttypes):
         """Returns next matching token by it's token type."""
-        if not isinstance(ttypes, (types.TupleType, types.ListType)):
+        if not isinstance(ttypes, (list, tuple)):
             ttypes = [ttypes]
         for token in self.tokens[idx:]:
             if token.ttype in ttypes:
@@ -208,7 +212,6 @@ class TokenList(Token):
         for token in self.tokens[idx:]:
             for i, func in enumerate(funcs):
                 if func(token):
-                    print 'MATCHED', i, token
                     return token
         return None
 
@@ -386,7 +389,8 @@ class IdentifierList(TokenList):
 
         Whitespaces and punctuations are not included in this list.
         """
-        return [x for x in self.tokens if isinstance(x, Identifier)]
+        return [x for x in self.tokens
+                if not x.is_whitespace() and not x.match(T.Punctuation, ',')]
 
 
 class Parenthesis(TokenList):

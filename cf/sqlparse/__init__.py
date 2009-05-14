@@ -6,15 +6,10 @@
 """Parse SQL statements."""
 
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 
-import logging
 import os
-
-
-if 'SQLPARSE_DEBUG' in os.environ:
-    logging.basicConfig(level=logging.DEBUG)
 
 
 class SQLParseError(Exception):
