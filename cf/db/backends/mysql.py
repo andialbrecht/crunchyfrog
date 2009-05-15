@@ -18,6 +18,7 @@
 
 """MySQL backend"""
 
+from cf.db import objects
 from cf.db.backends import Generic, DEFAULT_OPTIONS
 
 
@@ -73,5 +74,61 @@ class MySQL(Generic):
     def get_server_info(self, connection):
         return 'MySQL %s' % connection.connection.get_server_info()
 
+    def initialize(self, meta, connection):
+        schemata = objects.Schemata(meta)
+        users = objects.Users(meta)
+        meta.set_object(schemata)
+        meta.set_object(users)
+        for item in self._query(connection, INITIAL_SQL):
+            if item['type'] == 'schema':
+                schema = objects.Schema(meta, parent=schemata,
+                                        oid=item['id'], name=item['name'],
+                                        comment=item['description'])
+                meta.set_object(schema)
+                slookup[item['id']] = (schema.tables, schema.views)
+#            if item['type'] in ('table', 'view'):
+#                if item['type'] == 'table':
+#                    cls = objects.Table
+#                else:
+#                    cls = obejcts.View
+
+    def _query(self, connection, sql):
+        return connection.execute_raw(sql)
+
+    def refresh(self, obj, meta, connection):
+        if obj.typeid == 'users':
+            self._refresh_users(obj, meta, connection)
+
+    def _refresh_users(self, coll, meta, connection):
+        sql = "select concat(user, '@', host) as name from mysql.user"
+        for item in self._query(connection, sql):
+            user = meta.find_exact(parent=coll, name=item['name'])
+            if user is None:
+                user = objects.User(meta, parent=coll, name=item['name'])
+                user.props.has_children = False
+                meta.set_object(user)
+
 
 DRIVER = MySQL
+
+INITIAL_SQL = """select * from (
+select lower(schema_name) as id, schema_name as name,
+null as description, 'schema' as type, null as parent, 0 as pos
+from information_schema.schemata
+union
+select lower(concat(table_schema, '.', table_name)) as id,
+table_name as name, table_comment as description, 'table' as type,
+lower(table_schema) as parent, 1 as pos
+from information_schema.tables
+union
+select lower(concat(table_schema, '.', table_name)) as id,
+table_name as name, null as description, 'view' as type,
+lower(table_schema) as parent, 2 as pos
+from information_schema.views
+union
+select lower(concat(table_schema, '.', table_name, '.', column_name)) as id,
+column_name as name, column_comment as description, 'column' as type,
+lower(concat(table_schema, '.', table_name)) as parent, 3 as pos
+from information_schema.columns
+) x order by pos asc
+"""
