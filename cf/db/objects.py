@@ -826,6 +826,22 @@ class Languages(Collection):
         self.typestr = _(u"Languages")
 
 
+class Index(DBObject):
+
+    icon = 'stock_navigator-indexes'
+    typeid = 'index'
+    typestr = _(u'Index')
+
+
+class Indexes(Collection):
+
+    typeid = 'indexes'
+    typestr = _(u'Indexes')
+
+    def __init__(self, meta, **kwds):
+        Collection.__init__(self, meta, Index, **kwds)
+
+
 gobject.type_register(Columns)
 gobject.type_register(Column)
 gobject.type_register(Constraints)
@@ -846,3 +862,5 @@ gobject.type_register(Views)
 gobject.type_register(View)
 gobject.type_register(Languages)
 gobject.type_register(Language)
+gobject.type_register(Index)
+gobject.type_register(Indexes)

@@ -145,6 +145,8 @@ class Postgres(Generic):
                           oid=item['reloid'], name=item['relname'],
                           comment=item['description'],
                           parent=coll)
+                idxs = objects.Indexes(meta, parent=obj)
+                meta.set_object(idxs)
                 meta.set_object(obj)
             elif item['objtype'] == 'user':
                 user = objects.User(meta, name=item['relname'],
