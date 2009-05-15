@@ -26,9 +26,6 @@ from cf.filter.exportfilter import OOCalcExportFilter
 try: from cf.backends.mysql import MySQLBackend
 except ImportError, err:
     logging.warning('Could not import MySQLBackend: %s', err)
-try: from cf.backends.postgres import PostgresBackend
-except ImportError, err:
-    logging.warning('Could not import PostgresBackend: %s', err)
 try: from cf.backends.oracle import OracleBackend
 except ImportError, err:
     logging.warning('Could not import OracleBackend; %s', err)

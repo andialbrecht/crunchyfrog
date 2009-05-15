@@ -342,8 +342,9 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
                               2, child.get_icon_pixbuf(),
                               5, child.comment,
                               7, False)
-                    cciter = model.append(citer)
-                    model.set(cciter, 0, DummyNode(), 7, False)
+                    if child.has_children():
+                        cciter = model.append(citer)
+                        model.set(cciter, 0, DummyNode(), 7, False)
                 treeview.expand_row(model.get_path(iter), False)
                 return
 

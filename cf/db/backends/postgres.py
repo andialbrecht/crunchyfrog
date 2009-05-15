@@ -103,8 +103,10 @@ class Postgres(Generic):
     def initialize(self, meta, connection):
         schemata = objects.Schemata(meta)
         users = objects.Users(meta)
+        languages = objects.Languages(meta)
         meta.set_object(schemata)
         meta.set_object(users)
+        meta.set_object(languages)
         search_path = self._get_search_path(connection)
         for item in self._query(connection, PG_INITIAL_SQL):
             if item['nspoid'] is not None:
@@ -147,6 +149,8 @@ class Postgres(Generic):
     def refresh(self, obj, meta, connection):
         if obj.typeid == 'columns':
             self._refresh_columns(obj, meta, connection)
+        elif obj.typeid == 'languages':
+            self._refresh_languages(obj, meta, connection)
 
     def _refresh_columns(self, coll, meta, connection):
         table = coll.parent
@@ -168,6 +172,16 @@ class Postgres(Generic):
             col.pos = item['attnum']
             col.comment = item['description']
             meta.set_object(col)
+
+    def _refresh_languages(self, coll, meta, connection):
+        sql = "select lan.oid, lan.lanname from pg_language lan"
+        for item in self._query(connection, sql):
+            lan = meta.find_exact(parent=coll, oid=item['oid'])
+            if lan is None:
+                lan = objects.Language(meta, parent=coll,
+                                       oid=item['oid'])
+                meta.set_object(lan)
+            lan.name = item['lanname']
 
     def get_transaction_state(self, connection):
         # The postgres backend retrieves this information from the

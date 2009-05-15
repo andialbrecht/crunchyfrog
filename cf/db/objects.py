@@ -129,6 +129,11 @@ class DBObject(GObjectBase):
             'Refresh required', 'Refresh required',
             True,
             gobject.PARAM_READWRITE),
+        'has_children': (
+            gobject.TYPE_BOOLEAN,
+            'Has children', 'Has children',
+            True,
+            gobject.PARAM_READWRITE),
         }
 
     typeid = ''
@@ -165,6 +170,9 @@ class DBObject(GObjectBase):
         else:
             cmp_value = self.get_data(name)
         return cmp_func(value, cmp_value)
+
+    def has_children(self):
+        return self.props.has_children
 
     def get_children(self):
         return self.meta.get_children(self)
@@ -799,6 +807,26 @@ class View(DBObject):
         self.columns = Columns(self.meta, parent=self)
         self.meta.set_object(self.columns)
 
+
+class Language(DBObject):
+
+    icon = 'stock_script'
+
+    def __init__(self, meta, **kwds):
+        DBObject.__init__(self, meta, **kwds)
+        self.typeid = 'language'
+        self.typestr = _(u'Language')
+        self.props.has_children = False
+
+
+class Languages(Collection):
+
+    def __init__(self, meta):
+        Collection.__init__(self, meta, Language)
+        self.typeid = "languages"
+        self.typestr = _(u"Languages")
+
+
 gobject.type_register(Columns)
 gobject.type_register(Column)
 gobject.type_register(Constraints)
@@ -817,3 +845,5 @@ gobject.type_register(Users)
 gobject.type_register(User)
 gobject.type_register(Views)
 gobject.type_register(View)
+gobject.type_register(Languages)
+gobject.type_register(Language)
