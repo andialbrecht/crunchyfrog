@@ -832,6 +832,10 @@ class Index(DBObject):
     typeid = 'index'
     typestr = _(u'Index')
 
+    def __init__(self, meta, **kwds):
+        DBObject.__init__(self, meta, **kwds)
+        self.props.has_children = False
+
 
 class Indexes(Collection):
 

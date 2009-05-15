@@ -160,6 +160,8 @@ class Postgres(Generic):
             self._refresh_languages(obj, meta, connection)
         elif obj.typeid == 'functions':
             self._refresh_functions(obj, meta, connection)
+        elif obj.typeid == 'indexes':
+            self._refresh_indexes(obj, meta, connection)
 
     def _refresh_columns(self, coll, meta, connection):
         table = coll.parent
@@ -181,6 +183,20 @@ class Postgres(Generic):
             col.pos = item['attnum']
             col.comment = item['description']
             meta.set_object(col)
+
+    def _refresh_indexes(self, coll, meta, connection):
+        sql = ("select rel.oid, rel.relname, dsc.description"
+               " from pg_index ind, pg_class rel"
+               " left join pg_description dsc on dsc.objoid = rel.oid"
+               " where ind.indexrelid = rel.oid"
+               " and ind.indrelid = %d" % coll.parent.oid)
+        for item in self._query(connection, sql):
+            idx = meta.find_exact(parent=coll, oid=item['oid'])
+            if idx is None:
+                idx = objects.Index(meta, parent=coll, oid=item['oid'])
+                meta.set_object(idx)
+            idx.name = item['relname']
+            idx.comment = item['description']
 
     def _refresh_languages(self, coll, meta, connection):
         sql = ("select lan.oid, lan.lanname, dsc.description"

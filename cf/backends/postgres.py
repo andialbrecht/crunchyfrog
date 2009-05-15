@@ -27,17 +27,6 @@ class PgSchema(SchemaProvider):
             for item in self.q(connection, sql):
                 ret.append(Constraint(item[1], oid=item[0]))
             return ret
-
-        elif isinstance(parent, IndexCollection):
-            ret = []
-            table = parent.get_data("table")
-            sql = "select rel.oid, rel.relname, dsc.description \
-            from pg_class rel \
-            left join pg_description dsc on dsc.objoid = rel.oid \
-            , pg_index ind \
-            where ind.indrelid = %(relid)s and ind.indexrelid = rel.oid" % {"relid" : table.get_data("oid")}
-            for item in self.q(connection, sql):
-                ret.append(Index(item[1], item[2], oid=item[0]))
             return ret
 
 
