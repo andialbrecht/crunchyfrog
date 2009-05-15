@@ -11,12 +11,6 @@ class PgSchema(SchemaProvider):
 
     def fetch_children(self, connection, parent):
 
-        elif isinstance(parent, Schema):
-            return [TableCollection(schema=parent),
-                    ViewCollection(schema=parent),
-                    SequenceCollection(schema=parent),
-                    FunctionCollection(schema=parent)]
-
 
         elif isinstance(parent, Table):
             return [ColumnCollection(table=parent),
@@ -35,16 +29,6 @@ class PgSchema(SchemaProvider):
             and att.attnum >= 1" % {"tableoid" : table.get_data("oid")}
             for item in self.q(connection, sql):
                 ret.append(Column(item[1], item[2], attnum=item[0]))
-            return ret
-
-        elif isinstance(parent, FunctionCollection):
-            ret = []
-            schema = parent.get_data("schema")
-            sql = "select pro.oid, pro.proname, dsc.description from pg_proc pro \
-            left join pg_description dsc on dsc.objoid = pro.oid \
-            where pro.pronamespace = %(schemaoid)s" % {"schemaoid" : schema.get_data("oid")}
-            for item in self.q(connection, sql):
-                ret.append(Function(item[1], item[2], oid=item[0]))
             return ret
 
         elif isinstance(parent, ConstraintCollection):

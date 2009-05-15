@@ -441,20 +441,19 @@ class Argument(DBObject):
                                         "Parent object", "Parent object",
                                         gobject.PARAM_READWRITE)}
 
-    def __init__(self, provider, *args, **kwargs):
-        DBObject.__init__(self, provider, *args, **kwargs)
+    def __init__(self, meta, **kwds):
+        DBObject.__init__(self, meta, **kwds)
         self.typeid = "argument"
         self.typestr = _(u"Arguments")
 
 
 class Arguments(Collection):
 
-    def __init__(self, provider, parent):
-        #self.backend = provider.engine
+    def __init__(self, meta, **kwds):
+        Collection.__init__(self, meta, Argument, **kwds)
         self.typeid = "arguments"
         self.typestr = _(u"Arguments")
-        self.parent = parent
-        Collection.__init__(self, provider, self.backend, Argument)
+
 
 class Cache(Collection):
 
@@ -561,20 +560,20 @@ class Function(DBObject):
 
     icon = 'gdbo-function'
 
-    def __init__(self, provider, *args, **kwargs):
-        DBObject.__init__(self, provider, *args, **kwargs)
+    def __init__(self, meta, **kwds):
+        DBObject.__init__(self, meta, **kwds)
         self.typeid = "function"
         self.typestr = _(u"Function")
-        self.arguments = Arguments(self.provider, self)
+        self.arguments = Arguments(self.meta, parent=self)
+        self.props.has_children = False
 
 
 class Functions(Collection):
 
-    def __init__(self, provider):
-        self.backend = None
+    def __init__(self, meta, **kwds):
+        Collection.__init__(self, meta, Function, **kwds)
         self.typeid = "functions"
         self.typestr = _(u"Functions")
-        Collection.__init__(self, provider, self.backend, Function)
 
 
 class Table(DBObject):

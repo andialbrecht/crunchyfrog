@@ -122,6 +122,8 @@ class Postgres(Generic):
                                             parent=schemata,
                                             is_default=is_default)
                     meta.set_object(schema)
+                    funcs = objects.Functions(meta, parent=schema)
+                    meta.set_object(funcs)
             else:
                 schema = None
             if item['objtype'] in ('table', 'view', 'sequence'):
@@ -154,6 +156,8 @@ class Postgres(Generic):
             self._refresh_columns(obj, meta, connection)
         elif obj.typeid == 'languages':
             self._refresh_languages(obj, meta, connection)
+        elif obj.typeid == 'functions':
+            self._refresh_functions(obj, meta, connection)
 
     def _refresh_columns(self, coll, meta, connection):
         table = coll.parent
@@ -185,6 +189,20 @@ class Postgres(Generic):
                                        oid=item['oid'])
                 meta.set_object(lan)
             lan.name = item['lanname']
+
+    def _refresh_functions(self, coll, meta, connection):
+        sql = ("select pro.oid, pro.proname, dsc.description"
+               " from pg_proc pro"
+               " left join pg_description dsc"
+               "  on dsc.objoid = pro.oid"
+               " where pro.pronamespace = %d" % coll.parent.oid)
+        for item in self._query(connection, sql):
+            pro = meta.find_exact(parent=coll, oid=item["oid"])
+            if pro is None:
+                pro = objects.Function(meta, parent=coll, oid=item["oid"])
+                meta.set_object(pro)
+            pro.name = item["proname"]
+            pro.comment = item["description"]
 
     def get_transaction_state(self, connection):
         # The postgres backend retrieves this information from the
