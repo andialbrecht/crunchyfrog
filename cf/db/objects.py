@@ -684,21 +684,21 @@ class Sequence(DBObject):
                                   "",
                                   gobject.PARAM_READWRITE),}
 
-    icon = 'gtk-sort-ascending'
+    icon = 'gtk-sort-descending'
 
-    def __init__(self, provider, *args, **kwargs):
-        DBObject.__init__(self, provider, *args, **kwargs)
+    def __init__(self, meta, **kwds):
+        DBObject.__init__(self, meta, **kwds)
         self.typeid = "sequence"
         self.typestr = _(u"Sequence")
+        self.props.has_children = False
 
 
 class Sequences(Collection):
 
-    def __init__(self, provider):
-        self.backend = None
+    def __init__(self, meta, **kwds):
+        Collection.__init__(self, meta, Sequence, **kwds)
         self.typeid = "sequences"
         self.typestr = _(u"Sequences")
-        Collection.__init__(self, provider, self.backend, Sequence)
 
 class User(DBObject):
 

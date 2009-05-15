@@ -124,15 +124,18 @@ class Postgres(Generic):
                     meta.set_object(schema)
             else:
                 schema = None
-            if item['objtype'] in ('table', 'view'):
+            if item['objtype'] in ('table', 'view', 'sequence'):
                 if item['objtype'] == 'table':
                     cls = objects.Table
                     coll_cls = objects.Tables
+                elif item['objtype'] == 'sequence':
+                    cls = objects.Sequence
+                    coll_cls = objects.Sequences
                 else:
                     cls = objects.View
                     coll_cls = objects.Views
                 coll = meta.find_exact(cls=coll_cls,
-                                            parent=schema)
+                                       parent=schema)
                 if coll is None:
                     coll = coll_cls(meta, parent=schema)
                     meta.set_object(coll)

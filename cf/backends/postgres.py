@@ -17,32 +17,6 @@ class PgSchema(SchemaProvider):
                     SequenceCollection(schema=parent),
                     FunctionCollection(schema=parent)]
 
-        elif isinstance(parent, TableCollection) \
-        or isinstance(parent, ViewCollection) \
-        or isinstance(parent, SequenceCollection):
-            if isinstance(parent, TableCollection):
-                obj = Table
-                relkind = 'r'
-                has_details = False
-            elif isinstance(parent, ViewCollection):
-                obj = View
-                relkind = 'v'
-                has_details = True
-            elif isinstance(parent, SequenceCollection):
-                obj = Sequence
-                relkind = 'S'
-                has_details = False
-            schema = parent.get_data("schema")
-            sql = "select rel.oid, rel.relname, dsc.description from pg_class rel \
-            left join pg_description dsc on dsc.objoid = rel.oid and dsc.objsubid = 0 \
-            where rel.relnamespace = %(nspoid)s \
-            and rel.relkind = '%(relkind)s'" % {"nspoid" : schema.get_data("oid"),
-                                                "relkind" : relkind}
-            ret = []
-            for item in self.q(connection, sql):
-                ret.append(obj(item[1], item[2], oid=item[0],
-                               has_details=has_details))
-            return ret
 
         elif isinstance(parent, Table):
             return [ColumnCollection(table=parent),
