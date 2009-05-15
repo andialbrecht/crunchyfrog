@@ -162,6 +162,9 @@ class Postgres(Generic):
             self._refresh_functions(obj, meta, connection)
         elif obj.typeid == 'indexes':
             self._refresh_indexes(obj, meta, connection)
+        elif obj.typeid == 'constraints':
+            self._refresh_constraints(obj, meta, connection)
+        # View definitions: select pg_get_viewdef(%(oid)s, true)
 
     def _refresh_columns(self, coll, meta, connection):
         table = coll.parent
@@ -183,6 +186,19 @@ class Postgres(Generic):
             col.pos = item['attnum']
             col.comment = item['description']
             meta.set_object(col)
+
+    def _refresh_constraints(self, coll, meta, connection):
+        sql = ("select con.oid, con.conname, dsc.description"
+               " from pg_constraint con"
+               " left join pg_description dsc on dsc.objoid = con.oid"
+               " where con.conrelid = %d" % coll.parent.oid)
+        for item in self._query(connection, sql):
+            con = meta.find_exact(parent=coll, oid=item['oid'])
+            if con is None:
+                con = objects.Constraint(meta, parent=coll, oid=item['oid'])
+                meta.set_object(con)
+            con.name = item['conname']
+            con.comment = item['description']
 
     def _refresh_indexes(self, coll, meta, connection):
         sql = ("select rel.oid, rel.relname, dsc.description"

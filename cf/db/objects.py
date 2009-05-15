@@ -551,6 +551,7 @@ class Constraint(DBObject):
         self.columns = Columns(self.meta, parent=self)
         self.meta.set_object(self.columns)
         self.fkcolumns = Columns(self.meta, parent=self)
+        self.props.has_children = False
 
 class Function(DBObject):
 
