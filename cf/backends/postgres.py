@@ -17,19 +17,6 @@ class PgSchema(SchemaProvider):
                     ConstraintCollection(table=parent),
                     IndexCollection(table=parent)]
 
-        elif isinstance(parent, View):
-            return [ColumnCollection(table=parent)]
-
-        elif isinstance(parent, ColumnCollection):
-            table = parent.get_data("table")
-            ret = []
-            sql = "select att.attnum, att.attname, dsc.description from pg_attribute att \
-            left join pg_description dsc on dsc.objoid = %(tableoid)s and dsc.objsubid = att.attnum \
-            where att.attrelid = %(tableoid)s \
-            and att.attnum >= 1" % {"tableoid" : table.get_data("oid")}
-            for item in self.q(connection, sql):
-                ret.append(Column(item[1], item[2], attnum=item[0]))
-            return ret
 
         elif isinstance(parent, ConstraintCollection):
             ret = []
@@ -53,11 +40,6 @@ class PgSchema(SchemaProvider):
                 ret.append(Index(item[1], item[2], oid=item[0]))
             return ret
 
-        elif isinstance(parent, PgLanguageCollection):
-            sql = "select lan.oid, lan.lanname, dsc.description \
-            from pg_language lan \
-            left join pg_description dsc on dsc.objoid = lan.oid"
-            return [PgLanguage(item[1], item[2], oid=item[0]) for item in self.q(connection, sql)]
 
     def get_details(self, connection, obj):
         func = getattr(self, "details_%s" % obj.__class__.__name__.lower(), None)

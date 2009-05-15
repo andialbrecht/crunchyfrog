@@ -181,7 +181,10 @@ class Postgres(Generic):
             meta.set_object(col)
 
     def _refresh_languages(self, coll, meta, connection):
-        sql = "select lan.oid, lan.lanname from pg_language lan"
+        sql = ("select lan.oid, lan.lanname, dsc.description"
+               " from pg_language lan"
+               " left join pg_description dsc"
+               "  on dsc.objoid = lan.oid")
         for item in self._query(connection, sql):
             lan = meta.find_exact(parent=coll, oid=item['oid'])
             if lan is None:
@@ -189,6 +192,7 @@ class Postgres(Generic):
                                        oid=item['oid'])
                 meta.set_object(lan)
             lan.name = item['lanname']
+            lan.comment = item['description']
 
     def _refresh_functions(self, coll, meta, connection):
         sql = ("select pro.oid, pro.proname, dsc.description"
