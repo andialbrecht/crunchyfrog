@@ -277,7 +277,6 @@ class Connection(gobject.GObject):
 
     def __init__(self, datasource, real_conn):
         self._transaction_state = TRANSACTION_IDLE
-        self._transaction = None
         self.__gobject_init__()
         self.datasource = datasource
         self.connection = real_conn
@@ -353,29 +352,20 @@ class Connection(gobject.GObject):
     def begin(self):
         """Start transaction."""
         # We don't support nested transactions.
-        if self._transaction is not None:
-            return
         if not self.datasource.backend.begin(self):
-            self._transaction = self.connection.begin()
+            self.connection.begin()
         self.update_transaction_state()
 
     def commit(self):
         """Commit changes."""
-        if self._transaction is None:
-            # Transaction started via direct statement (not sqlalchemy)
-            self.datasource.backend.commit(self)
-        else:
-            self._transaction.commit()
-            self._transaction = None
+        if not self.datasource.backend.commit(self):
+            self.connection.commit()
         self.update_transaction_state()
 
     def rollback(self):
         """Rollback changes."""
-        if self._transaction is None:
-            self.datasource.backend.rollback(self)
-        else:
-            self._transaction.rollback()
-            self._transaction = None
+        if not self.datasource.backend.rollback(self):
+            self.connection.rollback()
         self.update_transaction_state()
 
     def update_transaction_state(self):
