@@ -23,7 +23,6 @@ import logging
 import gtk
 import gobject
 
-from cf.backends.schema import Table
 from cf.plugins.core import BottomPanePlugin
 from cf.plugins.mixins import InstanceMixin
 from cf.ui.pane import PaneItem

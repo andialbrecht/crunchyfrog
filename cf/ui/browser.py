@@ -28,7 +28,6 @@ except ImportError:
     HAVE_SEXY = False
 
 from cf.db import Datasource
-from cf.backends import schema
 from cf.ui.editor import SQLView
 from cf.ui import pane, dialogs
 

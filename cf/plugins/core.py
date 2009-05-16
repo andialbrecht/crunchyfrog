@@ -42,7 +42,6 @@ PLUGIN_TYPE_EDITOR = 3
 
 from cf import USER_PLUGIN_DIR, PLUGIN_DIR
 
-from cf.backends import DBFeatures
 from cf.plugins.mixins import InstanceMixin, MenubarMixin, EditorMixin
 from cf.plugins.mixins import UserDBMixin
 from cf.ui import dialogs
