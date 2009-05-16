@@ -12,10 +12,12 @@ Bug Fixes
  * Moved user specific files and directories to proper locations
    according to XDG Base Directory Specification (issue56, reported by
    schlaber).
+ * Replaced some libgnome dependencies with gio/glib functions (incl. issue2).
 
 Other
  * Improved SQL formatting.
  * Improved statment markers, derived from Giggle's browse view.
+ * Improved detection of mime types and default applications of BLOB data.
 
 
 Release 0.3.4 (Mar 17, 2009)

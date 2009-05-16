@@ -20,16 +20,11 @@
 
 import logging
 import os
+import urlparse
 import webbrowser
 
 import gobject
 import gtk
-
-try:
-    import gnomevfs
-    HAVE_GNOMEVFS = True
-except ImportError:
-    HAVE_GNOMEVFS = False
 
 from cf import USER_CONFIG_DIR
 from cf import release
@@ -730,8 +725,8 @@ class MainWindow(gtk.Window):
         if last_conn is not None:
             editor.set_connection(last_conn)
         if fname:
-            if fname.startswith("file://") and HAVE_GNOMEVFS:
-                fname = gnomevfs.get_local_path_from_uri(fname)
+            scheme, _, path, _, _, _ = urlparse.urlparse(fname)
+            fname = path
             editor.set_filename(fname)
         self.editor_append(editor)
         editor.show_all()

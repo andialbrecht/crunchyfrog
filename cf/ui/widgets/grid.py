@@ -21,15 +21,18 @@
 # NOTE:
 #     This module should have no cf dependencies!
 
+import mimetypes
+import tempfile
+
 import gtk
 import gobject
 import pango
 
 try:
-    import gnomevfs
-    HAVE_GNOMEVFS = True
+    import gio
+    HAVE_GIO = True
 except ImportError:
-    HAVE_GNOMEVFS = False
+    HAVE_GIO = False
 
 import sys
 import os
@@ -138,23 +141,29 @@ class Grid(gtk.TreeView):
                 sep = gtk.SeparatorMenuItem()
                 sep.show()
                 popup.append(sep)
-            if isinstance(data, buffer) and HAVE_GNOMEVFS:
-                mime = gnomevfs.get_mime_type_for_data(data)
+            if isinstance(data, buffer) and HAVE_GIO:
+                mime = gio.content_type_guess(None, data)
                 item = gtk.MenuItem(_(u"Save as..."))
                 item.connect("activate", self.on_save_blob, data, mime)
                 item.show()
                 popup.append(item)
                 if mime:
-                    apps = gnomevfs.mime_get_all_applications(mime)
+                    apps = gio.app_info_get_all_for_type(mime)
                     if apps:
+                        default = gio.app_info_get_default_for_type(mime,
+                                                                    False)
+                        if default is not None and default in apps:
+                            apps.remove(default)
+                            apps.insert(0, default)  # make sure it's first
                         item = gtk.MenuItem(_(u"Open with..."))
                         smenu = gtk.Menu()
                         item.set_submenu(smenu)
                         item.show()
                         popup.append(item)
                         for app_info in apps:
-                            item = gtk.MenuItem(app_info[1])
-                            item.connect("activate", self.on_open_blob, data, app_info)
+                            item = gtk.MenuItem(app_info.get_name())
+                            item.connect("activate", self.on_open_blob,
+                                         data, app_info, mime)
                             item.show()
                             smenu.append(item)
             else:
@@ -233,13 +242,18 @@ class Grid(gtk.TreeView):
             self.select_column(xcolumn, selected)
         column.set_data("pressed", selected)
 
-    def on_open_blob(self, menuitem, data, app_info):
-        fname = os.path.expanduser("~/cf-blob.file")
-        cmd = "%s %s" % (app_info[2], fname)
-        f = open(fname, "w")
-        f.write(str(data))
+    def on_open_blob(self, menuitem, data, app_info, mime):
+        suffix = mimetypes.guess_extension(mime)
+        if suffix is None:
+            suffix = '.blob'
+        fp, fname = tempfile.mkstemp(suffix)
+        # no need to check for gio. The callback is only called iff gio
+        # is installed.
+        file_info = gio.File(fname)
+        f = open(fname, "wb")
+        f.write(data)
         f.close()
-        os.system(cmd)
+        app_info.launch([file_info])
 
     def on_save_blob(self, menuitem, data, mime):
         dlg = gtk.FileChooserDialog(_(u"Save as..."),
@@ -250,6 +264,9 @@ class Grid(gtk.TreeView):
         if mime:
             filter = gtk.FileFilter()
             filter.set_name(mime)
+            suffix = mimetypes.guess_extension(mime)
+            if suffix is not None:
+                filter.add_pattern('*.%s' % suffix)
             filter.add_mime_type(mime)
             dlg.add_filter(filter)
             dlg.set_filter(filter)
@@ -513,7 +530,18 @@ class GridModel(gtk.GenericTreeModel):
                 value = 'null'
         elif isinstance(value, buffer):
             if markup:
-                value = '<span foreground="%s">&lt;LOB&gt;</span>' % style.dark[gtk.STATE_PRELIGHT].to_string()
+                if HAVE_GIO:
+                    mime = gio.content_type_guess(None, value)
+                else:
+                    mime = None
+                if mime is None:
+                    mime = 'LOB'
+                else:
+                    mime = ('%s (%s)'  # e.g. "Python-Skript (text/x-python)"
+                            % (gio.content_type_get_description(mime),
+                               mime))
+                value = ('<span foreground="%s">&lt;%s&gt;</span>'
+                         % (style.dark[gtk.STATE_PRELIGHT].to_string(), mime))
             else:
                 value = str(buffer)
         else:

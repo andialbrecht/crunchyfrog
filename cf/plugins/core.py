@@ -25,12 +25,6 @@ from inspect import isclass
 import imp
 import zipimport
 
-try:
-    import gnomevfs
-    HAVE_GNOMEVFS = True
-except ImportError:
-    HAVE_GNOMEVFS = False
-
 import logging
 log = logging.getLogger("PLUGINS")
 
@@ -182,13 +176,6 @@ class PluginManager(gobject.GObject):
         self.__gobject_init__()
         self.__plugins = dict()
         self.__active_plugins = dict()
-        if HAVE_GNOMEVFS:
-            gnomevfs.monitor_add(USER_PLUGIN_DIR,
-                                 gnomevfs.MONITOR_DIRECTORY,
-                                 self.on_plugin_folder_changed)
-            gnomevfs.monitor_add(PLUGIN_DIR,
-                                 gnomevfs.MONITOR_DIRECTORY,
-                                 self.on_plugin_folder_changed)
         self.app.register_shutdown_task(self.on_app_shutdown, "")
         self.app.cb.connect("instance-created", self.on_instance_created)
         self.refresh()
@@ -202,11 +189,6 @@ class PluginManager(gobject.GObject):
         for plugin in self.__active_plugins.values():
             if isinstance(plugin, InstanceMixin):
                 self.init_instance_mixins(plugin, instance)
-
-    def on_plugin_folder_changed(self, folder, path, change):
-        if HAVE_GNOMEVFS and change in [gnomevfs.MONITOR_EVENT_DELETED,
-                                        gnomevfs.MONITOR_EVENT_CREATED]:
-            gobject.idle_add(self.refresh)
 
     def _first_run(self):
         if not self.app.options.first_run:

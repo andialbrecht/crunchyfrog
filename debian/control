@@ -22,9 +22,9 @@ Description: SQL client for GNOME
 Package: crunchyfrog-gnome
 Architecture: any
 XB-Python-Version: ${python:Versions}
-Depends: crunchyfrog, python-gnome2, python-gnome2-desktop,
-    python-gnome2-extras, python-gconf
+Depends: crunchyfrog, python-gnome2-desktop, python-gconf
 Description: SQL client for GNOME (GNOME dependencies)
- This package defines GNOME related dependencies for CrunchyFrog.
+ This package defines GNOME related dependencies for CrunchyFrog,
+ namely for storing passwords in GNOME Keyring.
  It should be installed when running the application with GNOME.
 
