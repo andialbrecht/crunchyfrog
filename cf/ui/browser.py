@@ -347,27 +347,6 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
                 treeview.expand_row(model.get_path(iter), False)
                 return
 
-                ## if datasource_info.backend.schema and datasource_info.internal_connection:
-                ##     for child in datasource_info.backend.schema.fetch_children(datasource_info.internal_connection, obj) or []:
-                ##         citer = model.append(iter)
-                ##         if child.icon:
-                ##             icon = self.app.load_icon(child.icon,
-                ##                                       gtk.ICON_SIZE_MENU,
-                ##                                       gtk.ICON_LOOKUP_FORCE_SVG)
-                ##         else:
-                ##             icon = None
-                ##         model.set(citer,
-                ##                   0, child,
-                ##                   1, child.name,
-                ##                   2, icon,
-                ##                   5, child.description)
-                ##         if child.has_children:
-                ##             cciter = model.append(citer)
-                ##             model.set(cciter, 0, DummyNode())
-                ##     citer = model.iter_children(iter)
-                ##     if citer:
-                ##         treeview.expand_row(model.get_path(iter), False)
-
     def on_show_details(self, menuitem, object, model, iter):
         # FIXME(andi): Rewrite this part when main notebook allows different
         #  views.
@@ -424,10 +403,10 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
                   6, color,
                   7, True)
         citer = self.model.iter_children(iter)
-        if datasource_info.get_connections() \
-        and not citer:
+        if datasource_info.get_connections() and not citer:
             citer = self.model.append(iter)
             self.model.set(citer, 0, DummyNode())
-        elif not datasource_info.get_connections() \
-        and citer:
-            self.model.remove(citer)
+        elif not datasource_info.get_connections() and citer:
+            while citer:
+                self.model.remove(citer)
+                citer = self.model.iter_children(iter)
