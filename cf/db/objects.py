@@ -736,23 +736,17 @@ class Trigger(DBObject):
                                     None,
                                     gobject.PARAM_READWRITE),}
 
-    def __init__(self, provider, *args, **kwargs):
-        DBObject.__init__(self, provider, *args, **kwargs)
-        self.typeid = "trigger"
-        self.typestr = _(u"Trigger")
-        self.connect("notify::table", self.on_notify)
-
-    def on_notify(self, *args):
-        self.schema = self.table.schema
+    typeid = "trigger"
+    typestr = _(u"Trigger")
 
 
-class TriggerCollection(Collection):
+class Triggers(Collection):
 
-    def __init__(self, provider):
-        self.typeid = "triggercollection"
-        self.typestr = _(u"Trigger")
-        self.backend = None
-        Collection.__init__(self, provider, self.backend, Trigger)
+    typeid = "triggers"
+    typestr = _(u"Trigger")
+
+    def __init__(self, meta, **kwds):
+        Collection.__init__(self, meta, Trigger, **kwds)
 
 
 class Type(DBObject):
@@ -859,7 +853,7 @@ gobject.type_register(Sequences)
 gobject.type_register(Sequence)
 gobject.type_register(Tables)
 gobject.type_register(Table)
-gobject.type_register(TriggerCollection)
+gobject.type_register(Triggers)
 gobject.type_register(Trigger)
 gobject.type_register(Users)
 gobject.type_register(User)

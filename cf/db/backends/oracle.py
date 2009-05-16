@@ -18,6 +18,7 @@
 
 """Oracle backend"""
 
+from cf.db import objects
 from cf.db.backends import Generic, GUIOption
 
 
@@ -107,4 +108,177 @@ class Oracle(Generic):
     def get_explain_statement(self, statement):
         return ['explain plan for %s' % statement, 'select * from plan_table']
 
+    def _query(self, connection, sql):
+        return connection.execute_raw(sql)
+
+    def initialize(self, meta, connection):
+        schemata = objects.Schemata(meta)
+        users = objects.Users(meta)
+        meta.set_object(schemata)
+        meta.set_object(users)
+        tbl_cache = {}  # speed up object creation
+        for item in self._query(connection, INITIAL_SQL):
+            if item['TYPE'] == 'schema':
+                schema = objects.Schema(meta, oid=item['ID'],
+                                        name=item['NAME'], parent=schemata)
+                meta.set_object(schema)
+                tables = objects.Tables(meta, parent=schema)
+                meta.set_object(tables)
+                schema.tables = tables
+                views = objects.Views(meta, parent=schema)
+                meta.set_object(views)
+                schema.views = views
+                schema.sequences = objects.Sequences(meta, parent=schema)
+                meta.set_object(schema.sequences)
+
+            if item['TYPE'] in ('table', 'view'):
+                schema = meta.find_exact(cls=objects.Schema,
+                                         oid=item['PARENT'])
+                if item['TYPE'] == 'table':
+                    cls = objects.Table
+                    parent = meta.find_exact(cls=objects.Tables, parent=schema)
+                else:
+                    cls = objects.View
+                    parent = meta.find_exact(cls=objects.Views, parent=schema)
+                obj = cls(meta, parent=parent, oid=item['ID'],
+                          name=item['NAME'], comment=item['DESCRIPTION'])
+                meta.set_object(obj)
+                tbl_cache[item['ID']] = obj
+                if item['TYPE'] == 'table':
+                    obj.indexes = objects.Indexes(meta, parent=obj)
+                    meta.set_object(obj.indexes)
+                obj.triggers = objects.Triggers(meta, parent=obj)
+                meta.set_object(obj.triggers)
+
+            if item['TYPE'] == 'column':
+                parent = tbl_cache.get(item['PARENT'])
+                if parent is None:
+                    continue
+                col = objects.Column(meta, parent=parent.columns,
+                                     oid=item['ID'],
+                                     name=item['NAME'],
+                                     comment=item['DESCRIPTION'])
+                meta.set_object(col)
+
+
+    def refresh(self, obj, meta, connection):
+        if obj.typeid == 'users':
+            self._refresh_users(obj, meta, connection)
+        elif obj.typeid == 'constraints':
+            self._refresh_constraints(obj, meta, connection)
+        elif obj.typeid == 'indexes':
+            self._refresh_indexes(obj, meta, connection)
+        elif obj.typeid == 'triggers':
+            self._refresh_triggers(obj, meta, connection)
+        elif obj.typeid == 'sequences':
+            self._refresh_sequences(obj, meta, connection)
+
+    def _refresh_users(self, coll, meta, connection):
+        sql = "select username from sys.all_users"
+        for item in self._query(connection, sql):
+            u = meta.find_exact(parent=coll, oid=item['USERNAME'].lower())
+            if u is None:
+                u = objects.User(meta, parent=coll,
+                                 oid=item['USERNAME'].lower(),
+                                 name=item['USERNAME'])
+                meta.set_object(u)
+                u.props.has_children = False
+
+    def _refresh_constraints(self, coll, meta, connection):
+        sql = ("select lower(owner||'.'||constraint_name) as id,"
+               " constraint_name as name"
+               " from sys.all_constraints"
+               " where lower(owner||'.'||table_name) = '%s'"
+               % coll.parent.oid)
+        for item in self._query(connection, sql):
+            con = meta.find_exact(parent=coll, oid=item['ID'])
+            if con is None:
+                con = objects.Constraint(meta, parent=coll,
+                                         oid=item['ID'])
+                meta.set_object(con)
+            con.name = item['NAME']
+            con.pros.has_children = False
+
+    def _refresh_indexes(self, coll, meta, connection):
+        sql = ("select lower(owner||'.'||index_name) as id,"
+               " index_name as name from sys.all_indexes"
+               " where lower(owner||'.'||table_name) = '%s'"
+               % coll.parent.oid)
+        for item in self._query(connection, sql):
+            con = meta.find_exact(parent=coll, oid=item['ID'])
+            if con is None:
+                con = objects.Index(meta, parent=coll,
+                                    oid=item['ID'])
+                meta.set_object(con)
+            con.name = item['NAME']
+            con.props.has_children = False
+
+    def _refresh_triggers(self, coll, meta, connection):
+        sql = ("select lower(owner||'.'||trigger_name) as id,"
+               " trigger_name as name"
+               " from sys.all_triggers"
+               " where lower(owner||'.'||table_name) = '%s'"
+               % coll.parent.oid)
+        for item in self._query(connection, sql):
+            con = meta.find_exact(parent=coll, oid=item['ID'])
+            if con is None:
+                con = objects.Trigger(meta, parent=coll,
+                                      oid=item['ID'])
+                meta.set_object(con)
+            con.name = item['NAME']
+            con.props.has_children = False
+
+    def _refresh_sequences(self, coll, meta, connection):
+        sql = ("select lower(sequence_owner||'.'||sequence_name) as id,"
+               " sequence_name as name"
+               " from sys.all_sequences"
+               " where lower(sequence_owner) = '%s'"
+               % coll.parent.oid)
+        for item in self._query(connection, sql):
+            seq = meta.find_exact(parent=coll, oid=item['ID'])
+            if seq is None:
+                seq = objects.Sequence(meta, parent=coll, oid=item['ID'])
+                meta.set_object(seq)
+            seq.name = item['NAME']
+            seq.props.has_children = False
+
+
 DRIVER = Oracle
+
+
+INITIAL_SQL = """select * from (
+select lower(username) as id, null as parent,
+username as name, null as description, 'schema' as type, 1 as pos
+from sys.all_users
+where exists (select 'x' from sys.all_objects where owner=username) or username = user
+
+union
+
+select
+lower(t.owner||'.'||t.table_name) as id, lower(t.owner) as parent,
+t.table_name as name, c.comments as description, 'table' as type, 2 as pos
+from sys.all_tables t
+left join all_tab_comments c on c.owner = t.owner
+and c.table_name = t.table_name
+and c.table_type = 'TABLE'
+
+union
+
+select
+lower(t.owner||'.'||t.view_name) as id, lower(t.owner) as parent,
+t.view_name as name, c.comments as description, 'table' as type, 3 as pos
+from sys.all_views t
+left join all_tab_comments c on c.owner = t.owner
+and c.table_name = t.view_name
+and c.table_type = 'VIEW'
+
+union
+
+select
+lower(t.owner||'.'||t.table_name||'.'||t.column_name) as id,
+lower(t.owner||'.'||t.table_name) as parent,
+t.column_name as name, c.comments as description, 'column' as type, 4 as pos
+from sys.all_tab_columns t
+left join sys.all_col_comments c on c.owner = t.owner
+and c.table_name = t.table_name and c.column_name = t.column_name
+) x order by pos, name"""
