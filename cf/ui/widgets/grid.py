@@ -553,13 +553,15 @@ class GridModel(gtk.GenericTreeModel):
                 value = unicode(value)
             value = value.splitlines()
             if value:
-                if strip_length:
-                    value = value[0][:GRID_LABEL_MAX_LENGTH]
+                if strip_length and len(value[0]) > GRID_LABEL_MAX_LENGTH:
+                    value = ('%s <span foreground="%s">[...]</span>'
+                             % (gobject.markup_escape_text(
+                                    value[0][:GRID_LABEL_MAX_LENGTH]),
+                                style.dark[gtk.STATE_NORMAL].to_string()))
                 else:
-                    value = "\n".join(value)
+                    value = gobject.markup_escape_text("\n".join(value))
             else:
                 value = ""
-            value = gobject.markup_escape_text(value)
         return value
 
     def on_get_flags(self):
