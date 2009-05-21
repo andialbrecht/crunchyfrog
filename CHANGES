@@ -1,10 +1,12 @@
-Release 0.3.5 (In Development)
-------------------------------
+Release 0.3.90 (May 21, 2009)
+-----------------------------
 
 New Features
  * Execute statement at cursor position with Ctrl-F5.
- * Auto-completion of tables, columns and SQL syntax (issue36, thanks to
-   nearyd for making the suggestion).
+ * Auto-completion of tables, columns and SQL syntax (issue36, suggested by
+   nearyd).
+ * Added support for Firebird, Informix and MaxDB (issue49, reported by
+   marcin.matlag).
 
 Bug Fixes
  * Fixed execution of statement with Oracle (issue50, thanks to
@@ -13,11 +15,14 @@ Bug Fixes
    according to XDG Base Directory Specification (issue56, reported by
    schlaber).
  * Replaced some libgnome dependencies with gio/glib functions (incl. issue2).
+ * Removed gnome-extra-icons depedency (issue22).
 
 Other
  * Improved SQL formatting.
  * Improved statment markers, derived from Giggle's browse view.
  * Improved detection of mime types and default applications of BLOB data.
+ * Removed reference plugin (issue54) and LDAP backend.
+ * Cleaned up data source manager (issue32, reported by robertknight).
 
 
 Release 0.3.4 (Mar 17, 2009)
