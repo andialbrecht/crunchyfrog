@@ -113,10 +113,14 @@ class CFApplication(gobject.GObject):
         if not os.path.exists(old_user_dir):
             return
         for fname in ['user.db', 'VERSION']:
-            shutil.move(os.path.join(old_user_dir, fname),
+            path = os.path.join(old_user_dir, fname)
+            if not os.path.exists(path):
+                continue
+            shutil.move(path,
                         os.path.join(cf.USER_CONFIG_DIR, fname))
-        shutil.move(os.path.join(old_user_dir, 'plugins'),
-                    os.path.join(cf.USER_DIR, 'plugins'))
+        if os.path.exists(os.path.join(old_user_dir, 'plugins')):
+            shutil.move(os.path.join(old_user_dir, 'plugins'),
+                        os.path.join(cf.USER_DIR, 'plugins'))
         shutil.rmtree(old_user_dir)
 
     def _datasources_db2url(self, dir_version, release):
