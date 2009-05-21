@@ -13,9 +13,9 @@ XB-Python-Version: ${python:Versions}
 Depends: python (>=2.5), python-central, python-gtk2, python-configobj,
     python-glade2, python-gtksourceview2 (>=2.2.0), python-cairo (>=1.4.0),
     python-gobject (>=2.14), python-xdg (>=0.15)
-Recommends: ipython
+Recommends: python-vte
 Suggests: python-psycopg2, python-mysqldb, python-gnome2,
-    python-gnome2-extras, gnome-icon-theme, python-vte
+    python-gnome2-extras, gnome-icon-theme, ipython
 Description: SQL client for GNOME
  For more information see: http://crunchyfrog.googlecode.com
 
