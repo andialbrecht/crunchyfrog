@@ -137,19 +137,24 @@ class CFApplication(gobject.GObject):
             return
         sql = ('select name, description, backend, options, password '
                'from datasource')
-        self.userdb.cursor.execute(sql)
+        attribs = ['database', 'host', 'port', 'user']
+        try:
+            self.userdb.cursor.execute(sql)
+            attribs.append('password')
+        except sqlite3.OperationalError:  # password column is already gone
+            sql = ('select name, description, backend, options '
+                   'from datasource')
+            self.userdb.cursor.execute(sql)
         ldap_found = False
         for item in self.userdb.cursor.fetchall():
             old_backend = item[2].split('.')[-1]
-            print old_backend
             opts = cPickle.loads(str(item[3]))
             if old_backend in ('mssql', 'oracle', 'mysql', 'postgres'):
                 url = URL(old_backend)
-                for name in ['database', 'host', 'port',
-                             'user', 'password']:
+                for name in attribs:
                     if name in opts:
                         setattr(url, name, opts[name])
-                if item[4]:
+                if len(item) == 5:
                     url.password = item[4]
                 ds = Datasource(manager)
                 ds.url = url
