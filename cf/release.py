@@ -33,12 +33,14 @@ It's mainly written for GNOME but it should run in other environments too.
 Supported databases
 ===================
 
- * PostgreSQL (requires psycopg2)
- * MySQL (requires MySQLdb)
- * SQLite3 (requires python-sqlite3)
- * Oracle (requires cx_Oracle)
- * MS-SQL Server (requires pymssql)
- * LDAP (requires python-ldap)
+ * PostgreSQL
+ * MySQL
+ * SQLite3
+ * Oracle
+ * SQL Server
+ * Firebird
+ * Informix
+ * MaxDB
 
 It is written in Python (PyGTK) and can be extended using plugins.
 
