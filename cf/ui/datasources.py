@@ -323,7 +323,11 @@ class DatasourceEditDialog(object):
                             break
                         iter_ = model.iter_next(iter_)
                 else:
-                    child.set_text(data[key] or '')
+                    if data[key] is None:
+                        val = ''
+                    else:
+                        val = str(data[key])
+                    child.set_text(val)
             elif key == 'ask_for_password':
                 child.set_active(data['ask_for_password'])
         buffer_ = self.widget_startup_commands.get_buffer()
