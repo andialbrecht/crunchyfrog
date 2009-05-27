@@ -401,6 +401,19 @@ class Editor(gobject.GObject, PaneItem):
         return self.connection
 
     def set_filename(self, filename):
+        """Opens filename.
+
+        Returns ``True`` if the file was successfully opened.
+        Otherwise ``False``.
+        """
+        msg = None
+        if not os.path.isfile(filename):
+            msg = _(u'No such file: %(name)s')
+        elif not os.access(filename, os.R_OK):
+            msg = _(u'File is not readable: %(name)s')
+        if msg is not None:
+            dialogs.error(_(u"Failed to open file"), msg % {'name': filename})
+            return False
         self._filename = filename
         if filename:
             f = open(self._filename)
@@ -411,6 +424,7 @@ class Editor(gobject.GObject, PaneItem):
         self._filecontent_read = a
         self.set_text(a)
         self.app.recent_manager.add_item(to_uri(filename))
+        return True
 
     def get_filename(self):
         return self._filename
