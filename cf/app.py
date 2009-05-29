@@ -20,6 +20,7 @@
 
 import logging
 import os
+import sqlite3
 import sys
 import threading
 import urlparse
