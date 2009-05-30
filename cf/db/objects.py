@@ -10,6 +10,8 @@ import gobject
 
 _ = lambda x: x
 
+from cf import DATA_DIR
+
 
 class PropertyAttribute(object):
     """Connects a instance attribute to a property."""
@@ -180,8 +182,7 @@ class DBObject(GObjectBase):
     def get_icon_pixbuf(self):
         """Returns a pixbuf for this object of 16x16 size."""
         if self.icon.startswith('gdbo-'):
-            dir_name = os.path.join(os.path.dirname(__file__),
-                                    'pixmaps')
+            dir_name = os.path.join(DATA_DIR, 'pixmaps')
             fname = os.path.join(dir_name, '%s.png' % self.icon)
             return gtk.gdk.pixbuf_new_from_file(fname)
         else:

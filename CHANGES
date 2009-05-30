@@ -1,3 +1,11 @@
+In Development
+--------------
+
+Bug Fixes
+ * Fixed packaging of custom database pixmaps (issue61, reported
+   by m...@vee.net).
+
+
 Release 0.3.90 (May 21, 2009)
 -----------------------------
 
