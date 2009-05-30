@@ -7,6 +7,7 @@ DESTDIR=/
 BUILDIR=mydeb
 PROJECT=crunchyfrog
 DEBFLAGS=
+PYINSTALL=
 
 PO=`find po/* -maxdepth 0 -name .svn -prune -o -type d|sed 's/po\///g'`
 
@@ -20,7 +21,7 @@ all:
 	@echo "make clean - Get rid of scratch and byte files"
 
 install:
-	$(PYTHON) setup.py install --root $(DESTDIR) $(COMPILE)
+	$(PYTHON) setup.py install $(PYINSTALL) --root $(DESTDIR) $(COMPILE)
 
 builddeb: dist-clean
 	$(PYTHON) setup.py sdist

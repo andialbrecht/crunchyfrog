@@ -42,7 +42,7 @@ clean:
 install: build
 	# Add here commands to install the package into debian/crunchyfrog.
 	$(MAKE) DESTDIR=$(CURDIR)/debian/crunchyfrog \
-	  COMPILE=--no-compile install
+	  COMPILE=--no-compile PYINSTALL=--install-layout=deb install
 
 # Build architecture-independent files here.
 binary-indep: build install
