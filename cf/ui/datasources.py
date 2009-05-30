@@ -428,7 +428,7 @@ class DatasourceEditDialog(object):
                     return None
                 return model.get_value(iter_, 0)
             else:
-                return child.get_text() or None
+                return child.get_text().strip() or None
         return None
 
     def _get_url_options(self):
