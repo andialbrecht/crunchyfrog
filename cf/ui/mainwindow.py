@@ -185,6 +185,14 @@ class MainWindow(gtk.Window):
              _(u'Show connections'), '<shift>F5',
              _(u'Open or close connections in a dialog'),
              lambda *a: self.app.manage_connections(self)),
+            ('query-next-statement', None,
+             _(u'Next Statement'), '<control><alt>j',
+             _(u'Move cursor to next statement'),
+             self.on_jump_next_statement),
+            ('query-prev-statement', None,
+             _(u'Previous Statement'), '<control><alt>k',
+             _(u'Move cursor to previous statement'),
+             self.on_jump_prev_statement),
             ('query-frmt-menu', None, _(u'_Format')),
             ('query-frmt-comment', None,
              _(u'_Comment / Uncomment'), '<shift><control>space',
@@ -522,6 +530,18 @@ class MainWindow(gtk.Window):
 
     def on_instance_new(self, action):
         self.app.new_instance()
+
+    def on_jump_next_statement(self, action):
+        editor = self.get_active_editor()
+        if editor is None:
+            return
+        editor.rjump_to_statement(1)
+
+    def on_jump_prev_statement(self, action):
+        editor = self.get_active_editor()
+        if editor is None:
+            return
+        editor.rjump_to_statement(-1)
 
     def on_menu_item_deselect(self, menuitem):
         self.statusbar.pop(100)
@@ -903,6 +923,9 @@ UI = '''
       <menuitem name="Begin" action="query-begin" />
       <menuitem name="Commit" action="query-commit" />
       <menuitem name="Rollback" action="query-rollback" />
+      <separator />
+      <menuitem name="QueryJumpNext" action="query-next-statement" />
+      <menuitem name="QueryJumpPrev" action="query-prev-statement" />
       <separator />
       <menu name="QueryFormat" action="query-frmt-menu">
         <menuitem name="QueryFormatComment" action="query-frmt-comment" />

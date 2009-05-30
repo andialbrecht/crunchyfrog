@@ -559,6 +559,45 @@ class Editor(gobject.GObject, PaneItem):
             action = gtk.PRINT_OPERATION_ACTION_PRINT_DIALOG
         operation.run(action)
 
+    def rjump_to_statement(self, offset):
+        """Jumps to a statement relative to current.
+
+        :param offset: Position relative to current statement as integer.
+        """
+        idx_current = 0
+        positions = []
+        curr = self.textview.get_current_statement()
+        buffer_ = self.textview.get_buffer()
+        if curr is not None:
+            # We're using the presence of an end iter as a flag if we're
+            # inside a statement. If not, just jump to the next/prev statement
+            # without respecting the offset.
+            cstart, inside_statement = curr
+        else:
+            cstart = buffer_.get_iter_at_mark(buffer_.get_insert())
+            cstart.set_line_offset(0)
+            inside_statement = None
+        for start, end in self.textview.get_statements():
+            positions.append((start, end))
+            if not inside_statement:
+                if offset > 0 and start.get_line() > cstart.get_line():
+                    buffer_.place_cursor(start)
+                    return
+                elif offset < 0 and start.get_line() > cstart.get_line():
+                    if len(positions) > 2:
+                        buffer_.place_cursor(positions[-2][0])
+                    elif positions:  # there's just one statement buffered
+                        buffer_.place_cursor(positions[0][0])
+                    return
+            elif start.equal(cstart):
+                idx_current = len(positions)-1
+        max_idx = len(positions)-1
+        if offset > 0:
+            new_pos = min(idx_current+offset, max_idx)
+        else:
+            new_pos = max(idx_current+offset, 0)
+        buffer_.place_cursor(positions[new_pos][0])
+
     def selected_lines_toggle_comment(self):
         """Comments/uncomments selected lines."""
         buffer_ = self.textview.get_buffer()

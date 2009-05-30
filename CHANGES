@@ -1,6 +1,9 @@
 In Development
 --------------
 
+New Features
+ * Keyboard shortcuts to jump to next/prev statement (issue57).
+
 Bug Fixes
  * Fixed packaging of custom database pixmaps (issue61, reported
    by m...@vee.net).
