@@ -43,6 +43,13 @@ from cf import release
 
 
 def find_packages(base):
+    """Helper function to find subpackages in base.
+
+    :param base: Directory holding the main package.
+
+    Returns a list of subpackages suitable for setup() packages keyword.
+    base is already included in the returned list.
+    """
     ret = [base]
     for path in os.listdir(base):
         if path.startswith('.'):
