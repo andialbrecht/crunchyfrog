@@ -9,6 +9,12 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+ifneq (,$(findstring 2.6,$(shell python --version 2>&1)))
+DEB_PYINSTALL_FLAGS := --install-layout=deb
+else
+DEB_PYINSTALL_FLAGS := 
+endif
+
 
 configure: configure-stamp
 configure-stamp:
@@ -42,7 +48,7 @@ clean:
 install: build
 	# Add here commands to install the package into debian/crunchyfrog.
 	$(MAKE) DESTDIR=$(CURDIR)/debian/crunchyfrog \
-	  COMPILE=--no-compile PYINSTALL=--install-layout=deb install
+	  COMPILE=--no-compile PYINSTALL=$(DEB_PYINSTALL_FLAGS) install
 
 # Build architecture-independent files here.
 binary-indep: build install
