@@ -250,10 +250,13 @@ def select_offset(popup, offset):
     row = model.get_path(iter_)[0]
     row += offset
     if row < 0:
-        row == 0
+        row = 0
     try:
         iter_ = model.get_iter(row)
     except ValueError:
+        # end of completion list reached.
+        # maybe this could be catched earlier be looking at the actual
+        # number of rows.
         iter_ = model.get_iter_first()
     selection.select_iter(iter_)
     treeview.scroll_to_cell(row)
