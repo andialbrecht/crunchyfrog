@@ -559,6 +559,32 @@ class Editor(gobject.GObject, PaneItem):
             action = gtk.PRINT_OPERATION_ACTION_PRINT_DIALOG
         operation.run(action)
 
+    # Clipboard functions
+
+    def clipboard_copy(self, clipboard):
+        """Copies selected data to clipboard.
+
+        This is either the selected text from the editor or the selected
+        cells from the results grid.
+        """
+        if self.textview.is_focus():
+            buffer_ = self.textview.get_buffer()
+            buffer_.copy_clipboard(clipboard)
+        elif self.results.grid.grid.is_focus():
+            self.results.clipboard_copy(clipboard)
+
+    def clipboard_cut(self, clipboard):
+        """Cuts selected text from editor."""
+        buffer_ = self.textview.get_buffer()
+        buffer_.cut_clipboard(clipboard, True)
+
+    def clipboard_paste(self, clipboard):
+        """Pastes clipboard data to editor."""
+        buffer_ = self.textview.get_buffer()
+        buffer_.paste_clipboard(clipboard, None, True)
+
+    # Statement navigation and formatting
+
     def rjump_to_statement(self, offset):
         """Jumps to a statement relative to current.
 
@@ -729,21 +755,25 @@ class ResultsView(object):
     def on_grid_selection_changed(self, grid, selected_cells):
         self.builder.get_object("editor_copy_data").set_sensitive(bool(selected_cells))
 
-    def copy_data(self):
-        rows = dict()
+    def copy_data(self, clipboard=None):
+        """Copy selected values to clipboard.
+
+        Columns are terminated by \t, rows by \n.
+        If *clipboard* is ``None``, the default clipboard will be used.
+        """
+        rows = {}
         for cell in self.grid.grid.get_selected_cells():
             value = self.grid.grid.get_cell_data(cell, repr=True)
             if rows.has_key(cell[0]):
-                rows[cell[0]] += "%s\t" % value
+                rows[cell[0]] += "\t%s" % value
             else:
-                rows[cell[0]] = "%s\t" % value
+                rows[cell[0]] = "%s" % value
         rownums = rows.keys()
         rownums.sort()
-        txt = ""
-        for rownum in rownums:
-            txt += "%s\n" % rows.get(rownum)
-        display = gtk.gdk.display_manager_get().get_default_display()
-        clipboard = gtk.Clipboard(display, "CLIPBOARD")
+        txt = "\n".join(rows.get(rownum) for rownum in rownums)
+        if clipboard is None:
+            display = gtk.gdk.display_manager_get().get_default_display()
+            clipboard = gtk.Clipboard(display, "CLIPBOARD")
         clipboard.set_text(txt)
         self.instance.statusbar.set_message(_(u"Data copied to clipboard"))
 
@@ -760,6 +790,11 @@ class ResultsView(object):
             dlg.export_data()
         dlg.destroy()
         gtk.gdk.threads_leave()
+
+    def clipboard_copy(self, clipboard):
+        """Copies selected cells to clipboard."""
+        # TODO: Cleanup API. There should be one function to do this.
+        self.copy_data(clipboard)
 
     def reset(self):
         # Explain

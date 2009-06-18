@@ -406,21 +406,17 @@ class MainWindow(gtk.Window):
     def on_clipboard_copy(self, *args):
         if not self._editor:
             return
-        buffer_ = self._editor.textview.get_buffer()
-        buffer_.copy_clipboard(self._get_clipboard())
+        self._editor.clipboard_copy(self._get_clipboard())
 
     def on_clipboard_cut(self, *args):
         if not self._editor:
             return
-        buffer_ = self._editor.textview.get_buffer()
-        buffer_.cut_clipboard(self._get_clipboard(), True)
+        self._editor.clipboard_cut(self._get_clipboard())
 
     def on_clipboard_paste(self, *args):
         if not self._editor:
             return
-        buffer_ = self._editor.textview.get_buffer()
-        buffer_.paste_clipboard(self._get_clipboard(), None, True)
-
+        self._editor.clipboard_paste(self._get_clipboard())
 
     def on_commit(self, *args):
         if not self._editor:

@@ -106,8 +106,8 @@ Cells
 Select/Unselect All
    To select or unselect all cells click on the first (top left) cell.
 
-Click on the :guilabel:`Copy` button in the toolbar
-in an editor to copy selected cells, columns or rows to the clipboard.
+Click on the :guilabel:`Copy` button in the toolbar or hit
+:kbd:`<Control>C` to copy selected cells, columns or rows to the clipboard.
 
 To export the dataset click on the :guilabel:`Export`
 button in the toolbar. If you have made a selection before,
