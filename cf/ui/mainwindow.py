@@ -773,7 +773,9 @@ class MainWindow(gtk.Window):
         Returns:
           Editor instance or None.
         """
-        return self._editor
+        if isinstance(self._editor, Editor):
+            return self._editor
+        return None
 
     def set_editor_active(self, editor, active):
         """Called whenever an editor receives or looses focus."""

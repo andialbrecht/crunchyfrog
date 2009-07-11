@@ -19,6 +19,9 @@ User Interface
 - Panes loose state when new instance was created and closed last.
 - Replace BottomPane by Pane.
 - Save and restore position of pane items.
+- Provide a better widget type infrastructure. Currently the Editor widget
+  is treated special, some methods assume that the main notebook only holds
+  Editor widgets.
 
 
 Editor

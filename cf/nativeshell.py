@@ -91,6 +91,7 @@ class NativeShell(gtk.ScrolledWindow, PaneItem):
     name = _(u'Native Shell')
     icon = 'gnome-terminal'
     detachable = True
+    connection = None  # For compatibility with Editor widget
 
     def __init__(self, app, instance, datasource):
         gtk.ScrolledWindow.__init__(self)

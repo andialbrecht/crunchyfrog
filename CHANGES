@@ -11,6 +11,8 @@ Bug Fixes
    by m...@vee.net).
  * Added --install-layout=deb to debian/rules (issue60, reported
    by m...@vee.net).
+ * Improved handling of other widgets than SQL editors in main
+   notebook (issue62).
 
 Translations
  * New Japanese translation (partial), thanks to Ryutatsu Ishigami.
