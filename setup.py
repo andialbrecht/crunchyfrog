@@ -138,7 +138,7 @@ setup(
     long_description=release.long_description,
     license='GPL',
     url=release.url,
-    download_url='http://crunchyfrog.googlecode.com/files/crunchyfrog-0.3.90.tar.gz',
+    download_url='http://crunchyfrog.googlecode.com/files/crunchyfrog-%s.tar.gz' % release.version,
     classifiers = [
         'Development Status :: 4 - Beta',
         'Environment :: X11 Applications :: GTK',
