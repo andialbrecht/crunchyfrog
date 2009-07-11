@@ -18,6 +18,8 @@
 
 """Oracle backend"""
 
+from gettext import gettext as _
+
 from cf.db import objects
 from cf.db.backends import Generic, GUIOption
 

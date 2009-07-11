@@ -22,6 +22,7 @@ import logging
 import os
 import urlparse
 import webbrowser
+from gettext import gettext as _
 
 import gobject
 import gtk

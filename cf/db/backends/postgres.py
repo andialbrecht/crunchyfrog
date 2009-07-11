@@ -18,6 +18,8 @@
 
 """PostgreSQL backend."""
 
+from gettext import gettext as _
+
 from cf.db import TRANSACTION_IDLE
 from cf.db import TRANSACTION_COMMIT_ENABLED
 from cf.db import TRANSACTION_ROLLBACK_ENABLED

@@ -18,6 +18,8 @@
 
 """Object browser"""
 
+from gettext import gettext as _
+
 import gtk
 import gobject
 

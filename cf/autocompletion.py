@@ -27,6 +27,7 @@ config changes.
 """
 
 import itertools
+from gettext import gettext as _
 
 import gobject
 import gtk

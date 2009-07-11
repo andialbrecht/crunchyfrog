@@ -19,6 +19,7 @@
 """Dialog to manage data sources and connections."""
 
 import sys
+from gettext import gettext as _
 
 import gobject
 import gtk

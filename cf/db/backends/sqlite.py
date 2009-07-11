@@ -18,6 +18,8 @@
 
 """SQLite backend"""
 
+from gettext import gettext as _
+
 import gobject
 import functools
 
