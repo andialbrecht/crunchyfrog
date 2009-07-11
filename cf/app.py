@@ -75,7 +75,10 @@ class CFApplication(gobject.GObject):
         self.__shutdown_tasks = []
         self.config = Config(self, self.options.config)
         self.userdb = UserDB(self)
-        self._check_version()
+        try:
+            self._check_version()
+        except:
+            logging.exception('Exception during version update:')
         self.run_listener()
         self.plugins = PluginManager(self)
         self.datasources = DatasourceManager(self)
