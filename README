@@ -1,0 +1,58 @@
+CrunchyFrog -- A cross-platform SQL client.
+===========================================
+
+CrunchyFrog is a cross-platform SQL client for a variety of database
+systems.
+
+
+Running CrunchyFrog
+-------------------
+
+You can run CrunchyFrog from this directory without installing:
+
+    ./crunchyfrog
+
+The next thing is to define some datasources by opening the Datasource manager
+(Edit > Data Source Manager).
+
+See requirements.txt for a complete list of requirements.
+
+For a localized version first run
+
+    make msg-compile
+
+and then start the application as described above.
+This command requires gettext installed on your system.
+
+To have the manual run
+
+    python setup.py build_manual
+
+and then select "Help > Help" (F1) in the application.
+This command requires Sphinx (>=0.5) installed on your system.
+
+
+Installing CrunchyFrog
+----------------------
+
+For a system-wide installation from a source distribution or Subversion
+checkout run:
+
+    sudo python setup.py install
+
+After installing you should find a launcher in your Applications menu.
+
+Have a look at the project's homepage to see if a pre-built binary for your
+distribution is available.
+
+
+Links
+-----
+Homepage:    http://crunchyfrog.googlecode.com/
+Discussions: http://groups.google.com/group/crunchyfrog
+Issues/Bugs: http://code.google.com/p/crunchyfrog/issues/list
+
+
+CrunchyFrog is licensed under the GNU/GPLv3 (see COPYING for details).
+
+Copyright (C) 2009 Andi Albrecht <albrecht.andi@gmail.com>
