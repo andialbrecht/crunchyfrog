@@ -107,7 +107,7 @@ Select/Unselect All
    To select or unselect all cells click on the first (top left) cell.
 
 Click on the :guilabel:`Copy` button in the toolbar or hit
-:kbd:`<Control>C` to copy selected cells, columns or rows to the clipboard.
+:kbd:`Ctrl+C` to copy selected cells, columns or rows to the clipboard.
 
 To export the dataset click on the :guilabel:`Export`
 button in the toolbar. If you have made a selection before,
@@ -135,13 +135,24 @@ The editor provides features for editing SQL statements.
 
 
 .. index::
+   pair: Editor; Navigation
+
+Navigating Between Statements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To navigate between statements in the SQL editor use :kbd:`Ctrl+Alt+J`
+to jump to the next statement and :kbd:`Ctrl+Alt+K` to jump to the
+previous statement.
+
+
+.. index::
    pair: Editor; Autocompletion
 
 Autocompletion
 ^^^^^^^^^^^^^^
 
 The editor supports autocompletion for tables, columns and SQL syntax.
-To activate autocompletion press :kbd:`<Control>Space` while typing
+To activate autocompletion press :kbd:`Ctrl+Space` while typing
 a SQL statement. If there's more than one possible completion you can
 select the desired completion from a popup list.
 Use the arrow keys to navigate through this list, :kbd:`Enter` to write the
@@ -203,5 +214,7 @@ To beautify the content of an editor or the selected text either select
 .. Note::
    This is an experimental feature. The results might differ from
    your expectations. ;-)
+   Please file bug reports and feature request on the issue tracker
+   for the :mod:`sqlparse` module at http://python-sqlparse.googlecode.com.
 
 
