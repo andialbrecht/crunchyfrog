@@ -2,7 +2,6 @@ Database
 --------
 - Client encoding, e.g. for MySQL cur.execute("SET NAMES utf8;")
 - Provide more meta information, incl. detail views.
-- Cleanup backend API.
 - Track unused connections (not in transaction, not used by an editor) and
   provide a quick way to close them.
 
@@ -10,14 +9,9 @@ Database
 User Interface
 --------------
 - Failed queries: Stop on error with continue/stop dialog.
-- Add data source colors. Each data source might have a color that is shown
-  in navigator, tab label, statusbar, connection dialog, ...
 - Explain view: Enhance explain view with respect to backend specific
   options and return values.
-- Replace toolbar from data source manager? It's too large and looks
-  ugly with some GTK themes.
 - Panes loose state when new instance was created and closed last.
-- Replace BottomPane by Pane.
 - Save and restore position of pane items.
 - Provide a better widget type infrastructure. Currently the Editor widget
   is treated special, some methods assume that the main notebook only holds
@@ -26,7 +20,7 @@ User Interface
 
 Editor
 ------
-- Disable export button if no filter plugin is active.
+- Disable export button if no filter plugin is active (issue65).
 - SQL statement in messages list should point to corresponding row in editor
   when clicking on it.
 
@@ -46,17 +40,11 @@ Documentation
 Misc.
 -----
 - Follow "libgnome must die!" (http://live.gnome.org/LibgnomeMustDie)
-- Add support for Capuchin?
-  See: http://capuchin.k-d-w.org/
-- Remove ReferenceProvider
-- Remove LDAP backend?
 - Cleanup plugin API
 - Add options for CSV export.
   See: http://docs.python.org/lib/csv-fmt-params.html
 - Export filter should emit a progress signal (and of course the dialog
   should have a callback).
-- LDAP connections make no sense in editor, should be suppressed
-  somehow.
 - Distribute API docs (crunchyfrog-dev package, devhelp integration).
 
 
@@ -71,13 +59,12 @@ Ideas
 -----
 - Visualize database schema (maybe using gaphas?).
   http://gaphor.devjavu.com/wiki/Subprojects/Gaphas
+- Visual query builder using sqlalchemy?
 - Query history, possibly bound to datasource info.
 - libgda backend? But maybe it's too confusing to have multiple possibilities
   to connect to a RDBMS.
-- Include VTE support.
 - Add an template base export plugin (Jinja?). Possible export formats: HTML,
   XML, TeX, plain text, ... The templates could be customizable.
-- Visual query builder using sqlalchemy?
 - Use PackageKit to install DB-API2 modules?
   https://bugzilla.redhat.com/show_bug.cgi?id=484511#c5
 
