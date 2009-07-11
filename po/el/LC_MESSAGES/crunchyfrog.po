@@ -7,289 +7,315 @@ msgid ""
 msgstr ""
 "Project-Id-Version: crunchyfrog\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-02-01 16:07+0100\n"
+"POT-Creation-Date: 2009-06-17 19:17+0200\n"
 "PO-Revision-Date: 2008-11-04 16:53+0000\n"
 "Last-Translator: Thanos Chatziathanassiou <tchatzi@arx.net>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-03-15 08:36+0000\n"
+"X-Launchpad-Export-Date: 2009-07-11 04:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: cf/ui/mainwindow.py:93
+#: cf/ui/mainwindow.py:92
 msgid "Application"
 msgstr ""
 
-#: cf/ui/mainwindow.py:96
+#: cf/ui/mainwindow.py:95
 msgid "_File"
 msgstr ""
 
-#: cf/ui/mainwindow.py:98
+#: cf/ui/mainwindow.py:97
 msgid "Quit the program"
 msgstr ""
 
-#: cf/ui/mainwindow.py:100
+#: cf/ui/mainwindow.py:99
 msgid "_New"
 msgstr ""
 
-#: cf/ui/mainwindow.py:102 cf/ui/mainwindow.py:175
+#: cf/ui/mainwindow.py:101 cf/ui/mainwindow.py:122
 msgid "_Query"
 msgstr ""
 
-#: cf/ui/mainwindow.py:102
+#: cf/ui/mainwindow.py:101
 msgid "New SQL editor"
 msgstr ""
 
-#: cf/ui/mainwindow.py:105
-msgid "_Instance"
+#: cf/ui/mainwindow.py:104
+msgid "_Window"
 msgstr ""
 
-#: cf/ui/mainwindow.py:106
+#: cf/ui/mainwindow.py:105
 msgid "New application window."
 msgstr ""
 
-#: cf/ui/mainwindow.py:109
+#: cf/ui/mainwindow.py:108
 msgid "Open a file"
 msgstr ""
 
-#: cf/ui/mainwindow.py:112
+#: cf/ui/mainwindow.py:111
 msgid "_Edit"
 msgstr ""
 
-#: cf/ui/mainwindow.py:114 data/glade/preferences.glade.h:44
+#: cf/ui/mainwindow.py:113 data/glade/preferences.glade.h:46
 msgid "_Plugins"
 msgstr ""
 
-#: cf/ui/mainwindow.py:114
+#: cf/ui/mainwindow.py:113
 msgid "Configure plugins"
 msgstr ""
 
-#: cf/ui/mainwindow.py:116
-msgid "_Data source manager"
+#: cf/ui/mainwindow.py:115 data/glade/datasources.glade.h:5
+msgid "_Data Sources"
 msgstr ""
 
-#: cf/ui/mainwindow.py:117
+#: cf/ui/mainwindow.py:116
 msgid "Add, edit and delete data sources"
 msgstr ""
 
-#: cf/ui/mainwindow.py:120
+#: cf/ui/mainwindow.py:119
 msgid "Configure the application"
 msgstr ""
 
-#: cf/ui/mainwindow.py:123
+#: cf/ui/mainwindow.py:124
 msgid "_View"
 msgstr ""
 
-#: cf/ui/mainwindow.py:125
+#: cf/ui/mainwindow.py:126
 msgid "_Help"
 msgstr ""
 
-#: cf/ui/mainwindow.py:127
+#: cf/ui/mainwindow.py:128
 msgid "Open the CrunchyFrog manual"
 msgstr ""
 
-#: cf/ui/mainwindow.py:130
+#: cf/ui/mainwindow.py:131
 msgid "Help translate..."
 msgstr ""
 
-#: cf/ui/mainwindow.py:131
+#: cf/ui/mainwindow.py:132
 msgid "Help to translate this application"
 msgstr ""
 
-#: cf/ui/mainwindow.py:136
+#: cf/ui/mainwindow.py:137
 msgid "Report a problem"
 msgstr ""
 
-#: cf/ui/mainwindow.py:143
+#: cf/ui/mainwindow.py:144
 msgid "About this application"
 msgstr ""
 
-#: cf/ui/mainwindow.py:149
+#: cf/ui/mainwindow.py:150
 msgid "_Toolbar"
 msgstr ""
 
-#: cf/ui/mainwindow.py:150
+#: cf/ui/mainwindow.py:151
 msgid "Show or hide the toolbar in the current window"
 msgstr ""
 
-#: cf/ui/mainwindow.py:153
+#: cf/ui/mainwindow.py:154
 msgid "_Statusbar"
 msgstr ""
 
-#: cf/ui/mainwindow.py:154
+#: cf/ui/mainwindow.py:155
 msgid "Show or hide the statusbar in the current window"
 msgstr ""
 
-#: cf/ui/mainwindow.py:169 cf/ui/editor.py:61 cf/ui/prefs.py:82
-#: cf/plugins/core.py:164 data/glade/preferences.glade.h:18
+#: cf/ui/mainwindow.py:170 cf/ui/editor.py:67 cf/ui/prefs.py:88
+#: cf/plugins/core.py:121 data/glade/preferences.glade.h:20
 msgid "Editor"
 msgstr ""
 
-#: cf/ui/mainwindow.py:172
+#: cf/ui/mainwindow.py:173
 msgid "Close the current editor"
 msgstr ""
 
 #: cf/ui/mainwindow.py:176
-msgid "_Connection"
+msgid "Close _all"
+msgstr ""
+
+#: cf/ui/mainwindow.py:176
+msgid "Close all editors"
 msgstr ""
 
 #: cf/ui/mainwindow.py:179
-msgid "Disconnect current editor"
+msgid "_Connection"
 msgstr ""
 
 #: cf/ui/mainwindow.py:182
+msgid "Disconnect current editor"
+msgstr ""
+
+#: cf/ui/mainwindow.py:185
 msgid "Show connections"
 msgstr ""
 
-#: cf/ui/mainwindow.py:183
+#: cf/ui/mainwindow.py:186
 msgid "Open or close connections in a dialog"
 msgstr ""
 
-#: cf/ui/mainwindow.py:186
-msgid "Save the current file"
+#: cf/ui/mainwindow.py:189
+msgid "Next Statement"
 msgstr ""
 
 #: cf/ui/mainwindow.py:190
-msgid "Save the current file with a different name"
+msgid "Move cursor to next statement"
 msgstr ""
 
 #: cf/ui/mainwindow.py:193
-msgid "Print the current page"
+msgid "Previous Statement"
 msgstr ""
 
-#: cf/ui/mainwindow.py:196
-msgid "Print preview"
+#: cf/ui/mainwindow.py:194
+msgid "Move cursor to previous statement"
+msgstr ""
+
+#: cf/ui/mainwindow.py:196 cf/ui/mainwindow.py:202
+msgid "_Format"
+msgstr ""
+
+#: cf/ui/mainwindow.py:198
+msgid "_Comment / Uncomment"
+msgstr ""
+
+#: cf/ui/mainwindow.py:199
+msgid "Comment / uncomment selected lines"
+msgstr ""
+
+#: cf/ui/mainwindow.py:203
+msgid "Beautify selected lines or whole buffer"
 msgstr ""
 
 #: cf/ui/mainwindow.py:206
+msgid "_Uppercase Keywords"
+msgstr ""
+
+#: cf/ui/mainwindow.py:207
+msgid "Uppercase keywords in selected lines or in whole buffer"
+msgstr ""
+
+#: cf/ui/mainwindow.py:210
+msgid "Save the current file"
+msgstr ""
+
+#: cf/ui/mainwindow.py:214
+msgid "Save the current file with a different name"
+msgstr ""
+
+#: cf/ui/mainwindow.py:217
+msgid "Print the current page"
+msgstr ""
+
+#: cf/ui/mainwindow.py:220
+msgid "Print preview"
+msgstr ""
+
+#: cf/ui/mainwindow.py:230
 msgid "Cut the selection"
 msgstr ""
 
-#: cf/ui/mainwindow.py:209
+#: cf/ui/mainwindow.py:233
 msgid "Copy the selection"
 msgstr ""
 
-#: cf/ui/mainwindow.py:212
+#: cf/ui/mainwindow.py:236
 msgid "Paste the clipboard"
 msgstr ""
 
-#: cf/ui/mainwindow.py:218
+#: cf/ui/mainwindow.py:242
 msgid "Queries"
 msgstr ""
 
-#: cf/ui/mainwindow.py:221
+#: cf/ui/mainwindow.py:245
 msgid "Execute statements in SQL editor"
 msgstr ""
 
-#: cf/ui/mainwindow.py:224
+#: cf/ui/mainwindow.py:248
+msgid "Exec_ute Current Statement"
+msgstr ""
+
+#: cf/ui/mainwindow.py:249
+msgid "Executes statement at cursor"
+msgstr ""
+
+#: cf/ui/mainwindow.py:252
 msgid "Transaction"
 msgstr ""
 
-#: cf/ui/mainwindow.py:225
+#: cf/ui/mainwindow.py:253
 msgid "Begin transaction on current connection"
 msgstr ""
 
-#: cf/ui/mainwindow.py:228
+#: cf/ui/mainwindow.py:256
 msgid "Commit"
 msgstr ""
 
-#: cf/ui/mainwindow.py:229
+#: cf/ui/mainwindow.py:257
 msgid "Commit current transaction"
 msgstr ""
 
-#: cf/ui/mainwindow.py:232
+#: cf/ui/mainwindow.py:260
 msgid "Rollback"
 msgstr ""
 
-#: cf/ui/mainwindow.py:233
+#: cf/ui/mainwindow.py:261
 msgid "Rollback current transaction"
 msgstr ""
 
-#: cf/ui/mainwindow.py:285
+#: cf/ui/mainwindow.py:313
 msgid "_Recent Files"
 msgstr ""
 
-#: cf/ui/mainwindow.py:500 cf/ui/editor.py:570
+#: cf/ui/mainwindow.py:553 cf/ui/datasources.py:383
 msgid "Select file"
 msgstr ""
 
-#: cf/ui/mainwindow.py:508 cf/ui/editor.py:441 cf/ui/editor.py:577
+#: cf/ui/mainwindow.py:561 cf/ui/editor.py:479
 msgid "All files (*)"
 msgstr ""
 
-#: cf/ui/mainwindow.py:512 cf/ui/mainwindow.py:519 cf/ui/editor.py:445
-#: cf/ui/editor.py:581
+#: cf/ui/mainwindow.py:565 cf/ui/mainwindow.py:572 cf/ui/editor.py:483
 msgid "SQL files (*.sql)"
 msgstr ""
 
-#: cf/ui/mainwindow.py:532
+#: cf/ui/mainwindow.py:585
 msgid "_Recent files:"
 msgstr ""
 
-#: cf/ui/dialogs.py:76 cf/ui/datasources.py:156
+#: cf/ui/dialogs.py:78
 msgid "Password:"
 msgstr ""
 
-#: cf/ui/datasources.py:74
-msgid "_Connections"
+#: cf/ui/datasources.py:116
+msgid "No description available."
 msgstr ""
 
-#: cf/ui/datasources.py:80
-msgid "No active database backends."
+#: cf/ui/datasources.py:159
+msgid "Delete Data Source?"
 msgstr ""
 
-#: cf/ui/datasources.py:81
-msgid "Open preferences and activate at least one database backend plugin."
+#: cf/ui/datasources.py:378
+msgid "Ask for password"
 msgstr ""
 
-#: cf/ui/datasources.py:91
-msgid "Other..."
+#: cf/ui/datasources.py:400
+msgid "An URL"
 msgstr ""
 
-#: cf/ui/datasources.py:107
-msgid "Database:"
+#: cf/ui/datasources.py:492 cf/ui/datasources.py:512
+#, python-format
+msgid ""
+"Missing fields:\n"
+"%(fields)s"
 msgstr ""
 
-#: cf/ui/datasources.py:114
-msgid "DSN:"
+#: cf/ui/datasources.py:494 cf/ui/datasources.py:504 cf/ui/datasources.py:514
+#: cf/ui/editor.py:779 cf/nativeshell.py:120 cf/db/__init__.py:232
+msgid "Failed"
 msgstr ""
 
-#: cf/ui/datasources.py:121
-msgid "Host:"
-msgstr ""
-
-#: cf/ui/datasources.py:131
-msgid "Port:"
-msgstr ""
-
-#: cf/ui/datasources.py:138
-msgid "User:"
-msgstr ""
-
-#: cf/ui/datasources.py:148
-msgid "_Ask for password"
-msgstr ""
-
-#: cf/ui/datasources.py:168 cf/ui/widgets/__init__.py:124 cf/ui/browser.py:154
-#: cf/ui/browser.py:247
-msgid "Connection failed"
-msgstr ""
-
-#: cf/ui/datasources.py:170
-msgid "Successful."
-msgstr ""
-
-#: cf/ui/datasources.py:200 cf/ui/datasources.py:360
-msgid "Plugin not active"
-msgstr ""
-
-#: cf/ui/datasources.py:201
-msgid "Please activate the following plugin to use this data source: "
-msgstr ""
-
-#: cf/ui/datasources.py:274
-msgid "Plugin not active."
+#: cf/ui/datasources.py:500
+msgid "Succeeded"
 msgstr ""
 
 #: cf/ui/statusbar.py:107
@@ -309,567 +335,564 @@ msgstr ""
 msgid "OVR"
 msgstr ""
 
-#: cf/ui/editor.py:153
+#: cf/ui/editor.py:174
 msgid "Split statements"
 msgstr ""
 
-#: cf/ui/editor.py:185
+#: cf/ui/editor.py:206
 #, python-format
 msgid "Query failed (%(sec).3f seconds)"
 msgstr ""
 
-#: cf/ui/editor.py:189
+#: cf/ui/editor.py:210
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d rows)"
 msgstr ""
 
-#: cf/ui/editor.py:194
+#: cf/ui/editor.py:215
 #, python-format
 msgid "Query finished (%(sec).3f seconds, %(num)d affected rows)"
 msgstr ""
 
-#: cf/ui/editor.py:361
+#: cf/ui/editor.py:367
 msgid "Select a single statement to explain."
 msgstr ""
 
-#: cf/ui/editor.py:409
+#: cf/ui/editor.py:411
+#, python-format
+msgid "No such file: %(name)s"
+msgstr ""
+
+#: cf/ui/editor.py:413
+#, python-format
+msgid "File is not readable: %(name)s"
+msgstr ""
+
+#: cf/ui/editor.py:415
+msgid "Failed to open file"
+msgstr ""
+
+#: cf/ui/editor.py:446
 #, python-format
 msgid "Save file %(name)s before closing the editor?"
 msgstr ""
 
-#: cf/ui/editor.py:429
+#: cf/ui/editor.py:467
 msgid "Save file"
 msgstr ""
 
-#: cf/ui/editor.py:483
+#: cf/ui/editor.py:524
 #, python-format
 msgid "Query running... (%.3f seconds)"
 msgstr ""
 
-#: cf/ui/editor.py:534
-msgid "Show in main window"
-msgstr ""
-
-#: cf/ui/editor.py:657 cf/ui/editor.py:659 cf/ui/pane.py:383 cf/ui/pane.py:449
-#: data/glade/editor.glade.h:3
-msgid "Query"
-msgstr ""
-
-#: cf/ui/editor.py:757
+#: cf/ui/editor.py:748
 msgid "Data copied to clipboard"
 msgstr ""
 
-#: cf/ui/editor.py:906
+#: cf/ui/editor.py:901
 msgid "Variables"
 msgstr ""
 
-#: cf/ui/prefs.py:80 data/glade/preferences.glade.h:22
+#: cf/ui/prefs.py:86 data/glade/preferences.glade.h:24
 msgid "General"
 msgstr ""
 
-#: cf/ui/prefs.py:81 cf/backends/schema/__init__.py:86
-#: data/glade/preferences.glade.h:34
+#: cf/ui/prefs.py:87 cf/db/objects.py:801 data/glade/preferences.glade.h:36
 msgid "View"
 msgstr ""
 
-#: cf/ui/prefs.py:83
+#: cf/ui/prefs.py:89
 msgid "Fonts & Colors"
 msgstr ""
 
-#: cf/ui/prefs.py:84
+#: cf/ui/prefs.py:90
 msgid ""
 "Keyboard\n"
 "Shortcuts"
 msgstr ""
 
-#: cf/ui/prefs.py:227 cf/ui/prefs.py:388 cf/ui/prefs.py:457 cf/library.py:337
+#: cf/ui/prefs.py:154
+msgid "Action"
+msgstr ""
+
+#: cf/ui/prefs.py:158
+msgid "Shortcut"
+msgstr ""
+
+#: cf/ui/prefs.py:239 cf/ui/prefs.py:403 cf/library.py:335
 msgid "Unknown"
 msgstr ""
 
-#: cf/ui/prefs.py:246
+#: cf/ui/prefs.py:257
 msgid "Install plugin"
 msgstr ""
 
-#: cf/ui/prefs.py:251
+#: cf/ui/prefs.py:262
 msgid "CrunchyFrog plugins (*.zip, *.py)"
 msgstr ""
 
-#: cf/ui/prefs.py:393
+#: cf/ui/prefs.py:408
 msgid "ERROR"
 msgstr ""
 
-#: cf/ui/widgets/grid.py:136
+#: cf/ui/widgets/grid.py:137
 msgid "Copy value to clipboard"
 msgstr ""
 
-#: cf/ui/widgets/grid.py:145 cf/ui/widgets/grid.py:247
+#: cf/ui/widgets/grid.py:146 cf/ui/widgets/grid.py:259
 msgid "Save as..."
 msgstr ""
 
-#: cf/ui/widgets/grid.py:152
+#: cf/ui/widgets/grid.py:158
 msgid "Open with..."
 msgstr ""
 
-#: cf/ui/widgets/grid.py:163
+#: cf/ui/widgets/grid.py:170
 msgid "View value"
 msgstr ""
 
-#: cf/ui/widgets/grid.py:168
+#: cf/ui/widgets/grid.py:175
 msgid "This cell contains a 'NULL' value."
 msgstr ""
 
-#: cf/ui/widgets/grid.py:259
+#: cf/ui/widgets/grid.py:274
 msgid "All files"
 msgstr ""
 
-#: cf/ui/widgets/grid.py:644
+#: cf/ui/widgets/grid.py:675
 msgid "Data"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:99 cf/backends/__init__.py:95
+#: cf/ui/widgets/__init__.py:89
 msgid "Connection"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:102 cf/ui/pane.py:460
+#: cf/ui/widgets/__init__.py:92 cf/ui/pane.py:591
 msgid "Not connected"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:103
+#: cf/ui/widgets/__init__.py:93
 msgid "Click to open a connection"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:140
+#: cf/ui/widgets/__init__.py:128
 msgid "_New connection"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:223
+#: cf/ui/widgets/__init__.py:211
 msgid "Export data"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:241
+#: cf/ui/widgets/__init__.py:229
 msgid "_Edit export options"
 msgstr ""
 
-#: cf/ui/widgets/__init__.py:248
+#: cf/ui/widgets/__init__.py:235
 msgid "_Open file when finished"
 msgstr ""
 
-#: cf/ui/browser.py:55
+#: cf/ui/browser.py:54
 msgid "Navigator"
 msgstr ""
 
-#: cf/ui/browser.py:119
+#: cf/ui/browser.py:126
 msgid ""
 "<b>No active data sources</b>\n"
 "\n"
 "<a href=\"#\">Click</a> to open the data source manager."
 msgstr ""
 
-#: cf/ui/browser.py:124
+#: cf/ui/browser.py:131
 msgid ""
 "<b>No active data sources</b>\n"
 "Select \"Edit\" &gt; \"Data Source Manager\"\n"
 "to create one."
 msgstr ""
 
-#: cf/ui/browser.py:164
+#: cf/ui/browser.py:170 cf/ui/browser.py:189
 msgid "Disconnect"
 msgstr ""
 
-#: cf/ui/browser.py:167
+#: cf/ui/browser.py:173 cf/ui/browser.py:193
 msgid "Connect"
 msgstr ""
 
-#: cf/ui/browser.py:193
-msgid "Add data source"
+#: cf/ui/browser.py:183
+msgid "Add Data source"
 msgstr ""
 
-#: cf/ui/browser.py:208 cf/backends/ldapbe.py:298
-msgid "Details"
+#: cf/ui/browser.py:198 data/glade/editor.glade.h:4
+msgid "Refresh"
 msgstr ""
 
-#: cf/ui/browser.py:239
+#: cf/ui/browser.py:254
 msgid "Connecting..."
 msgstr ""
 
-#: cf/ui/refviewer.py:43
-msgid "Reference Browser"
-msgstr ""
-
-#: cf/ui/refviewer.py:44
-msgid "A tiny webbrowser to view references"
-msgstr ""
-
-#: cf/ui/refviewer.py:75
-msgid "References"
-msgstr ""
-
-#: cf/ui/confirmsave.py:73 cf/ui/confirmsave.py:97
+#: cf/ui/confirmsave.py:94 cf/ui/confirmsave.py:127
 #, python-format
 msgid "Unsaved Query %(num)s"
 msgstr ""
 
-#: cf/ui/confirmsave.py:98
+#: cf/ui/confirmsave.py:128
 #, python-format
 msgid "Save the changes to document \"%(filename)s\" before closing?"
 msgstr ""
 
-#: cf/ui/confirmsave.py:102
+#: cf/ui/confirmsave.py:132
 #, python-format
 msgid ""
 "There are %(num)d documents with unsaved changes. Save changes before "
 "closing?"
 msgstr ""
 
-#: cf/ui/pane.py:182
+#: cf/ui/pane.py:216
 #, python-format
 msgid "Detach %(name)s"
 msgstr ""
 
-#: cf/ui/pane.py:187
+#: cf/ui/pane.py:221
 msgid "side pane"
 msgstr ""
 
-#: cf/ui/pane.py:190
+#: cf/ui/pane.py:224
 msgid "bottom pane"
 msgstr ""
 
-#: cf/ui/pane.py:192
+#: cf/ui/pane.py:226
 #, python-format
 msgid "Move to %(name)s"
 msgstr ""
 
-#: cf/ui/pane.py:280
+#: cf/ui/pane.py:305
 msgid "Side _Pane"
 msgstr ""
 
-#: cf/ui/pane.py:281
+#: cf/ui/pane.py:306
 msgid "Show or hide the side pane in the current window"
 msgstr ""
 
-#: cf/ui/pane.py:302
+#: cf/ui/pane.py:327
 msgid "_Bottom Pane"
 msgstr ""
 
-#: cf/ui/pane.py:303
+#: cf/ui/pane.py:328
 msgid "Show or hide the bottom pane in the current window"
 msgstr ""
 
-#: cf/library.py:101 cf/library.py:214
-msgid "Library"
+#: cf/ui/pane.py:444 cf/ui/pane.py:580 data/glade/editor.glade.h:3
+msgid "Query"
 msgstr ""
 
-#: cf/library.py:102
-msgid "A personal SQL library"
+#: cf/ui/pane.py:464
+msgid "Close"
 msgstr ""
 
-#: cf/library.py:133
-msgid "Save to library"
+#: cf/nativeshell.py:33 cf/nativeshell.py:91
+msgid "Native Shell"
 msgstr ""
 
-#: cf/library.py:134
-msgid "Save content of the current editor to SQL library."
+#: cf/nativeshell.py:34
+msgid "Native Database shells"
 msgstr ""
 
-#: cf/library.py:307 cf/library.py:320
-msgid "Add category"
+#: cf/nativeshell.py:63
+msgid "Open Native Shell"
 msgstr ""
 
-#: cf/library.py:311
-msgid "Rename"
+#: cf/nativeshell.py:82
+msgid "Please install python-vte."
 msgstr ""
 
-#: cf/library.py:315
-msgid "Delete"
-msgstr ""
-
-#: cf/filter/exportfilter.py:28
-msgid "CSV Export"
-msgstr ""
-
-#: cf/filter/exportfilter.py:29
-msgid "Export query results as CSV files"
-msgstr ""
-
-#: cf/filter/exportfilter.py:36
-msgid "Text CSV (.csv)"
-msgstr ""
-
-#: cf/filter/exportfilter.py:51
-msgid "OpenDocument Export"
-msgstr ""
-
-#: cf/filter/exportfilter.py:52
-msgid "Export query results as OpenDocument Spreadsheets"
-msgstr ""
-
-#: cf/filter/exportfilter.py:58
-msgid "OpenDocument Spreadsheet (.ods)"
-msgstr ""
-
-#: cf/filter/exportfilter.py:70
-msgid "CrunchyFrog Data Export"
-msgstr ""
-
-#: cf/shell/__init__.py:44 cf/shell/__init__.py:74
+#: cf/nativeshell.py:102 cf/shell/__init__.py:41 cf/shell/__init__.py:71
 msgid "Shell"
 msgstr ""
 
-#: cf/shell/__init__.py:45
-msgid "Interactive shell (mainly for debugging)"
+#: cf/library.py:99 cf/library.py:212
+msgid "Library"
 msgstr ""
 
-#: cf/shell/__init__.py:69
-msgid "Python module ipython is required."
+#: cf/library.py:100
+msgid "A personal SQL library"
 msgstr ""
 
-#: cf/plugins/core.py:156
-msgid "Password required"
+#: cf/library.py:131
+msgid "Save to library"
 msgstr ""
 
-#: cf/plugins/core.py:156
-msgid "Enter the password to connect to this database."
+#: cf/library.py:132
+msgid "Save content of the current editor to SQL library."
 msgstr ""
 
-#: cf/plugins/core.py:161
-msgid "Miscellaneous"
+#: cf/library.py:305 cf/library.py:318
+msgid "Add category"
 msgstr ""
 
-#: cf/plugins/core.py:162
-msgid "Database backends"
+#: cf/library.py:309
+msgid "Rename"
 msgstr ""
 
-#: cf/plugins/core.py:163
-msgid "Export filter"
+#: cf/library.py:313
+msgid "Delete"
 msgstr ""
 
-#: cf/backends/schema/__init__.py:59
-msgid "Schemata"
+#: cf/filter/exportfilter.py:27
+msgid "CSV Export"
 msgstr ""
 
-#: cf/backends/schema/__init__.py:62
-msgid "Schema"
+#: cf/filter/exportfilter.py:28
+msgid "Export query results as CSV files"
 msgstr ""
 
-#: cf/backends/schema/__init__.py:66
-msgid "Tables"
+#: cf/filter/exportfilter.py:35
+msgid "Text CSV (.csv)"
 msgstr ""
 
-#: cf/backends/schema/__init__.py:70
-msgid "Table"
+#: cf/filter/exportfilter.py:50
+msgid "OpenDocument Export"
 msgstr ""
 
-#: cf/backends/schema/__init__.py:74
+#: cf/filter/exportfilter.py:51
+msgid "Export query results as OpenDocument Spreadsheets"
+msgstr ""
+
+#: cf/filter/exportfilter.py:57
+msgid "OpenDocument Spreadsheet (.ods)"
+msgstr ""
+
+#: cf/filter/exportfilter.py:69
+msgid "CrunchyFrog Data Export"
+msgstr ""
+
+#: cf/autocompletion.py:56
+msgid "_Auto-Complete"
+msgstr ""
+
+#: cf/autocompletion.py:302
+msgid "Keyword"
+msgstr ""
+
+#: cf/db/objects.py:448 cf/db/objects.py:456
+msgid "Arguments"
+msgstr ""
+
+#: cf/db/objects.py:463
+msgid "dbschema_cache"
+msgstr ""
+
+#: cf/db/objects.py:476
 msgid "Columns"
 msgstr ""
 
-#: cf/backends/schema/__init__.py:77
+#: cf/db/objects.py:510
 msgid "Column"
 msgstr ""
 
-#: cf/backends/schema/__init__.py:82
-msgid "Views"
-msgstr ""
-
-#: cf/backends/schema/__init__.py:90
-msgid "Sequences"
-msgstr ""
-
-#: cf/backends/schema/__init__.py:94
-msgid "Sequence"
-msgstr ""
-
-#: cf/backends/schema/__init__.py:99
-msgid "Functions"
-msgstr ""
-
-#: cf/backends/schema/__init__.py:103
-msgid "Function"
-msgstr ""
-
-#: cf/backends/schema/__init__.py:108
-msgid "Packages"
-msgstr ""
-
-#: cf/backends/schema/__init__.py:111
-msgid "Package"
-msgstr ""
-
-#: cf/backends/schema/__init__.py:115
+#: cf/db/objects.py:520
 msgid "Constraints"
 msgstr ""
 
-#: cf/backends/schema/__init__.py:118
+#: cf/db/objects.py:551
 msgid "Constraint"
 msgstr ""
 
-#: cf/backends/schema/__init__.py:122
-msgid "Indexes"
+#: cf/db/objects.py:568
+msgid "Function"
 msgstr ""
 
-#: cf/backends/schema/__init__.py:125
-msgid "Index"
+#: cf/db/objects.py:578
+msgid "Functions"
 msgstr ""
 
-#: cf/backends/postgres.py:45
-msgid "PostgreSQL Reference"
+#: cf/db/objects.py:595
+msgid "Table"
 msgstr ""
 
-#: cf/backends/postgres.py:56
-msgid "PostgreSQL Plugin"
+#: cf/db/objects.py:642
+msgid "Tables"
 msgstr ""
 
-#: cf/backends/postgres.py:57
-msgid "Provides access to PostgreSQL databases"
+#: cf/db/objects.py:655
+msgid "Schema"
 msgstr ""
 
-#: cf/backends/postgres.py:93 cf/backends/mssql.py:75 cf/backends/mysql.py:79
-#: data/plugins/backend_oracle/__init__.py:74
-msgid "No password given."
+#: cf/db/objects.py:663
+msgid "Schemata"
 msgstr ""
 
-#: cf/backends/postgres.py:98
-msgid "Python module psycopg2 is not installed."
+#: cf/db/objects.py:693
+msgid "Sequence"
 msgstr ""
 
-#: cf/backends/postgres.py:172
-msgid "Languages"
+#: cf/db/objects.py:702
+msgid "Sequences"
 msgstr ""
 
-#: cf/backends/postgres.py:175
+#: cf/db/objects.py:716
+msgid "User"
+msgstr ""
+
+#: cf/db/objects.py:725
+msgid "Users"
+msgstr ""
+
+#: cf/db/objects.py:741 cf/db/objects.py:747
+msgid "Trigger"
+msgstr ""
+
+#: cf/db/objects.py:767
+msgid "Type"
+msgstr ""
+
+#: cf/db/objects.py:775
+msgid "Types"
+msgstr ""
+
+#: cf/db/objects.py:783
+msgid "Views"
+msgstr ""
+
+#: cf/db/objects.py:813
 msgid "Language"
 msgstr ""
 
-#: cf/backends/postgres.py:306
-msgid "Definition"
+#: cf/db/objects.py:822
+msgid "Languages"
 msgstr ""
 
-#: cf/backends/postgres.py:314
-msgid "Python module psycopg2 required."
+#: cf/db/objects.py:829
+msgid "Index"
 msgstr ""
 
-#: cf/backends/sqlite.py:41
-msgid "SQLite3 Plugin"
+#: cf/db/objects.py:839
+msgid "Indexes"
 msgstr ""
 
-#: cf/backends/sqlite.py:42
-msgid "Provides access to SQLite3 databases"
+#: cf/db/__init__.py:51
+msgid "Provides access to PostgreSQL databases"
 msgstr ""
 
-#: cf/backends/sqlite.py:59
-msgid "Database file:"
+#: cf/db/__init__.py:56
+msgid "Provides access to SQLite databases"
 msgstr ""
 
-#: cf/backends/sqlite.py:61
-msgid "Select database file"
-msgstr ""
-
-#: cf/backends/sqlite.py:75
-msgid "Python module sqlite3 is not installed."
-msgstr ""
-
-#: cf/backends/sqlite.py:133
-msgid "SQLite Reference"
-msgstr ""
-
-#: cf/backends/sqlite.py:143
-msgid "Python module sqlite3 required."
-msgstr ""
-
-#: cf/backends/dbapi2helper.py:93
-msgid "An error occured"
-msgstr "Προέκυψε σφάλμα"
-
-#: cf/backends/mssql.py:40
-msgid "MS-SQL Plugin"
-msgstr ""
-
-#: cf/backends/mssql.py:41
-msgid "Provides access to MS-SQL databases"
-msgstr ""
-
-#: cf/backends/mssql.py:159
-msgid "Python module pymssql not found."
-msgstr ""
-
-#: cf/backends/mysql.py:42
-msgid "MySQL Plugin"
-msgstr ""
-
-#: cf/backends/mysql.py:43
+#: cf/db/__init__.py:61
 msgid "Provides access to MySQL databases"
 msgstr ""
 
-#: cf/backends/mysql.py:84
-msgid "Python module MySQLdb is not installed."
-msgstr ""
-
-#: cf/backends/mysql.py:167
-msgid "MySQL Reference"
-msgstr ""
-
-#: cf/backends/mysql.py:179
-msgid "Python module MySQLdb required."
-msgstr ""
-
-#: cf/backends/ldapbe.py:46
-msgid "LDAP Plugin"
-msgstr "Πρόσθετο LDAP"
-
-#: cf/backends/ldapbe.py:47
-msgid "Provides access to LDAP/ActiveDirectory servers"
-msgstr "Παρέχει πρόσβαση σε διακομιστές LDAP/ActiveDirectory"
-
-#: cf/backends/ldapbe.py:78
-msgid "_Details"
-msgstr "_Λεπτομέρειες"
-
-#: cf/backends/ldapbe.py:99
-msgid "Base DN:"
-msgstr ""
-
-#: cf/backends/ldapbe.py:115
-msgid "Python module ldap is not installed."
-msgstr "Το πρόσθετο python ldap δεν είναι εγκατεστημένο"
-
-#: cf/backends/ldapbe.py:167
-msgid "Search"
-msgstr ""
-
-#: cf/backends/ldapbe.py:192
-msgid "Export"
-msgstr "Εξαγωγή"
-
-#: cf/backends/ldapbe.py:307
-msgid "Attribute"
-msgstr "Ιδιότητα"
-
-#: cf/backends/ldapbe.py:310
-msgid "Value"
-msgstr "Τιμή"
-
-#: cf/backends/ldapbe.py:345
-msgid "Python module ldap required."
-msgstr "Απαιτείται το πρόσθετο python ldap"
-
-#: cf/config/__init__.py:114
-msgid "Writing configuration"
-msgstr ""
-
-#: data/plugins/backend_oracle/__init__.py:39
-msgid "Oracle Plugin"
-msgstr ""
-
-#: data/plugins/backend_oracle/__init__.py:40
+#: cf/db/__init__.py:66
 msgid "Provides access to Oracle databases"
 msgstr ""
 
-#: data/plugins/backend_oracle/__init__.py:79
-msgid "Python module cx_Oracle is not installed."
+#: cf/db/__init__.py:71
+msgid "Provides access to SQL Server databases"
 msgstr ""
 
-#: data/plugins/backend_oracle/__init__.py:216
-msgid "Python module cx_Oracle required."
+#: cf/db/__init__.py:81
+msgid "Provides access to Firebird databses"
+msgstr ""
+
+#: cf/db/__init__.py:86
+msgid "Provides access to Informix databases"
+msgstr ""
+
+#: cf/db/__init__.py:91
+msgid "Provides access to MaxDB databases"
+msgstr ""
+
+#: cf/db/__init__.py:195
+msgid "Password required"
+msgstr ""
+
+#: cf/db/__init__.py:229
+#, python-format
+msgid "Could not connect to %(name)s: %(error)s"
+msgstr ""
+
+#: cf/db/__init__.py:320
+#, python-format
+msgid "Connection #%(num)d"
+msgstr ""
+
+#: cf/db/backends/oracle.py:80
+msgid "TNS Name"
+msgstr ""
+
+#: cf/db/backends/oracle.py:81 cf/db/backends/__init__.py:52
+msgid "Username"
+msgstr ""
+
+#: cf/db/backends/oracle.py:82 cf/db/backends/__init__.py:53
+msgid "Password"
+msgstr ""
+
+#: cf/db/backends/oracle.py:84
+msgid "Mode"
+msgstr ""
+
+#: cf/db/backends/postgres.py:35
+msgid "SSL Mode"
+msgstr ""
+
+#: cf/db/backends/postgres.py:39
+msgid "No SSL (disable)"
+msgstr ""
+
+#: cf/db/backends/postgres.py:41
+msgid "First try non SSL, then try SSL (allow)"
+msgstr ""
+
+#: cf/db/backends/postgres.py:43
+msgid "First try SSL, then non-SSL (prefer)"
+msgstr ""
+
+#: cf/db/backends/postgres.py:45
+msgid "Only try SSL connection (require)"
+msgstr ""
+
+#: cf/db/backends/sqlite.py:36
+msgid "File"
+msgstr ""
+
+#: cf/db/backends/__init__.py:48
+msgid "Host"
+msgstr ""
+
+#: cf/db/backends/__init__.py:49
+msgid "Port"
+msgstr ""
+
+#: cf/db/backends/__init__.py:51
+msgid "Database"
+msgstr ""
+
+#: cf/db/backends/__init__.py:70
+msgid "URL"
+msgstr ""
+
+#: cf/db/meta.py:51
+msgid "Loading database structure..."
+msgstr ""
+
+#: cf/shell/__init__.py:42
+msgid "Interactive shell (mainly for debugging)"
+msgstr ""
+
+#: cf/shell/__init__.py:66
+msgid "Python module ipython is required."
+msgstr ""
+
+#: cf/plugins/core.py:119
+msgid "Miscellaneous"
+msgstr ""
+
+#: cf/plugins/core.py:120
+msgid "Export filter"
+msgstr ""
+
+#: cf/config/__init__.py:112
+msgid "Writing configuration"
 msgstr ""
 
 #: data/glade/connectionsdialog.glade.h:1
@@ -880,8 +903,8 @@ msgstr ""
 msgid "_Assign to editor"
 msgstr ""
 
-#: data/glade/connectionsdialog.glade.h:3 data/glade/crunchyfrog.glade.h:28
-#: data/glade/preferences.glade.h:49
+#: data/glade/connectionsdialog.glade.h:3 data/glade/datasources.glade.h:7
+#: data/glade/preferences.glade.h:53
 msgid "gtk-close"
 msgstr ""
 
@@ -893,158 +916,116 @@ msgstr ""
 msgid "gtk-disconnect"
 msgstr ""
 
-#: data/glade/crunchyfrog.glade.h:1
-msgid "(objectclass=*)"
+#: data/glade/datasourceedit.glade.h:1
+msgid "<b>Connection Settings</b>"
 msgstr ""
 
-#: data/glade/crunchyfrog.glade.h:2
-msgid "<b>Installed backends</b>"
+#: data/glade/datasourceedit.glade.h:2
+msgid "<b>Data Source</b>"
 msgstr ""
 
-#: data/glade/crunchyfrog.glade.h:3
-msgid "<b>Select an instance</b>"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:5
-#, no-c-format
-msgid "<span size=\"large\"><b>%s</b></span>"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:6
-msgid "Close _without Saving"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:7
+#: data/glade/datasourceedit.glade.h:3
 msgid ""
-"CrunchyFrog is already running.\n"
-"Open selected files..."
+"<b>Edit Data Source</b>\n"
+"Fill out the form below to create or edit this data source."
 msgstr ""
 
-#: data/glade/crunchyfrog.glade.h:9
-msgid "If you don't save, all your changes will be permanently lost."
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:10
-msgid "Installed backends"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:11
-msgid "Progress"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:12
-msgid "S_elect the documents you want to save:"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:13
-msgid "S_ub-tree level"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:14
-msgid "Save files"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:15
-msgid "Search s_cope:"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:16
-msgid "Select instance"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:17
-msgid "Separate attributes by commas"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:18
+#: data/glade/datasourceedit.glade.h:5
 msgid ""
-"The following backends are installed on your system.\n"
-"Plugins currently not available, e.g. because of missing requirements, are "
-"marked with a warning sign."
+"<i>Start commands are execute evertime a new database\n"
+"connection is established. They can be used to set default\n"
+"encodings or schemata.</i>"
 msgstr ""
 
-#: data/glade/crunchyfrog.glade.h:20
-msgid "Toggle favorites"
+#: data/glade/datasourceedit.glade.h:8
+msgid ""
+"Choosing a color for a data source helps to identify it within the "
+"application (e.g. red = production)."
 msgstr ""
 
-#: data/glade/crunchyfrog.glade.h:21
-msgid "Toggle navigation bar"
+#: data/glade/datasourceedit.glade.h:9
+msgid "D_esscription:"
 msgstr ""
 
-#: data/glade/crunchyfrog.glade.h:22
-msgid "_Attributes:"
+#: data/glade/datasourceedit.glade.h:10
+msgid "Edit Data Source"
 msgstr ""
 
-#: data/glade/crunchyfrog.glade.h:23
-msgid "_Filter:"
+#: data/glade/datasourceedit.glade.h:11
+msgid "_Color Code:"
 msgstr ""
 
-#: data/glade/crunchyfrog.glade.h:24
-msgid "_One level"
+#: data/glade/datasourceedit.glade.h:12
+msgid "_Database Type:"
 msgstr ""
 
-#: data/glade/crunchyfrog.glade.h:25
-msgid "_Search DN:"
+#: data/glade/datasourceedit.glade.h:13 data/glade/preferences.glade.h:43
+msgid "_General"
 msgstr ""
 
-#: data/glade/crunchyfrog.glade.h:26
-msgid "_URL:"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:27
-msgid "gtk-cancel"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:29
-msgid "gtk-find"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:30 data/glade/datasourcemanager.glade.h:9
-msgid "gtk-ok"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:31
-msgid "gtk-save"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:32
-msgid "in an _existing instance"
-msgstr ""
-
-#: data/glade/crunchyfrog.glade.h:33
-msgid "in an _new instance"
-msgstr ""
-
-#: data/glade/datasourcemanager.glade.h:1
-msgid "Datasource Manager"
-msgstr ""
-
-#: data/glade/datasourcemanager.glade.h:2
-msgid "St_ored connections"
-msgstr ""
-
-#: data/glade/datasourcemanager.glade.h:3
-msgid "_Backend:"
-msgstr ""
-
-#: data/glade/datasourcemanager.glade.h:4
-msgid "_Datasources"
-msgstr ""
-
-#: data/glade/datasourcemanager.glade.h:5
-msgid "_Description:"
-msgstr ""
-
-#: data/glade/datasourcemanager.glade.h:6
+#: data/glade/datasourceedit.glade.h:14
 msgid "_Name:"
 msgstr ""
 
-#: data/glade/datasourcemanager.glade.h:7
-msgid "_Test connection"
+#: data/glade/datasourceedit.glade.h:15
+msgid "_Startup Commands"
 msgstr ""
 
-#: data/glade/datasourcemanager.glade.h:8 data/glade/preferences.glade.h:50
+#: data/glade/datasourceedit.glade.h:16
+msgid "_Test Connection"
+msgstr ""
+
+#: data/glade/datasourceedit.glade.h:17
+msgid "_Use a color for this data source"
+msgstr ""
+
+#: data/glade/datasourceedit.glade.h:18 data/glade/instanceselector.glade.h:5
+#: data/glade/saveconfirm.glade.h:7
+msgid "gtk-cancel"
+msgstr ""
+
+#: data/glade/datasourceedit.glade.h:19 data/glade/instanceselector.glade.h:6
+msgid "gtk-ok"
+msgstr ""
+
+#: data/glade/datasources.glade.h:1
+msgid "Active"
+msgstr ""
+
+#: data/glade/datasources.glade.h:2
+msgid "All"
+msgstr ""
+
+#: data/glade/datasources.glade.h:3
+msgid "Available"
+msgstr ""
+
+#: data/glade/datasources.glade.h:4
+msgid "Show:"
+msgstr ""
+
+#: data/glade/datasources.glade.h:6
+msgid "_Provider"
+msgstr ""
+
+#: data/glade/datasources.glade.h:8
+msgid "gtk-delete"
+msgstr ""
+
+#: data/glade/datasources.glade.h:9
+msgid "gtk-edit"
+msgstr ""
+
+#: data/glade/datasources.glade.h:10 data/glade/preferences.glade.h:54
 msgid "gtk-help"
+msgstr ""
+
+#: data/glade/datasources.glade.h:11
+msgid "gtk-new"
+msgstr ""
+
+#: data/glade/datasources.glade.h:12
+msgid "gtk-refresh"
 msgstr ""
 
 #: data/glade/editor.glade.h:1
@@ -1055,10 +1036,6 @@ msgstr ""
 msgid "E_xplain"
 msgstr ""
 
-#: data/glade/editor.glade.h:4
-msgid "Refresh"
-msgstr ""
-
 #: data/glade/editor.glade.h:5
 msgid "_Messages"
 msgstr ""
@@ -1067,178 +1044,241 @@ msgstr ""
 msgid "_Results"
 msgstr ""
 
+#: data/glade/instanceselector.glade.h:1
+msgid "<b>Select an instance</b>"
+msgstr ""
+
+#: data/glade/instanceselector.glade.h:2
+msgid ""
+"CrunchyFrog is already running.\n"
+"Open selected files..."
+msgstr ""
+
+#: data/glade/instanceselector.glade.h:4
+msgid "Select instance"
+msgstr ""
+
+#: data/glade/instanceselector.glade.h:7
+msgid "in an _existing instance"
+msgstr ""
+
+#: data/glade/instanceselector.glade.h:8
+msgid "in an _new instance"
+msgstr ""
+
 #: data/glade/preferences.glade.h:1
 msgid "    "
 msgstr ""
 
 #: data/glade/preferences.glade.h:2
-msgid "<b>Automatic Indentation</b>"
+msgid "<b>Autocompletion</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:3
-msgid "<b>Bracket Matching</b>"
+msgid "<b>Automatic Indentation</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:4
-msgid "<b>Current Line</b>"
+msgid "<b>Bracket Matching</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:5
-msgid "<b>Font</b>"
+msgid "<b>Current Line</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:6
-msgid "<b>Keyboard Shortcuts</b>"
+msgid "<b>Font</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:7
-msgid "<b>Line Numbers</b>"
+msgid "<b>Keyboard Shortcuts</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:8
-msgid "<b>New editors</b>"
+msgid "<b>Line Numbers</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:9
-msgid "<b>Right Margin</b>"
+msgid "<b>New Editors</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:10
-msgid "<b>SQL Splitting</b>"
+msgid "<b>Right Margin</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:11
-msgid "<b>Tab Stops</b>"
+msgid "<b>SQL Splitting</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:12
-msgid "<b>Text Wrapping</b>"
+msgid "<b>Tab Stops</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:13
-msgid "<b>Variables</b>"
+msgid "<b>Text Wrapping</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:14
-msgid "<span weight=\"bold\">Color Scheme</span>"
+msgid "<b>Variables</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:15
-msgid "Activate to split statements in a SQL editor before execution."
+msgid ""
+"<i>To edit a shortcut key, click on the corresponding entry and type a new "
+"accelerator or press delete to clear.</i>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:16
-msgid "Display right _margin"
+msgid "<span weight=\"bold\">Color Scheme</span>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:17
-msgid "Do not _split words over two lines"
+msgid "Activate to split statements in a SQL editor before execution."
+msgstr ""
+
+#: data/glade/preferences.glade.h:18
+msgid "Display right _margin"
 msgstr ""
 
 #: data/glade/preferences.glade.h:19
-msgid "Editor _font: "
-msgstr ""
-
-#: data/glade/preferences.glade.h:20
-msgid "Enable text _wrapping"
+msgid "Do not _split words over two lines"
 msgstr ""
 
 #: data/glade/preferences.glade.h:21
-msgid "Font & Colors"
+msgid "Editor _font: "
+msgstr ""
+
+#: data/glade/preferences.glade.h:22
+msgid "Enable text _wrapping"
 msgstr ""
 
 #: data/glade/preferences.glade.h:23
-msgid "Highlight current _line"
-msgstr ""
-
-#: data/glade/preferences.glade.h:24
-msgid "Highlight matching _bracket"
+msgid "Font & Colors"
 msgstr ""
 
 #: data/glade/preferences.glade.h:25
-msgid "Insert _spaces instead of tabs"
+msgid "Highlight current _line"
 msgstr ""
 
 #: data/glade/preferences.glade.h:26
-msgid "Open editor in _separate window"
+msgid "Highlight matching _bracket"
 msgstr ""
 
 #: data/glade/preferences.glade.h:27
-msgid "Pick the editor font"
+msgid ""
+"If activated the connection of the active editor is used when a new editor "
+"is opened."
 msgstr ""
 
 #: data/glade/preferences.glade.h:28
-msgid "Preferences"
+msgid "Insert _spaces instead of tabs"
 msgstr ""
 
 #: data/glade/preferences.glade.h:29
-msgid "Replace _variables (e.g. '$MyVar')"
+msgid "Pick the editor font"
 msgstr ""
 
 #: data/glade/preferences.glade.h:30
-msgid "Shortcuts"
+msgid "Preferences"
 msgstr ""
 
 #: data/glade/preferences.glade.h:31
-msgid "Synchronize with plugin repository"
+msgid "Replace _variables (e.g. '$MyVar')"
 msgstr ""
 
 #: data/glade/preferences.glade.h:32
-msgid "TODO"
+msgid "Shortcuts"
 msgstr ""
 
 #: data/glade/preferences.glade.h:33
-msgid "Use SQL s_plitting"
+msgid "Synchronize with plugin repository"
+msgstr ""
+
+#: data/glade/preferences.glade.h:34
+msgid "TODO"
 msgstr ""
 
 #: data/glade/preferences.glade.h:35
-msgid "_About this plugin"
-msgstr ""
-
-#: data/glade/preferences.glade.h:36
-msgid "_Configure plugin"
+msgid "Use SQL s_plitting"
 msgstr ""
 
 #: data/glade/preferences.glade.h:37
-msgid "_Display line numbers"
+msgid "_About this plugin"
 msgstr ""
 
 #: data/glade/preferences.glade.h:38
-msgid "_Editor"
+msgid "_Configure plugin"
 msgstr ""
 
 #: data/glade/preferences.glade.h:39
-msgid "_Enable automatic indentation"
+msgid "_Display line numbers"
 msgstr ""
 
 #: data/glade/preferences.glade.h:40
-msgid "_Enable repository"
+msgid "_Editor"
 msgstr ""
 
 #: data/glade/preferences.glade.h:41
-msgid "_General"
+msgid "_Enable automatic indentation"
 msgstr ""
 
 #: data/glade/preferences.glade.h:42
+msgid "_Enable repository"
+msgstr ""
+
+#: data/glade/preferences.glade.h:44
 msgid "_Install plugin"
 msgstr ""
 
-#: data/glade/preferences.glade.h:43
+#: data/glade/preferences.glade.h:45
 msgid "_Open plugin folder"
 msgstr ""
 
-#: data/glade/preferences.glade.h:45
+#: data/glade/preferences.glade.h:47
 msgid "_Remove plugin"
 msgstr ""
 
-#: data/glade/preferences.glade.h:46
+#: data/glade/preferences.glade.h:48
 msgid "_Right margin at column:"
 msgstr ""
 
-#: data/glade/preferences.glade.h:47
+#: data/glade/preferences.glade.h:49
 msgid "_Synchronize"
 msgstr ""
 
-#: data/glade/preferences.glade.h:48
+#: data/glade/preferences.glade.h:50
+msgid "_Tab Starts Autocompletion (Advanced Mode)"
+msgstr ""
+
+#: data/glade/preferences.glade.h:51
 msgid "_Tab width:"
+msgstr ""
+
+#: data/glade/preferences.glade.h:52
+msgid "_Use active connection as default"
+msgstr ""
+
+#: data/glade/saveconfirm.glade.h:2
+#, no-c-format
+msgid "<span size=\"large\"><b>%s</b></span>"
+msgstr ""
+
+#: data/glade/saveconfirm.glade.h:3
+msgid "Close _without Saving"
+msgstr ""
+
+#: data/glade/saveconfirm.glade.h:4
+msgid "If you don't save, all your changes will be permanently lost."
+msgstr ""
+
+#: data/glade/saveconfirm.glade.h:5
+msgid "S_elect the documents you want to save:"
+msgstr ""
+
+#: data/glade/saveconfirm.glade.h:6
+msgid "Save files"
+msgstr ""
+
+#: data/glade/saveconfirm.glade.h:8
+msgid "gtk-save"
 msgstr ""

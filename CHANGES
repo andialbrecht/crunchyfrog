@@ -12,6 +12,11 @@ Bug Fixes
  * Added --install-layout=deb to debian/rules (issue60, reported
    by m...@vee.net).
 
+Translations
+ * New Japanese translation (partial), thanks to Ryutatsu Ishigami.
+ * Other translations updated.
+ * Thanks to all contributors on Launchpad!
+
 
 Release 0.3.90 (May 21, 2009)
 -----------------------------

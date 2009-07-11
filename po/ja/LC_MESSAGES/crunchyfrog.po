@@ -1,4 +1,4 @@
-# Turkish translation for crunchyfrog
+# Japanese translation for crunchyfrog
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the crunchyfrog package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
@@ -8,329 +8,57 @@ msgstr ""
 "Project-Id-Version: crunchyfrog\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-06-17 19:17+0200\n"
-"PO-Revision-Date: 2008-07-12 14:54+0000\n"
-"Last-Translator: TRanslate <einstein89@gmail.com>\n"
-"Language-Team: Turkish <tr@li.org>\n"
+"PO-Revision-Date: 2009-06-07 22:02+0000\n"
+"Last-Translator: rish(Ryutatsu Ishigami) <ai.inside+ubuntu@gmail.com>\n"
+"Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2009-07-11 04:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: cf/ui/mainwindow.py:95
-msgid "_File"
-msgstr "_Dosya"
-
-#: cf/ui/mainwindow.py:99
-msgid "_New"
-msgstr "_Yeni"
-
-#: cf/ui/mainwindow.py:101 cf/ui/mainwindow.py:122
-msgid "_Query"
-msgstr "_Sorgu"
-
-#: cf/ui/mainwindow.py:111
-msgid "_Edit"
-msgstr "_Düzenle"
-
-#: cf/ui/mainwindow.py:113 data/glade/preferences.glade.h:46
-msgid "_Plugins"
-msgstr "_Eklentiler"
-
-#: cf/ui/mainwindow.py:124
-msgid "_View"
-msgstr "_Görünüm"
-
-#: cf/ui/mainwindow.py:126
-msgid "_Help"
-msgstr "_Yardım"
-
-#: cf/ui/mainwindow.py:170 cf/ui/editor.py:67 cf/ui/prefs.py:88
-#: cf/plugins/core.py:121 data/glade/preferences.glade.h:20
-msgid "Editor"
-msgstr "Düzenleyici"
-
 #: cf/ui/mainwindow.py:256
 msgid "Commit"
-msgstr ""
-
-#: cf/ui/mainwindow.py:260
-msgid "Rollback"
-msgstr ""
-
-#: cf/ui/mainwindow.py:313
-msgid "_Recent Files"
-msgstr "_Son Dosyalar"
-
-#: cf/ui/prefs.py:86 data/glade/preferences.glade.h:24
-msgid "General"
-msgstr "Genel"
-
-#: cf/ui/prefs.py:87 cf/db/objects.py:801 data/glade/preferences.glade.h:36
-msgid "View"
-msgstr "Görünüm"
-
-#: cf/ui/browser.py:198 data/glade/editor.glade.h:4
-msgid "Refresh"
-msgstr "Yenile"
-
-#: cf/ui/pane.py:444 cf/ui/pane.py:580 data/glade/editor.glade.h:3
-msgid "Query"
-msgstr "Sorgu"
-
-#: cf/library.py:131
-msgid "Save to library"
-msgstr "Kütüphaneye kaydet"
-
-#: data/glade/connectionsdialog.glade.h:1
-msgid "Connections"
-msgstr "Bağlantılar"
-
-#: data/glade/connectionsdialog.glade.h:3 data/glade/datasources.glade.h:7
-#: data/glade/preferences.glade.h:53
-msgid "gtk-close"
-msgstr "gtk-kapat"
-
-#: data/glade/connectionsdialog.glade.h:4
-msgid "gtk-connect"
-msgstr "gtk-bağlan"
-
-#: data/glade/connectionsdialog.glade.h:5
-msgid "gtk-disconnect"
-msgstr "gtk-bağlantıyı kes"
-
-#: data/glade/datasourceedit.glade.h:13 data/glade/preferences.glade.h:43
-msgid "_General"
-msgstr "_Genel"
-
-#: data/glade/datasourceedit.glade.h:14
-msgid "_Name:"
-msgstr "_İsim"
-
-#: data/glade/datasourceedit.glade.h:18 data/glade/instanceselector.glade.h:5
-#: data/glade/saveconfirm.glade.h:7
-msgid "gtk-cancel"
-msgstr "gtk-iptal"
-
-#: data/glade/datasourceedit.glade.h:19 data/glade/instanceselector.glade.h:6
-msgid "gtk-ok"
-msgstr "gtk-tamam"
-
-#: data/glade/datasources.glade.h:10 data/glade/preferences.glade.h:54
-msgid "gtk-help"
-msgstr "gtk-yardım"
-
-#: data/glade/editor.glade.h:2
-msgid "E_xplain"
-msgstr "T_anımla"
-
-#: data/glade/editor.glade.h:5
-msgid "_Messages"
-msgstr "_Mesajlar"
-
-#: data/glade/editor.glade.h:6
-msgid "_Results"
-msgstr "_Sonuçlar"
-
-#: data/glade/instanceselector.glade.h:1
-msgid "<b>Select an instance</b>"
-msgstr ""
-
-#: data/glade/instanceselector.glade.h:2
-msgid ""
-"CrunchyFrog is already running.\n"
-"Open selected files..."
-msgstr ""
-"CrunchyFrog şu an çalışıyor.\n"
-"Seçili dosyaları aç..."
-
-#: data/glade/instanceselector.glade.h:4
-msgid "Select instance"
-msgstr ""
-
-#: data/glade/instanceselector.glade.h:7
-msgid "in an _existing instance"
-msgstr ""
-
-#: data/glade/instanceselector.glade.h:8
-msgid "in an _new instance"
-msgstr ""
-
-#: data/glade/preferences.glade.h:1
-msgid "    "
-msgstr "    "
+msgstr "コミット"
 
 #: data/glade/preferences.glade.h:3
 msgid "<b>Automatic Indentation</b>"
-msgstr "<b>Otomatik Girintileme</b>"
-
-#: data/glade/preferences.glade.h:4
-msgid "<b>Bracket Matching</b>"
-msgstr "<b>Köşeli Ayraç Eşleştirme</b>"
-
-#: data/glade/preferences.glade.h:5
-msgid "<b>Current Line</b>"
-msgstr "<b>Geçerli Satır</b>"
+msgstr "<b>自動インデント</b>"
 
 #: data/glade/preferences.glade.h:6
 msgid "<b>Font</b>"
-msgstr "<b>Yazı Tipi</b>"
+msgstr "<b>フォント</b>"
 
 #: data/glade/preferences.glade.h:8
 msgid "<b>Line Numbers</b>"
-msgstr "<b>Satır Numaraları</b>"
+msgstr "<b>行番号</b>"
 
 #: data/glade/preferences.glade.h:10
 msgid "<b>Right Margin</b>"
-msgstr "<b>Sağ Girinti</b>"
-
-#: data/glade/preferences.glade.h:12
-msgid "<b>Tab Stops</b>"
-msgstr ""
-
-#: data/glade/preferences.glade.h:13
-msgid "<b>Text Wrapping</b>"
-msgstr "<b>Sözcük Kaydırma</b>"
-
-#: data/glade/preferences.glade.h:14
-msgid "<b>Variables</b>"
-msgstr ""
-
-#: data/glade/preferences.glade.h:16
-msgid "<span weight=\"bold\">Color Scheme</span>"
-msgstr "<span weight=\"bold\">Renk Paleti</span>"
-
-#: data/glade/preferences.glade.h:18
-msgid "Display right _margin"
-msgstr "Sağ _girintiyi göster"
-
-#: data/glade/preferences.glade.h:19
-msgid "Do not _split words over two lines"
-msgstr ""
-
-#: data/glade/preferences.glade.h:21
-msgid "Editor _font: "
-msgstr "Düzenleyici _yazıtipi "
-
-#: data/glade/preferences.glade.h:22
-msgid "Enable text _wrapping"
-msgstr "Sözcük _kaydırmayı aç"
-
-#: data/glade/preferences.glade.h:23
-msgid "Font & Colors"
-msgstr "Yazı Tipi & Renkler"
-
-#: data/glade/preferences.glade.h:25
-msgid "Highlight current _line"
-msgstr "Geçerli satırı _renklendir"
-
-#: data/glade/preferences.glade.h:26
-msgid "Highlight matching _bracket"
-msgstr ""
-
-#: data/glade/preferences.glade.h:28
-msgid "Insert _spaces instead of tabs"
-msgstr ""
-
-#: data/glade/preferences.glade.h:29
-msgid "Pick the editor font"
-msgstr "Düzenleyici fontunu ayarla"
-
-#: data/glade/preferences.glade.h:30
-msgid "Preferences"
-msgstr "Tercihler"
-
-#: data/glade/preferences.glade.h:31
-msgid "Replace _variables (e.g. '$MyVar')"
-msgstr ""
-
-#: data/glade/preferences.glade.h:33
-msgid "Synchronize with plugin repository"
-msgstr ""
-
-#: data/glade/preferences.glade.h:34
-msgid "TODO"
-msgstr "YAPILACAK"
-
-#: data/glade/preferences.glade.h:37
-msgid "_About this plugin"
-msgstr "_Bu eklenti hakkında"
-
-#: data/glade/preferences.glade.h:38
-msgid "_Configure plugin"
-msgstr "_Eklentiyi ayarla"
-
-#: data/glade/preferences.glade.h:39
-msgid "_Display line numbers"
-msgstr "_Satır numaralarını göster"
-
-#: data/glade/preferences.glade.h:40
-msgid "_Editor"
-msgstr "_Düzenleyici"
-
-#: data/glade/preferences.glade.h:41
-msgid "_Enable automatic indentation"
-msgstr "_Otomatik girintilemeyi aç"
-
-#: data/glade/preferences.glade.h:42
-msgid "_Enable repository"
-msgstr ""
-
-#: data/glade/preferences.glade.h:44
-msgid "_Install plugin"
-msgstr "_Eklenti yükle"
-
-#: data/glade/preferences.glade.h:45
-msgid "_Open plugin folder"
-msgstr "_Eklenti klasörünü aç"
-
-#: data/glade/preferences.glade.h:47
-msgid "_Remove plugin"
-msgstr "_Eklenti Kaldır"
-
-#: data/glade/preferences.glade.h:48
-msgid "_Right margin at column:"
-msgstr ""
-
-#: data/glade/preferences.glade.h:49
-msgid "_Synchronize"
-msgstr "_Eşleme"
-
-#: data/glade/preferences.glade.h:51
-msgid "_Tab width:"
-msgstr "_Sekme genişliği:"
-
-#: data/glade/saveconfirm.glade.h:2
-#, no-c-format
-msgid "<span size=\"large\"><b>%s</b></span>"
-msgstr "<span size=\"large\"><b>%s</b></span>"
+msgstr "<b>右マージン</b>"
 
 #: data/glade/saveconfirm.glade.h:3
 msgid "Close _without Saving"
-msgstr "Kaydetmeden Kapat"
-
-#: data/glade/saveconfirm.glade.h:4
-msgid "If you don't save, all your changes will be permanently lost."
-msgstr "Eğer kaydetmezseniz, tüm yaptıklarınız kaybolacak."
-
-#: data/glade/saveconfirm.glade.h:5
-msgid "S_elect the documents you want to save:"
-msgstr "K_aydetmek istediğiniz belgeleri seçiniz:"
-
-#: data/glade/saveconfirm.glade.h:6
-msgid "Save files"
-msgstr "Dosyaları kaydet"
-
-#: data/glade/saveconfirm.glade.h:8
-msgid "gtk-save"
-msgstr "gtk-kaydet"
+msgstr "保存せずに終了(_w)"
 
 #: cf/ui/mainwindow.py:92
 msgid "Application"
 msgstr ""
 
+#: cf/ui/mainwindow.py:95
+msgid "_File"
+msgstr ""
+
 #: cf/ui/mainwindow.py:97
 msgid "Quit the program"
+msgstr ""
+
+#: cf/ui/mainwindow.py:99
+msgid "_New"
+msgstr ""
+
+#: cf/ui/mainwindow.py:101 cf/ui/mainwindow.py:122
+msgid "_Query"
 msgstr ""
 
 #: cf/ui/mainwindow.py:101
@@ -347,11 +75,19 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:108
 msgid "Open a file"
+msgstr "ファイルを開く"
+
+#: cf/ui/mainwindow.py:111
+msgid "_Edit"
+msgstr ""
+
+#: cf/ui/mainwindow.py:113 data/glade/preferences.glade.h:46
+msgid "_Plugins"
 msgstr ""
 
 #: cf/ui/mainwindow.py:113
 msgid "Configure plugins"
-msgstr ""
+msgstr "プラグインの設定"
 
 #: cf/ui/mainwindow.py:115 data/glade/datasources.glade.h:5
 msgid "_Data Sources"
@@ -363,27 +99,35 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:119
 msgid "Configure the application"
+msgstr "アプリケーションの設定"
+
+#: cf/ui/mainwindow.py:124
+msgid "_View"
+msgstr ""
+
+#: cf/ui/mainwindow.py:126
+msgid "_Help"
 msgstr ""
 
 #: cf/ui/mainwindow.py:128
 msgid "Open the CrunchyFrog manual"
-msgstr ""
+msgstr "CrunchyFrogのマニュアルを開く"
 
 #: cf/ui/mainwindow.py:131
 msgid "Help translate..."
-msgstr ""
+msgstr "翻訳を助ける..."
 
 #: cf/ui/mainwindow.py:132
 msgid "Help to translate this application"
-msgstr ""
+msgstr "このアプリケーションの翻訳を助ける"
 
 #: cf/ui/mainwindow.py:137
 msgid "Report a problem"
-msgstr ""
+msgstr "問題を報告する"
 
 #: cf/ui/mainwindow.py:144
 msgid "About this application"
-msgstr ""
+msgstr "このアプリケーションについて"
 
 #: cf/ui/mainwindow.py:150
 msgid "_Toolbar"
@@ -399,6 +143,11 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:155
 msgid "Show or hide the statusbar in the current window"
+msgstr ""
+
+#: cf/ui/mainwindow.py:170 cf/ui/editor.py:67 cf/ui/prefs.py:88
+#: cf/plugins/core.py:121 data/glade/preferences.glade.h:20
+msgid "Editor"
 msgstr ""
 
 #: cf/ui/mainwindow.py:173
@@ -471,35 +220,35 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:210
 msgid "Save the current file"
-msgstr ""
+msgstr "現在のファイルを保存"
 
 #: cf/ui/mainwindow.py:214
 msgid "Save the current file with a different name"
-msgstr ""
+msgstr "現在のファイルを別名で保存"
 
 #: cf/ui/mainwindow.py:217
 msgid "Print the current page"
-msgstr ""
+msgstr "現在のページを印刷"
 
 #: cf/ui/mainwindow.py:220
 msgid "Print preview"
-msgstr ""
+msgstr "印刷プレビュー"
 
 #: cf/ui/mainwindow.py:230
 msgid "Cut the selection"
-msgstr ""
+msgstr "選択範囲を切り取る"
 
 #: cf/ui/mainwindow.py:233
 msgid "Copy the selection"
-msgstr ""
+msgstr "選択範囲をコピー"
 
 #: cf/ui/mainwindow.py:236
 msgid "Paste the clipboard"
-msgstr ""
+msgstr "クリップボードに貼り付け"
 
 #: cf/ui/mainwindow.py:242
 msgid "Queries"
-msgstr ""
+msgstr "クエリー"
 
 #: cf/ui/mainwindow.py:245
 msgid "Execute statements in SQL editor"
@@ -515,7 +264,7 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:252
 msgid "Transaction"
-msgstr ""
+msgstr "トランザクション"
 
 #: cf/ui/mainwindow.py:253
 msgid "Begin transaction on current connection"
@@ -525,8 +274,16 @@ msgstr ""
 msgid "Commit current transaction"
 msgstr ""
 
+#: cf/ui/mainwindow.py:260
+msgid "Rollback"
+msgstr "ロールバック"
+
 #: cf/ui/mainwindow.py:261
 msgid "Rollback current transaction"
+msgstr ""
+
+#: cf/ui/mainwindow.py:313
+msgid "_Recent Files"
 msgstr ""
 
 #: cf/ui/mainwindow.py:553 cf/ui/datasources.py:383
@@ -535,11 +292,11 @@ msgstr ""
 
 #: cf/ui/mainwindow.py:561 cf/ui/editor.py:479
 msgid "All files (*)"
-msgstr ""
+msgstr "全てのファイル(*)"
 
 #: cf/ui/mainwindow.py:565 cf/ui/mainwindow.py:572 cf/ui/editor.py:483
 msgid "SQL files (*.sql)"
-msgstr ""
+msgstr "SQLファイル(*.sql)"
 
 #: cf/ui/mainwindow.py:585
 msgid "_Recent files:"
@@ -547,7 +304,7 @@ msgstr ""
 
 #: cf/ui/dialogs.py:78
 msgid "Password:"
-msgstr ""
+msgstr "パスワード:"
 
 #: cf/ui/datasources.py:116
 msgid "No description available."
@@ -642,7 +399,7 @@ msgstr ""
 
 #: cf/ui/editor.py:467
 msgid "Save file"
-msgstr ""
+msgstr "ファイルの保存"
 
 #: cf/ui/editor.py:524
 #, python-format
@@ -657,6 +414,14 @@ msgstr ""
 msgid "Variables"
 msgstr ""
 
+#: cf/ui/prefs.py:86 data/glade/preferences.glade.h:24
+msgid "General"
+msgstr ""
+
+#: cf/ui/prefs.py:87 cf/db/objects.py:801 data/glade/preferences.glade.h:36
+msgid "View"
+msgstr ""
+
 #: cf/ui/prefs.py:89
 msgid "Fonts & Colors"
 msgstr ""
@@ -666,6 +431,8 @@ msgid ""
 "Keyboard\n"
 "Shortcuts"
 msgstr ""
+"キーボード\n"
+"ショートカット"
 
 #: cf/ui/prefs.py:154
 msgid "Action"
@@ -681,7 +448,7 @@ msgstr ""
 
 #: cf/ui/prefs.py:257
 msgid "Install plugin"
-msgstr ""
+msgstr "プラグインのインストール"
 
 #: cf/ui/prefs.py:262
 msgid "CrunchyFrog plugins (*.zip, *.py)"
@@ -689,11 +456,11 @@ msgstr ""
 
 #: cf/ui/prefs.py:408
 msgid "ERROR"
-msgstr ""
+msgstr "エラー"
 
 #: cf/ui/widgets/grid.py:137
 msgid "Copy value to clipboard"
-msgstr ""
+msgstr "値をクリップボードにコピー"
 
 #: cf/ui/widgets/grid.py:146 cf/ui/widgets/grid.py:259
 msgid "Save as..."
@@ -713,7 +480,7 @@ msgstr ""
 
 #: cf/ui/widgets/grid.py:274
 msgid "All files"
-msgstr ""
+msgstr "全てのファイル"
 
 #: cf/ui/widgets/grid.py:675
 msgid "Data"
@@ -721,7 +488,7 @@ msgstr ""
 
 #: cf/ui/widgets/__init__.py:89
 msgid "Connection"
-msgstr ""
+msgstr "接続"
 
 #: cf/ui/widgets/__init__.py:92 cf/ui/pane.py:591
 msgid "Not connected"
@@ -733,15 +500,15 @@ msgstr ""
 
 #: cf/ui/widgets/__init__.py:128
 msgid "_New connection"
-msgstr ""
+msgstr "新しい接続(_N)"
 
 #: cf/ui/widgets/__init__.py:211
 msgid "Export data"
-msgstr ""
+msgstr "データのエクスポート"
 
 #: cf/ui/widgets/__init__.py:229
 msgid "_Edit export options"
-msgstr ""
+msgstr "エクスポートオプションの編集(_E)"
 
 #: cf/ui/widgets/__init__.py:235
 msgid "_Open file when finished"
@@ -771,15 +538,19 @@ msgstr ""
 
 #: cf/ui/browser.py:173 cf/ui/browser.py:193
 msgid "Connect"
-msgstr ""
+msgstr "接続"
 
 #: cf/ui/browser.py:183
 msgid "Add Data source"
 msgstr ""
 
+#: cf/ui/browser.py:198 data/glade/editor.glade.h:4
+msgid "Refresh"
+msgstr ""
+
 #: cf/ui/browser.py:254
 msgid "Connecting..."
-msgstr ""
+msgstr "接続中..."
 
 #: cf/ui/confirmsave.py:94 cf/ui/confirmsave.py:127
 #, python-format
@@ -805,7 +576,7 @@ msgstr ""
 
 #: cf/ui/pane.py:221
 msgid "side pane"
-msgstr ""
+msgstr "サイドペイン"
 
 #: cf/ui/pane.py:224
 msgid "bottom pane"
@@ -818,7 +589,7 @@ msgstr ""
 
 #: cf/ui/pane.py:305
 msgid "Side _Pane"
-msgstr ""
+msgstr "サイドペイン(_P)"
 
 #: cf/ui/pane.py:306
 msgid "Show or hide the side pane in the current window"
@@ -831,6 +602,10 @@ msgstr ""
 #: cf/ui/pane.py:328
 msgid "Show or hide the bottom pane in the current window"
 msgstr ""
+
+#: cf/ui/pane.py:444 cf/ui/pane.py:580 data/glade/editor.glade.h:3
+msgid "Query"
+msgstr "クエリ"
 
 #: cf/ui/pane.py:464
 msgid "Close"
@@ -864,13 +639,17 @@ msgstr ""
 msgid "A personal SQL library"
 msgstr ""
 
+#: cf/library.py:131
+msgid "Save to library"
+msgstr ""
+
 #: cf/library.py:132
 msgid "Save content of the current editor to SQL library."
 msgstr ""
 
 #: cf/library.py:305 cf/library.py:318
 msgid "Add category"
-msgstr ""
+msgstr "カテゴリの追加"
 
 #: cf/library.py:309
 msgid "Rename"
@@ -878,11 +657,11 @@ msgstr ""
 
 #: cf/library.py:313
 msgid "Delete"
-msgstr ""
+msgstr "削除"
 
 #: cf/filter/exportfilter.py:27
 msgid "CSV Export"
-msgstr ""
+msgstr "CSV形式でエクスポート"
 
 #: cf/filter/exportfilter.py:28
 msgid "Export query results as CSV files"
@@ -890,7 +669,7 @@ msgstr ""
 
 #: cf/filter/exportfilter.py:35
 msgid "Text CSV (.csv)"
-msgstr ""
+msgstr "テキストCSV(.csv)"
 
 #: cf/filter/exportfilter.py:50
 msgid "OpenDocument Export"
@@ -926,11 +705,11 @@ msgstr ""
 
 #: cf/db/objects.py:476
 msgid "Columns"
-msgstr ""
+msgstr "カラム"
 
 #: cf/db/objects.py:510
 msgid "Column"
-msgstr ""
+msgstr "カラム"
 
 #: cf/db/objects.py:520
 msgid "Constraints"
@@ -950,15 +729,15 @@ msgstr ""
 
 #: cf/db/objects.py:595
 msgid "Table"
-msgstr ""
+msgstr "テーブル"
 
 #: cf/db/objects.py:642
 msgid "Tables"
-msgstr ""
+msgstr "テーブル"
 
 #: cf/db/objects.py:655
 msgid "Schema"
-msgstr ""
+msgstr "スキーマ"
 
 #: cf/db/objects.py:663
 msgid "Schemata"
@@ -994,7 +773,7 @@ msgstr ""
 
 #: cf/db/objects.py:783
 msgid "Views"
-msgstr ""
+msgstr "ビュー"
 
 #: cf/db/objects.py:813
 msgid "Language"
@@ -1006,7 +785,7 @@ msgstr ""
 
 #: cf/db/objects.py:829
 msgid "Index"
-msgstr ""
+msgstr "インデックス"
 
 #: cf/db/objects.py:839
 msgid "Indexes"
@@ -1120,11 +899,11 @@ msgstr ""
 
 #: cf/shell/__init__.py:42
 msgid "Interactive shell (mainly for debugging)"
-msgstr ""
+msgstr "インタラクティブなシェル(主にデバッグ用)"
 
 #: cf/shell/__init__.py:66
 msgid "Python module ipython is required."
-msgstr ""
+msgstr "Pythonモジュールのipythonが必要です。"
 
 #: cf/plugins/core.py:119
 msgid "Miscellaneous"
@@ -1138,8 +917,25 @@ msgstr ""
 msgid "Writing configuration"
 msgstr ""
 
+#: data/glade/connectionsdialog.glade.h:1
+msgid "Connections"
+msgstr ""
+
 #: data/glade/connectionsdialog.glade.h:2
 msgid "_Assign to editor"
+msgstr ""
+
+#: data/glade/connectionsdialog.glade.h:3 data/glade/datasources.glade.h:7
+#: data/glade/preferences.glade.h:53
+msgid "gtk-close"
+msgstr ""
+
+#: data/glade/connectionsdialog.glade.h:4
+msgid "gtk-connect"
+msgstr ""
+
+#: data/glade/connectionsdialog.glade.h:5
+msgid "gtk-disconnect"
 msgstr ""
 
 #: data/glade/datasourceedit.glade.h:1
@@ -1185,6 +981,14 @@ msgstr ""
 msgid "_Database Type:"
 msgstr ""
 
+#: data/glade/datasourceedit.glade.h:13 data/glade/preferences.glade.h:43
+msgid "_General"
+msgstr ""
+
+#: data/glade/datasourceedit.glade.h:14
+msgid "_Name:"
+msgstr ""
+
 #: data/glade/datasourceedit.glade.h:15
 msgid "_Startup Commands"
 msgstr ""
@@ -1195,6 +999,15 @@ msgstr ""
 
 #: data/glade/datasourceedit.glade.h:17
 msgid "_Use a color for this data source"
+msgstr ""
+
+#: data/glade/datasourceedit.glade.h:18 data/glade/instanceselector.glade.h:5
+#: data/glade/saveconfirm.glade.h:7
+msgid "gtk-cancel"
+msgstr ""
+
+#: data/glade/datasourceedit.glade.h:19 data/glade/instanceselector.glade.h:6
+msgid "gtk-ok"
 msgstr ""
 
 #: data/glade/datasources.glade.h:1
@@ -1225,6 +1038,10 @@ msgstr ""
 msgid "gtk-edit"
 msgstr ""
 
+#: data/glade/datasources.glade.h:10 data/glade/preferences.glade.h:54
+msgid "gtk-help"
+msgstr ""
+
 #: data/glade/datasources.glade.h:11
 msgid "gtk-new"
 msgstr ""
@@ -1237,8 +1054,54 @@ msgstr ""
 msgid "Copy to clipboard"
 msgstr ""
 
+#: data/glade/editor.glade.h:2
+msgid "E_xplain"
+msgstr ""
+
+#: data/glade/editor.glade.h:5
+msgid "_Messages"
+msgstr ""
+
+#: data/glade/editor.glade.h:6
+msgid "_Results"
+msgstr ""
+
+#: data/glade/instanceselector.glade.h:1
+msgid "<b>Select an instance</b>"
+msgstr ""
+
+#: data/glade/instanceselector.glade.h:2
+msgid ""
+"CrunchyFrog is already running.\n"
+"Open selected files..."
+msgstr ""
+
+#: data/glade/instanceselector.glade.h:4
+msgid "Select instance"
+msgstr ""
+
+#: data/glade/instanceselector.glade.h:7
+msgid "in an _existing instance"
+msgstr ""
+
+#: data/glade/instanceselector.glade.h:8
+msgid "in an _new instance"
+msgstr ""
+
+#: data/glade/preferences.glade.h:1
+msgid "    "
+msgstr ""
+
 #: data/glade/preferences.glade.h:2
 msgid "<b>Autocompletion</b>"
+msgstr ""
+
+#: data/glade/preferences.glade.h:4
+msgid "<b>Bracket Matching</b>"
+msgstr ""
+
+#: data/glade/preferences.glade.h:5
+msgid "<b>Current Line</b>"
 msgstr ""
 
 #: data/glade/preferences.glade.h:7
@@ -1253,14 +1116,58 @@ msgstr ""
 msgid "<b>SQL Splitting</b>"
 msgstr ""
 
+#: data/glade/preferences.glade.h:12
+msgid "<b>Tab Stops</b>"
+msgstr ""
+
+#: data/glade/preferences.glade.h:13
+msgid "<b>Text Wrapping</b>"
+msgstr ""
+
+#: data/glade/preferences.glade.h:14
+msgid "<b>Variables</b>"
+msgstr ""
+
 #: data/glade/preferences.glade.h:15
 msgid ""
 "<i>To edit a shortcut key, click on the corresponding entry and type a new "
 "accelerator or press delete to clear.</i>"
 msgstr ""
 
+#: data/glade/preferences.glade.h:16
+msgid "<span weight=\"bold\">Color Scheme</span>"
+msgstr ""
+
 #: data/glade/preferences.glade.h:17
 msgid "Activate to split statements in a SQL editor before execution."
+msgstr ""
+
+#: data/glade/preferences.glade.h:18
+msgid "Display right _margin"
+msgstr ""
+
+#: data/glade/preferences.glade.h:19
+msgid "Do not _split words over two lines"
+msgstr ""
+
+#: data/glade/preferences.glade.h:21
+msgid "Editor _font: "
+msgstr ""
+
+#: data/glade/preferences.glade.h:22
+msgid "Enable text _wrapping"
+msgstr ""
+
+#: data/glade/preferences.glade.h:23
+msgid "Font & Colors"
+msgstr ""
+
+#: data/glade/preferences.glade.h:25
+msgid "Highlight current _line"
+msgstr ""
+
+#: data/glade/preferences.glade.h:26
+msgid "Highlight matching _bracket"
 msgstr ""
 
 #: data/glade/preferences.glade.h:27
@@ -1269,18 +1176,111 @@ msgid ""
 "is opened."
 msgstr ""
 
+#: data/glade/preferences.glade.h:28
+msgid "Insert _spaces instead of tabs"
+msgstr ""
+
+#: data/glade/preferences.glade.h:29
+msgid "Pick the editor font"
+msgstr ""
+
+#: data/glade/preferences.glade.h:30
+msgid "Preferences"
+msgstr ""
+
+#: data/glade/preferences.glade.h:31
+msgid "Replace _variables (e.g. '$MyVar')"
+msgstr ""
+
 #: data/glade/preferences.glade.h:32
 msgid "Shortcuts"
+msgstr ""
+
+#: data/glade/preferences.glade.h:33
+msgid "Synchronize with plugin repository"
+msgstr ""
+
+#: data/glade/preferences.glade.h:34
+msgid "TODO"
 msgstr ""
 
 #: data/glade/preferences.glade.h:35
 msgid "Use SQL s_plitting"
 msgstr ""
 
+#: data/glade/preferences.glade.h:37
+msgid "_About this plugin"
+msgstr ""
+
+#: data/glade/preferences.glade.h:38
+msgid "_Configure plugin"
+msgstr ""
+
+#: data/glade/preferences.glade.h:39
+msgid "_Display line numbers"
+msgstr ""
+
+#: data/glade/preferences.glade.h:40
+msgid "_Editor"
+msgstr ""
+
+#: data/glade/preferences.glade.h:41
+msgid "_Enable automatic indentation"
+msgstr ""
+
+#: data/glade/preferences.glade.h:42
+msgid "_Enable repository"
+msgstr ""
+
+#: data/glade/preferences.glade.h:44
+msgid "_Install plugin"
+msgstr ""
+
+#: data/glade/preferences.glade.h:45
+msgid "_Open plugin folder"
+msgstr ""
+
+#: data/glade/preferences.glade.h:47
+msgid "_Remove plugin"
+msgstr ""
+
+#: data/glade/preferences.glade.h:48
+msgid "_Right margin at column:"
+msgstr ""
+
+#: data/glade/preferences.glade.h:49
+msgid "_Synchronize"
+msgstr ""
+
 #: data/glade/preferences.glade.h:50
 msgid "_Tab Starts Autocompletion (Advanced Mode)"
 msgstr ""
 
+#: data/glade/preferences.glade.h:51
+msgid "_Tab width:"
+msgstr ""
+
 #: data/glade/preferences.glade.h:52
 msgid "_Use active connection as default"
+msgstr ""
+
+#: data/glade/saveconfirm.glade.h:2
+#, no-c-format
+msgid "<span size=\"large\"><b>%s</b></span>"
+msgstr ""
+
+#: data/glade/saveconfirm.glade.h:4
+msgid "If you don't save, all your changes will be permanently lost."
+msgstr ""
+
+#: data/glade/saveconfirm.glade.h:5
+msgid "S_elect the documents you want to save:"
+msgstr ""
+
+#: data/glade/saveconfirm.glade.h:6
+msgid "Save files"
+msgstr ""
+
+#: data/glade/saveconfirm.glade.h:8
+msgid "gtk-save"
 msgstr ""
