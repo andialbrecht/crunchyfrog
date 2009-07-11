@@ -272,7 +272,7 @@ class Collection(DBObject):
         @warning: Deprecated: Use L{filter} instead.
         @todo 0.1.5: Remove this method.
         """
-        deprecated("Use filter() instead.")
+        # deprecated: Use filter() instead.
         self.provider.log("%r.refresh() called")
         self.add_task(self.refresh_count)
         self.add_task(self.refresh_objects)
@@ -283,7 +283,7 @@ class Collection(DBObject):
         @warning: Deprecated. Use L{filter} instead.
         @todo 0.1.5: Remove this method.
         """
-        deprecated("Use filter() instead.")
+        # deprecated: Use filter() instead.
         if self.backend:
             self.count = self.backend.get_object_count(self.objklass)
         else:
@@ -295,7 +295,7 @@ class Collection(DBObject):
         @warning: Deprecated. Use L{filter} instead.
         @todo 0.1.5: Remove this method.
         """
-        deprecated("Use filter() instead.")
+        # deprecated: Use filter() instead.
         self.objects = []
         if self.backend:
             [self.objects.append(s) for s in self.backend.get_objects(self.objklass)]
@@ -308,7 +308,7 @@ class Collection(DBObject):
         @warning: Deprecated. Use L{filter} instead.
         @todo 0.1.5: Remove this method.
         """
-        deprecated("Use filter() instead.")
+        # deprecated: Use filter() instead.
         self.refresh_count()
         return len(self.objects or []) <> self.count
 
@@ -318,7 +318,7 @@ class Collection(DBObject):
         @warning: Deprecated. Use L{filter} instead.
         @todo 0.1.5: Remove this method.
         """
-        deprecated("Use filter() instead.")
+        # deprecated: Use filter() instead.
         self.check_refresh()
         return self.objects
 

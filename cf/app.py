@@ -172,7 +172,7 @@ class CFApplication(gobject.GObject):
                 ds.description = item[1]
                 ds.ask_for_password = opts.get('ask_for_password', False)
                 manager.save(ds)
-            elif old_backed == 'ldap':
+            elif old_backend == 'ldap':
                 ldap_found = True
         if ldap_found:
             dialogs.warning('Warning',

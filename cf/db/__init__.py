@@ -380,10 +380,10 @@ class Connection(gobject.GObject):
         new_state = self.datasource.backend.get_transaction_state(self)
         if new_state is None:
             if self.connection.in_transaction:
-                new_state = TRANSACTION_STATE_COMMIT_ENABLED | \
-                            TRANSACTION_STATE_ROLLBACK_ENABLED
+                new_state = TRANSACTION_COMMIT_ENABLED | \
+                            TRANSACTION_ROLLBACK_ENABLED
             else:
-                new_state = TRANSACTION_STATE_IDLE
+                new_state = TRANSACTION_IDLE
         if new_state != old_state:
             self.set_property('transaction-state', new_state)
 

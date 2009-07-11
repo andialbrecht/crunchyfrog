@@ -70,7 +70,7 @@ class DatasourcesDialog(object):
 
     def on_show_help(self, *args):
         self.app.show_help('datasources')
-        dlg.stop_emission('clicked')
+        self.stop_emission('clicked')
         return True
 
     # -----------

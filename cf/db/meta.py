@@ -27,6 +27,8 @@ import gobject
 import gtk
 
 
+
+
 class DatabaseMeta(object):
 
     def __init__(self, datasource):
@@ -92,7 +94,7 @@ class DatabaseMeta(object):
         """Like :meth:`find`, but returns exactly one match or ``None``."""
         res = self.find(**kwds)
         if len(res) > 1:
-            raise GDBOError('More than one match found (%d)' % len(res))
+            raise RuntimeError('More than one match found (%d)' % len(res))
         elif len(res) == 1:
             return res[0]
         return None

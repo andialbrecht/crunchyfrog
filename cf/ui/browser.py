@@ -29,7 +29,7 @@ try:
 except ImportError:
     HAVE_SEXY = False
 
-from cf.db import Datasource
+from cf.db import Datasource, objects
 from cf.ui.editor import SQLView
 from cf.ui import pane, dialogs
 
@@ -112,8 +112,8 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             model, iter = treeselection.get_selected()
             obj = model.get_value(iter, 0)
             # row_draggable(path) doesn't work somehow...
-            if isinstance(obj, schema.Node) \
-            and not isinstance(obj, schema.Collection):
+            if isinstance(obj, objects.DBObject) \
+            and not isinstance(obj, objects.Collection):
                 text = model.get_value(iter, 1)
             else:
                 text = ""

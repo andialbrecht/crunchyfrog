@@ -58,7 +58,7 @@ class Oracle(Generic):
                 port = int(port)
             else:
                 port = 1521
-            dsn = self.dbapi().makedsn(url.host, port, url.database)
+            dsn = cls.dbapi().makedsn(url.host, port, url.database)
         else:
             # we have a local tnsname
             dsn = url.host
@@ -69,11 +69,11 @@ class Oracle(Generic):
             if isinstance(opts['mode'], basestring):
                 mode = opts['mode'].upper()
                 if mode == 'SYSDBA':
-                    opts['mode'] = self.dbapi().SYSDBA
+                    opts['mode'] = cls.dbapi().SYSDBA
                 elif mode == 'SYSOPER':
-                    opts['mode'] = self.dbapi().SYSOPER
+                    opts['mode'] = cls.dbapi().SYSOPER
                 else:
-                    opts['mode'] = int(opt['mode'])
+                    opts['mode'] = int(opts['mode'])
         return tuple(), opts
 
     @classmethod
