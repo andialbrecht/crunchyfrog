@@ -20,7 +20,6 @@ User Interface
 
 Editor
 ------
-- Disable export button if no filter plugin is active (issue65).
 - SQL statement in messages list should point to corresponding row in editor
   when clicking on it.
 

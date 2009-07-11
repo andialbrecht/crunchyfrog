@@ -33,6 +33,7 @@ import gtksourceview2
 import pango
 
 from cf.db import Query
+from cf.plugins.core import PLUGIN_TYPE_EXPORT
 from cf.ui import dialogs
 from cf.ui.confirmsave import ConfirmSaveDialog
 from cf.ui.pane import PaneItem
@@ -679,6 +680,7 @@ class ResultsView(object):
 
     def __init__(self, win, builder):
         self.instance = win
+        self.app = win.app
         self.widget = builder.get_object('editor_results')
         self.builder = builder
         self._setup_widget()
@@ -713,6 +715,22 @@ class ResultsView(object):
         sw = self.builder.get_object('sw_explain_results')
         sw.add(self.explain_results)
         self.explain_results.show_all()
+        self._update_btn_export_state()
+
+    def _update_btn_export_state(self):
+        """Update state of export button."""
+        btn_export = self.builder.get_object('editor_export_data')
+        rows = None
+        if self.grid.query:
+            rows = self.grid.query.rows
+        sensitive = False
+        if rows:
+            sensitive = True
+            exp_plugins = self.app.plugins.get_plugins(PLUGIN_TYPE_EXPORT,
+                                                       True)
+            if not exp_plugins:
+                sensitive = False
+        btn_export.set_sensitive(sensitive)
 
     def _msg_model_changed(self, model, *args):
         tb_clear = self.builder.get_object("tb_messages_clear")
@@ -724,6 +742,12 @@ class ResultsView(object):
     def _setup_connections(self):
         self.grid.grid.connect("selection-changed",
                                self.on_grid_selection_changed)
+        self.app.plugins.connect('plugin-added',
+                                 lambda *a: self._update_btn_export_state())
+        self.app.plugins.connect('plugin-removed',
+                                 lambda *a: self._update_btn_export_state())
+        self.app.plugins.connect('plugin-active',
+                                 lambda *a: self._update_btn_export_state())
 
     def _set_row_separator(self, model, iter):
         return model.get_value(iter, 4)
@@ -829,7 +853,7 @@ class ResultsView(object):
             curr_page = 0
         else:
             curr_page = 2
-        self.builder.get_object("editor_export_data").set_sensitive(bool(query.rows))
+        self._update_btn_export_state()
         gobject.idle_add(self.widget.set_current_page, curr_page)
 
     def add_message(self, msg, type_=None, path=None, monospaced=False):
