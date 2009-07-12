@@ -96,7 +96,7 @@ class UserDB(gobject.GObject):
 
         This method creates the database if necessary.
         """
-        log.debug("Initializing user database")
+        log.debug("Initializing user database: %s", self._user_db)
         create = not os.path.isfile(self._user_db)
         self.conn = sqlite.connect(self._user_db)
         self.cursor = self.conn.cursor()
