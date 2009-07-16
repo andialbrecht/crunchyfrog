@@ -36,6 +36,33 @@ class AppTest(unittest.TestCase):
             gtk.main_iteration_do(block=False)
         time.sleep(delay)
 
+    def assertEmitted(self, sig_spec, func, *args, **kwargs):
+        """Assert that a signal was emitted.
+
+        sig_spec is a tuple (sender, signal_name, *args). Where args are the
+        expected arguments to the callback.
+        """
+        sender = sig_spec[0]
+        signal_name = sig_spec[1]
+        sig_args = sig_spec[2:]
+        cb_data = {'args': None, 'emitted': False}
+        def _cb(s, *args):
+            cb_data = args[-1]
+            cb_data['args'] = args[:-1]
+            cb_data['emitted'] = True
+        try:
+            sender.connect(signal_name, _cb, cb_data)
+        except Exception, err:
+            raise AssertionError(('Failed to connect %r on object %r: %s'
+                                  % (signal_name, sender, err)))
+        try:
+            func(*args, **kwargs)
+        except Exception, err:
+            raise AssertionError(('Function call failed: %s' % err))
+        self.refresh_gui()
+        self.assert_(cb_data['emitted'], 'Signal %r not emitted' % signal_name)
+        self.assertEqual(cb_data['args'], sig_args)
+
 
 class InstanceTest(AppTest):
 
