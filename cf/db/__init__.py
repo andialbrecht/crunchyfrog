@@ -206,10 +206,10 @@ class Datasource(gobject.GObject):
         if connection in self.connections:
             self.connections.remove(connection)
         if connection == self.internal_connection:
-            if self.connections:
-                self.internal_connection = self.connections[0]
-            else:
-                self.internal_connection = None
+            self.internal_connection = None
+            for conn in self.connections:
+                self.internal_connection = conn
+                break
         self.manager.emit('datasource-changed', self)
 
     def dbconnect(self):
