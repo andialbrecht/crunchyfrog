@@ -1,0 +1,74 @@
+Database
+--------
+- Client encoding, e.g. for MySQL cur.execute("SET NAMES utf8;")
+- Provide more meta information, incl. detail views.
+- Track unused connections (not in transaction, not used by an editor) and
+  provide a quick way to close them.
+
+
+User Interface
+--------------
+- Failed queries: Stop on error with continue/stop dialog.
+- Explain view: Enhance explain view with respect to backend specific
+  options and return values.
+- Panes loose state when new instance was created and closed last.
+- Save and restore position of pane items.
+- Provide a better widget type infrastructure. Currently the Editor widget
+  is treated special, some methods assume that the main notebook only holds
+  Editor widgets.
+
+
+Editor
+------
+- SQL statement in messages list should point to corresponding row in editor
+  when clicking on it.
+
+
+Library
+-------
+- Improve save to library function.
+- Export/import library.
+- Optionally save current connection with statement?
+
+
+Documentation
+-------------
+- Some more Plugin examples.
+
+
+Misc.
+-----
+- Follow "libgnome must die!" (http://live.gnome.org/LibgnomeMustDie)
+- Cleanup plugin API
+- Add options for CSV export.
+  See: http://docs.python.org/lib/csv-fmt-params.html
+- Export filter should emit a progress signal (and of course the dialog
+  should have a callback).
+- Distribute API docs (crunchyfrog-dev package, devhelp integration).
+- Get rid of user database?
+
+
+Windows
+-------
+- Missing icons.
+- SegFaults when resizing panes with missing icons.
+- Print preview doesn't work on windows.
+
+
+Ideas
+-----
+- Visualize database schema (maybe using gaphas?).
+  http://gaphor.devjavu.com/wiki/Subprojects/Gaphas
+- Visual query builder using sqlalchemy?
+- Query history, possibly bound to datasource info.
+- libgda backend? But maybe it's too confusing to have multiple possibilities
+  to connect to a RDBMS.
+- Add an template base export plugin (Jinja?). Possible export formats: HTML,
+  XML, TeX, plain text, ... The templates could be customizable.
+- Use PackageKit to install DB-API2 modules?
+  https://bugzilla.redhat.com/show_bug.cgi?id=484511#c5
+
+
+Software Engineering
+--------------------
+- Code cleanup... ;-)
