@@ -132,6 +132,13 @@ def get_dialect_backend(dialect):
 
 class Datasource(gobject.GObject):
 
+    __gsignals__ = {
+        'executed': (
+            gobject.SIGNAL_RUN_LAST,
+            gobject.TYPE_NONE,
+            (gobject.TYPE_PYOBJECT,)),
+        }
+
     def __init__(self, manager):
         self.__gobject_init__()
         self._engine = None
@@ -623,5 +630,7 @@ class Query(gobject.GObject):
         self.connection.update_transaction_state()
         if threaded:
             Emit(self, "finished")
+            Emit(self.connection.datasource, 'executed', self)
         else:
             self.emit("finished")
+            self.connection.datasource.emit('executed', self)

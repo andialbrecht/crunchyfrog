@@ -2,7 +2,7 @@ import unittest
 
 from tests.utils import AppTest
 
-from cf.db import Datasource, Connection
+from cf.db import Datasource, Connection, Query
 from cf.db.url import URL
 from cf import sqlparse
 
@@ -25,12 +25,14 @@ class TestDatasource(AppTest):
         self.assertEqual(self.ds.connections, set([]))
 
     def test_execute_emit(self):
-        return True  # FIXME: Test needs to be rewritten.
-        def _check_cb(datasource, c, parsed):
-            self.assert_(isinstance(parsed, sqlparse.sql.Statement),
-                         'Expected sqlparse.sql.Statement, got %r' % parsed)
-            self.assertEqual(unicode(parsed), sql1)
+        self.res_q = None
+        def _check_cb(datasource, q):
+            self.res_q = q
         sql1 = 'create table foo (val integer);'
         conn = self.ds.dbconnect()
+        query = Query(sql1, conn)
         self.assertEmitted((self.ds, 'executed', _check_cb),
-                           conn.execute, sql1)
+                           query.execute)
+        self.assert_(isinstance(self.res_q, Query),
+                     'Expected Query, got %r' % self.res_q)
+

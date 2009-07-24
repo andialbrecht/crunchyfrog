@@ -49,12 +49,13 @@ class AppTest(unittest.TestCase):
         else:
             sig_cb = None
         cb_data = {'emitted': False, 'sig_cb': sig_cb}
-        def _cb(s, *args):
-            cb_data = args[-1]
+        def _cb(s, *a):
+            cb_data = a[-1]
             cb_data['emitted'] = True
+            a = a[:-1]
             sig_cb = cb_data['sig_cb']
             if sig_cb is not None:
-                sig_cb(s, *args)
+                sig_cb(s, *a)
         try:
             sender.connect(signal_name, _cb, cb_data)
         except Exception, err:
