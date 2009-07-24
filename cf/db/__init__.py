@@ -584,7 +584,7 @@ class Query(gobject.GObject):
         """
         self.__gobject_init__()
         self.connection = connection
-        self._statement = self.connection.prepare_statement(statement)
+        self.statement = self.connection.prepare_statement(statement)
         self._parsed = None
         self.description = None
         self.rowcount = -1
@@ -599,7 +599,7 @@ class Query(gobject.GObject):
     @property
     def parsed(self):
         if self._parsed is None:
-            self._parsed = sqlparse.parse(self._statement)[0]
+            self._parsed = sqlparse.parse(self.statement)[0]
         return self._parsed
 
     def execute(self, threaded=False):
@@ -616,7 +616,7 @@ class Query(gobject.GObject):
         dbapi_conn = self.connection.get_dbapi_connection()
         dbapi_cur = dbapi_conn.cursor()
         try:
-            dbapi_cur.execute(self._statement)
+            dbapi_cur.execute(self.statement)
         except:
             self.failed = True
             self.errors.append(str(sys.exc_info()[1]))
