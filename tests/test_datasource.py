@@ -1,18 +1,12 @@
 import unittest
 
-from tests.utils import AppTest
+from tests.utils import DbTest
 
-from cf.db import Datasource, Connection, Query
-from cf.db.url import URL
+from cf.db import Connection, Query
 from cf import sqlparse
 
 
-class TestDatasource(AppTest):
-
-    def setUp(self):
-        super(TestDatasource, self).setUp()
-        self.ds = Datasource(self.app.datasources)
-        self.ds.url = URL('sqlite', database=':memory:')
+class TestDatasource(DbTest):
 
     def test_open_close_connection(self):
         conn = self.ds.dbconnect()

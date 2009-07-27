@@ -1,17 +1,14 @@
-from tests.utils import AppTest
+from tests.utils import DbTest
 
 import sqlparse
 import sqlparse.sql
-from cf.db import Datasource, Query
-from cf.db.url import URL
+from cf.db import Query
 
 
-class TestQuery(AppTest):
+class TestQuery(DbTest):
 
     def setUp(self):
         super(TestQuery, self).setUp()
-        self.ds = Datasource(self.app.datasources)
-        self.ds.url = URL('sqlite', database=':memory:')
         self.conn = self.ds.dbconnect()
 
     def test_parsed(self):

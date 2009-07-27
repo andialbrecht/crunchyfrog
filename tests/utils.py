@@ -9,7 +9,8 @@ import gtk
 
 import cf.app
 import cf.cmdline
-#import cf.env
+from cf.db import Datasource
+from cf.db.url import URL
 
 
 __builtin__.__dict__['_'] = lambda x: x
@@ -79,3 +80,11 @@ class InstanceTest(AppTest):
         self.instance.destroy()
         self.instance = None
         super(InstanceTest, self).tearDown()
+
+
+class DbTest(AppTest):
+
+    def setUp(self):
+        super(DbTest, self).setUp()
+        self.ds = Datasource(self.app.datasources)
+        self.ds.url = URL('sqlite', database=':memory:')
