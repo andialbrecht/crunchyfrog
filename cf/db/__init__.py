@@ -35,8 +35,12 @@ import gtk
 try:
     import gnomekeyring
     USE_KEYRING = True
+    if (not gnomekeyring.is_available()
+        or not gnomekeyring.get_default_keyring_sync()):
+        USE_KEYRING = False
 except ImportError:
     USE_KEYRING = False
+logging.debug('Using Gnome keyring: %r' % USE_KEYRING)
 
 
 TRANSACTION_IDLE = 1 << 1
