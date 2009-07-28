@@ -19,6 +19,10 @@
 """Data source URL"""
 
 import urlparse
+try:
+    from urlparse import parse_qsl
+except ImportError:
+    from cgi import parse_qsl
 
 import cf.db
 
@@ -112,7 +116,7 @@ def make_url(raw):
     if database and database.startswith('//'):
         database = database[1:]
     if parsed.query:
-        kwds = dict(urlparse.parse_qsl(parsed.query))
+        kwds = dict(parse_qsl(parsed.query))
     else:
         kwds = {}
     return URL(parsed.scheme,
