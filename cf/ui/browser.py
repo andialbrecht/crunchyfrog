@@ -18,6 +18,7 @@
 
 """Object browser"""
 
+import logging
 from gettext import gettext as _
 
 import gtk
@@ -32,6 +33,8 @@ except ImportError:
 from cf.db import Datasource, objects
 from cf.ui.editor import SQLView
 from cf.ui import pane, dialogs
+
+import sqlparse.tokens
 
 
 class DummyNode(object):
@@ -292,6 +295,16 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             return
         self.set_datasource_info(iter_, datasource_info)
 
+    def on_query_executed(self, datasource, query):
+        if query.failed:
+            return
+        if query.parsed.tokens[0].ttype is sqlparse.tokens.Keyword.DDL:
+            # FIXME: implement refresh tree
+            #   Only already expanded items should be refreshed.
+            #   This must happen after the datasource has updated it's
+            #   internal data.
+            logging.error('Not implemented: Refresh tree.')
+
     def on_object_tree_selection_changed(self, selection):
         model, iter_ = selection.get_selected()
         if iter_ is None:
@@ -412,3 +425,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             while citer:
                 self.model.remove(citer)
                 citer = self.model.iter_children(iter)
+        # connect executed signal
+        if not datasource_info.get_data('browser-sig-executed'):
+            sig = datasource_info.connect('executed', self.on_query_executed)
+            datasource_info.set_data('browser-sig-executed', sig)

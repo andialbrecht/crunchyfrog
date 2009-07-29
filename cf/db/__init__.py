@@ -42,6 +42,8 @@ except ImportError:
     USE_KEYRING = False
 logging.debug('Using Gnome keyring: %r' % USE_KEYRING)
 
+import sqlparse
+
 
 TRANSACTION_IDLE = 1 << 1
 TRANSACTION_COMMIT_ENABLED = 1 << 2
@@ -135,6 +137,13 @@ def get_dialect_backend(dialect):
 
 
 class Datasource(gobject.GObject):
+
+    __gsignals__ = {
+        'executed': (
+            gobject.SIGNAL_RUN_LAST,
+            gobject.TYPE_NONE,
+            (gobject.TYPE_PYOBJECT,)),
+        }
 
     def __init__(self, manager):
         self.__gobject_init__()
@@ -578,8 +587,9 @@ class Query(gobject.GObject):
         :param connection: A database connection.
         """
         self.__gobject_init__()
-        self.statement = statement
         self.connection = connection
+        self.statement = self.connection.prepare_statement(statement)
+        self._parsed = None
         self.description = None
         self.rowcount = -1
         self.rows = None
@@ -589,6 +599,12 @@ class Query(gobject.GObject):
         self.execution_time = None
         self.coding_hint = "utf-8"
         self.errors = list()
+
+    @property
+    def parsed(self):
+        if self._parsed is None:
+            self._parsed = sqlparse.parse(self.statement)[0]
+        return self._parsed
 
     def execute(self, threaded=False):
         """Execute the statement.
@@ -601,15 +617,10 @@ class Query(gobject.GObject):
         else:
             self.emit("started")
         start = time.time()
-        stmt = self.connection.prepare_statement(self.statement)
-        # Let's go down to plain DB-API stuff to speed things up a bit
-        # and to avoid statement modifications done by sqlalchemy.
-        # We're not afraid of SQL injections here and don't need to
-        # replace parameters... ;-)
         dbapi_conn = self.connection.get_dbapi_connection()
         dbapi_cur = dbapi_conn.cursor()
         try:
-            dbapi_cur.execute(stmt)
+            dbapi_cur.execute(self.statement)
         except:
             self.failed = True
             self.errors.append(str(sys.exc_info()[1]))
@@ -627,5 +638,7 @@ class Query(gobject.GObject):
         self.connection.update_transaction_state()
         if threaded:
             Emit(self, "finished")
+            Emit(self.connection.datasource, 'executed', self)
         else:
             self.emit("finished")
+            self.connection.datasource.emit('executed', self)
