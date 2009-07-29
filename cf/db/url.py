@@ -97,7 +97,7 @@ class URL(object):
         if self.host:
             data['host'] = self.host
         if self.port:
-            data['port'] = self.port
+            data['port'] = int(self.port)
         if self.database:
             data['database'] = self.database
         data.update(self.query)

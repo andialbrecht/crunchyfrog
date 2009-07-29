@@ -4,6 +4,8 @@ In Development
 Bug Fixes
  * Updated GTK requirement in Glade files to GTK 2.12.
  * Improved GNOME keyring detection (issue68, reported by Igor Stirbu).
+ * Fixed a bug with data sources defined with port (issue79, reported
+   by Igor Stirbu).
 
 
 Release 0.4.0 (Jul 11, 2009)
