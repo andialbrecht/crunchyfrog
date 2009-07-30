@@ -18,6 +18,7 @@
 
 """Data source URL"""
 
+import logging
 import urlparse
 try:
     from urlparse import parse_qsl
@@ -52,7 +53,7 @@ class URL(object):
         self.user = user
         self.password = password
         self.host = host
-        self.port = port
+        self.port = self._clean_port(port)
         self.database = database
         self.query = kwds
         _initialize()
@@ -87,6 +88,20 @@ class URL(object):
         return urlparse.urlunsplit((self.drivername, netloc,
                                     self.database or '', query, None))
 
+    @classmethod
+    def _clean_port(cls, port):
+        """Return port as integer or None."""
+        if port is None:
+            return port
+        if not isinstance(port, int):
+            try:
+                port = int(port)
+            except (TypeError, ValueError), err:
+                port = None
+                logging.exception('Failed to convert port to int %r: %s',
+                                  port, err)
+        return port
+
     def get_dict(self):
         """Return instance values as dictionary."""
         data = {}
@@ -97,7 +112,7 @@ class URL(object):
         if self.host:
             data['host'] = self.host
         if self.port:
-            data['port'] = int(self.port)
+            data['port'] = self.port
         if self.database:
             data['database'] = self.database
         data.update(self.query)
