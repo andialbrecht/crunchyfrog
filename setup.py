@@ -25,12 +25,23 @@ import os
 import shutil
 import sys
 
+CMD_CLASS = {}
+
 try:
     # Try to import the original one first (Sphinx >= 0.5)
     from sphinx.setup_command import BuildDoc
 except ImportError:
     # ok, it failed... try the local copy
-    from utils.command.sphinx_build import BuildDoc
+    try:
+        from utils.command.sphinx_build import BuildDoc
+    except ImportError:
+        # giving up, not building docs
+        pass
+try:
+    CMD_CLASS['build_manual'] = BuildDoc
+    CMD_CLASS['build_devguide'] = BuildDoc
+except NameError:
+    pass
 
 from utils.command.build_api import build_api
 from utils.command.build_manpage import build_manpage
@@ -68,16 +79,12 @@ class clean_with_subcommands(clean):
         clean.run(self)
 
 
-CMD_CLASS = {
-    'clean': clean_with_subcommands,
-    'clean_docs': clean_docs,
-    'build_api': build_api,
-    'build_devguide': BuildDoc,
-    'build_manual': BuildDoc,
-    'build_manpage': build_manpage,
-    'build_mo': build_mo,
-    'clean_mo': clean_mo,
-}
+CMD_CLASS['clean'] = clean_with_subcommands
+CMD_CLASS['clean_docs'] = clean_docs
+CMD_CLASS['build_api'] = build_api
+CMD_CLASS['build_manpage'] = build_manpage
+CMD_CLASS['build_mo'] = build_mo
+CMD_CLASS['clean_mo'] = clean_mo
 
 
 build.sub_commands.append(('build_manual', None))
