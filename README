@@ -19,7 +19,7 @@ See requirements.txt for a complete list of requirements.
 
 For a localized version first run
 
-    make msg-compile
+    python setup.py build_mo
 
 and then start the application as described above.
 This command requires gettext installed on your system.
