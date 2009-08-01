@@ -6,6 +6,7 @@ Bug Fixes
  * Improved GNOME keyring detection (issue68, reported by Igor Stirbu).
  * Fixed a bug with data sources defined with port (issue79, reported
    by Igor Stirbu).
+ * Improved packaging (thanks to Kartik Mistry).
 
 
 Release 0.4.0 (Jul 11, 2009)
