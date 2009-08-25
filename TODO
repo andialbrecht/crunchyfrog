@@ -67,6 +67,8 @@ Ideas
   XML, TeX, plain text, ... The templates could be customizable.
 - Use PackageKit to install DB-API2 modules?
   https://bugzilla.redhat.com/show_bug.cgi?id=484511#c5
+- Use python-keyring module?
+  http://pypi.python.org/pypi/keyring/
 
 
 Software Engineering
