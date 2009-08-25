@@ -29,7 +29,8 @@ builddeb: dist-clean
 	cp dist/$(PROJECT)-$(VERSION).tar.gz $(BUILDIR)
 	cd $(BUILDIR) && tar xfz $(PROJECT)-$(VERSION).tar.gz
 	mv $(BUILDIR)/$(PROJECT)-$(VERSION).tar.gz $(BUILDIR)/$(PROJECT)-$(VERSION)/
-	cp debian/* $(BUILDIR)/$(PROJECT)-$(VERSION)/debian/
+	cp -r extras/debian/ $(BUILDIR)/$(PROJECT)-$(VERSION)/
+	cp Makefile $(BUILDIR)/$(PROJECT)-$(VERSION)/
 	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dpkg-buildpackage $(DEBFLAGS)
 
 builddeb-src:
