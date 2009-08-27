@@ -24,8 +24,15 @@ import gobject
 import gtk
 
 
+DIALOG_TITLES = {
+    gtk.STOCK_DIALOG_ERROR: _(u'An error occurred'),
+    gtk.STOCK_DIALOG_WARNING: _(u'Warning'),
+    gtk.STOCK_DIALOG_INFO: _(u'Information'),
+}
+
+
 def _run_dialog(short, long=None, parent=None, buttons=gtk.BUTTONS_NONE,
-                dlg_type=gtk.STOCK_DIALOG_INFO):
+                dlg_type=gtk.STOCK_DIALOG_INFO, title=None):
     if dlg_type == gtk.STOCK_DIALOG_ERROR:
         dlg_type2 = gtk.MESSAGE_ERROR
     elif dlg_type == gtk.STOCK_DIALOG_WARNING:
@@ -34,6 +41,8 @@ def _run_dialog(short, long=None, parent=None, buttons=gtk.BUTTONS_NONE,
         dlg_type2 = gtk.MESSAGE_QUESTION
     else:
         dlg_type2 = gtk.MESSAGE_INFO
+    if title is None:
+        title = DIALOG_TITLES.get(dlg_type, 'CrunchyFrog')
     dlg = gtk.MessageDialog(parent,
                             gtk.DIALOG_MODAL|gtk.DIALOG_DESTROY_WITH_PARENT,
                             dlg_type2, buttons)
@@ -43,6 +52,8 @@ def _run_dialog(short, long=None, parent=None, buttons=gtk.BUTTONS_NONE,
         dlg.format_secondary_markup(long)
     img = gtk.image_new_from_stock(dlg_type, gtk.ICON_SIZE_DIALOG)
     dlg.set_image(img)
+    dlg.set_title(title)
+    dlg.set_icon_name('crunchyfrog')
     img.show()
     ret = dlg.run()
     dlg.destroy()
@@ -68,6 +79,8 @@ def password(title, msg=None, parent=None):
                             gtk.BUTTONS_OK_CANCEL)
     title = gobject.markup_escape_text(title)
     dlg.set_markup('<b>%s</b>' % title)
+    dlg.set_title(_(u'Password required'))
+    dlg.set_icon_name('crunchyfrog')
     if msg is not None:
         dlg.format_secondary_markup(msg)
     hbox = gtk.HBox()
