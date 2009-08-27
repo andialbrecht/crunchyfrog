@@ -33,6 +33,7 @@ from cf import release, USER_DIR, MANUAL_URL, DATA_DIR, USER_CONFIG_DIR
 from config import Config
 from plugins.core import PluginManager
 from cf.db import DatasourceManager
+from cf.ui import dialogs
 from cf.ui.datasources import DatasourcesDialog
 from cf.ui.widgets import ConnectionsDialog
 from ui.mainwindow import MainWindow
@@ -272,7 +273,16 @@ class CFApplication(gobject.GObject):
           topic: If given, the URL points to the selected topic.
         """
         url = os.path.join(MANUAL_URL, '%s.html' % topic)
-        webbrowser.open(url)
+        parsed = urlparse.urlparse(url)
+        if parsed[0] in ('file', ''):
+            local_path = parsed[2]
+        else:
+            local_path = url
+        if not os.path.exists(local_path):
+            dialogs.error(_(u"Documentation not found"),
+                          _(u"Could not find documentation at %s.") % url)
+        else:
+            webbrowser.open(url)
 
     def shutdown(self):
         """Execute all shutdown tasks and quit application
