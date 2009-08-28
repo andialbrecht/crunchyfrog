@@ -90,7 +90,7 @@ class SQLView(gtksourceview2.View):
             self.editor.connect('connection-changed', lambda e, c:
                                 self.on_buffer_changed(self.buffer))
         self.connect('expose-event', self.on_expose)
-        self._sql_marks = []
+        self._sql_marks = set()
         self.connect('destroy', self.on_destroy)
 
     def on_buffer_changed(self, buffer):
@@ -121,7 +121,7 @@ class SQLView(gtksourceview2.View):
         color = self.get_style().base[gtk.STATE_SELECTED]
 
         cr = event.window.cairo_create()
-        cr.rectangle(event.area.x, event.area.y-0.5,
+        cr.rectangle(event.area.x, event.area.y,
                      event.area.width, event.area.height)
         cr.clip()
 
@@ -281,9 +281,9 @@ class SQLView(gtksourceview2.View):
                 iter_end.set_line_offset(0)
                 mark = buffer.create_source_mark(None, 'sql-start',
                                                  iter_start)
-                self._sql_marks.append(mark)
+                self._sql_marks.add(mark)
                 mark = buffer.create_source_mark(None, 'sql-end', iter_end)
-                self._sql_marks.append(mark)
+                self._sql_marks.add(mark)
         self._buffer_changed_cb = None
         self.queue_draw()
         return False

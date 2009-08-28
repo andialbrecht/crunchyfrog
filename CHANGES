@@ -8,6 +8,9 @@ Bug Fixes
    by Igor Stirbu).
  * Improved packaging (thanks to Kartik Mistry).
 
+Other
+ * Improved painting of SQL markers.
+
 
 Release 0.4.0 (Jul 11, 2009)
 ----------------------------
