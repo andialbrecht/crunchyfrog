@@ -1,0 +1,10 @@
+syntax: glob
+docs/manual/build
+docs/devguide/build
+*~
+*.pyc
+dist/
+MANIFEST
+mydeb/
+data/crunchyfrog.1
+*.mo

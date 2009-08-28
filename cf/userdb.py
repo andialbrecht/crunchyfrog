@@ -1,0 +1,199 @@
+# -*- coding: utf-8 -*-
+
+# crunchyfrog - a database schema browser and query tool
+# Copyright (C) 2007 Andi Albrecht <albrecht.andi@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+"""User database
+
+The user database can be used by plugins to store some information.
+It is also used by CrunchyFrog itself i.e. to store connection data.
+
+:USER_DB: Path to sqlite3 file
+"""
+
+import logging
+import os.path
+import sqlite3
+import sys
+
+import gobject
+
+from cf import USER_CONFIG_DIR
+from cf.ui import dialogs
+
+USER_DB = os.path.join(USER_CONFIG_DIR, "user.db")
+
+
+class UserDB(gobject.GObject):
+    """User database class.
+
+    An instance of this class is accessible through the ``userdb``
+    attribute of an `CFApplication`_ instance.
+
+    :Usage example:
+
+        .. sourcecode:: python
+
+            >>> app.userdb.get_table_version("foo")
+            None
+            >>> app.userdb.create_table("foo", "0.1", create_statement)
+            >>> app.userdb.get_table_version("foo")
+            '0.1'
+            >>> app.userdb.cursor.execute("insert into foo (value) values (?)", ("bar",))
+            >>> app.userdb.conn.commit()
+            >>> app.userdb.cursor.execute("select * from foo")
+            >>> app.userdb.cursor.fetchone()
+            ('bar',)
+            >>> app.userdb.drop_table("foo")
+
+
+    :Instance attributes:
+
+        :conn: Database connection (sqlite connection)
+        :cursor: Database cursor (sqlite cursor)
+
+
+    .. _CFApplication: cf.app.CFApplication.html
+    """
+
+    def __init__(self, app):
+        """
+        The constructor of this class takes one argument:
+
+        :Parameters:
+            app
+                `CFApplication`_ instance
+
+        .. _CFApplication: cf.app.CFApplication.html
+        """
+        self.app = app
+        self.conn = None
+        self._user_db = self.app.config.get("userdb.file", USER_DB)
+        self.__gobject_init__()
+        self.__init_userdb()
+
+    def _get_connection(self):
+        return self.conn
+    connection = property(fget=_get_connection)
+
+    def __init_userdb(self):
+        """Initializes the connection and cursor.
+
+        This method creates the database if necessary.
+        """
+        logging.debug("Initializing user database: %s", self._user_db)
+        create = not os.path.isfile(self._user_db)
+        try:
+            self.conn = sqlite3.connect(self._user_db)
+        except sqlite3.OperationalError, err:
+            logging.exception('Unable to open user database:')
+            dialogs.error(_(u'Unable to open user database'),
+                          '%s (%s)' % (str(err), self._user_db))
+            sys.exit(1)
+        self.cursor = self.conn.cursor()
+        if create:
+            self.__create_userdb()
+
+    def __create_userdb(self):
+        """Creates the sqlite3 file and some core tables."""
+        sql = "create table sy_table_version (id integer primary key, \
+        tablename text, version text)"
+        self.cursor.execute(sql)
+        if not self.get_table_version("datasource"):
+            sql = ("create table datasource (id integer primary key, "
+                   "name text, description text, backend text, options text, "
+                   "last_accessed real, num_accessed integer)")
+            self.create_table("datasource", "0.1", sql)
+
+    def get_cursor(self):
+        """Returns a new DB-API compliant cursor.
+
+        :Returns: DB-API compliant cursor
+        """
+        return self.conn.cursor()
+
+    def get_table_version(self, table_name):
+        """Returns the version of a table or ``None``.
+
+        ``None`` is returned, if the table isn't registered
+        with the `create_table` method, that means, if it's not
+        found in ``sy_table_version``.
+
+        :Parameter:
+            table_name
+                Name of the table
+
+        :Returns: Version of the table, or ``None``
+        """
+        sql = "select version from sy_table_version \
+        where tablename=?"
+        try:
+            self.cursor.execute(sql, (table_name,))
+        except sqlite3.OperationalError, e:
+            logging.warning("sy_table_version not found: %s" % str(e))
+            return None
+        result = self.cursor.fetchone()
+        if result:
+            return result[0]
+        else:
+            return None
+
+    def create_table(self, name, version, statement):
+        """Creates and registers a table.
+
+        :Parameter:
+            name
+                Table name
+            version
+                Table version
+            statement
+                ``CREATE`` statement to create the table
+
+        :Returns: ``True`` if the table was successfully created, otherwise ``False``
+        """
+        if self.get_table_version(name):
+            logging.error("Table '%s' already exists.", name)
+            return False
+        try:
+            self.cursor.execute(statement)
+        except sqlite3.OperationalError, e:
+            logging.error("Failed to create table '%s': %s", name, str(e))
+            return False
+        sql = ("insert into sy_table_version (tablename, version) "
+               "values (?,?)")
+        self.cursor.execute(sql, (name, version))
+        self.conn.commit()
+        return True
+
+    def drop_table(self, name):
+        """Deletes and unregisters a table.
+
+        :Parameter:
+            name
+                Table name
+
+        :Returns: ``True`` if the table was successfully dropped, otherwise ``False``
+        """
+        sql = "delete from sy_table_version where tablename=?"
+        self.cursor.execute(sql, (name,))
+        self.conn.commit()
+        sql = "drop table %s" % name
+        try:
+            self.cursor.execute(sql)
+        except sqlite3.OperationalError, e:
+            logging.error("Failed to delete table: %s", str(e))
+            return False
+        return True
