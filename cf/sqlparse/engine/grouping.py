@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import itertools
-import re
-import types
 
 from sqlparse import tokens as T
 from sqlparse.sql import *
-
 
 
 def _group_left_right(tlist, ttype, value, cls,
@@ -92,7 +89,12 @@ def group_for(tlist):
     _group_matching(tlist, T.Keyword, 'FOR', T.Keyword, 'END LOOP', For, True)
 
 def group_as(tlist):
-    _group_left_right(tlist, T.Keyword, 'AS', Identifier)
+    def _right_valid(token):
+        # Currently limited to DML/DDL. Maybe additional more non SQL reserved
+        # keywords should appear here (see issue8).
+        return not token.ttype in (T.DML, T.DDL)
+    _group_left_right(tlist, T.Keyword, 'AS', Identifier,
+                      check_right=_right_valid)
 
 def group_assignment(tlist):
     _group_left_right(tlist, T.Assignment, ':=', Assignment,
@@ -103,7 +105,7 @@ def group_comparsion(tlist):
         return (token.ttype in (T.String.Symbol, T.Name, T.Number,
                                 T.Number.Integer, T.Literal)
                 or isinstance(token, (Identifier,)))
-    _group_left_right(tlist, T.Operator, None, Comparsion,
+    _group_left_right(tlist, T.Operator.Comparsion, None, Comparsion,
                       check_left=_parts_valid, check_right=_parts_valid)
 
 
@@ -114,10 +116,13 @@ def group_case(tlist):
 
 def group_identifier(tlist):
     def _consume_cycle(tl, i):
-        x = itertools.cycle((lambda y: y.match(T.Punctuation, '.'),
-                             lambda y: y.ttype in (T.String.Symbol,
-                                                   T.Name,
-                                                   T.Wildcard)))
+        x = itertools.cycle((
+            lambda y: (y.match(T.Punctuation, '.')
+                       or y.ttype is T.Operator),
+            lambda y: (y.ttype in (T.String.Symbol,
+                                   T.Name,
+                                   T.Wildcard))
+            ))
         for t in tl.tokens[i:]:
             if x.next()(t):
                 yield t
@@ -130,14 +135,22 @@ def group_identifier(tlist):
 
     # real processing
     idx = 0
-    token = tlist.token_next_by_type(idx, (T.String.Symbol, T.Name))
+    token = tlist.token_next_by_instance(idx, Function)
+    if token is None:
+        token = tlist.token_next_by_type(idx, (T.String.Symbol, T.Name))
     while token:
         identifier_tokens = [token]+list(
             _consume_cycle(tlist,
                            tlist.token_index(token)+1))
-        group = tlist.group_tokens(Identifier, identifier_tokens)
-        idx = tlist.token_index(group)+1
-        token = tlist.token_next_by_type(idx, (T.String.Symbol, T.Name))
+        if not (len(identifier_tokens) == 1
+                and isinstance(identifier_tokens[0], Function)):
+            group = tlist.group_tokens(Identifier, identifier_tokens)
+            idx = tlist.token_index(group)+1
+        else:
+            idx += 1
+        token = tlist.token_next_by_instance(idx, Function)
+        if token is None:
+            token = tlist.token_next_by_type(idx, (T.String.Symbol, T.Name))
 
 
 def group_identifier_list(tlist):
@@ -245,8 +258,25 @@ def group_typecasts(tlist):
     _group_left_right(tlist, T.Punctuation, '::', Identifier)
 
 
+def group_functions(tlist):
+    [group_functions(sgroup) for sgroup in tlist.get_sublists()
+     if not isinstance(sgroup, Function)]
+    idx = 0
+    token = tlist.token_next_by_type(idx, T.Name)
+    while token:
+        next_ = tlist.token_next(token)
+        if not isinstance(next_, Parenthesis):
+            idx = tlist.token_index(token)+1
+        else:
+            func = tlist.group_tokens(Function,
+                                      tlist.tokens_between(token, next_))
+            idx = tlist.token_index(func)+1
+        token = tlist.token_next_by_type(idx, T.Name)
+
+
 def group(tlist):
     for func in [group_parenthesis,
+                 group_functions,
                  group_comments,
                  group_where,
                  group_case,

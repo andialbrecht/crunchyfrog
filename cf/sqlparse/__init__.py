@@ -9,9 +9,6 @@
 __version__ = '0.1.1'
 
 
-import os
-
-
 class SQLParseError(Exception):
     """Base class for exceptions in this module."""
 
@@ -56,4 +53,3 @@ def split(sql):
     stack = engine.FilterStack()
     stack.split_statements = True
     return [unicode(stmt) for stmt in stack.run(sql)]
-
