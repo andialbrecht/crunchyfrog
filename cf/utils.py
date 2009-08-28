@@ -51,3 +51,14 @@ def to_uri(filename):
     else:
         uri = filename
     return uri
+
+
+def profile(func):
+    """Decorator to profile a function."""
+    def wrapper(*args, **kwds):
+        import hotshot
+        prof = hotshot.Profile("%s.prof" % func.__name__)
+        ret = prof.runcall(func, *args, **kwds)
+        prof.close()
+        return ret
+    return wrapper
