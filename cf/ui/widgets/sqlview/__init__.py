@@ -121,7 +121,7 @@ class SQLView(gtksourceview2.View):
         color = self.get_style().base[gtk.STATE_SELECTED]
 
         cr = event.window.cairo_create()
-        cr.rectangle(event.area.x, event.area.y-0.5,
+        cr.rectangle(event.area.x, event.area.y,
                      event.area.width, event.area.height)
         cr.clip()
 

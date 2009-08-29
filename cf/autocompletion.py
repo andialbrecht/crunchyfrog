@@ -38,6 +38,10 @@ import sqlparse.keywords
 from cf import db
 
 
+SQL_KEYWORDS = set(tuple(sqlparse.keywords.KEYWORDS))
+SQL_KEYWORDS.update(tuple(sqlparse.keywords.KEYWORDS_COMMON))
+
+
 def setup(app):
     """Setup autocompletion feature.
 
@@ -108,6 +112,11 @@ def editor_autocomplete(editor, popup=None, matches=None):
     selection.select_iter(iter_)
 
 
+def _is_keyword(value):
+    """Return True if value is a SQL keyword."""
+    return value.upper() in SQL_KEYWORDS
+
+
 def editor_autocomplete_advanced(editor):
     """Implementation of advanced autocompletion (tab-completion).
 
@@ -130,7 +139,7 @@ def editor_autocomplete_advanced(editor):
         editor_autocomplete(editor, matches=matches)
         return True
     value = completions.pop()
-    _apply_selection(editor, value)
+    _apply_selection(editor, value, add_blank=_is_keyword(value))
     return True
 
 
@@ -454,8 +463,10 @@ def get_fragment_bounds(buffer_, replace_mode=False, value=None):
     return start, end
 
 
-def _apply_selection(editor, value):
+def _apply_selection(editor, value, add_blank=False):
     """Helper function that does the modifications in the text buffer."""
+    if add_blank:
+        value = '%s ' % value
     buffer_ = editor.textview.buffer
     start, end = get_fragment_bounds(buffer_, replace_mode=True, value=value)
     buffer_.begin_user_action()

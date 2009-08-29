@@ -19,34 +19,6 @@ class TokenFilter(Filter):
         raise NotImplementedError
 
 
-# FIXME: Should be removed
-def rstrip(stream):
-    buff = []
-    for token in stream:
-        if token.is_whitespace() and '\n' in token.value:
-            # assuming there's only one \n in value
-            before, rest = token.value.split('\n', 1)
-            token.value = '\n%s' % rest
-            buff = []
-            yield token
-        elif token.is_whitespace():
-            buff.append(token)
-        elif token.is_group():
-            token.tokens = list(rstrip(token.tokens))
-            # process group and look if it starts with a nl
-            if token.tokens and token.tokens[0].is_whitespace():
-                before, rest = token.tokens[0].value.split('\n', 1)
-                token.tokens[0].value = '\n%s' % rest
-                buff = []
-            while buff:
-                yield buff.pop(0)
-            yield token
-        else:
-            while buff:
-                yield buff.pop(0)
-            yield token
-
-
 # --------------------------
 # token process
 
@@ -227,7 +199,7 @@ class ReindentFilter(Filter):
 
     def _process_identifierlist(self, tlist):
         identifiers = tlist.get_identifiers()
-        if len(identifiers) > 1:
+        if len(identifiers) > 1 and not tlist.within(sql.Function):
             first = list(identifiers[0].flatten())[0]
             num_offset = self._get_offset(first)-len(first.value)
             self.offset += num_offset
@@ -437,4 +409,3 @@ class OutputPHPFilter(Filter):
             varname = self.varname
         stmt.tokens = tuple(self._process(stmt.tokens, varname))
         return stmt
-
