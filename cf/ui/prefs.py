@@ -191,6 +191,9 @@ class PreferencesDialog(object):
     def on_editor_reuse_conn_toggled(self, toggle):
         self.app.config.set("editor.reuse_connection", toggle.get_active())
 
+    def on_editor_hide_results_toggled(self, toggle):
+        self.app.config.set('editor.hide_results_pane', toggle.get_active())
+
     def on_editor_option_changed(self, widget, *args):
         option = widget.get_data("config_option")
         conf = self.app.config
@@ -344,6 +347,10 @@ class PreferencesDialog(object):
                                                'editor.reuse_connection')
         gw("editor_reuse_connection").set_active(
             config.get("editor.reuse_connection"))
+        gw('editor_hide_results').set_data('config_option',
+                                           'editor.hide_results_pane')
+        gw('editor_hide_results').set_active(
+            config.get('editor.hide_results_pane'))
         gw("editor_replace_variables").set_data("config_option", "editor.replace_variables")
         gw("editor_replace_variables").set_active(config.get("editor.replace_variables"))
         gw("sqlparse_enabled").set_data("config_option", "sqlparse.enabled")

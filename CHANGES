@@ -1,6 +1,10 @@
 In Development
 --------------
 
+New Features
+ * Hide results pane either by keyboard shortcut (Shift+F9) or by default
+   for new editors.
+
 Bug Fixes
  * Updated GTK requirement in Glade files to GTK 2.12.
  * Improved GNOME keyring detection (issue68, reported by Igor Stirbu).

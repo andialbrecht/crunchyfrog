@@ -131,7 +131,14 @@ can be changed by statements executed in the editor, too.
 Editing SQL Statements
 ----------------------
 
-The editor provides features for editing SQL statements.
+The editor provides features for editing SQL statements as follows.
+
+.. note::
+
+   To enlarge the editing area consider to hide the side pane (:kbd:`F9`),
+   the bottom pane (:kbd:`Ctrl+F9`) or the results pane (:kbd:`Shift+F9`).
+   The results pane will automatically pop in again when a query is
+   executed.
 
 
 .. index::

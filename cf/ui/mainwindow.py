@@ -207,6 +207,10 @@ class MainWindow(gtk.Window):
              _(u'_Uppercase Keywords'), '<shift><control>u',
              _(u'Uppercase keywords in selected lines or in whole buffer'),
              self.on_frmt_uppercase_kw),
+            ('query-toggle-results', None,
+             _(u'Show / Hide Results'), '<shift>F9',
+             _(u'Show or hide results pane'),
+             self.on_editor_toggle_results),
             ('file-save', gtk.STOCK_SAVE,
              None, '<control>S', _(u'Save the current file'),
              self.on_file_save),
@@ -494,6 +498,12 @@ class MainWindow(gtk.Window):
         focus_child = editor.get_focus_child()
         if focus_child is not None:
             focus_child.grab_focus()
+
+    def on_editor_toggle_results(self, action):
+        editor = self.get_active_editor()
+        if editor is None:
+            return
+        editor.toggle_results_pane()
 
     def on_frmt_comment(self, action):
         editor = self.get_active_editor()
@@ -931,6 +941,7 @@ UI = '''
         <menuitem name="QueryFormatFormat" action="query-frmt-format" />
         <menuitem name="QueryFormatKwUpper" action="query-frm-uppercase-kw" />
       </menu>
+      <menuitem name="QueryToggleResults" action="query-toggle-results" />
       <placeholder name="query-extensions" />
       <separator />
       <menuitem name="Editor1" action="activate-editor1" />
