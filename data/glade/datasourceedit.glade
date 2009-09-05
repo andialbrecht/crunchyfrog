@@ -312,7 +312,7 @@ Fill out the form below to create or edit this data source.</property>
                                     <property name="visible">True</property>
                                     <property name="xalign">0</property>
                                     <property name="yalign">0</property>
-                                    <property name="label" translatable="yes">&lt;i&gt;Start commands are execute evertime a new database
+                                    <property name="label" translatable="yes">&lt;i&gt;Start commands are executed evertime a new database
 connection is established. They can be used to set default
 encodings or schemata.&lt;/i&gt;</property>
                                     <property name="use_markup">True</property>
