@@ -14,6 +14,7 @@ Bug Fixes
 
 Other
  * Improved painting of SQL markers.
+ * Preserve cursor position when formatting SQL statements.
 
 
 Release 0.4.0 (Jul 11, 2009)

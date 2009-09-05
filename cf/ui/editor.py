@@ -666,6 +666,15 @@ class Editor(gobject.GObject, PaneItem):
         else:
             start, end = res
             select_range = True
+        # Count chars excluding whitespaces
+        insert_mark = buffer_.get_insert()
+        insert_iter = buffer_.get_iter_at_mark(insert_mark)
+        if insert_iter.in_range(start, end):
+            char_offset = len(re.sub(r'\s', '',
+                                     buffer_.get_text(start, insert_iter)))
+            start_offset = start.get_offset()
+        else:
+            char_offset = start_offset = None
         orig = buffer_.get_text(start, end)
         formatted = sqlparse.format(orig, **options)
         # Modify buffer
@@ -678,6 +687,19 @@ class Editor(gobject.GObject, PaneItem):
             end.backward_chars(len(formatted))
             buffer_.select_range(end, start)
         buffer_.end_user_action()
+        # TODO: place cursor - but how to do this... :)
+        if char_offset is not None:
+            num = 0
+            idx = 0
+            iter_ = buffer_.get_iter_at_offset(start_offset)
+            for i in range(len(formatted)):
+                if formatted[i] not in '\r\n\t ':
+                    num += 1
+                if num == char_offset:
+                    iter_.forward_chars(i+1)
+                    buffer_.place_cursor(iter_)
+                    self.textview.scroll_to_mark(buffer_.get_insert(), 0.25)
+                    break
 
     def toggle_results_pane(self):
         """Show or hide the result pane."""
