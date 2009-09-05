@@ -11,6 +11,7 @@ Bug Fixes
  * Fixed a bug with data sources defined with port (issue79, reported
    by Igor Stirbu).
  * Improved packaging (thanks to Kartik Mistry).
+ * Close broken connections.
 
 Other
  * Improved painting of SQL markers.

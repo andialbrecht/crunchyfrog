@@ -109,6 +109,10 @@ from cf.ui import dialogs
 from cf.utils import Emit
 
 
+class DummyOperationalError(Exception):
+    """Fake exception for backends that don't provider OperationalError"""
+
+
 def availability():
     """Checks for availability of backends.
 
@@ -619,8 +623,17 @@ class Query(gobject.GObject):
         start = time.time()
         dbapi_conn = self.connection.get_dbapi_connection()
         dbapi_cur = dbapi_conn.cursor()
+        operational_error = getattr(self.connection.datasource.backend.dbapi(),
+                                    'OperationalError',
+                                    DummyOperationalError)
+        do_close = False
         try:
             dbapi_cur.execute(self.statement)
+        except operational_error, err:
+            print err
+            self.failed = True
+            self.errors.append(str(err))
+            do_close = True
         except:
             self.failed = True
             self.errors.append(str(sys.exc_info()[1]))
@@ -642,3 +655,6 @@ class Query(gobject.GObject):
         else:
             self.emit("finished")
             self.connection.datasource.emit('executed', self)
+        if do_close:
+            logging.debug('Closing connection')
+            gobject.idle_add(self.connection.close)
