@@ -454,6 +454,9 @@ class DatasourceManager(gobject.GObject):
             sig_name = 'datasource-added'
         else:
             sig_name = 'datasource-changed'
+            old_ds = self.load(datasource.id, cached=False)
+            if old_ds.url.get_dict() != datasource.url.get_dict():
+                datasource.dbdisconnect_all()
         conf = self._get_config()
         if conf.has_section(datasource.id):
             conf.remove_section(datasource.id)
@@ -481,9 +484,9 @@ class DatasourceManager(gobject.GObject):
         self._cache[datasource.id] = datasource
         self.emit(sig_name, datasource)
 
-    def load(self, id_, conf=None):
+    def load(self, id_, conf=None, cached=True):
         """Load data source with given ID."""
-        if id_ in self._cache:
+        if cached and id_ in self._cache:
             return self._cache[id_]
         if conf is None:
             conf = self._get_config()
