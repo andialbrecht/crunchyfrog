@@ -391,7 +391,8 @@ class Editor(gobject.GObject, PaneItem):
 
     def set_connection(self, conn):
         if self.connection and self.__conn_close_tag:
-            self.connection.disconnect(self.__conn_close_tag)
+            if self.connection.handler_is_connected(self.__conn_close_tag):
+                self.connection.disconnect(self.__conn_close_tag)
             self.__conn_close_tag = None
         self.connection = conn
         if conn:
