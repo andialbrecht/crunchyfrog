@@ -23,7 +23,7 @@ class Token(object):
         self.parent = None
 
     def __str__(self):
-        return unicode(self).encode('latin-1')
+        return unicode(self).encode('utf-8')
 
     def __repr__(self):
         short = self._get_repr_value()
@@ -139,7 +139,7 @@ class TokenList(Token):
         return ''.join(unicode(x) for x in self.flatten())
 
     def __str__(self):
-        return unicode(self).encode('latin-1')
+        return unicode(self).encode('utf-8')
 
     def _get_repr_name(self):
         return self.__class__.__name__
@@ -175,6 +175,10 @@ class TokenList(Token):
 
     def get_sublists(self):
         return [x for x in self.tokens if isinstance(x, TokenList)]
+
+    @property
+    def _groupable_tokens(self):
+        return self.tokens
 
     def token_first(self, ignore_whitespace=True):
         """Returns the first child token.
@@ -425,6 +429,10 @@ class IdentifierList(TokenList):
 class Parenthesis(TokenList):
     """Tokens between parenthesis."""
     __slots__ = ('value', 'ttype', 'tokens')
+
+    @property
+    def _groupable_tokens(self):
+        return self.tokens[1:-1]
 
 
 class Assignment(TokenList):
