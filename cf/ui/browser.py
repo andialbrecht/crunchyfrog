@@ -340,6 +340,10 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             cobj = model.get_value(citer, 0)
             if isinstance(cobj, DummyNode):
                 datasource_info = self.find_datasource_info(model, citer)
+                if datasource_info.color is not None:
+                    color = gtk.gdk.color_parse(datasource_info.color)
+                else:
+                    color = None
                 model.remove(citer)
                 if datasource_info.meta is None:
                     return
@@ -355,7 +359,8 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
                               1, child.get_display_name(),
                               2, child.get_icon_pixbuf(),
                               5, child.comment,
-                              7, False)
+                              6, color,
+                              7, True)
                     if child.has_children():
                         cciter = model.append(citer)
                         model.set(cciter, 0, DummyNode(), 7, False)
