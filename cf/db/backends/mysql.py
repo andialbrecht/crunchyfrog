@@ -18,8 +18,18 @@
 
 """MySQL backend"""
 
+import re
+
 from cf.db import objects
 from cf.db.backends import Generic, DEFAULT_OPTIONS
+
+P_ERROR_MESSAGES = {
+    1064: re.compile(r"near '(?P<pattern>.*)' at line (?P<lineno>\d+)$",
+                     re.MULTILINE|re.UNICODE),
+    1051: re.compile(r"Unknown table '(?P<pattern>.*)'$"),
+    1146: re.compile(r"Table '.*\.(?P<pattern>.*)' doesn't exist$"),
+    1054: re.compile(r"^Unknown column '(?P<pattern>.*)' in"),
+}
 
 
 class MySQL(Generic):
@@ -70,6 +80,42 @@ class MySQL(Generic):
         url = super(MySQL, cls).create_url(options)
         url.query = {'charset': 'utf8'}
         return url
+
+    @classmethod
+    def should_close(cls, error):
+        if not isinstance(error, cls.dbapi().OperationalError):
+            return False
+        err_code, msg = error.args
+        if err_code >= 2000:
+            return True
+        return False
+
+    @classmethod
+    def get_error_position(cls, query, error):
+        err_code, msg = error.args
+        p = P_ERROR_MESSAGES.get(err_code)
+        print p
+        if p is None:
+            return None
+        m = p.search(msg)
+        print m
+        if m is None:
+            return None
+        data = m.groupdict()
+        line = data.get('lineno')
+        pattern = data.get('pattern')
+        print data
+        if line is None and pattern is None:
+            return None
+        elif pattern is None:
+            return int(line), 1
+        if line is None:
+            for idx, l in enumerate(query.statement.splitlines()):
+                if pattern in l:
+                    return idx+1, l.index(pattern)+1
+        else:
+            l = query.statement.splitlines()[int(line)-1]
+            return int(line), l.index(pattern)+1
 
     def get_server_info(self, connection):
         return 'MySQL %s' % connection.connection.get_server_info()

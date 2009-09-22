@@ -21,11 +21,20 @@
 from gettext import gettext as _
 
 import gobject
+import re
 import functools
 
 from cf.db import TRANSACTION_IDLE, TRANSACTION_ACTIVE
 from cf.db import objects
 from cf.db.backends import Generic, GUIOption
+
+
+P_ERROR_MESSAGES = set([
+    re.compile(r'^no such (table|column): (?P<pattern>.*)$'),
+    re.compile(r'^near "(?P<pattern>.*)": syntax error$'),
+    re.compile(r'table (?P<pattern>.*) already exists$'),
+    re.compile(r'there is already another table or index with this name: (?P<pattern>.*)$'),
+    ])
 
 
 class SQLite(Generic):
@@ -48,6 +57,25 @@ class SQLite(Generic):
     def dbapi(cls):
         import sqlite3
         return sqlite3
+
+    @classmethod
+    def should_close(cls, error):
+        return False
+
+    @classmethod
+    def get_error_position(cls, query, error):
+        pattern = None
+        for p in P_ERROR_MESSAGES:
+            m = p.match(str(error))
+            if m:
+                pattern = m.groupdict()['pattern']
+                break
+        if pattern is None:
+            return None
+        for idx, line in enumerate(query.statement.splitlines()):
+            if pattern in line:
+                return idx+1, line.index(pattern)+1
+        return None
 
     def get_connect_params(self, url):
         return (url.database,), {}

@@ -107,6 +107,27 @@ class Generic(object):
         msg = 'Driver.dbapi() not implemented [%s]' % cls.drivername
         raise NotImplementedError(msg)
 
+    @classmethod
+    def should_close(cls, error):
+        """Return True if the connection should be closed after this error.
+
+        The default implementation returns False.
+        """
+        return False
+
+    @classmethod
+    def get_error_position(cls, query, error):
+        """Return a 2-tuple (line, offset) for a given error.
+
+        The default implementation return None to indicate that the backend
+        isn't capable of getting the position in the SQL statement where
+        the error happend.
+
+        query is a Query instance. error is an instance of
+        dbapi.ProgrammingError or dbapi.OperationalError.
+        """
+        return None
+
     def get_connection(self, url):
         """Returns a DB-API2 connection."""
         args, kwds = self.get_connect_params(url)

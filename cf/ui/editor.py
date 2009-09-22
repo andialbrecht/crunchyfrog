@@ -145,6 +145,8 @@ class Editor(gobject.GObject, PaneItem):
         self.textview = SQLView(self.win, self)
         sw = self.builder.get_object("sw_editor_textview")
         sw.add(self.textview)
+        buffer_ = self.textview.buffer
+        tag = buffer_.create_tag('error', underline=pango.UNDERLINE_ERROR)
         self.textview.buffer.connect('changed', self.on_buffer_changed)
 
     def _setup_resultsgrid(self):
@@ -157,6 +159,11 @@ class Editor(gobject.GObject, PaneItem):
 
     def on_buffer_changed(self, buffer):
         self.props.buffer_dirty = self.contents_changed()
+        iter1 = buffer.get_iter_at_mark(buffer.get_insert())
+        iter1.set_line_offset(0)
+        iter2 = iter1.copy()
+        iter2.forward_to_line_end()
+        buffer.remove_tag_by_name('error', iter1, iter2)
 
     def on_close(self, *args):
         self.close()
@@ -209,6 +216,10 @@ class Editor(gobject.GObject, PaneItem):
             msg = _(u'Query failed (%(sec).3f seconds)')
             msg = msg % {"sec": query.execution_time}
             type_ = 'error'
+            if query.error_position:
+                line, offset = query.error_position
+                line += query.get_data('editor_start_line')
+                self._mark_error(line, offset)
         elif query.description:
             msg = (_(u"Query finished (%(sec).3f seconds, %(num)d rows)")
                    % {"sec": query.execution_time,
@@ -233,6 +244,33 @@ class Editor(gobject.GObject, PaneItem):
         gobject.idle_add(self.show_in_separate_window)
 
     # Public methods
+
+    def _mark_error(self, line, offset=None):
+        buffer_ = self.textview.buffer
+#        buffer_.create_source_mark(
+#            None, 'error',
+#            buffer_.get_iter_at_line_offset(line-2, offset))
+        import pango
+        tag_table = buffer_.get_tag_table()
+        tag = tag_table.lookup('error')
+        iter_err = buffer_.get_iter_at_line_offset(line-2, offset-1)
+        iter1 = iter_err.copy()
+        if not iter1.starts_word():
+            iter1.backward_word_start()
+        iter2 = iter1.copy()
+        iter2.forward_word_end()
+#        tag = gtk.TextTag()
+#        tag.props.underline = pango.UNDERLINE_SINGLE
+        buffer_.apply_tag(tag, iter1, iter2)
+        buffer_.place_cursor(iter_err)
+        self.textview.move_mark_onscreen(buffer_.get_insert())
+#        self.textview.set_mark_category_background('error',
+#                                                   gtk.gdk.color_parse('red'))
+#        it = gtk.icon_theme_get_default()
+#        pb = it.load_icon ("gtk-dialog-error", gtk.ICON_SIZE_MENU,
+#                           gtk.ICON_LOOKUP_USE_BUILTIN)
+#        self.textview.set_mark_category_pixbuf('error', pb)
+#        self.textview.set_show_line_marks(True)
 
     def get_focus_child(self):
         return self.get_child1().get_children()[0].grab_focus()
@@ -284,23 +322,27 @@ class Editor(gobject.GObject, PaneItem):
 
     def execute_query(self, statement_at_cursor=False):
         self.results.assure_visible()
-        def exec_threaded(statement):
+        def exec_threaded(statement, start_line):
             if self.app.config.get("sqlparse.enabled", True):
                 stmts = sqlparse.split(statement)
             else:
                 stmts = [statement]
             for stmt in stmts:
+                add_offset = len(stmt.splitlines())
                 if not stmt.strip():
+                    start_line += add_offset
                     continue
                 query = Query(stmt, self.connection)
 #                query.coding_hint = self.connection.coding_hint
                 gtk.gdk.threads_enter()
+                query.set_data('editor_start_line', start_line)
                 query.connect("started", self.on_query_started)
                 query.connect("finished",
                               self.on_query_finished,
                               tag_notice)
                 gtk.gdk.threads_leave()
                 query.execute(True)
+                start_line += add_offset
                 if query.failed:
                     # hmpf, doesn't work that way... so just return here...
                     return
@@ -329,6 +371,7 @@ class Editor(gobject.GObject, PaneItem):
             bounds = self.textview.get_current_statement()
             if bounds is None:
                 return
+        buffer.remove_tag_by_name('error', *bounds)
         statement = buffer.get_text(*bounds)
         if self.app.config.get("editor.replace_variables"):
             tpl = string.Template(statement)
@@ -346,20 +389,27 @@ class Editor(gobject.GObject, PaneItem):
             self.results.add_message(msg)
         tag_notice = self.connection.connect("notice", foo)
         if self.connection.threadsafety >= 2:
-            thread.start_new_thread(exec_threaded, (statement,))
+            start_line = bounds[0].get_line()+1
+            thread.start_new_thread(exec_threaded, (statement, start_line))
         else:
+            start_line = bounds[0].get_line()+1
+            line_offset = start_line
             if self.app.config.get("sqlparse.enabled", True):
                 stmts = sqlparse.split(statement)
             else:
                 stmts = [statement]
             for stmt in stmts:
+                add_offset = len(stmt.splitlines())
                 if not stmt.strip():
+                    line_offset += add_offset
                     continue
                 query = Query(stmt, self.connection)
+                query.set_data('editor_start_line', line_offset)
 #                query.coding_hint = self.connection.coding_hint
                 query.connect("started", self.on_query_started)
                 query.connect("finished", self.on_query_finished, tag_notice)
                 query.execute()
+                line_offset += add_offset
 
     def explain(self):
         self.results.assure_visible()

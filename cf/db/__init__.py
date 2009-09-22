@@ -109,7 +109,7 @@ from cf.ui import dialogs
 from cf.utils import Emit
 
 
-class DummyOperationalError(Exception):
+class DummyDBAPIError(Exception):
     """Fake exception for backends that don't provider OperationalError"""
 
 
@@ -606,6 +606,7 @@ class Query(gobject.GObject):
         self.execution_time = None
         self.coding_hint = "utf-8"
         self.errors = list()
+        self.error_position = None
 
     @property
     def parsed(self):
@@ -619,6 +620,7 @@ class Query(gobject.GObject):
         :param threaded: If ``True`` the statement is executed in threaded
           mode, otherwise in blocking mode (default: ``False``).
         """
+        backend = self.connection.datasource.backend
         if threaded:
             Emit(self, "started")
         else:
@@ -626,17 +628,18 @@ class Query(gobject.GObject):
         start = time.time()
         dbapi_conn = self.connection.get_dbapi_connection()
         dbapi_cur = dbapi_conn.cursor()
-        operational_error = getattr(self.connection.datasource.backend.dbapi(),
-                                    'OperationalError',
-                                    DummyOperationalError)
+        operational_error = getattr(backend.dbapi(), 'OperationalError',
+                                    DummyDBAPIError)
+        programming_error = getattr(backend.dbapi(), 'ProgrammingError',
+                                    DummyDBAPIError)
         do_close = False
         try:
             dbapi_cur.execute(self.statement)
-        except operational_error, err:
-            print err
+        except Exception, err:
             self.failed = True
             self.errors.append(str(err))
-            do_close = True
+            self.error_position = backend.get_error_position(self, err)
+            do_close = backend.should_close(err)
         except:
             self.failed = True
             self.errors.append(str(sys.exc_info()[1]))

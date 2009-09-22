@@ -18,6 +18,7 @@
 
 """PostgreSQL backend."""
 
+import re
 from gettext import gettext as _
 
 from cf.db import TRANSACTION_IDLE
@@ -25,6 +26,9 @@ from cf.db import TRANSACTION_COMMIT_ENABLED
 from cf.db import TRANSACTION_ROLLBACK_ENABLED
 from cf.db.backends import Generic, DEFAULT_OPTIONS, GUIOption
 from cf.db import objects
+
+
+P_ERRORLINE = re.compile(r'^[A-Z]+ (?P<lineno>\d+):', re.UNICODE)
 
 
 class Postgres(Generic):
@@ -80,6 +84,26 @@ class Postgres(Generic):
             opts['user'] = opts['username']
             del opts['username']
         return tuple(), opts
+
+    @classmethod
+    def get_error_position(cls, query, error):
+        if not isinstance(error, cls.dbapi().ProgrammingError):
+            return None
+        line_no = offset = skip_offset = None
+        for line in error.pgerror.splitlines():
+            # If the line number was found, the next line contains an
+            # offset indicator.
+            if line_no:
+                offset_ws, unused = line[skip_offset:].split('^', 1)
+                offset = len(offset_ws)
+                break
+            m = P_ERRORLINE.match(line)
+            if m and line_no is None:
+                line_no = int(m.groupdict()['lineno'])
+                skip_offset = m.end()
+        if line_no:
+            return (line_no, offset)
+        return None
 
     def prepare_connection(self, connection):
         import psycopg2.extensions as pe

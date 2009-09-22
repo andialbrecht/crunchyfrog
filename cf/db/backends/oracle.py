@@ -92,6 +92,25 @@ class Oracle(Generic):
                       )),
             )
 
+    @classmethod
+    def get_error_position(cls, query, error):
+        if not isinstance(error, cls.dbapi().DatabaseError):
+            return None
+        ora_error = error.args[0]
+        if not isinstance(ora_error, cls.dbapi()._Error):
+            return None
+        offset = getattr(ora_error, 'offset', None)
+        if offset is None:
+            return None
+        loffset = new_offset = 0
+        for idx, line in enumerate(query.statement.splitlines(True)):
+            new_offset += len(line)
+            if new_offset > offset:
+                line_offset = offset-loffset
+                return idx+1, line_offset+1
+            loffset = new_offset
+        return None
+
     def get_server_info(self, connection):
         return 'Oracle %s' % connection.connection.version
 
