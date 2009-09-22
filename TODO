@@ -18,12 +18,6 @@ User Interface
   Editor widgets.
 
 
-Editor
-------
-- SQL statement in messages list should point to corresponding row in editor
-  when clicking on it.
-
-
 Library
 -------
 - Improve save to library function.
