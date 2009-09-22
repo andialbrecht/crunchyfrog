@@ -17,7 +17,7 @@ Bug Fixes
 
 Other
  * Improved painting of SQL markers.
- * Preserve cursor position when formatting SQL statements.
+ * Restore cursor position after formatting SQL statements.
  * Some minor UI fixes.
 
 
