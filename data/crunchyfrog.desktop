@@ -1,5 +1,4 @@
 [Desktop Entry]
-Version=0.4.0
 Name=CrunchyFrog
 Comment=SQL Client and Schema Browser
 Exec=crunchyfrog %U
