@@ -1,7 +1,8 @@
 PYTHON=`which python`
 
 PKGNAME=crunchyfrog
-VERSION=0.4.0
+VERSION=`python -c "from cf import release; print release.version"`
+TIMESTAMP=`date +%Y%m%d%H%M`
 
 DESTDIR=/
 BUILDIR=mydeb
@@ -13,6 +14,9 @@ PO=`find po/* -maxdepth 0 -name .svn -prune -o -type d|sed 's/po\///g'`
 
 PUSHPPA=cf-ppa
 PGPKEY=090D660E
+
+test2:
+	@echo "Version is $(VERSION)"
 
 
 all:
@@ -27,9 +31,11 @@ builddeb: dist-clean
 	$(PYTHON) setup.py sdist
 	mkdir -p $(BUILDIR)/$(PROJECT)-$(VERSION)/debian
 	cp dist/$(PROJECT)-$(VERSION).tar.gz $(BUILDIR)
-	cd $(BUILDIR) && tar xfz $(PROJECT)-$(VERSION).tar.gz
+	cd $(BUILDIR) && tar xfz $(PROJECT)-*.tar.gz
 	mv $(BUILDIR)/$(PROJECT)-$(VERSION).tar.gz $(BUILDIR)/$(PROJECT)-$(VERSION)/
 	cp -r extras/debian/ $(BUILDIR)/$(PROJECT)-$(VERSION)/
+	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && rm debian/changelog
+	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dch --create --package $(PROJECT) -v "$(VERSION)-$(TIMESTAMP)" "Local build."
 	cp Makefile $(BUILDIR)/$(PROJECT)-$(VERSION)/
 	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dpkg-buildpackage $(DEBFLAGS)
 
