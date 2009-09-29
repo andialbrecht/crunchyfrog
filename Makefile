@@ -17,9 +17,6 @@ PO=`find po/* -maxdepth 0 -name .svn -prune -o -type d|sed 's/po\///g'`
 PUSHPPA=cf-ppa
 PGPKEY=090D660E
 
-test2:
-	@echo "Version is $(VERSION)"
-
 
 all:
 	@echo "make install - Install on local system"
