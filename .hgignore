@@ -8,3 +8,4 @@ MANIFEST
 mydeb/
 data/crunchyfrog.1
 *.mo
+debian

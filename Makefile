@@ -3,6 +3,8 @@ PYTHON=`which python`
 PKGNAME=crunchyfrog
 VERSION=`python -c "from cf import release; print release.version"`
 TIMESTAMP=`date +%Y%m%d%H%M`
+DIST=`lsb_release -c -s`
+DCH_MESSAGE="Local build."
 
 DESTDIR=/
 BUILDIR=mydeb
@@ -35,15 +37,18 @@ builddeb: dist-clean
 	mv $(BUILDIR)/$(PROJECT)-$(VERSION).tar.gz $(BUILDIR)/$(PROJECT)-$(VERSION)/
 	cp -r extras/debian/ $(BUILDIR)/$(PROJECT)-$(VERSION)/
 	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && rm debian/changelog
-	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dch --create --package $(PROJECT) -v "$(VERSION)-$(TIMESTAMP)" "Local build."
+	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dch --create --package $(PROJECT) -v "$(VERSION)-$(TIMESTAMP)" -D $(DIST) $(DCH_MESSAGE)
 	cp Makefile $(BUILDIR)/$(PROJECT)-$(VERSION)/
 	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dpkg-buildpackage $(DEBFLAGS)
 
-builddeb-src:
+debian:
+	ln -s extras/debian .
+
+builddeb-src: debian
 	make builddeb DEBFLAGS="-S -k$(PGPKEY)"
 
 push-ppa: builddeb-src
-	cd $(BUILDIR) && dput $(PUSHPPA) $(PROJECT)_$(VERSION)*_source.changes
+	cd $(BUILDIR) && dput $(PUSHPPA) $(PROJECT)_*_source.changes
 
 clean:
 	$(PYTHON) setup.py clean
