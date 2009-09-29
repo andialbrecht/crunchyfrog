@@ -16,7 +16,8 @@ Bug Fixes
  * Close broken connections.
 
 Other
- * Improved painting of SQL markers.
+ * Better default column widths in results view.
+ * Improved SQL marker internals.
  * Restore cursor position after formatting SQL statements.
  * Some minor UI fixes.
 

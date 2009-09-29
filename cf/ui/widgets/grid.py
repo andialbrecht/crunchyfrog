@@ -85,6 +85,7 @@ class Grid(gtk.TreeView):
         self.connect("button-press-event", self.on_button_pressed)
 
     def _setup_columns(self, rows):
+        sample_size = 50  # less samples, better performance :)
         renderer = gtk.CellRendererText()
         renderer.set_property("background", self.get_style().dark[gtk.STATE_ACTIVE].to_string())
         renderer.set_property("alignment", pango.ALIGN_CENTER)
@@ -102,6 +103,7 @@ class Grid(gtk.TreeView):
         self.append_column(col)
         offset_fg = len(self.description)*2
         offset_bg = len(self.description)*3
+        samples = set(rows[:sample_size])
         for i in range(len(self.description)):
             item = self.description[i]
             renderer = gtk.CellRendererText()
@@ -113,7 +115,7 @@ class Grid(gtk.TreeView):
                                      background_gdk=offset_bg+i)
             col.connect("clicked", self.on_column_header_clicked)
             col.set_resizable(True)
-            col.set_min_width(75)
+            col.set_fixed_width(self._get_best_column_width(i, samples))
             col.set_sizing(gtk.TREE_VIEW_COLUMN_FIXED)
             self.append_column(col)
         self.set_headers_clickable(True)
@@ -126,6 +128,23 @@ class Grid(gtk.TreeView):
         if old_model:
             del old_model
         self.set_model(model)
+
+    def _get_best_column_width(self, colnum, samples):
+        label = '  %s  ' % self.description[colnum][0]
+        layout = self.create_pango_layout(label)
+        label_width = layout.get_pixel_size()[0]
+        lengths = set()
+        model = self.get_model()
+        for row in samples:
+            value = model._get_markup_for_value(row[colnum], markup=False)
+            lines = value.splitlines()
+            if lines:
+                value = lines[0]
+            del lines
+            layout = self.create_pango_layout('  %s  ' % value)
+            lengths.add(layout.get_pixel_size()[0])
+        max_length = max(lengths)
+        return min(max(max_length, label_width), label_width*3)
 
     def _get_popup_for_cell(self, row, col):
         col = self.get_model_index(col)
@@ -467,8 +486,8 @@ class Grid(gtk.TreeView):
                 DB-API2 like description
         """
         self.description = description
-        self._setup_columns(rows)
         self._setup_model(rows, description, coding_hint)
+        self._setup_columns(rows)
 
     def unselect_cells(self):
         """Unselects all cells"""
