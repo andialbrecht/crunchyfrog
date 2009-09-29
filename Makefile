@@ -2,9 +2,13 @@ PYTHON=`which python`
 
 PKGNAME=crunchyfrog
 VERSION=`python -c "from cf import release; print release.version"`
+PYVERSION=`python -c "from cf import release; print release.version"`
 TIMESTAMP=`date +%Y%m%d%H%M`
 DIST=`lsb_release -c -s`
-DCH_MESSAGE="Local build."
+DCH_MESSAGE="New upstream snapshot."
+SERIES=intrepid jaunty karmic
+MAINTEMAIL=Andi Albrecht <albrecht.andi@googlemail.com>
+HGREV=`hg identify -n -r tip`
 
 DESTDIR=/
 BUILDIR=mydeb
@@ -28,15 +32,15 @@ install:
 
 builddeb: dist-clean
 	$(PYTHON) setup.py sdist
-	mkdir -p $(BUILDIR)/$(PROJECT)-$(VERSION)/debian
-	cp dist/$(PROJECT)-$(VERSION).tar.gz $(BUILDIR)
+	mkdir -p $(BUILDIR)/$(PROJECT)-$(PYVERSION)/debian
+	cp dist/$(PROJECT)-$(PYVERSION).tar.gz $(BUILDIR)
 	cd $(BUILDIR) && tar xfz $(PROJECT)-*.tar.gz
-	mv $(BUILDIR)/$(PROJECT)-$(VERSION).tar.gz $(BUILDIR)/$(PROJECT)-$(VERSION)/
-	cp -r extras/debian/ $(BUILDIR)/$(PROJECT)-$(VERSION)/
-	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && rm debian/changelog
-	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dch --create --package $(PROJECT) -v "$(VERSION)-$(TIMESTAMP)" -D $(DIST) $(DCH_MESSAGE)
-	cp Makefile $(BUILDIR)/$(PROJECT)-$(VERSION)/
-	cd $(BUILDIR)/$(PROJECT)-$(VERSION) && dpkg-buildpackage $(DEBFLAGS)
+	mv $(BUILDIR)/$(PROJECT)-$(PYVERSION).tar.gz $(BUILDIR)/$(PROJECT)-$(PYVERSION)/
+	cp -r extras/debian/ $(BUILDIR)/$(PROJECT)-$(PYVERSION)/
+	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && rm debian/changelog
+	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && dch --create --package $(PROJECT) -v "$(VERSION)" -D $(DIST) $(DCH_MESSAGE)
+	cp Makefile $(BUILDIR)/$(PROJECT)-$(PYVERSION)/
+	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && dpkg-buildpackage $(DEBFLAGS)
 
 debian:
 	ln -s extras/debian .
@@ -46,6 +50,11 @@ builddeb-src: debian
 
 push-ppa: builddeb-src
 	cd $(BUILDIR) && dput $(PUSHPPA) $(PROJECT)_*_source.changes
+
+daily-build:
+	@for serie in $(SERIES); \
+	do DEBEMAIL="$(MAINTEMAIL)" make push-ppa PUSHPPA=cf-daily DIST=$$serie VERSION=$(VERSION)~hg$(HGREV)-0ubuntu1~daily1~$$serie PGPKEY=528F63F0; \
+	done;
 
 clean:
 	$(PYTHON) setup.py clean
