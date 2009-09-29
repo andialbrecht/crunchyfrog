@@ -214,6 +214,12 @@ class Grid(gtk.TreeView):
                     return
                 if not isinstance(data, buffer):
                     self.on_view_data(None, data)
+                elif isinstance(data, buffer) and HAVE_GIO:
+                    mime = gio.content_type_guess(None, data)
+                    default = gio.app_info_get_default_for_type(mime,
+                                                                False)
+                    if default is not None:
+                        self.on_open_blob(None, data, default, mime)
 
         elif event.button == 3:
             x = int(event.x)
