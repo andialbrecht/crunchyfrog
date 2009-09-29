@@ -38,7 +38,7 @@ builddeb: dist-clean
 	mv $(BUILDIR)/$(PROJECT)-$(PYVERSION).tar.gz $(BUILDIR)/$(PROJECT)-$(PYVERSION)/
 	cp -r extras/debian/ $(BUILDIR)/$(PROJECT)-$(PYVERSION)/
 	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && rm debian/changelog
-	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && dch --create --package $(PROJECT) -v "$(VERSION)" -D $(DIST) $(DCH_MESSAGE)
+	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && dch --create --package $(PROJECT) -v "$(VERSION)" -D $(DIST) --force-distribution $(DCH_MESSAGE)
 	cp Makefile $(BUILDIR)/$(PROJECT)-$(PYVERSION)/
 	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && dpkg-buildpackage $(DEBFLAGS)
 
