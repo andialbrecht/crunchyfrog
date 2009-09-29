@@ -14,6 +14,8 @@ Bug Fixes
    by Igor Stirbu).
  * Improved packaging (thanks to Kartik Mistry).
  * Close broken connections.
+ * Double-click on result column with BLOB content now opens document
+   using the default viewer (issue72).
 
 Other
  * Better default column widths in results view.
