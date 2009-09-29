@@ -28,7 +28,6 @@ from gettext import gettext as _
 import logging
 log = logging.getLogger("CONFIG")
 
-from cf import USER_CONF
 
 class Config(gobject.GObject):
     """Configuration object

@@ -19,16 +19,16 @@
 """Python shell plugin"""
 
 import logging
+from gettext import gettext as _
 
 import gtk
-import gobject
 
 from cf.plugins.core import BottomPanePlugin
 from cf.plugins.mixins import InstanceMixin
 from cf.ui.pane import PaneItem
 
 try:
-    from ipython_view import *
+    from ipython_view import IPythonView
     HAVE_IPYTHON = True
 except ImportError, err:
     logging.error(err)

@@ -38,7 +38,6 @@ from cf import USER_PLUGIN_DIR, PLUGIN_DIR
 
 from cf.plugins.mixins import InstanceMixin, MenubarMixin, EditorMixin
 from cf.plugins.mixins import UserDBMixin
-from cf.ui import dialogs
 
 
 class GenericPlugin(gobject.GObject):
