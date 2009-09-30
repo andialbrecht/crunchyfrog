@@ -638,7 +638,11 @@ class Query(gobject.GObject):
         except Exception, err:
             self.failed = True
             self.errors.append(str(err))
-            self.error_position = backend.get_error_position(self, err)
+            try:
+                self.error_position = backend.get_error_position(self, err)
+            except:
+                logging.exception('Failed to get error position:')
+                self.error_position = None
             do_close = backend.should_close(err)
         except:
             self.failed = True
