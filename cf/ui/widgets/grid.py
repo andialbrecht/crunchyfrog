@@ -143,7 +143,10 @@ class Grid(gtk.TreeView):
             del lines
             layout = self.create_pango_layout('  %s  ' % value)
             lengths.add(layout.get_pixel_size()[0])
-        max_length = max(lengths)
+        if lengths:
+            max_length = max(lengths)
+        else:
+            max_length = 1
         return min(max(max_length, label_width), label_width*3)
 
     def _get_popup_for_cell(self, row, col):
