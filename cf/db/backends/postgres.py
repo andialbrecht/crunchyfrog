@@ -28,7 +28,7 @@ from cf.db.backends import Generic, DEFAULT_OPTIONS, GUIOption
 from cf.db import objects
 
 
-P_ERRORLINE = re.compile(r'^[A-Z]+ (?P<lineno>\d+):', re.UNICODE)
+P_ERRORLINE = re.compile(r'^(?P<unused>[A-Z]+ )(?P<lineno>\d+): (...)?(?P<pattern>.*)(...)?$', re.UNICODE)
 
 
 class Postgres(Generic):
@@ -89,18 +89,23 @@ class Postgres(Generic):
     def get_error_position(cls, query, error):
         if not isinstance(error, cls.dbapi().ProgrammingError):
             return None
-        line_no = offset = skip_offset = None
+        line_no = offset = skip_offset = pattern = None
         for line in error.pgerror.splitlines():
             # If the line number was found, the next line contains an
             # offset indicator.
             if line_no:
                 offset_ws, unused = line[skip_offset:].split('^', 1)
-                offset = len(offset_ws)
+                sql_line = query.statement.splitlines()[line_no-1]
+                offset = len(offset_ws)+sql_line.index(pattern)-2
                 break
             m = P_ERRORLINE.match(line)
             if m and line_no is None:
                 line_no = int(m.groupdict()['lineno'])
-                skip_offset = m.end()
+                pattern = m.groupdict()['pattern']
+                if pattern.endswith('...'):
+                    pattern = pattern[:-3]
+                skip_offset = len('%s%s: ' % (m.groupdict()['unused'],
+                                              line_no))
         if line_no:
             return (line_no, offset)
         return None
