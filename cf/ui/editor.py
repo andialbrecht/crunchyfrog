@@ -712,8 +712,15 @@ class Editor(gobject.GObject, PaneItem):
         buffer_ = self.textview.get_buffer()
         res = buffer_.get_selection_bounds()
         if not res:
-            start, end = buffer_.get_bounds()
-            select_range = False
+            start = end = None
+            if self.app.config.get('editor.format_statement_at_cursor', False):
+                curr = self.textview.get_current_statement()
+                if curr:
+                    start, end = curr
+                    select_range = False
+            if start is None:
+                start, end = buffer_.get_bounds()
+                select_range = False
         else:
             start, end = res
             select_range = True
