@@ -1,0 +1,3 @@
+#!/bin/bash
+
+PYTHONPATH=LIBDIR:$PYTHONPATH GTKMOZEMBED_PATH python LIBDIR/cf/__init__.py "$@"

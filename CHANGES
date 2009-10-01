@@ -1,0 +1,264 @@
+Release 0.4.1 (Oct 1, 2009)
+---------------------------
+
+New Features
+ * Hide results pane either by keyboard shortcut (Shift+F9) or by default
+   for new editors.
+ * Highlighting of common errors in SQL editor (PostgreSQL, SQLite, MySQL,
+   Oracle).
+
+Bug Fixes
+ * Updated GTK requirement in Glade files to GTK 2.12.
+ * Improved GNOME keyring detection (issue68, reported by Igor Stirbu).
+ * Fixed a bug with data sources defined with port (issue79, reported
+   by Igor Stirbu).
+ * Improved packaging (thanks to Kartik Mistry).
+ * Close broken connections.
+ * Double-click on result column with BLOB content now opens document
+   using the default viewer (issue72).
+
+Other
+ * Better default column widths in results view.
+ * Improved SQL marker internals.
+ * Restore cursor position after formatting SQL statements.
+ * Some minor UI fixes.
+
+
+Release 0.4.0 (Jul 11, 2009)
+----------------------------
+
+New Features
+ * Keyboard shortcuts to jump to next/prev statement (issue57).
+ * Results grid supports Ctrl+C to copy selected cells (issue63, reported
+   by Martin Brochhaus).
+
+Bug Fixes
+ * Fixed packaging of custom database pixmaps (issue61, reported
+   by m...@vee.net).
+ * Added --install-layout=deb to debian/rules (issue60, reported
+   by m...@vee.net).
+ * Improved handling of other widgets than SQL editors in main
+   notebook (issue62).
+
+Translations
+ * New Japanese translation (partial), thanks to Ryutatsu Ishigami.
+ * Other translations updated.
+ * Thanks to all contributors on Launchpad!
+
+
+Release 0.3.90 (May 21, 2009)
+-----------------------------
+
+New Features
+ * Execute statement at cursor position with Ctrl-F5.
+ * Auto-completion of tables, columns and SQL syntax (issue36, suggested by
+   nearyd).
+ * Added support for Firebird, Informix and MaxDB (issue49, reported by
+   marcin.matlag).
+
+Bug Fixes
+ * Fixed execution of statement with Oracle (issue50, thanks to
+   massimiliano.bini for reporting and testings).
+ * Moved user specific files and directories to proper locations
+   according to XDG Base Directory Specification (issue56, reported by
+   schlaber).
+ * Replaced some libgnome dependencies with gio/glib functions (incl. issue2).
+ * Removed gnome-extra-icons depedency (issue22).
+
+Other
+ * Improved SQL formatting.
+ * Improved statment markers, derived from Giggle's browse view.
+ * Improved detection of mime types and default applications of BLOB data.
+ * Removed reference plugin (issue54) and LDAP backend.
+ * Cleaned up data source manager (issue32, reported by robertknight).
+
+
+Release 0.3.4 (Mar 17, 2009)
+----------------------------
+
+New Features
+ * Option to use the foreground editor's connection as default for new
+   editors (issue17, thanks to Michael Gratton).
+ * Comment / uncomment selected lines in editor.
+ * Simple formatting of SQL statements (experimental).
+
+Bug Fixes
+ * Prevent files from being saved over and over again (fixes 40 too).
+ * Fixed invalid category in crunchyfrog.desktop (issue37 reported
+   by ivazqueznet).
+ * Open files given as command line arguments works again (issue38).
+ * Socket connections to PostgreSQL fixed (issue43, thanks to ivazqueznet).
+ * Default window size is initialized correctly (issue45).
+
+Other
+ * Some more UI clean up (incl. issue34, thanks to robertknight for the
+   suggestions).
+ * Pygments is not required anymore.
+
+Translations
+ * Swedish and Spanish translations are now complete (thanks to
+   Daniel Nylander and DiegoJ).
+ * Russian translation is almost complete (thanks to Alexandr Udovichenko).
+
+
+Release 0.3.3 (Feb 6, 2009)
+---------------------------
+
+New Features
+ * Close all action added.
+
+Bug Fixes
+ * Statement splitting with SQLite and explain view for all RDBMs works
+   again (issue27, reported by abduleczek, robertknight and many others...).
+ * Use F1 instead of Ctrl-H for Help (issue26, thanks to Dave Neary).
+ * Oracle plugin now installs properly (issue28, abduleczek).
+ * Show an error dialog when connecting to SQL Server fails.
+ * Confirm save dialog works again when instance is closed.
+
+
+Release 0.3.2 (Jan 30, 2009)
+----------------------------
+
+Release Highlights
+ * Cleaner user interface.
+ * Configurable keyboard shortcuts.
+ * Re-written SQL library plugin.
+ * Initial support for cross-platform compatibility.
+ * Connection handling optimized (first part of issue17, thanks to
+   Mike for his good ideas).
+
+Bug Fixes
+ * Added missing check for IPython in Python shell (issue21).
+ * ...and a bunch of smaller issues.
+
+Other
+ * Removed a few obsolete dependencies, others are now optional.
+ * It's now ok to open multiple files at once.
+ * More documentation.
+ * Drag'n'drop SQL editors between existing application windows.
+
+Translations
+ * New translations: English (GB), Greek
+ * Updated translations: German, Spanish
+ * Thanks to all contributors!
+
+
+Release 0.3.1 (Nov 24, 2008)
+----------------------------
+
+New Features
+ * Initial printing support.
+
+Bug Fixes
+ * MySQL browser has changed the default database when browsing the
+   database objects (issue13, thanks to lostsector).
+ * Removed some old code that caused the editor to display some IDs
+   instead of table names when dragging from browser (issue15, thanks
+   to lostsector).
+ * Improved SQL parsing (incl. issue14, thanks to lostsector).
+ * Replaced dbus_manager.py by ipc.py (issue12, thanks to Frank Mersmann).
+ * Confirmation dialog when closing editors without changes fixed.
+
+Other
+ * Replaced some gnome.* stuff with their gtk counterparts (gtk 2.14).
+ * Start script preserves environment variables.
+ * Display notices from PostgreSQL connection.
+
+Translation
+ * crunchyfrog.pot covers now all translatable strings in Python files.
+   Thanks to Martin Picek for pointing at this bug.
+ * New translations: Czech, Russian.
+ * Updated translations: Dutch, German, Italian, Spanish, Swedish.
+ * Thanks to all contributors!
+
+
+Release 0.3.0 (Oct 24, 2008)
+----------------------------
+
+New Features
+ * query splitting
+ * gnomekeyring support
+ * UI cleanup (incl. issue8, thanks to Paul Kishimoto)
+
+Bug Fixes
+ * Errors when a plugin isn't activated but a data source used fixed.
+ * Connection chooser doesn't get insensitive when a editor is closed.
+ * Fixed errors with progress messages.
+
+Other
+ * gtksourceview-1 is not supported anymore (issue10).
+ * gdl isn't required anymore.
+
+Translations
+ * Danish
+ * Dutch
+ * French
+ * German
+ * Hebrew
+ * Indonesian
+ * Italian
+ * Spanish
+ * Swedish
+ * Turkish
+
+Thanks to all Launchpad contributors!
+
+
+Release 0.2.1 (Jun 10, 2008)
+----------------------------
+
+New Features
+ * SQL Server backend (using pymssql)
+ * HTTP log file backend (requires sqlite3)
+ * recent files support
+
+Bug Fixes
+ * scrollable mode and duplicate popup menu on queries notebook fixed
+ * confirm dialog for unsaved changes
+ * unloading of shell plugin fixed (issue7)
+ * UI enhancements (incl. parts of issue8, thanks to paul.kishimoto
+   for the suggestions)
+ * info dialog about available backends
+
+Translations
+ * Finish
+ * French
+ * German
+ * Italian
+ * Spanish
+
+Thanks to all launchpad contributors!
+
+
+Release 0.2.0 (Apr 4, 2008)
+---------------------------
+
+New Features
+ * navigator: refresh action
+ * double-click on data source opens editor and assigns a connection
+ * SQL library plugin
+ * API documentation
+
+
+Bug Fixes
+ * load/unload of plugins fixed (issue #5)
+ * minor improvements to connection handling
+ * installation mechanism improved (issue #4)
+ * exception handling fixed (issue #3)
+ * reset explain tab when a query is started
+ * ConnectionButton: Sort alphabetically
+ * ConnectionButton: If the button is assigned to an editor, new
+   data sources are note recognized
+ * UserDB: provide some kind of callback mechanism so that plugins can
+   create or update tables them self (implemented in UserDBMixin)
+ * UserDB: remove USER_DB attribute and implement it as config
+   value (userdb.file, not visible in preferences dialog)
+ * Library: Manage saved queries
+ * ConnectionButton: Manage connections
+ * ResultGrid: Custom TreeModel and Renderer
+
+Other
+ * User manual (en, de)
+ * slight modifications to plugin management, it doesn't use setuptools anymore
+ * better instance handling
+ * minor UI improvements

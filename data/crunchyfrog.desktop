@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=CrunchyFrog
+Comment=SQL Client and Schema Browser
+Exec=crunchyfrog %U
+StartupNotify=true
+StartupWMClass=crunchyfrog
+Icon=crunchyfrog
+Terminal=false
+Type=Application
+Categories=GNOME;GTK;Development;Database;
+MimeType=text/x-sql
