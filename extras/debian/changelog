@@ -1,8 +1,15 @@
-crunchyfrog (0.4.1dev-2ubuntu1) jaunty; urgency=low
+crunchyfrog (0.4.1-0ubuntu2) karmic; urgency=low
 
-  * Test build preparing 0.4.1.
+  * New upstream version.
+  * Fix version number in docs.
 
- -- Andi Albrecht <albrecht.andi@googlemail.com>  Mon, 28 Sep 2009 21:05:32 +0200
+ -- Andi Albrecht <albrecht.andi@googlemail.com>  Thu, 01 Oct 2009 06:06:56 +0200
+
+crunchyfrog (0.4.1-0ubuntu1) karmic; urgency=low
+
+  * New upstream version.
+
+ -- Andi Albrecht <albrecht.andi@googlemail.com>  Wed, 30 Sep 2009 20:32:43 +0200
 
 crunchyfrog (0.4.0-2) jaunty; urgency=low
 
