@@ -97,7 +97,7 @@ Fill out the form below to create or edit this data source.</property>
                             <property name="sensitive">False</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0</property>
-                            <property name="label" translatable="yes">D_esscription:</property>
+                            <property name="label" translatable="yes">D_escription:</property>
                             <property name="use_underline">True</property>
                           </object>
                           <packing>
