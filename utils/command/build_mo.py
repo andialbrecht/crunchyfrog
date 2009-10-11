@@ -4,8 +4,15 @@
 
 from distutils.command.build import build
 from distutils.core import Command
-import subprocess
+
+import os
 import sys
+
+from utils import msgfmt
+
+PO_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                       '../../po'))
+
 
 class build_mo(Command):
 
@@ -19,11 +26,15 @@ class build_mo(Command):
     def finalize_options(self):
         pass
 
+    def _generate(self, lang):
+        infile = os.path.join(PO_PATH, lang, 'LC_MESSAGES', 'crunchyfrog.po')
+        outfile = os.path.join(PO_PATH, lang, 'LC_MESSAGES', 'crunchyfrog.mo')
+        msgfmt.make(infile, outfile)
+
     def run(self):
-        proc = subprocess.Popen(['make', 'msg-compile'])
-        proc.wait()
-        if proc.returncode:
-            print 'Failed to compile message catalogs.'
-            sys.exit(1)
+        for path in os.listdir(PO_PATH):
+            if os.path.isdir(os.path.join(PO_PATH, path)):
+                self._generate(path)
+
 
 build.sub_commands.append(('build_mo', None))
