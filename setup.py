@@ -28,19 +28,10 @@ import sys
 CMD_CLASS = {}
 
 try:
-    # Try to import the original one first (Sphinx >= 0.5)
     from sphinx.setup_command import BuildDoc
-except ImportError:
-    # ok, it failed... try the local copy
-    try:
-        from utils.command.sphinx_build import BuildDoc
-    except ImportError:
-        # giving up, not building docs
-        pass
-try:
     CMD_CLASS['build_manual'] = BuildDoc
     CMD_CLASS['build_devguide'] = BuildDoc
-except NameError:
+except ImportError:
     pass
 
 from utils.command.build_api import build_api
