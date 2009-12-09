@@ -94,17 +94,14 @@ class MySQL(Generic):
     def get_error_position(cls, query, error):
         err_code, msg = error.args
         p = P_ERROR_MESSAGES.get(err_code)
-        print p
         if p is None:
             return None
         m = p.search(msg)
-        print m
         if m is None:
             return None
         data = m.groupdict()
         line = data.get('lineno')
         pattern = data.get('pattern')
-        print data
         if line is None and pattern is None:
             return None
         elif pattern is None:
@@ -182,7 +179,6 @@ class MySQL(Generic):
                % (coll.parent.name.lower(),
                   coll.parent.parent.parent.name.lower()))
         for item in self._query(connection, sql):
-            print item['id'], item['parent']
             con = meta.find_exact(oid=item['id'],
                                   parent=coll.parent.constraints)
             if con is None:
