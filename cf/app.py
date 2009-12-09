@@ -337,14 +337,6 @@ class CFApplication(gobject.GObject):
         for window in self.get_instances():
             window.statusbar.pop(context)
 
-    def set_status_message(self, msg, context=1):
-        for window in self.get_instances():
-            window.statusbar.set_message(msg, context)
-
-    def pop_status_message(self, context=1):
-        for window in self.get_instances():
-            window.statusbar.pop(context)
-
 
 class CFAppCallbacks(gobject.GObject):
     """Container for application specific signals.
