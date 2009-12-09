@@ -23,10 +23,10 @@ import logging
 from cf.filter.exportfilter import CSVExportFilter
 from cf.filter.exportfilter import OOCalcExportFilter
 
-try: from cf.backends.mysql import MySQLBackend
+try: from cf.db.backends.mysql import MySQL
 except ImportError, err:
     logging.warning('Could not import MySQLBackend: %s', err)
-try: from cf.backends.oracle import OracleBackend
+try: from cf.db.backends.oracle import Oracle
 except ImportError, err:
     logging.warning('Could not import OracleBackend; %s', err)
 
