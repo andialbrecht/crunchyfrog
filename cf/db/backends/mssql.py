@@ -109,8 +109,8 @@ DRIVER = MSSql
 
 INITIAL_SQL = """SELECT t.table_catalog,
 t.table_name, c.column_name, t.table_type
-FROM information_schema.columns c,
-    information_schema.tables t
+FROM INFORMATION_SCHEMA.COLUMNS c,
+    INFORMATION_SCHEMA.TABLES t
 WHERE t.TABLE_NAME = c.TABLE_NAME
       AND t.table_catalog = c.table_catalog
 ORDER BY c.table_catalog,
