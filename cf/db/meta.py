@@ -82,7 +82,7 @@ class DatabaseMeta(object):
 
     def find(self, **kwds):
         """Find an object using searchterm."""
-        res = self._items
+        res = list(self._items)
         if 'cls' in kwds:
             objcls = kwds.pop('cls')
             res = filter(lambda x: isinstance(x, objcls), res)
