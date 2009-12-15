@@ -130,3 +130,6 @@ def run():
             sel.destroy()
         else:
             ipc_client.new_instance()
+
+if __name__ == '__main__':
+    run()
