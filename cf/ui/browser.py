@@ -117,7 +117,12 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             # row_draggable(path) doesn't work somehow...
             if isinstance(obj, objects.DBObject) \
             and not isinstance(obj, objects.Collection):
-                text = model.get_value(iter, 1)
+                if hasattr(obj, 'schema'):
+                    # If we're directly associated with a schema, include it as a prefix
+                    text = '%s.%s' % (obj.schema.name, 
+                                      model.get_value(iter, 1))
+                else:
+                    text = model.get_value(iter, 1)
             else:
                 text = ""
             selection.set('text/plain', 8, text)

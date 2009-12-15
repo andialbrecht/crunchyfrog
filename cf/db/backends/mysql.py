@@ -145,7 +145,8 @@ class MySQL(Generic):
                     cls = objects.View
                     parent = meta.find_exact(cls=objects.Views, parent=schema)
                 obj = cls(meta, parent=parent, oid=item['id'],
-                          name=item['name'], comment=item['description'])
+                          name=item['name'], comment=item['description'],
+                          schema=schema)
                 meta.set_object(obj)
 
             if item['type'] == 'column':

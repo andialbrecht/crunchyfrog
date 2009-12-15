@@ -16,6 +16,8 @@ Bug Fixes
  * Close broken connections.
  * Double-click on result column with BLOB content now opens document
    using the default viewer (issue72).
+ * Provide proper schema information in navigator and when dropping
+   objects on SQL editor (issue81, patch by Darren Worrall).
 
 Other
  * Better default column widths in results view.

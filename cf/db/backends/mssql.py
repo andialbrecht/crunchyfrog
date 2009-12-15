@@ -73,9 +73,9 @@ class MSSql(Generic):
         meta.set_object(schemata)
         for item in self._query(connection, INITIAL_SQL):
             schema = meta.find_exact(cls=objects.Schema,
-                                     name=item['table_catalog'])
+                                     name=item['table_schema'])
             if schema is None:
-                schema = objects.Schema(meta, name=item['table_catalog'],
+                schema = objects.Schema(meta, name=item['table_schema'],
                                         parent=schemata)
                 meta.set_object(schema)
             if item['table_type'] == 'BASE TABLE':
@@ -94,7 +94,7 @@ class MSSql(Generic):
                                   parent=parent)
             if obj is None:
                 obj = cls(meta, name=item['table_name'],
-                          parent=parent)
+                          parent=parent, schema=schema)
                 meta.set_object(obj)
             col = meta.find_exact(cls=objects.Column, name=item['column_name'],
                                   parent=obj.columns)
@@ -107,7 +107,7 @@ class MSSql(Generic):
 DRIVER = MSSql
 
 
-INITIAL_SQL = """SELECT t.table_catalog,
+INITIAL_SQL = """SELECT t.table_catalog, t.table_schema,
 t.table_name, c.column_name, t.table_type
 FROM INFORMATION_SCHEMA.COLUMNS c,
     INFORMATION_SCHEMA.TABLES t
