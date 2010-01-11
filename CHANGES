@@ -6,6 +6,7 @@ New Features
    for new editors.
  * Highlighting of common errors in SQL editor (PostgreSQL, SQLite, MySQL,
    Oracle).
+ * Export to Excel (issue84, patch by Michele Albanese).
 
 Bug Fixes
  * Updated GTK requirement in Glade files to GTK 2.12.
