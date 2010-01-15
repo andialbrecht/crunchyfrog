@@ -1,8 +1,23 @@
 Development
 -----------
 
+New Features
+ * Add Excel export filter (issue84, patch by Michele Albanese).
+
 Bug Fixes
  * Properly escape error messages (issue85).
+ * Fix conditional import of MySQL and Oracle backends by Darren
+   Worrall (issue77).
+ * Fix case-sensitive table names for initial SQL Server schema query,
+   by Darren Worrall (issue80).
+ * Fixed a problem when building schema information for SQL Server
+   (issue79).
+ * Provide proper schema information in navigator and when dropping
+   objects on SQL editor (issue81, patch by Darren Worrall).
+
+Other
+ * Improved build process and code clean up (inluding a patch by
+   Darren Worrall for issue78).
 
 
 Release 0.4.1 (Oct 1, 2009)
@@ -13,7 +28,6 @@ New Features
    for new editors.
  * Highlighting of common errors in SQL editor (PostgreSQL, SQLite, MySQL,
    Oracle).
- * Export to Excel (issue84, patch by Michele Albanese).
 
 Bug Fixes
  * Updated GTK requirement in Glade files to GTK 2.12.
@@ -24,8 +38,6 @@ Bug Fixes
  * Close broken connections.
  * Double-click on result column with BLOB content now opens document
    using the default viewer (issue72).
- * Provide proper schema information in navigator and when dropping
-   objects on SQL editor (issue81, patch by Darren Worrall).
 
 Other
  * Better default column widths in results view.
