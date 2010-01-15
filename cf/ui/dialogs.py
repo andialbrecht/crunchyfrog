@@ -49,7 +49,7 @@ def _run_dialog(short, long=None, parent=None, buttons=gtk.BUTTONS_NONE,
     short = gobject.markup_escape_text(short)
     dlg.set_markup('<b>%s</b>' % short)
     if long is not None:
-        dlg.format_secondary_markup(long)
+        dlg.format_secondary_markup(gobject.markup_escape_text(long))
     img = gtk.image_new_from_stock(dlg_type, gtk.ICON_SIZE_DIALOG)
     dlg.set_image(img)
     dlg.set_title(title)

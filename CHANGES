@@ -1,3 +1,10 @@
+Development
+-----------
+
+Bug Fixes
+ * Properly escape error messages (issue85).
+
+
 Release 0.4.1 (Oct 1, 2009)
 ---------------------------
 
