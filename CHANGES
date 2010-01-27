@@ -14,6 +14,8 @@ Bug Fixes
    (issue79).
  * Provide proper schema information in navigator and when dropping
    objects on SQL editor (issue81, patch by Darren Worrall).
+ * Fixed a problem when certain data types appeared in query results
+   (issue87).
 
 Other
  * Improved build process and code clean up (inluding a patch by

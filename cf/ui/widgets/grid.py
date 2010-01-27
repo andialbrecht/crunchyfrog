@@ -103,7 +103,7 @@ class Grid(gtk.TreeView):
         self.append_column(col)
         offset_fg = len(self.description)*2
         offset_bg = len(self.description)*3
-        samples = set(rows[:sample_size])
+        samples = rows[:sample_size]
         for i in range(len(self.description)):
             item = self.description[i]
             renderer = gtk.CellRendererText()

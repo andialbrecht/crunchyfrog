@@ -1049,8 +1049,12 @@ class ResultList(object):
         self.query = query
         self.grid.reset()
         if self.query.description:
-            self.grid.set_result(self.query.rows, self.query.description,
-                                 self.query.coding_hint)
+            try:
+                self.grid.set_result(self.query.rows, self.query.description,
+                                     self.query.coding_hint)
+            except Exception, err:
+                logging.exception('Failed to display query results')
+                dialogs.error(_(u'Failed to display results'), str(err))
 
 
 
