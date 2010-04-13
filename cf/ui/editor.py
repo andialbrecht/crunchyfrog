@@ -321,6 +321,9 @@ class Editor(gobject.GObject, PaneItem):
         self.results.add_message('BEGIN TRANSACTION', 'info')
 
     def execute_query(self, statement_at_cursor=False):
+        # TODO(andi): This method needs some refactoring:
+        #   - the actual execution code is doubled
+        #   - that affects offset counting too
         self.results.assure_visible()
         def exec_threaded(statement, start_line):
             if self.app.config.get("sqlparse.enabled", True):
