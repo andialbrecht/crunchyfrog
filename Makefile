@@ -6,7 +6,7 @@ PYVERSION=`python -c "from cf import release; print release.version"`
 TIMESTAMP=`date +%Y%m%d%H%M`
 DIST=`lsb_release -c -s`
 DCH_MESSAGE="New upstream snapshot."
-SERIES=intrepid jaunty karmic
+SERIES=intrepid jaunty karmic lucid maverick
 MAINTEMAIL=Andi Albrecht <albrecht.andi@googlemail.com>
 HGREV=`hg identify -n -r tip`
 
@@ -37,8 +37,8 @@ builddeb: dist-clean
 	cd $(BUILDIR) && tar xfz $(PROJECT)-*.tar.gz
 	mv $(BUILDIR)/$(PROJECT)-$(PYVERSION).tar.gz $(BUILDIR)/$(PROJECT)-$(PYVERSION)/
 	cp -r extras/debian/ $(BUILDIR)/$(PROJECT)-$(PYVERSION)/
-#	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && rm debian/changelog
-#	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && dch --create --package $(PROJECT) -v "$(VERSION)" -D $(DIST) --force-distribution $(DCH_MESSAGE)
+	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && rm debian/changelog
+	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && dch --create --package $(PROJECT) -v "$(VERSION)" -D $(DIST) --force-distribution $(DCH_MESSAGE)
 	cp Makefile $(BUILDIR)/$(PROJECT)-$(PYVERSION)/
 	cd $(BUILDIR)/$(PROJECT)-$(PYVERSION) && dpkg-buildpackage $(DEBFLAGS)
 
