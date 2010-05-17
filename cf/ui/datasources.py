@@ -474,25 +474,43 @@ class DatasourceEditDialog(object):
         ds.startup_commands = buffer_.get_text(*buffer_.get_bounds()) or None
         return ds
 
-    def check_required(self):
-        """Returns a list of missing required options or None."""
+    def clean_data(self):
+        """Validates the form data."""
         data = self._get_url_options()
         backend = self.get_selected_backend()
-        result = []
+        required = []
+        errors = []
         for option in backend.get_options():
-            if option.required and data.get(option.key, None) is None:
-                result.append(option)
-        if result:
-            return result
-        return None
+            value = data.get(option.key, None)
+            if option.required and value is None:
+                required.append(option)
+            elif value and option.widget == option.WIDGET_PORT:
+                try:
+                    int(value)
+                except (ValueError, TypeError):
+                    errors.append((option, _(u'Integer required')))
+        return {'required': required, 'errors': errors}
+
+    def validate_data(self):
+        """Validates data and displays dialog on errors."""
+        result = self.clean_data()
+        msg = ''
+        if result['required']:
+            msg += _(u'Missing fields:\n%(fields)s')
+            msg += msg % {'fields': ', '.join(
+                [opt.label for opt in result['required']])}
+        if result['errors']:
+            msg += _(u'Validation errors:\n')
+            msg += '\n'.join('%s: %s' % (opt.label, err)
+                             for opt, err in result['errors'])
+        if msg:
+            dialogs.error(_(u'Failed'), msg, parent=self.dlg)
+            return False
+        return True
 
     def test_connection(self):
         """Test the current settings."""
-        result = self.check_required()
-        if result is not None:
-            msg = _(u'Missing fields:\n%(fields)s')
-            msg = msg % {'fields': ', '.join([opt.label for opt in result])}
-            dialogs.error(_(u'Failed'), msg, parent=self.dlg)
+        if not self.validate_data():
             return
         ds = self.make_datasource(create_new=True)
         try:
@@ -507,12 +525,7 @@ class DatasourceEditDialog(object):
 
     def save_datasource(self):
         """Save current settings."""
-        # TODO: Refactor, we need a validate function
-        result = self.check_required()
-        if result is not None:
-            msg = _(u'Missing fields:\n%(fields)s')
-            msg = msg % {'fields': ', '.join([opt.label for opt in result])}
-            dialogs.error(_(u'Failed'), msg, parent=self.dlg)
+        if not self.validate_data():
             return False
         ds = self.make_datasource()
         self.app.datasources.save(ds)

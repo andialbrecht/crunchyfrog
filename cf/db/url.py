@@ -134,7 +134,13 @@ def make_url(raw):
         kwds = dict(parse_qsl(parsed.query))
     else:
         kwds = {}
+    # The following try-except block cleans up bad data that may life
+    # in the datasource configuration file (see issue70).
+    try:
+        port = parsed.port
+    except ValueError:
+        port = None
     return URL(parsed.scheme,
                parsed.username or None, parsed.password or None,
-               parsed.hostname or None, parsed.port or None,
+               parsed.hostname or None, port or None,
                database, **kwds)
