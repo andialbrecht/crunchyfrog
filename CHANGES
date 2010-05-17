@@ -18,6 +18,7 @@ Bug Fixes
    (issue87).
  * Fixed a problem when connecting to MySQL with invalid port settings
    (issue70, reported by Igor Stirbu, re-opened by LynxHeureux).
+ * Catch GtkError when a backend reports a bad error position (issue74).
 
 Other
  * Improved build process and code clean up (inluding a patch by

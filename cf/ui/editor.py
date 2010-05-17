@@ -245,15 +245,19 @@ class Editor(gobject.GObject, PaneItem):
 
     # Public methods
 
-    def _mark_error(self, line, offset=None):
+    def _mark_error(self, line, offset):
+        line = line - 2
+        offset = offset - 1
+        if line < 0 or offset < 0:
+            # Backend reported a bad error position. Simply ignore it.
+            return
         buffer_ = self.textview.buffer
 #        buffer_.create_source_mark(
 #            None, 'error',
 #            buffer_.get_iter_at_line_offset(line-2, offset))
-        import pango
         tag_table = buffer_.get_tag_table()
         tag = tag_table.lookup('error')
-        iter_err = buffer_.get_iter_at_line_offset(line-2, offset-1)
+        iter_err = buffer_.get_iter_at_line_offset(line, offset)
         iter1 = iter_err.copy()
         if not iter1.starts_word():
             iter1.backward_word_start()
