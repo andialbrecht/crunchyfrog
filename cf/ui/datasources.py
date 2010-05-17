@@ -519,9 +519,8 @@ class DatasourceEditDialog(object):
             dialogs.info(_(u'Succeeded'), parent=self.dlg)
         except:
             import logging
-            logging.exception('xx')
-            dialogs.error(_(u'Failed'),
-                          gobject.markup_escape_text(str(sys.exc_info()[1])))
+            logging.exception('Test connect failed. Traceback follows:')
+            dialogs.error(_(u'Failed'), str(sys.exc_info()[1]))
 
     def save_datasource(self):
         """Save current settings."""
