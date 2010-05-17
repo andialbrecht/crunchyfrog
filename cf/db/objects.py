@@ -658,6 +658,7 @@ class Schema(DBObject):
         DBObject.__init__(self, meta, **kwds)
         self.typeid = "schema"
         self.typestr = _(u"Schema")
+        self.is_default = False  # Dummy value for now...
 
 
 class Schemata(Collection):
