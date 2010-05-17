@@ -21,7 +21,7 @@ Bug Fixes
 
 Other
  * Improved build process and code clean up (inluding a patch by
-   Darren Worrall for issue78).
+   Darren Worrall for issue78, issue86).
 
 
 Release 0.4.1 (Oct 1, 2009)
