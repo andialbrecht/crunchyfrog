@@ -16,6 +16,8 @@ Bug Fixes
    objects on SQL editor (issue81, patch by Darren Worrall).
  * Fixed a problem when certain data types appeared in query results
    (issue87).
+ * Fixed a problem when connecting to MySQL with invalid port settings
+   (issue70, reported by Igor Stirbu, re-opened by LynxHeureux).
 
 Other
  * Improved build process and code clean up (inluding a patch by
