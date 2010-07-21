@@ -114,7 +114,7 @@ def rebuild_connection_menu(menu, win, editor=None):
     add_sep = False
     for conn in win.app.datasources.get_connections():
         add_sep = True
-        item = gtk.MenuItem(conn.get_label())
+        item = gtk.MenuItem(conn.get_label(), use_underline=False)
         item.connect('activate', lambda m, c, e: e.set_connection(c),
                      conn, editor)
         item.show()
@@ -134,7 +134,7 @@ def rebuild_connection_menu(menu, win, editor=None):
     dsinfos.sort(lambda x, y: cmp(x.get_label().lower(),
                                   y.get_label().lower()))
     for dsinfo in dsinfos:
-        dsitem = gtk.MenuItem(dsinfo.get_label())
+        dsitem = gtk.MenuItem(dsinfo.get_label(), use_underline=False)
         dsitem.show()
         dsitem.connect('activate', create_and_assign, dsinfo, editor)
         dsmenu.append(dsitem)
