@@ -78,7 +78,8 @@ CMD_CLASS['build_mo'] = build_mo
 CMD_CLASS['clean_mo'] = clean_mo
 
 
-build.sub_commands.append(('build_manual', None))
+if 'build_manual' in CMD_CLASS:
+    build.sub_commands.append(('build_manual', None))
 
 
 DATA_FILES = []
