@@ -57,7 +57,7 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
 
     item_id = 'navigator'
     name = _(u'Navigator')
-    icon = 'stock_connect'
+    icon = gtk.STOCK_CONNECT
     detachable = True
 
     def __init__(self, app, instance):
@@ -411,9 +411,9 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
 
     def set_datasource_info(self, iter, datasource_info):
         if datasource_info.get_connections():
-            ico = self.app.load_icon('stock_connect')
+            ico = self.app.load_icon(gtk.STOCK_CONNECT)
         else:
-            ico = self.app.load_icon('stock_disconnect')
+            ico = self.app.load_icon(gtk.STOCK_DISCONNECT)
         if datasource_info.color is not None:
             color = gtk.gdk.color_parse(datasource_info.color)
         else:
