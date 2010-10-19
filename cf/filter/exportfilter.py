@@ -44,6 +44,7 @@ class CSVExportFilter(ExportPlugin):
         import csv
         fp = open(options["filename"], "w")
         w = csv.writer(fp)
+        w.writerow([x[0] for x in description])
         w.writerows(rows)
         fp.close()
 
