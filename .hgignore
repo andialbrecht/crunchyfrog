@@ -9,3 +9,4 @@ mydeb/
 data/crunchyfrog.1
 *.mo
 debian
+cf/local_config.py

@@ -29,7 +29,11 @@ class CFError(Exception):
     """Base class for all errors."""
 
 
-PREFIX = '/usr/'
+try:
+    from local_config import PREFIX
+except ImportError:
+    PREFIX = '/usr/'
+
 
 def _is_source_dir():
     """Checks if the application is started from source checkout/dist."""

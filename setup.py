@@ -19,6 +19,7 @@
 
 from distutils.command.build import build
 from distutils.command.clean import clean
+from distutils.command.install import install as _install
 from distutils.core import setup
 from glob import glob
 import os
@@ -60,6 +61,19 @@ def find_packages(base):
         if os.path.isdir(full_path):
             ret += find_packages(full_path)
     return ret
+
+
+class install(_install):
+    """install command -- generates a local_config.py"""
+
+    def run(self):
+        f = open('cf/local_config.py', 'w')
+        f.write('# -*- coding: utf-8 -*-\n\n')
+        f.write('PREFIX = \'%s\'\n' % self.install_data)
+        f.close()
+        _install.run(self)
+
+CMD_CLASS['install'] = install
 
 
 class clean_with_subcommands(clean):
