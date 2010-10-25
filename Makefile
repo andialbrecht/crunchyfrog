@@ -18,7 +18,7 @@ PYINSTALL=
 
 PO=`find po/* -maxdepth 0 -name .svn -prune -o -type d|sed 's/po\///g'`
 
-PUSHPPA=cf-ppa
+PUSHPPA=ppa:crunchyfrog/crunchyfrog-daily
 PGPKEY=090D660E
 
 
@@ -53,7 +53,7 @@ push-ppa: builddeb-src
 
 daily-build:
 	@for serie in $(SERIES); \
-	do DEBEMAIL="$(MAINTEMAIL)" make push-ppa PUSHPPA=cf-daily DIST=$$serie VERSION=$(VERSION)~hg$(HGREV)-0ubuntu1~daily1~$$serie PGPKEY=528F63F0; \
+	do DEBEMAIL="$(MAINTEMAIL)" make push-ppa PUSHPPA=cf-daily DIST=$$serie VERSION=$(VERSION)~hg$(HGREV)-0ubuntu1~daily1~$$serie PGPKEY=A92CC5D3; \
 	done;
 
 clean:
