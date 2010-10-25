@@ -64,6 +64,8 @@ clean:
 	find . -name '*.pyc' -delete
 	find . -name '*~' -delete
 	rm -rf testuserdir
+	rm -f docs/devguide/source/api/cf*.rst
+	rm cf/local_config.py
 
 dist-clean: clean
 	rm -rf dist
