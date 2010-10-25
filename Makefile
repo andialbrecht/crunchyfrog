@@ -53,7 +53,7 @@ push-ppa: builddeb-src
 
 daily-build:
 	@for serie in $(SERIES); \
-	do DEBEMAIL="$(MAINTEMAIL)" make push-ppa PUSHPPA=cf-daily DIST=$$serie VERSION=$(VERSION)~hg$(HGREV)-0ubuntu1~daily1~$$serie PGPKEY=A92CC5D3; \
+	do DEBEMAIL="$(MAINTEMAIL)" make push-ppa PUSHPPA=$(PUSHPPA) DIST=$$serie VERSION=$(VERSION)~hg$(HGREV)-0ubuntu1~daily1~$$serie PGPKEY=A92CC5D3; \
 	done;
 
 clean:
