@@ -6,7 +6,7 @@ PYVERSION=`python -c "from cf import release; print release.version"`
 TIMESTAMP=`date +%Y%m%d%H%M`
 DIST=`lsb_release -c -s`
 DCH_MESSAGE="New upstream snapshot."
-SERIES=intrepid jaunty karmic lucid maverick
+SERIES=jaunty karmic lucid maverick
 MAINTEMAIL=Andi Albrecht <albrecht.andi@googlemail.com>
 HGREV=`hg identify -n -r tip`
 
