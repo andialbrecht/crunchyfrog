@@ -21,6 +21,8 @@ Bug Fixes
  * Catch GtkError when a backend reports a bad error position (issue74).
  * Installation prefix was hard-coded in cf/__init__.py and caused
    problems with non-standard installations (issue93).
+ * English (en) message catalog was broken due to msgfmt's caching
+   (issue96, thanks to Darren Worrall for reporting and testing).
 
 Other
  * Improved build process and code clean up (inluding a patch by

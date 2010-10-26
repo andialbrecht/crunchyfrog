@@ -27,6 +27,7 @@ class build_mo(Command):
         pass
 
     def _generate(self, lang):
+        msgfmt.MESSAGES = {}  # reset cache (see issue96)
         infile = os.path.join(PO_PATH, lang, 'LC_MESSAGES', 'crunchyfrog.po')
         outfile = os.path.join(PO_PATH, lang, 'LC_MESSAGES', 'crunchyfrog.mo')
         msgfmt.make(infile, outfile)
