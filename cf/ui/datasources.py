@@ -518,8 +518,6 @@ class DatasourceEditDialog(object):
             conn.close()
             dialogs.info(_(u'Succeeded'), parent=self.dlg)
         except:
-            import logging
-            logging.exception('Test connect failed. Traceback follows:')
             dialogs.error(_(u'Failed'), str(sys.exc_info()[1]))
 
     def save_datasource(self):
