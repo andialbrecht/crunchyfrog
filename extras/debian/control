@@ -18,5 +18,3 @@ Recommends: python-vte, python-gconf
 Suggests: python-psycopg2, python-mysqldb, python-gnome2,
     python-gnome2-extras, gnome-icon-theme, ipython
 Description: SQL client for GNOME
- For more information see: http://crunchyfrog.googlecode.com
-
