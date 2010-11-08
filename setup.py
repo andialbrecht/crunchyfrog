@@ -67,9 +67,19 @@ class install(_install):
     """install command -- generates a local_config.py"""
 
     def run(self):
+        if sys.platform == 'linux2':
+            destdir = os.getenv('DESTDIR', '')
+            if destdir and self.install_data.startswith(destdir):
+                prefix = self.install_data[len(destdir):]
+            else:
+                prefix = self.install_data
+            if prefix[0] != '/':
+                prefix = '/%s' % prefix
+        else:
+            prefix = self.install_data
         f = open('cf/local_config.py', 'w')
         f.write('# -*- coding: utf-8 -*-\n\n')
-        f.write('PREFIX = \'%s\'\n' % self.install_data)
+        f.write('PREFIX = \'%s\'\n' % prefix)
         f.close()
         _install.run(self)
 
