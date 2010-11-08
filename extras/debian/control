@@ -14,18 +14,9 @@ XB-Python-Version: ${python:Versions}
 Depends: python (>=2.5), python-central, python-gtk2, python-configobj,
     python-glade2, python-gtksourceview2 (>=2.2.0), python-cairo (>=1.4.0),
     python-gobject (>=2.14), python-xdg (>=0.15)
-Recommends: python-vte
+Recommends: python-vte, python-gconf
 Suggests: python-psycopg2, python-mysqldb, python-gnome2,
     python-gnome2-extras, gnome-icon-theme, ipython
 Description: SQL client for GNOME
  For more information see: http://crunchyfrog.googlecode.com
-
-Package: crunchyfrog-gnome
-Architecture: any
-XB-Python-Version: ${python:Versions}
-Depends: crunchyfrog, python-gnome2-desktop, python-gconf
-Description: SQL client for GNOME (GNOME dependencies)
- This package defines GNOME related dependencies for CrunchyFrog,
- namely for storing passwords in GNOME Keyring.
- It should be installed when running the application with GNOME.
 
