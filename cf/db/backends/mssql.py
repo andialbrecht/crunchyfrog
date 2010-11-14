@@ -18,9 +18,11 @@
 
 """SQL Server backend."""
 
+from gettext import gettext as _
+
 from cf.db import TRANSACTION_ACTIVE, TRANSACTION_IDLE
 from cf.db import objects
-from cf.db.backends import Generic, DEFAULT_OPTIONS
+from cf.db.backends import Generic, DEFAULT_OPTIONS, GUIOption
 
 
 class MSSql(Generic):
@@ -45,7 +47,13 @@ class MSSql(Generic):
 
     @classmethod
     def get_options(cls):
-        return DEFAULT_OPTIONS
+        opts = list(DEFAULT_OPTIONS)
+        opts.append(
+            GUIOption(
+                'charset', _('Character set'),
+                tooltip=_('Character set with which to connect to the database')
+                ))
+        return tuple(opts)
 
     def get_server_info(self, connection):
         ver = connection.execute('SELECT @@VERSION')[0][0]

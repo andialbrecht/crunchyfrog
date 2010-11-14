@@ -23,6 +23,9 @@ Bug Fixes
    problems with non-standard installations (issue93).
  * English (en) message catalog was broken due to msgfmt's caching
    (issue96, thanks to Darren Worrall for reporting and testing).
+ * Port is now properly set when connceting to SQL Server, in addition
+   it's possible to define a character set when connecting to the
+   database (issues 100 and 101, reported by Ernesto).
 
 Other
  * Improved build process and code clean up (inluding a patch by

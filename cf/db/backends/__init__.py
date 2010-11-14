@@ -81,9 +81,15 @@ class Generic(object):
         :returns: An :class:`URL` instance.
         """
         url = URL(cls.drivername)
-        for key in ('username', 'password', 'host', 'port', 'database'):
-            if key in options and options.get(key, None) is not None:
+        attr_names = ('username', 'password', 'host', 'port', 'database')
+        backend_keys = [opt.key for opt in cls.get_options()]
+        for key in options:
+            if key not in backend_keys:
+                continue
+            elif key in attr_names and options.get(key, None) is not None:
                 setattr(url, key, options[key])
+            elif options.get(key, None) is not None:
+                url.query[key] = options[key]
         return url
 
     @classmethod
