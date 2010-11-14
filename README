@@ -15,7 +15,8 @@ You can run CrunchyFrog from this directory without installing:
 The next thing is to define some datasources by opening the Datasource manager
 (Edit > Data Source Manager).
 
-See requirements.txt for a complete list of requirements.
+See http://code.google.com/p/crunchyfrog/wiki/Requirements for a
+complete list of requirements.
 
 For a localized version first run
 
