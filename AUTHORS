@@ -4,6 +4,9 @@ The Python shell plugin uses code written by Eitan Isaacson found on
 http://ipython.scipy.org/moin/Cookbook/EmbeddingInGTK. The embedded
 IPython shell is licensed under the BSD license.
 
+msgfmt.py is written by Martin v. Löwis and is distributed as part of
+the Python distribution.
+
 Translators are noted in cf/release.py.
 
 Many thanks for all contributions!
