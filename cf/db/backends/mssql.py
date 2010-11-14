@@ -38,6 +38,9 @@ class MSSql(Generic):
         if 'username' in opts:
             opts['user'] = opts['username']
             del opts['username']
+        if 'port' in opts:
+            opts['host'] = '%s:%s' % (opts['host'], opts['port'])
+            del opts['port']
         return tuple(), opts
 
     @classmethod
