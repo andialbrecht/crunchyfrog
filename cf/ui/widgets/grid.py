@@ -574,7 +574,7 @@ class GridModel(gtk.GenericTreeModel):
                 value = str(buffer)
         else:
             if isinstance(value, str):
-                value = unicode(value, self.coding_hint)
+                value = unicode(value, self.coding_hint, 'replace')
             elif isinstance(value, unicode):
                 pass
             else:
