@@ -19,6 +19,9 @@
 """Export filter"""
 
 import datetime
+import os
+import pwd
+import types
 
 from cf.plugins.core import ExportPlugin
 
@@ -64,10 +67,7 @@ class OOCalcExportFilter(ExportPlugin):
         ExportPlugin.__init__(self, app)
 
     def export(self, description, rows, options):
-        from cf.thirdparty import ooolib
-        import pwd
-        import os
-        import types
+        import ooolib
         doc = ooolib.Calc()
         doc.set_meta('title', _(u"CrunchyFrog Data Export"))
         doc.set_meta('description', options.get("query", ""))

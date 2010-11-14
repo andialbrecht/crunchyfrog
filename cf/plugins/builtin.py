@@ -21,7 +21,12 @@
 import logging
 
 from cf.filter.exportfilter import CSVExportFilter
-from cf.filter.exportfilter import OOCalcExportFilter
+try:
+    import ooolib
+except ImportError:
+    pass
+else:
+    from cf.filter.exportfilter import OOCalcExportFilter
 try:
     import xlwt
 except ImportError, err:

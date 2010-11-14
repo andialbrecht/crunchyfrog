@@ -16,5 +16,6 @@ Depends: python (>=2.5), python-central, python-gtk2, python-configobj,
     python-gobject (>=2.14), python-xdg (>=0.15)
 Recommends: python-vte, python-gconf
 Suggests: python-psycopg2, python-mysqldb, python-gnome2,
-    python-gnome2-extras, gnome-icon-theme, ipython
+    python-gnome2-extras, gnome-icon-theme, ipython,
+    python-ooolib
 Description: SQL client for GNOME
