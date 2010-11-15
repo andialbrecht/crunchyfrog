@@ -2,7 +2,8 @@ Development
 -----------
 
 New Features
- * Add Excel export filter (issue84, patch by Michele Albanese).
+ * Add Excel export filter (issue84, patch by Michele Albanese). To
+   use this export filter python-xlwt is required.
 
 Bug Fixes
  * Properly escape error messages (issue85).
