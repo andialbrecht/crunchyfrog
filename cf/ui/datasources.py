@@ -497,7 +497,7 @@ class DatasourceEditDialog(object):
         msg = ''
         if result['required']:
             msg += _(u'Missing fields:\n%(fields)s')
-            msg += msg % {'fields': ', '.join(
+            msg = msg % {'fields': ', '.join(
                 [opt.label for opt in result['required']])}
         if result['errors']:
             msg += _(u'Validation errors:\n')
