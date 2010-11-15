@@ -26,6 +26,7 @@ Bug Fixes
  * Port is now properly set when connceting to SQL Server, in addition
    it's possible to define a character set when connecting to the
    database (issues 100 and 101, reported by Ernesto).
+ * SQLite backend now allows to create a new database (issue 99).
 
 Other
  * Improved build process and code clean up (inluding a patch by

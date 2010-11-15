@@ -21,6 +21,7 @@
 from gettext import gettext as _
 
 import gobject
+import os
 import re
 import functools
 
@@ -43,11 +44,12 @@ class SQLite(Generic):
 
     @classmethod
     def get_options(cls):
-        return (
-            GUIOption('database', _(u'File'),
-                      widget=GUIOption.WIDGET_FILECHOOSER,
-                      required=True),
-            )
+        return (GUIOption('database', _(u'File'), required=True),)
+
+    @classmethod
+    def create_url(cls, options):
+        options['database'] = os.path.expanduser(options['database'])
+        return super(SQLite, cls).create_url(options)
 
     @classmethod
     def get_native_shell_command(cls, url):
