@@ -32,9 +32,9 @@ Bug Fixes
 Other
  * Improved build process and code clean up (inluding a patch by
    Darren Worrall for issue78, issue86).
- * Extracted sqlparse from the source tree. sqlparse is still
-   required, but a project on it's own for some time now. Source code
-   is available from http://python-sqlparse.googlecode.com.
+ * Removed sqlparse from source tree. It's a project on it's own for
+   some time now. Source code is available from
+   http://python-sqlparse.googlecode.com.
 
 
 Release 0.4.1 (Oct 1, 2009)
