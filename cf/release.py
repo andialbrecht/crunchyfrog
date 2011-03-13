@@ -65,6 +65,7 @@ Anthony Guéchoum (https://launchpad.net/~athael)
 cd (https://launchpad.net/~zadoev)
 Christophe Chauvet (https://launchpad.net/~christophe-chauvet)
 Christian Olate Opazo (https://launchpad.net/~cristian-olate)
+Claudio Giordano
 Daniel Nylander (https://translations.launchpad.net/~yeager)
 Dante Díaz (https://launchpad.net/~dante)
 David A Páez (https://launchpad.net/~orlsend)
