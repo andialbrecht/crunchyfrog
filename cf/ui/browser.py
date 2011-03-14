@@ -273,6 +273,8 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             elif isinstance(obj, Datasource):
                 editor = self.instance.editor_create()
                 editor.set_connection(obj.internal_connection)
+            else:
+                self.on_show_details(None, obj, model, iter_)
 
     def on_button_press_event(self, treeview, event):
         if event.type == gtk.gdk._2BUTTON_PRESS \
@@ -376,9 +378,8 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
         # FIXME(andi): Rewrite this part when main notebook allows different
         #  views.
         datasource_info = self.find_datasource_info(model, iter)
-        if datasource_info.backend.schema:
-            data = datasource_info.backend.schema.get_details(
-                datasource_info.internal_connection, object)
+        if datasource_info.meta:
+            data = datasource_info.meta.get_details(object)
             if not data:
                 return
             for key, value in data.items():
