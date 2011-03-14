@@ -273,8 +273,8 @@ class Browser(gtk.ScrolledWindow, pane.PaneItem):
             elif isinstance(obj, Datasource):
                 editor = self.instance.editor_create()
                 editor.set_connection(obj.internal_connection)
-            else:
-                self.on_show_details(None, obj, model, iter_)
+            #else:
+            #    self.on_show_details(None, obj, model, iter_)
 
     def on_button_press_event(self, treeview, event):
         if event.type == gtk.gdk._2BUTTON_PRESS \
