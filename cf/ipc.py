@@ -26,6 +26,7 @@ A very simple protocol is used:
 """
 
 import cPickle
+import errno
 import logging
 import os
 import socket
@@ -105,7 +106,7 @@ class IPCListener(SocketServer.UnixStreamServer):
         try:
             os.remove(IPC_SOCKET)
         except OSError, err:
-            if err.errno == 2:  # Socket is already gone.
+            if err.errno == errno.ENOENT:  # Socket is already gone.
                 pass
             else:
                 raise
