@@ -18,6 +18,7 @@
 
 """Firebird backend."""
 
+from cf.db import objects
 from cf.db.backends import Generic, DEFAULT_OPTIONS
 
 
@@ -27,8 +28,8 @@ class Firebird(Generic):
 
     @classmethod
     def dbapi(cls):
-        import kinterbasdb
-        return kinterbasdb
+        import firebirdsql
+        return firebirdsql
 
     @classmethod
     def get_native_shell_command(cls, url):
@@ -37,8 +38,12 @@ class Firebird(Generic):
             args.extend(['-u', url.username])
         if url.password:
             args.extend(['-p', url.password])
-        args.extend([url.database])
-        print args
+        if url.host and url.port and url.database:
+            args.extend(['%s/%d:%s' % (url.host, url.port, url.database)])
+        elif url.host and url.database:
+            args.extend(['%s:%s' % (url.host, url.database)])
+        else:
+            args.extend(['127.0.0.1:' + url.database])
         return 'isql-fb', args
 
     @classmethod
@@ -62,7 +67,35 @@ class Firebird(Generic):
         return DEFAULT_OPTIONS
 
     def get_server_info(self, connection):
-        return 'Firebird %s' % connection.connection.server_version
+        sql = 'select rdb$get_context("SYSTEM", "ENGINE_VERSION") from rdb$database'
+        return 'FirebirdSQL ' + connection.execute(sql)[0][0]
+
+    def initialize(self, meta, connection):
+        tables = objects.Tables(meta)
+        meta.set_object(tables)
+        views = objects.Views(meta)
+        meta.set_object(views)
+        sql = 'select rdb$relation_name, rdb$view_blr ' \
+            'from rdb$relations where rdb$system_flag=0'
+        for item in connection.execute(sql):
+            if not item[1]:
+                table = objects.Table(meta, name=item[0], parent=tables)
+                meta.set_object(table)
+            else:
+                view = objects.View(meta, name=item[0], parent=views)
+                meta.set_object(view)
+        users = objects.Users(meta)
+        meta.set_object(users)
+        sql = 'select distinct rdb$user from rdb$user_privileges'
+        for item in connection.execute(sql):
+            user = objects.User(meta, name=item[0], parent=users)
+            meta.set_object(user)
+        functions = objects.Functions(meta)
+        meta.set_object(functions)
+        sql = 'select rdb$function_name from rdb$functions where rdb$system_flag=0'
+        for item in connection.execute(sql):
+            function = objects.User(meta, name=item[0], parent=functions)
+            meta.set_object(function)
 
     def get_explain_statement(self, statement):
         return None

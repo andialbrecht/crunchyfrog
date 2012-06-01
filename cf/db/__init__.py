@@ -86,7 +86,7 @@ DIALECTS = {
     'firebird': {
         'name': 'Firebird',
         'description': _(u'Provides access to Firebird databses'),
-        'dependencies': ['kinterbasdb'],
+        'dependencies': ['firebirdsql'],
     },
     'informix': {
         'name': 'Informix',
