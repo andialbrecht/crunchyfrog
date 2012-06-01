@@ -116,9 +116,9 @@ class SQLite(Generic):
                                       createstmt=item[3])
                 meta.set_object(table)
             elif item[0] == 'view':
-                views = objects.View(meta, name=item[1], parent=views,
-                                     createstmt=item[3])
-                meta.set_object(views)
+                view = objects.View(meta, name=item[1], parent=views,
+                                    createstmt=item[3])
+                meta.set_object(view)
 
     def refresh(self, obj, meta, connection):
         if obj.typeid == 'columns':
