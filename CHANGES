@@ -35,6 +35,8 @@ Other
  * Removed sqlparse from source tree. It's a project on it's own for
    some time now. Source code is available from
    http://python-sqlparse.googlecode.com.
+ * Speed improvements in translation mechanism (patch by Andreas
+   Stührk).
 
 
 Release 0.4.1 (Oct 1, 2009)
