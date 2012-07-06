@@ -23,7 +23,6 @@ import gobject
 
 import os
 
-from gettext import gettext as _
 
 
 MODE_SINGLE = 1

@@ -18,7 +18,6 @@
 
 """SQL editor and results view"""
 
-from gettext import gettext as _
 import logging
 import os
 import re

@@ -23,8 +23,6 @@ import gobject
 from os.path import abspath, dirname, join
 from configobj import ConfigObj
 
-from gettext import gettext as _
-
 import logging
 log = logging.getLogger("CONFIG")
 

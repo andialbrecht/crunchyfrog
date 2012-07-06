@@ -32,8 +32,6 @@ except ImportError:
 import os
 import sys
 
-from gettext import gettext as _
-
 import logging
 log = logging.getLogger("PREFS")
 

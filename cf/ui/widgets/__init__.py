@@ -18,7 +18,6 @@
 
 """Common widgets"""
 
-from gettext import gettext as _
 import os
 
 import gobject

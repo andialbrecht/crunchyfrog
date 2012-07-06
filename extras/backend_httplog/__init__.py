@@ -39,7 +39,6 @@ from cf.backends.schema import *
 import os
 import sys
 import md5
-from gettext import gettext as _
 from tempfile import mkstemp
 
 import logging

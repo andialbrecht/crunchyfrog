@@ -18,8 +18,6 @@
 
 """Native Shells"""
 
-from gettext import gettext as _
-
 import gtk
 
 from cf.db import Datasource

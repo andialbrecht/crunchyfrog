@@ -25,8 +25,6 @@ This module contains the SQL library plugin.
     - Double-click / open in editor (drag'n'drop)
 """
 
-from gettext import gettext as _
-
 import gtk
 import gobject
 import pango

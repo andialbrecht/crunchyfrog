@@ -26,7 +26,6 @@ import sys
 import thread
 import time
 from ConfigParser import ConfigParser
-from gettext import gettext as _
 from threading import Thread
 
 import gobject

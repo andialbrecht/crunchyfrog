@@ -18,8 +18,6 @@
 
 """Custom statusbar"""
 
-from gettext import gettext as _
-
 import gtk
 
 from cf.ui.editor import Editor

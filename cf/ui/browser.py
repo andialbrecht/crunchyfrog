@@ -19,7 +19,6 @@
 """Object browser"""
 
 import logging
-from gettext import gettext as _
 
 import gtk
 import gobject

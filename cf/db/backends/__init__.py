@@ -18,8 +18,6 @@
 
 """Database backends."""
 
-from gettext import gettext as _
-
 from cf.db import DIALECTS
 from cf.db import objects
 from cf.db import TRANSACTION_IDLE

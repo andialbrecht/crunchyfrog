@@ -28,8 +28,6 @@ import zipimport
 import logging
 log = logging.getLogger("PLUGINS")
 
-from gettext import gettext as _
-
 PLUGIN_TYPE_GENERIC = 0
 PLUGIN_TYPE_EXPORT = 2
 PLUGIN_TYPE_EDITOR = 3

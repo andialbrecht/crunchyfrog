@@ -25,8 +25,6 @@ import types
 
 from cf.plugins.core import ExportPlugin
 
-from gettext import gettext as _
-
 class CSVExportFilter(ExportPlugin):
     id = "crunchyfrog.export.csv"
     name = _(u"CSV Export")

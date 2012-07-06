@@ -37,8 +37,6 @@ except ImportError:
 import sys
 import os
 
-from gettext import gettext as _
-
 GRID_LABEL_MAX_LENGTH = 100
 
 class Grid(gtk.TreeView):
